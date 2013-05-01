@@ -1,5 +1,5 @@
 package de.wota;
 
-public interface Ant {
-	public void tick();
+public abstract class Ant {		
+	public abstract void tick();
 }
