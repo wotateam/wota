@@ -7,7 +7,7 @@ import java.awt.Point;
  * @author pascal
  *
  */
-public class Suggar {
+public class Sugar {
 	
 	private Point position;
 	private double amount;

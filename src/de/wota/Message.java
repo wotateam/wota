@@ -9,7 +9,7 @@ import java.awt.Point;
  */
 public class Message {
 	private int content;
-	private AntObject sender;
+	private Ant sender;
 	private Point position;
 	
 	public Message(int content) {
@@ -20,7 +20,7 @@ public class Message {
 		return content;
 	}
 	
-	public AntObject getSender() {
+	public Ant getSender() {
 		return sender;
 	}
 	

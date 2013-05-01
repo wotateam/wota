@@ -1,7 +1,7 @@
 import de.wota.Action;
-import de.wota.Ant;
+import de.wota.AntAI;
 
-public class DemoAnt extends Ant {
+public class DemoAntAI extends AntAI {
 
 	public Action getAction() {
 		// TODO getAction() schreiben

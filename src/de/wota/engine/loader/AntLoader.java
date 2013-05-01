@@ -5,25 +5,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import de.wota.Ant;
+import de.wota.AntAI;
 
 public class AntLoader {
 	
-	private ServiceLoader<Ant> installedAnts;
+	private ServiceLoader<AntAI> installedAnts;
 	
-	private List<Class<Ant>> loadedAnts;
+	private List<Class<AntAI>> loadedAnts;
 	
 	public void findInstalledAnts()
 	{
-		installedAnts = ServiceLoader.load(Ant.class);
+		installedAnts = ServiceLoader.load(AntAI.class);
 	}
 	
 	public void loadAnts(List<String> names)
 	{
-		loadedAnts = new ArrayList<Class<Ant>>();
+		loadedAnts = new ArrayList<Class<AntAI>>();
 		
-		Iterator<Ant> ants = installedAnts.iterator();
-		Ant currentAnt;
+		Iterator<AntAI> ants = installedAnts.iterator();
+		AntAI currentAnt;
 		
 		while (ants.hasNext())
 		{
@@ -31,17 +31,17 @@ public class AntLoader {
 			
 			if (names.contains(currentAnt.getClass().getName()))
 			{
-				loadedAnts.add((Class<Ant>) currentAnt.getClass());
+				loadedAnts.add((Class<AntAI>) currentAnt.getClass());
 			}
 		}
 	}
 	
 	public void testAnts()
 	{
-		for (Class<Ant> antClass : loadedAnts)
+		for (Class<AntAI> antClass : loadedAnts)
 		{
 			try {
-				((Ant) antClass.newInstance()).tick();
+				((AntAI) antClass.newInstance()).tick();
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -9,7 +9,7 @@ package de.wota;
 public class Action {
 	
 	private Message message;
-	private AntObject attackTarget;
+	private Ant attackTarget;
 	/** from 0 to GameWordl.MAX_MOVEMENT_DISTANCE */
 	private double movementDistance;
 	/** from 0 to 360 */
@@ -23,7 +23,7 @@ public class Action {
 		movementDirection = 0;
 	}
 	
-	public Action(Message message, AntObject attackTarget,
+	public Action(Message message, Ant attackTarget,
 			double movementDistance, double movementDirection) {
 		this.message = message;
 		this.attackTarget = attackTarget;
@@ -31,7 +31,7 @@ public class Action {
 		this.movementDistance = movementDistance;
 	}
 	
-	public AntObject getAttackTarget() {
+	public Ant getAttackTarget() {
 		return attackTarget;
 	}
 
