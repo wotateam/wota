@@ -1,5 +1,6 @@
 package de.wota;
 
 public interface Ant {
-	public void tick();
+	public void tick(); 
+	public Action getAction();
 }
