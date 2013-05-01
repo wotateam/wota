@@ -1,3 +1,3 @@
 wota
 ====
-War of the Ants/Apes.
+War of the Ants/Apes
