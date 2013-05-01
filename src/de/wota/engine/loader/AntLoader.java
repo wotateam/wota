@@ -8,18 +8,19 @@ import java.util.ServiceLoader;
 import de.wota.Ant;
 
 public class AntLoader {
-	private static ServiceLoader installedAnts;
 	
-	private static List<Class> loadedAnts;
+	private ServiceLoader<Ant> installedAnts;
 	
-	static void findInstalledAnts()
+	private List<Class<Ant>> loadedAnts;
+	
+	public void findInstalledAnts()
 	{
 		installedAnts = ServiceLoader.load(Ant.class);
 	}
 	
-	static void loadAnts(List<String> names)
+	public void loadAnts(List<String> names)
 	{
-		loadedAnts = new ArrayList<Class>();
+		loadedAnts = new ArrayList<Class<Ant>>();
 		
 		Iterator<Ant> ants = installedAnts.iterator();
 		Ant currentAnt;
@@ -30,14 +31,14 @@ public class AntLoader {
 			
 			if (names.contains(currentAnt.getClass().getName()))
 			{
-				loadedAnts.add(currentAnt.getClass());
+				loadedAnts.add((Class<Ant>) currentAnt.getClass());
 			}
 		}
 	}
 	
-	static void testAnts()
+	public void testAnts()
 	{
-		for (Class antClass : loadedAnts)
+		for (Class<Ant> antClass : loadedAnts)
 		{
 			try {
 				((Ant) antClass.newInstance()).tick();
