@@ -4,6 +4,9 @@ import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.wota.ai.DummyHillAI;
+import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.Sugar;
 import de.wota.test.DummyAntAI;
 
 /**

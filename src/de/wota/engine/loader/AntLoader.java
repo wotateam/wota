@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import de.wota.AntAI;
+import de.wota.ai.AntAI;
 
 public class AntLoader {
 	

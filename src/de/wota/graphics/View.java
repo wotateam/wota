@@ -18,9 +18,9 @@ import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 
-import de.wota.Ant;
 import de.wota.GameWorld;
 import de.wota.Player;
+import de.wota.gameobjects.Ant;
 
 /**
  * Renders everything.

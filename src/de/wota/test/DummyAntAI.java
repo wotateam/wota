@@ -1,7 +1,7 @@
 package de.wota.test;
 
 import de.wota.Action;
-import de.wota.AntAI;
+import de.wota.ai.AntAI;
 
 public class DummyAntAI extends AntAI {
 

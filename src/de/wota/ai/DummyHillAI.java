@@ -1,4 +1,5 @@
-package de.wota;
+package de.wota.ai;
+
 
 public class DummyHillAI extends HillAI {
 

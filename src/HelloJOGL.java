@@ -44,6 +44,7 @@ public class HelloJOGL {
         gl2.glVertex2f( width / 2, height );
         gl2.glEnd();
     }
+    
 
 	/**
 	 * @param args

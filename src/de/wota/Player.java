@@ -4,6 +4,11 @@ import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.wota.ai.AntAI;
+import de.wota.ai.HillAI;
+import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.Hill;
+
 public class Player {
 	public final Class<? extends AntAI> antAIClass;
 

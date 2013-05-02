@@ -1,4 +1,4 @@
-package de.wota;
+package de.wota.gameobjects;
 
 import java.awt.geom.Point2D;
 

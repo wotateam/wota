@@ -1,6 +1,8 @@
-package de.wota;
+package de.wota.gameobjects;
 
 import java.awt.geom.Point2D;
+
+import de.wota.ai.HillAI;
 
 public class Hill extends GameObject {
 	private final HillAI ai;
