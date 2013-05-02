@@ -4,8 +4,9 @@ import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.wota.ai.Ant;
 import de.wota.ai.DummyHillAI;
-import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.Sugar;
 import de.wota.test.DummyAntAI;
 
@@ -16,41 +17,77 @@ import de.wota.test.DummyAntAI;
  */
 public class GameWorld {
 
-	static final double MAX_MOVEMENT_DISTANCE = 5;
-	static final double SIZE_X = 1000;
-	static final double SIZE_Y = 1000;
-	public static final double HILL_RADIUS = 20; // TODO class for constants
-
 	public final List<Player> players = new LinkedList<Player>();
 	private LinkedList<Sugar> sugars;
 
 	public void tick() {
+		
+		// create Ants for all AntObjects
 		for (Player player : players) {
-			for (Ant ant : player.ants) {
-				ant.tick();
+			for (AntObject antObject : player.antObjects) {
+				antObject.createAnt();
+			}
+		}
+		
+		// call tick for all AntObjects
+		for (Player player : players) {
+			for (AntObject antObject : player.antObjects) {
+				LinkedList<Ant> visibleAnts = new LinkedList<Ant>();
+				// TODO pass visibleAnts
+				antObject.tick(visibleAnts);
 			}
 		}
 
+		// execute all actions
 		for (Player player : players) {
-			for (Ant ant : player.ants) {
-				Action action = ant.getAction();
-				executeAction(ant, action);
+			for (AntObject antObject : player.antObjects) {
+				executeAction(antObject);
 			}
 		}
 	}
 
 	/** führt die Aktion für das AntObject aus */
-	private void executeAction(Ant ant, Action action) {
-		// TODO executeAction schreiben
+	private void executeAction(AntObject actor) {
+		Action action = actor.getAction();
+		
+		// Attack
+		// TODO add collateral damage
+		Ant targetAnt = action.getAttackTarget();
+		AntObject target = getAntObjectById(targetAnt.ID);
+		if (target != null) {
+			target.takesDamage(actor.getAttack());
+		}
+		else {
+			System.err.println("unexpected case in GameWorld.executeAction(AntObject antObject)");
+		}
+		
+		// Movement
+		// TODO Movement
+		
+		// Messages
+		// TODO Messages
 	}
 
+	private AntObject getAntObjectById(int id) {
+		// TODO use dictionary or something!
+		for (Player player : players) {
+			for (AntObject antObject : player.antObjects) {
+				if (antObject.ID == id) {
+					return antObject;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static GameWorld testWorld() throws InstantiationException, IllegalAccessException {
 		GameWorld world = new GameWorld();
 		for (int i = 0; i < 2; i++) {
 			Player player = new Player(DummyAntAI.class, DummyHillAI.class, new Point2D.Double(100+i*200,100+i*200));
 			for (int j = 0; j < 10; j++) {
-				Ant ant = new Ant(new Point2D.Double(j * 10, 20 + i * 20));
-				player.ants.add(ant);
+				int id = i*10+j;
+				AntObject antObject = new AntObject(new Point2D.Double(j * 10, 20 + i * 20), id);
+				player.antObjects.add(antObject);
 			}
 			world.players.add(player);
 		}

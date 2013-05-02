@@ -1,15 +1,12 @@
 package de.wota.ai;
-import de.wota.Action;
+import java.util.List;
 
 public class DemoAntAI extends AntAI {
-	
-	public Action getAction() {
-		// TODO getAction() schreiben
-		return null;
-	}
-	
-	public void tick() {
-		System.out.println("Test");
+
+	@Override
+	public void tick(Ant self, List<Ant> visibleAnts) {
+		System.out.println("Test: Rennt immer nach rechts");
+		moveTo(0);
 	}
 
 }

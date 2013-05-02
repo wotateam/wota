@@ -1,37 +1,28 @@
 package de.wota;
 
-import java.awt.geom.Point2D;
-
-import de.wota.gameobjects.Ant;
+import de.wota.ai.Ant;
+import de.wota.gameobjects.AntObject;
 
 /**
  * Klasse für Nachrichten.
- * Hat beim Erzeugen nur content. Sender muss später von GameWorld eingetragen werden.
+ * Weiß den Sender (AntObject), darf ihn aber nicht preisgeben! Stattdessen wird das aktuelle Ant
+ * abgefragt und zurückgegeben. 
  * @author pascal
  */
 public class Message {
 	private int content;
-	private Ant sender;
-	private Point2D.Double position;
+	private AntObject sender;
 	
-	public Message(int content) {
+	public Message(int content, AntObject sender) {
 		this.content = content;
-	}
-	
-	public void setSender(Ant sender) {
 		this.sender = sender;
-		this.position = sender.getPosition();
 	}
 	
 	public int getContent() {
 		return content;
 	}
 	
-	public Ant getSender() {
-		return sender;
-	}
-	
-	public Point2D.Double getPosition() {
-		return position;
+	public Ant getTalkingAnt() {
+		return sender.getAnt();
 	}
 }

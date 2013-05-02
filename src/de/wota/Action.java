@@ -1,16 +1,20 @@
 package de.wota;
 
-import de.wota.gameobjects.Ant;
+import de.wota.ai.Ant;
+import de.wota.gameobjects.AntObject;
 
 /**
  * Gibt die Aktion einer Ant an.
  * Besteht aus Message, Angriffsziel (AntObject) und Bewegungsrichtung / Amplitude
+ * 
+ * Action darf nicht für die AI zugänglich sein.
+ * 
  * @author pascal
  *
  */
 public class Action {
 	
-	private Ant actor;
+	//private AntObject actor;
 	private Message message;
 	private Ant attackTarget;
 	/** from 0 to GameWordl.MAX_MOVEMENT_DISTANCE */
@@ -20,7 +24,7 @@ public class Action {
 
 	/** do nothing */
 	public Action() {
-		actor = null;
+	//	actor = null;
 		message = null;
 		attackTarget = null;
 		movementDistance = 0;
@@ -34,6 +38,7 @@ public class Action {
 		this.movementDirection = movementDirection;
 		this.movementDistance = movementDistance;
 	}
+	
 	
 	public Ant getAttackTarget() {
 		return attackTarget;
@@ -51,27 +56,27 @@ public class Action {
 		return message;
 	}
 	
-	public Ant getActor() {
+	/*public AntObject getActor() {
 		return actor;
-	}
+	}*/
 	
-	public void attack(Ant target) {
-		attackTarget = target;
-	}
-	
-	public void setActor(Ant actor) {
+	/*public void setActor(AntObject actor) {
 		this.actor = actor;
-		if (message != null) {
-			message.setSender(actor);
-		}
-	}
+	}*/
 	
-	/**
-	 * Send a message
-	 * @param message content of the message
-	 */
-	public void talk(int message) {
-		this.message = new Message(message);
+	public void setMessage(Message message) {
+		this.message = message;
 	}
-	/** TODO add Constructors/Setters */
+
+	public void setAttackTarget(Ant attackTarget) {
+		this.attackTarget = attackTarget;
+	}
+
+	public void setMovementDistance(double movementDistance) {
+		this.movementDistance = movementDistance;
+	}
+
+	public void setMovementDirection(double movementDirection) {
+		this.movementDirection = movementDirection;
+	}
 }

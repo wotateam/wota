@@ -6,13 +6,13 @@ import java.util.List;
 
 import de.wota.ai.AntAI;
 import de.wota.ai.HillAI;
-import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.Hill;
 
 public class Player {
 	public final Class<? extends AntAI> antAIClass;
 
-	public final List<Ant> ants = new LinkedList<Ant>();
+	public final List<AntObject> antObjects = new LinkedList<AntObject>();
 	public final Hill hill;
 
 	private final int id;
