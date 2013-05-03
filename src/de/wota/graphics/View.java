@@ -3,6 +3,7 @@ package de.wota.graphics;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 
@@ -17,9 +18,12 @@ import de.wota.Vector;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
+import de.wota.testing.TestWorld;
 
 /**
  * Renders everything.
+ * 
+ * Preliminary: Use this to test.
  * 
  * @author Daniel
  */
@@ -98,7 +102,8 @@ public class View {
 	 * @throws InstantiationException 
 	 */
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
-		View view = new View(GameWorld.testWorld());
+		GameWorld gameWorld = TestWorld.testWorld();
+		View view = new View(gameWorld);
 		final int width = 800;
 		final int height = 600;
 		try {
@@ -110,9 +115,11 @@ public class View {
 		}
 		
 		// init OpenGL here
+
+		view.setup(width, height);
 		
 		while (!Display.isCloseRequested()) {
-			view.setup(width, height);
+			gameWorld.tick();
 			view.render(width, height);
 			Display.update();
 		}

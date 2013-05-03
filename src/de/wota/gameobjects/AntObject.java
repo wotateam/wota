@@ -30,7 +30,7 @@ public class AntObject extends GameObject{
 		this.id = getNewID();
 		AntAI antAI = null;
 		try {
-			antAI = antAIClass.newInstance();
+			antAI = antAIClass.newInstance(); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Could not create AntAI -> exit");

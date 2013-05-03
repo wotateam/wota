@@ -7,8 +7,7 @@ import de.wota.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
 import de.wota.Player;
-import de.wota.ai.DemoAntAI;
-import de.wota.ai.DummyHillAI;
+import de.wota.ai.AntAI;
 
 /**
  * Enthält alle Elemente der Spielwelt.
@@ -81,18 +80,5 @@ public class GameWorld {
 		
 		// Messages
 		// TODO Messages
-	}
-	
-	public static GameWorld testWorld() throws InstantiationException, IllegalAccessException {
-		GameWorld world = new GameWorld();
-		for (int i = 0; i < 2; i++) {
-			Player player = new Player(DummyHillAI.class, new Vector(100+i*200,100+i*200));
-			for (int j = 0; j < 10; j++) {
-				AntObject antObject = new AntObject(new Vector(j * 10, 20 + i * 20), Ant.Caste.GATHERER, DemoAntAI.class);
-				player.antObjects.add(antObject);
-			}
-			world.players.add(player);
-		}
-		return world;
 	}
 }

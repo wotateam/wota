@@ -13,6 +13,10 @@ import de.wota.gameobjects.AntObject;
  * Basisklasse für die KI 
  */
 public abstract class AntAI extends BaseAI{	
+	public AntAI() {
+		// TODO comment this
+	}
+	
 	public Ant self; // user AI may have changed this value!
 	
 	protected void attack(Ant target) {
@@ -24,7 +28,7 @@ public abstract class AntAI extends BaseAI{
 		action.setMessage(message);
 	}
 	
-	protected void moveTo(double direction) {
+	protected void moveTo(double direction) { // TODO name
 		action.setMovementDirection(direction);
 		action.setMovementDistance(GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
