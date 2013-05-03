@@ -4,37 +4,54 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import de.wota.Action;
-import de.wota.ai.Ant;
+import de.wota.Message;
 import de.wota.ai.AntAI;
 
 /**
  * Interne Darstellung von Ants. Enthält alle Informationen.
  * Im Gegensatz dazu enthält Ant nur die Informationen, welche die KI sehen darf.
  * @author pascal
- *
  */
 public class AntObject extends GameObject{
 	
+	private static int idCounter = 0;
 	private Ant ant;
-	private AntAI ai;
-	public final int ID;
+	private final AntAI ai;
+	public final int id;
 	private double health;
 	private double speed;
 	/** Angriffspunkte */
 	private double attack;
 	private Action action;
+	final private Ant.Caste caste;
 	
-	public AntObject(Point2D.Double position, int ID) {
+	public AntObject(Point2D.Double position, Ant.Caste caste, Class<? extends AntAI> antAIClass) {
 		super(position);
-		this.ID = ID;
+		this.id = getNewID();
+		AntAI antAI = null;
+		try {
+			antAI = antAIClass.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Could not create AntAI -> exit");
+			System.exit(1);
+		}
+		
+		this.ai = antAI;
+		this.caste = caste;
+		this.ant = new Ant(this);
 	}
-	
+
 	public AntAI getAI() {
 		return ai;
 	}
 	
 	public Ant getAnt() {
 		return ant;
+	}
+	
+	public Ant.Caste getCaste() {
+		return caste;
 	}
 
 	public double getHealth() {
@@ -55,6 +72,7 @@ public class AntObject extends GameObject{
 	
 	public void createAnt() {
 		ant = new Ant(this);
+		this.ai.self = ant;
 	}
 	
 	public void takesDamage(double attack) {
@@ -68,8 +86,19 @@ public class AntObject extends GameObject{
 		// TODO write AntObject.die()
 	}
 
-	public void tick(List<Ant> visibleAnts) {
-		ai.tick(ant, visibleAnts);
+	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar) {
+		ai.visibleAnts = visibleAnts;
+		ai.visibleSugar = visibleSugar;
+		ai.tick();
 		action = ai.popAction();
+		// modify the action such that the actor is the right one
+		Message message = action.getMessage();
+		message.setSender(ant);
+		action.setMessage(message);
+	}
+	
+	private static int getNewID() {
+		idCounter++;
+		return idCounter - 1;
 	}
 }

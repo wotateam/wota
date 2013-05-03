@@ -1,20 +1,17 @@
 package de.wota;
 
-import de.wota.ai.Ant;
+import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 
 /**
  * Gibt die Aktion einer Ant an.
  * Besteht aus Message, Angriffsziel (AntObject) und Bewegungsrichtung / Amplitude
  * 
- * Action darf nicht für die AI zugänglich sein.
- * 
  * @author pascal
  *
  */
 public class Action {
 	
-	//private AntObject actor;
 	private Message message;
 	private Ant attackTarget;
 	/** from 0 to GameWordl.MAX_MOVEMENT_DISTANCE */

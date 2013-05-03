@@ -18,11 +18,11 @@ import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 
-import de.wota.GameWorld;
 import de.wota.GameWorldParameters;
 import de.wota.Player;
-import de.wota.ai.Ant;
+import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
+import de.wota.gameobjects.GameWorld;
 
 /**
  * Renders everything.
@@ -95,7 +95,7 @@ public class View extends GLCanvas {
 				renderCircle(antObject.getPosition(), ANT_RADIUS);
 			}
 
-			renderCircle(player.hill.getPosition(), GameWorldParameters.HILL_RADIUS);
+			renderCircle(player.hillObject.getPosition(), GameWorldParameters.HILL_RADIUS);
 		}
 
 	}

@@ -1,21 +1,18 @@
 package de.wota;
 
-import de.wota.ai.Ant;
+import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 
 /**
  * Klasse für Nachrichten.
- * Weiß den Sender (AntObject), darf ihn aber nicht preisgeben! Stattdessen wird das aktuelle Ant
- * abgefragt und zurückgegeben. 
  * @author pascal
  */
 public class Message {
 	private int content;
-	private AntObject sender;
+	private Ant sender;
 	
-	public Message(int content, AntObject sender) {
+	public Message(int content) {
 		this.content = content;
-		this.sender = sender;
 	}
 	
 	public int getContent() {
@@ -23,6 +20,10 @@ public class Message {
 	}
 	
 	public Ant getTalkingAnt() {
-		return sender.getAnt();
+		return sender;
+	}
+	
+	public void setSender(Ant ant) {
+		sender = ant;
 	}
 }
