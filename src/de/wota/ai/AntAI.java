@@ -1,29 +1,27 @@
 package de.wota.ai;
 
-import java.util.List;
+import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
 
 import de.wota.Action;
 import de.wota.GameWorldParameters;
 import de.wota.Message;
+import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 
 
 /** 
  * Basisklasse für die KI 
  */
-public abstract class AntAI {	
-	private Action action = new Action();
-	private AntObject antObject; // only to pass information to e.g. message objects
-	
-	public abstract void tick(Ant self, List<Ant> visibleAnts);
-	
-	protected void talk(int content) {
-		Message message = new Message(content, antObject);
-		action.setMessage(message);
-	}
+public abstract class AntAI extends BaseAI{	
+	public Ant self; // user AI may have changed this value!
 	
 	protected void attack(Ant target) {
 		action.setAttackTarget(target);
+	}
+	
+	protected void talk(int content) {
+		Message message = new Message(content);
+		action.setMessage(message);
 	}
 	
 	protected void moveTo(double direction) {
@@ -36,10 +34,14 @@ public abstract class AntAI {
 		action.setMovementDistance(distance);
 	}
 	
-	/** deletes the action */
-	public Action popAction() {
-		Action returnAction = action;
-		action = new Action();
-		return returnAction;
+	public void setAnt(Ant ant) {
+		self = ant;
+	}
+	
+	/**
+	 * CAUTION! USER AI MAY HAVE CHANGED THIS
+	 */
+	public Ant getAnt() {
+		return self;
 	}
 }

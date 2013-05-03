@@ -1,6 +1,11 @@
 package de.wota.ai;
 
 
-public class DummyHillAI extends HillAI {
+public class DummyHillAI extends HillAI {	
 
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+	}
+	
 }

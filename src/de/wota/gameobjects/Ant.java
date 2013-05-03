@@ -1,6 +1,5 @@
-package de.wota.ai;
+package de.wota.gameobjects;
 
-import de.wota.gameobjects.AntObject;
 
 /**
  * Beschreibt die Ameisen.
@@ -13,17 +12,17 @@ import de.wota.gameobjects.AntObject;
  */
 public class Ant {
 	
-	public final int ID; // same as for antObject
 	private final double health;
 	private final double speed;
 	/** Angriffspunkte */
 	private final double attack;
+	final AntObject antObject; // should only be accessible for objects in the same package
 	
 	public Ant(AntObject antObject) {
 		health = antObject.getHealth();
 		speed = antObject.getSpeed();
 		attack = antObject.getAttack();
-		ID = antObject.ID;
+		this.antObject = antObject;
 	}
 
 	public double getHealth() {
@@ -38,5 +37,7 @@ public class Ant {
 		return attack;
 	}
 	
-	
+	public enum Caste {
+		GATHERER, SOLDIER
+	}
 }

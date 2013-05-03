@@ -41,7 +41,7 @@ public class AntLoader {
 		for (Class<AntAI> antClass : loadedAnts)
 		{
 			try {
-				((AntAI) antClass.newInstance()).tick(null,null);
+				((AntAI) antClass.newInstance()).tick();
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
