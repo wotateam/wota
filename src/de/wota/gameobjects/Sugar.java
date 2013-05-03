@@ -1,6 +1,7 @@
 package de.wota.gameobjects;
 
-import java.awt.geom.Point2D;
+import de.wota.Vector;
+
 
 /**
  * Ein Zuckerhaufen.
@@ -11,7 +12,7 @@ public class Sugar extends GameObject {
 	
 	private double amount;
 	
-	public Sugar(double amount, Point2D.Double position) {
+	public Sugar(double amount, Vector position) {
 		super(position);
 		this.amount = amount;
 	}

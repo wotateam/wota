@@ -1,13 +1,12 @@
 package de.wota.gameobjects;
 
-import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.wota.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
 import de.wota.Player;
-import de.wota.ai.AntAI;
 import de.wota.ai.DemoAntAI;
 import de.wota.ai.DummyHillAI;
 
@@ -67,7 +66,7 @@ public class GameWorld {
 	}
 	
 	/** führt die Aktion für das AntObject aus */
-	private void executeAction(AntObject actor) {
+	private static void executeAction(AntObject actor) {
 		Action action = actor.getAction();
 		
 		// Attack
@@ -75,15 +74,10 @@ public class GameWorld {
 		Ant targetAnt = action.getAttackTarget();
 		// TODO check if target is in range.
 		AntObject target = targetAnt.antObject;
-		if (target != null) {
-			target.takesDamage(actor.getAttack());
-		}
-		else {
-			System.err.println("unexpected case in GameWorld.executeAction(AntObject antObject)");
-		}
+		target.takesDamage(actor.getAttack());
 		
 		// Movement
-		// TODO Movement
+		actor.move(Vector.fromPolar(action.getMovementDistance(), action.getMovementDirection()));
 		
 		// Messages
 		// TODO Messages
@@ -92,10 +86,9 @@ public class GameWorld {
 	public static GameWorld testWorld() throws InstantiationException, IllegalAccessException {
 		GameWorld world = new GameWorld();
 		for (int i = 0; i < 2; i++) {
-			Player player = new Player(DummyHillAI.class, new Point2D.Double(100+i*200,100+i*200));
+			Player player = new Player(DummyHillAI.class, new Vector(100+i*200,100+i*200));
 			for (int j = 0; j < 10; j++) {
-				int id = i*10+j;
-				AntObject antObject = new AntObject(new Point2D.Double(j * 10, 20 + i * 20), Ant.Caste.GATHERER, DemoAntAI.class);
+				AntObject antObject = new AntObject(new Vector(j * 10, 20 + i * 20), Ant.Caste.GATHERER, DemoAntAI.class);
 				player.antObjects.add(antObject);
 			}
 			world.players.add(player);

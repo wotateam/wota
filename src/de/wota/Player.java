@@ -1,10 +1,8 @@
 package de.wota;
 
-import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.wota.ai.AntAI;
 import de.wota.ai.HillAI;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.HillObject;
@@ -20,7 +18,7 @@ public class Player {
 		return id;
 	}
 
-	public Player(Class<? extends HillAI> hillAIClass, Point2D.Double position)
+	public Player(Class<? extends HillAI> hillAIClass, Vector position)
 			throws InstantiationException, IllegalAccessException {
 		hillObject = new HillObject(hillAIClass.newInstance(), position, this);
 

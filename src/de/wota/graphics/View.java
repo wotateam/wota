@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 
 import de.wota.GameWorldParameters;
 import de.wota.Player;
+import de.wota.Vector;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
@@ -100,11 +101,11 @@ public class View extends GLCanvas {
 
 	}
 
-	private void translate(Point2D.Double p) {
-		gl.glTranslated(p.getX(), p.getY(), 0);
+	private void translate(Vector p) {
+		gl.glTranslated(p.x, p.y, 0);
 	}
 
-	private void renderCircle(Point2D.Double p, double radius) {
+	private void renderCircle(Vector p, double radius) {
 		gl.glPushMatrix();
 		translate(p);
 		gl.glScaled(radius, radius, radius);

@@ -1,6 +1,6 @@
 package de.wota.gameobjects;
 
-import java.awt.geom.Point2D;
+import de.wota.Vector;
 
 /**
  * Base class for all objects which are part of the game.
@@ -9,18 +9,23 @@ import java.awt.geom.Point2D;
  */
 public class GameObject {
 
-	private Point2D.Double position;
+	private Vector position;
 
-	public GameObject(Point2D.Double position) {
+	public GameObject(Vector position) {
 		setPosition(position);
 	}
 	
-	public void setPosition(Point2D.Double position) {
+	public void setPosition(Vector position) {
 		this.position = position;
 	}
 
-	public Point2D.Double getPosition() {
+	public Vector getPosition() {
 		return position;
+	}
+	
+
+	public void move(Vector moveVector) {
+		position = position.add(moveVector);
 	}
 
 }

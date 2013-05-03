@@ -1,8 +1,8 @@
 package de.wota.gameobjects;
 
-import java.awt.geom.Point2D;
 import java.util.List;
 
+import de.wota.Vector;
 import de.wota.AntOrder;
 import de.wota.Player;
 import de.wota.ai.Hill;
@@ -13,7 +13,7 @@ public class HillObject extends GameObject {
 	private final Hill hill;
 	private Player player;
 
-	public HillObject(HillAI ai, Point2D.Double position, Player player) {
+	public HillObject(HillAI ai, Vector position, Player player) {
 		super(position);
 		this.hill = new Hill();
 		this.ai = ai;

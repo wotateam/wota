@@ -1,10 +1,10 @@
 package de.wota.gameobjects;
 
-import java.awt.geom.Point2D;
 import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
+import de.wota.Vector;
 import de.wota.ai.AntAI;
 
 /**
@@ -25,7 +25,7 @@ public class AntObject extends GameObject{
 	private Action action;
 	final private Ant.Caste caste;
 	
-	public AntObject(Point2D.Double position, Ant.Caste caste, Class<? extends AntAI> antAIClass) {
+	public AntObject(Vector position, Ant.Caste caste, Class<? extends AntAI> antAIClass) {
 		super(position);
 		this.id = getNewID();
 		AntAI antAI = null;
