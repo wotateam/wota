@@ -7,13 +7,11 @@ import java.util.List;
 import de.wota.ai.AntAI;
 import de.wota.ai.HillAI;
 import de.wota.gameobjects.AntObject;
-import de.wota.gameobjects.Hill;
+import de.wota.gameobjects.HillObject;
 
 public class Player {
-	public final Class<? extends AntAI> antAIClass;
-
 	public final List<AntObject> antObjects = new LinkedList<AntObject>();
-	public final Hill hill;
+	public final HillObject hillObject;
 
 	private final int id;
 	private static int nextId = 0;
@@ -22,11 +20,9 @@ public class Player {
 		return id;
 	}
 
-	public Player(Class<? extends AntAI> antAIClass,
-			Class<? extends HillAI> hillAIClass, Point2D.Double position)
+	public Player(Class<? extends HillAI> hillAIClass, Point2D.Double position)
 			throws InstantiationException, IllegalAccessException {
-		this.antAIClass = antAIClass;
-		hill = new Hill(hillAIClass.newInstance(), position);
+		hillObject = new HillObject(hillAIClass.newInstance(), position, this);
 
 		// TODO fail early w.r.t. to ants, too, by creating one to test ant
 		// creation

@@ -1,10 +1,9 @@
 package de.wota.ai;
-import java.util.List;
 
 public class DemoAntAI extends AntAI {
 
 	@Override
-	public void tick(Ant self, List<Ant> visibleAnts) {
+	public void tick() {
 		System.out.println("Test: Rennt immer nach rechts");
 		moveTo(0);
 	}

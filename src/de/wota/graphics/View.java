@@ -11,11 +11,11 @@ import java.awt.geom.Point2D;
 import java.nio.FloatBuffer;
 
 
-import de.wota.GameWorld;
 import de.wota.GameWorldParameters;
 import de.wota.Player;
-import de.wota.ai.Ant;
+import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
+import de.wota.gameobjects.GameWorld;
 
 /**
  * Renders everything.
@@ -62,7 +62,7 @@ public class View {
 				renderCircle(antObject.getPosition(), ANT_RADIUS);
 			}
 
-			renderCircle(player.hill.getPosition(), GameWorldParameters.HILL_RADIUS);
+			renderCircle(player.hillObject.getPosition(), GameWorldParameters.HILL_RADIUS);
 		}
 
 	}
