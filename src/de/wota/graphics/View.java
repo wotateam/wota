@@ -1,22 +1,15 @@
 package de.wota.graphics;
 
-import java.awt.BorderLayout;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.*;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
 import java.nio.FloatBuffer;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.glu.GLU;
-import javax.swing.JFrame;
 
 import de.wota.GameWorld;
 import de.wota.GameWorldParameters;
@@ -29,67 +22,41 @@ import de.wota.gameobjects.AntObject;
  * 
  * @author Daniel
  */
-public class View extends GLCanvas {
-	private GL2 gl;
-
+public class View {
 	// hardcoded number of players = 8
 	private static final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN,
 			Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.YELLOW };
 
 	private GameWorld world;
 
-	public View(GLCapabilities capabilities, GameWorld world) {
-		super(capabilities);
+	public View(GameWorld world) {
 		this.world = world;
-
-		addGLEventListener(new GLEventListener() {
-
-			@Override
-			public void reshape(GLAutoDrawable glautodrawable, int x, int y,
-					int width, int height) {
-				gl = glautodrawable.getGL().getGL2();
-				setup(width, height);
-			}
-
-			@Override
-			public void init(GLAutoDrawable glautodrawable) {
-			}
-
-			@Override
-			public void dispose(GLAutoDrawable glautodrawable) {
-			}
-
-			@Override
-			public void display(GLAutoDrawable glautodrawable) {
-				gl = glautodrawable.getGL().getGL2();
-				render(glautodrawable.getWidth(), glautodrawable.getHeight());
-			}
-		});
 	}
 
 	private void setup(int width, int height) {
-		gl.glMatrixMode(GL2.GL_PROJECTION);
-		gl.glLoadIdentity();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
 		// coordinate system origin at lower left with width and height same as
 		// the window
-		gl.glOrtho(0, width, 0, height, -1, 1);
-		gl.glMatrixMode(GL2.GL_MODELVIEW);
-		gl.glLoadIdentity();
+		glOrtho(0, width, 0, height, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 
-		gl.glViewport(0, 0, width, height);
+		glViewport(0, 0, width, height);
 	}
 
 	private static final int ANT_RADIUS = 2;
 
 	private void render(int width, int height) {
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 
-		gl.glLoadIdentity();
+		glLoadIdentity();
 
 		for (Player player : world.players) {
 			Color color = colors[player.getId()];
-			gl.glColor3fv(FloatBuffer.wrap(color.getColorComponents(null)));
+			float[] colorComponents = color.getColorComponents(null);
+			glColor3f(colorComponents[0], colorComponents[1], colorComponents[2]);
 			
 			for (AntObject antObject : player.antObjects) {
 				renderCircle(antObject.getPosition(), ANT_RADIUS);
@@ -101,56 +68,54 @@ public class View extends GLCanvas {
 	}
 
 	private void translate(Point2D.Double p) {
-		gl.glTranslated(p.getX(), p.getY(), 0);
+		glTranslated(p.getX(), p.getY(), 0);
 	}
 
 	private void renderCircle(Point2D.Double p, double radius) {
-		gl.glPushMatrix();
+		glPushMatrix();
 		translate(p);
-		gl.glScaled(radius, radius, radius);
+		glScaled(radius, radius, radius);
 		renderUnitCircle();
-		gl.glPopMatrix();
+		glPopMatrix();
 	}
 
 	final int numberOfCircleCorners = 24;
 
 	private void renderUnitCircle() {
-		gl.glBegin(GL.GL_TRIANGLE_FAN);
-		gl.glVertex2f(0, 0);
+		glBegin(GL_TRIANGLE_FAN);
+		glVertex2f(0, 0);
 		for (int i = 0; i <= numberOfCircleCorners; i++) {
 			final double angle = 2 * Math.PI * i / numberOfCircleCorners;
-			gl.glVertex2d(Math.cos(angle), Math.sin(angle));
+			glVertex2d(Math.cos(angle), Math.sin(angle));
 		}
-		gl.glEnd();
+		glEnd();
 	}
 
 	/**
 	 * @param args
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-	public static void main(String[] args) {
-		GLProfile glprofile = GLProfile.getDefault();
-		GLCapabilities glcapabilities = new GLCapabilities(glprofile);
-		GLCanvas glcanvas = null;
-		try { 
-			glcanvas = new View(glcapabilities, GameWorld.testWorld());
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+		View view = new View(GameWorld.testWorld());
+		final int width = 800;
+		final int height = 600;
+		try {
+			Display.setDisplayMode(new DisplayMode(width, height));
+			Display.create();
+		} catch (LWJGLException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.exit(0);
 		}
-
-		final JFrame jframe = new JFrame("One Triangle Swing GLCanvas");
-		jframe.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent windowevent) {
-				jframe.dispose();
-				System.exit(0);
-			}
-		});
-
-		jframe.getContentPane().add(glcanvas, BorderLayout.CENTER);
-		jframe.setSize(640, 480);
-		jframe.setVisible(true);
+		
+		// init OpenGL here
+		
+		while (!Display.isCloseRequested()) {
+			view.setup(width, height);
+			view.render(width, height);
+			Display.update();
+		}
+		
+		Display.destroy();
 	}
 }
