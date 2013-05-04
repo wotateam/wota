@@ -5,8 +5,8 @@ import java.util.List;
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.Player;
-import de.wota.Vector;
 import de.wota.ai.AntAI;
+import de.wota.utility.Vector;
 
 /**
  * Interne Darstellung von Ants. Enthält alle Informationen.

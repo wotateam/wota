@@ -1,5 +1,6 @@
 package de.wota.gameobjects;
 
+import java.lang.Math;
 import java.util.Random;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,7 +8,8 @@ import java.util.List;
 
 import de.wota.Message;
 import de.wota.gameobjects.GameWorldParameters;
-import de.wota.Vector;
+import de.wota.utility.Vector;
+import de.wota.utility.Modulo;
 import de.wota.Action;
 import de.wota.AntOrder;
 import de.wota.Player;
@@ -91,11 +93,6 @@ public class GameWorld {
 	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
 		
-		// TODO remove this test ----------------------
-		Random random = new Random();
-		actor.takesDamage(3*random.nextDouble());
-		// --------------------------------------------
-		
 		// Attack
 		// TODO add collateral damage
 		Ant targetAnt = action.getAttackTarget();
@@ -127,23 +124,6 @@ public class GameWorld {
 			messages.add(message);
 			System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
 		}
-	}
-	
-	/**
-	 * Assumes that p1 and p2 are in the fundamental region.
-	 * @param p1
-	 * @param p2
-	 * @return The shortest vector from p1 to a point equivalent to p2.
-	 */
-	public static Vector shortestDifferenceOnTorus(Vector p1, Vector p2) {
-		Vector d = Vector.add(p1, Vector.scale(-1,p2));
-		if (d.x > GameWorldParameters.SIZE_X) {
-			d.x = GameWorldParameters.SIZE_X - d.x; 
-		}
-		if (d.y > GameWorldParameters.SIZE_Y) {
-			d.y = GameWorldParameters.SIZE_Y - d.y; 
-		}
-		return d;
 	}
 	
 	/**
@@ -241,7 +221,7 @@ public class GameWorld {
 			
 			for (int i = 0; i < numberOfVisibleCells; i++) {
 				for (T t : field.get(cells[x+deltaX[i]][y+deltaY[i]])) {
-					if (shortestDifferenceOnTorus(t.getPosition(),center).length() < radius) {
+					if (GameWorldParameters.shortestDifferenceOnTorus(t.getPosition(),center).length() < radius) {
 						listOfTsInsideCircle.add(t);
 					}
 				}
@@ -301,21 +281,12 @@ public class GameWorld {
 			public abstract List<T> get(Cell cell);
 		}
 		
-		private final int mod(int x, int m) {
-			int r = x % m;
-			if (r < 0) {
-				return r + m;
-			} else {
-				return r;
-			}
-		}
-		
 		public final int coordinatesToCellXIndex(Vector p) {
-			return mod((int) Math.round(Math.floor(p.x/cellWidth)), numberOfHorizontalCells) + 1;
+			return Modulo.mod((int) Math.round(Math.floor(p.x/cellWidth)), numberOfHorizontalCells) + 1;
 		}
 		
 		public final int coordinatesToCellYIndex(Vector p) {
-			return mod((int) Math.round(Math.floor(p.y/cellHeight)), numberOfVerticalCells) + 1;
+			return Modulo.mod((int) Math.round(Math.floor(p.y/cellHeight)), numberOfVerticalCells) + 1;
 		}
 		
 		public final Cell coordinatesToCell(Vector p) {

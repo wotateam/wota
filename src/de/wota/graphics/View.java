@@ -13,12 +13,12 @@ import java.nio.FloatBuffer;
 
 
 import de.wota.Player;
-import de.wota.Vector;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.testing.TestWorld;
+import de.wota.utility.Vector;
 
 /**
  * Renders everything.
@@ -44,7 +44,7 @@ public class View {
 
 		// coordinate system origin at lower left with width and height same as
 		// the window
-		glOrtho(0, width, 0, height, -1, 1);
+		glOrtho(0, GameWorldParameters.SIZE_X, 0, GameWorldParameters.SIZE_Y, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
@@ -104,8 +104,8 @@ public class View {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		GameWorld gameWorld = TestWorld.testWorld();
 		View view = new View(gameWorld);
-		final int width = 800;
-		final int height = 600;
+		final int width = 700;
+		final int height = 700;
 		try {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();

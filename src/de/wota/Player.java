@@ -6,6 +6,7 @@ import java.util.List;
 import de.wota.ai.HillAI;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.HillObject;
+import de.wota.utility.Vector;
 
 public class Player {
 	public final List<AntObject> antObjects = new LinkedList<AntObject>();

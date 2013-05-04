@@ -1,6 +1,6 @@
 package de.wota.gameobjects;
 
-import de.wota.Vector;
+import de.wota.utility.Vector;
 
 /**
  * Base class for all objects which are part of the game.
@@ -17,7 +17,7 @@ public class GameObject {
 	}
 	
 	public void setPosition(Vector position) {
-		this.position = position;
+		this.position = GameWorldParameters.normalize(position);
 	}
 
 	public Vector getPosition() {
@@ -26,7 +26,7 @@ public class GameObject {
 	
 
 	public void move(Vector moveVector) {
-		position = Vector.add(position,moveVector);
+		setPosition(Vector.add(position,moveVector));
 	}
 
 }

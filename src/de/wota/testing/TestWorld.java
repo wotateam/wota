@@ -3,13 +3,13 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 import de.wota.Player;
-import de.wota.Vector;
 import de.wota.ai.DemoAntAI;
 import de.wota.ai.DummyHillAI;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.Ant.Caste;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
+import de.wota.utility.Vector;
 
 public class TestWorld {
 

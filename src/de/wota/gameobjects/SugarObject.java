@@ -1,6 +1,6 @@
 package de.wota.gameobjects;
 
-import de.wota.Vector;
+import de.wota.utility.Vector;
 
 
 /**

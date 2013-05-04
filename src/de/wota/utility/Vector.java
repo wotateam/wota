@@ -1,4 +1,4 @@
-package de.wota;
+package de.wota.utility;
 
 public class Vector {
 	public double x;
@@ -7,6 +7,11 @@ public class Vector {
 	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Vector(Vector v) {
+		this.x = v.x;
+		this.y = v.y;
 	}
 	
 	public double length() {

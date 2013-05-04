@@ -2,11 +2,11 @@ package de.wota.gameobjects;
 
 import java.util.List;
 
-import de.wota.Vector;
 import de.wota.AntOrder;
 import de.wota.Player;
 import de.wota.ai.Hill;
 import de.wota.ai.HillAI;
+import de.wota.utility.Vector;
 
 public class HillObject extends GameObject {
 	private final HillAI ai;
