@@ -146,55 +146,27 @@ public class GameWorld {
 		return d;
 	}
 	
+	/**
+	 * When determining which objects are visible to an ant, we would like to avoid 
+	 * iterating over all objects. We subdivide the torus into cells and only look
+	 * at the cells adjacent to the ant and the cell containing it.
+	 * 
+	 * The game takes place on a torus. Periodicity is implemented having the zeroth 
+	 * row point to the same cells as the second to last and the last point to the same 
+	 * cells as the first.
+	 * 
+	 * @author daniel
+	 *
+	 */
 	public class SpacePartioning {
-		// Relative coordinates of visible cells, i.e. the cell itself and the adjacent ones.
-		private final int numberOfVisibleCells = 9;
-		private final int[] deltaX = {0, 1, 1, 0, -1, -1, -1,  0,  1};
-		private final int[] deltaY = {0, 0, 1, 1,  1,  0, -1, -1, -1};
-		
-		public List<AntObject> antObjectsWithDistanceLessThanTo(double r, Vector p) {
-			List<AntObject> listOfAntObjectsWithDistanceLessRThanToP = new LinkedList<AntObject>();
-			int x = coordinatesToCellXIndex(p);
-			int y = coordinatesToCellYIndex(p);
-			
-			for (int i = 0; i < numberOfVisibleCells; i++) {
-				for (AntObject antObject : cells[x+deltaX[i]][y+deltaY[i]].antObjects) {
-					if (shortestDifferenceOnTorus(antObject.getPosition(),p).length() < r) {
-						listOfAntObjectsWithDistanceLessRThanToP.add(antObject);
-					}
-				}
-			}
-			
-			return listOfAntObjectsWithDistanceLessRThanToP;
-		}
-		
-		private final double width;
-		private final double height;
-		private final double minimumCellSize;
-		private int numberOfHorizontalCells;
-		private int numberOfVerticalCells;
-		private final double cellWidth;
-		private final double cellHeight;
-		
-		private final Cell[][] cells;
-		
-		public class Cell {
-			private final List<AntObject> antObjects = new LinkedList<AntObject>();
-			private final List<HillObject> hillObjects = new LinkedList<HillObject>();
-			private final List<Sugar> sugarObjects = new LinkedList<Sugar>();
-		}
-		
+
 		public SpacePartioning(double width, double height, double minimumCellSize) {
-			this.width = width;
-			this.height = height;
 			this.minimumCellSize = minimumCellSize;
 			numberOfHorizontalCells = (int) Math.round(Math.floor(width/minimumCellSize));
 			numberOfVerticalCells = (int) Math.round(Math.floor(height/minimumCellSize));
 			cellWidth = width / numberOfHorizontalCells;
 			cellHeight = height / numberOfVerticalCells;
 			
-			// Periodicity is implemented having the zeroth row point to the same cells as  
-			// the second to last and the last point to the same cells as the first.
 			cells = new Cell[numberOfHorizontalCells + 2][numberOfVerticalCells + 2];
 			for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
 				for (int j = 1; j < numberOfVerticalCells + 1; j++) {
@@ -219,8 +191,75 @@ public class GameWorld {
 				}
 				coordinatesToCell(player.hillObject.getPosition()).hillObjects.add(player.hillObject);
 			}
+		}
+		
+		// Relative coordinates of visible cells, i.e. the cell itself and the adjacent ones.
+		private final int numberOfVisibleCells = 9;
+		private final int[] deltaX = {0, 1, 1, 0, -1, -1, -1,  0,  1};
+		private final int[] deltaY = {0, 0, 1, 1,  1,  0, -1, -1, -1};
+		
+		private <T extends GameObject> List<T> TsInsideCircle(double radius, Vector center, GameObjectListField<T> field) {
+			if (radius > minimumCellSize) { 
+				throw new Error("radius > minimumCellSize");
+			}
+			List<T> listOfTsInsideCircle = new LinkedList<T>();
+			int x = coordinatesToCellXIndex(center);
+			int y = coordinatesToCellYIndex(center);
 			
+			for (int i = 0; i < numberOfVisibleCells; i++) {
+				for (T t : field.get(cells[x+deltaX[i]][y+deltaY[i]])) {
+					if (shortestDifferenceOnTorus(t.getPosition(),center).length() < radius) {
+						listOfTsInsideCircle.add(t);
+					}
+				}
+			}
 			
+			return listOfTsInsideCircle;
+		}
+		
+		public List<AntObject> antObjectsInsideCircle(double radius, Vector center) {
+			return TsInsideCircle(radius, center, new GameObjectListField<AntObject>() {
+				@Override
+				public List<AntObject> get(Cell cell) {
+					return cell.antObjects;
+				}
+			});
+		}
+		
+		public List<HillObject> hillObjectsInsideCircle(double radius, Vector center) {
+			return TsInsideCircle(radius, center, new GameObjectListField<HillObject>() {
+				@Override
+				public List<HillObject> get(Cell cell) {
+					return cell.hillObjects;
+				}
+			});
+		}
+		
+		public List<SugarObject> sugarObjectsInsideCircle(double radius, Vector center) {
+			return TsInsideCircle(radius, center, new GameObjectListField<SugarObject>() {
+				@Override
+				public List<SugarObject> get(Cell cell) {
+					return cell.sugarObjects;
+				}
+			});
+		}
+		
+		private final double minimumCellSize;
+		private int numberOfHorizontalCells;
+		private int numberOfVerticalCells;
+		private final double cellWidth;
+		private final double cellHeight;
+		
+		private final Cell[][] cells;
+		
+		private abstract class GameObjectListField<T extends GameObject> {
+			public abstract List<T> get(Cell cell);
+		}
+		
+		public class Cell {
+			private final List<AntObject> antObjects = new LinkedList<AntObject>();
+			private final List<HillObject> hillObjects = new LinkedList<HillObject>();
+			private final List<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 		}
 		
 		private final int mod(int x, int m) {
