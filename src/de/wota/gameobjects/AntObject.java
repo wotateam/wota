@@ -95,9 +95,11 @@ public class AntObject extends GameObject{
 		// TODO AntObject.die() schreiben. z.B. könnte die AI einen letzten Todesschrei abgeben
 	}
 
-	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar) {
+	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar,
+			List<Message> incomingMessages) {
 		ai.visibleAnts = visibleAnts;
 		ai.visibleSugar = visibleSugar;
+		ai.incomingMessages = incomingMessages;
 		ai.tick();
 		action = ai.popAction();
 		// modify the action such that the actor is the right one

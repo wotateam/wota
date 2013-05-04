@@ -21,6 +21,7 @@ import de.wota.gameobjects.SugarObject;
 public abstract class BaseAI {
 	public List<Ant> visibleAnts;
 	public List<Sugar> visibleSugar;
+	public List<Message> incomingMessages;
 	protected Action action = new Action();
 	
 	public abstract void tick();

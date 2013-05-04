@@ -5,8 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-
+import de.wota.Message;
 import de.wota.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
@@ -22,9 +21,9 @@ public class GameWorld {
 
 	public final List<Player> players = new LinkedList<Player>();
 	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
+	private LinkedList<Message> messages = new LinkedList<Message>();
 
 	public void tick() {
-		
 		// create Ants for all AntObjects and sets them in the AntAI
 		// (the latter happens in AntObject.createAnt() )
 		// also create Sugar for SugarObjects
@@ -42,9 +41,10 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				LinkedList<Ant> visibleAnts = new LinkedList<Ant>();
 				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
+				LinkedList<Message> audibleMessages = new LinkedList<Message>();
 
-				// TODO pass visibleAnts and visibleSugar
-				antObject.tick(visibleAnts, visibleSugar);
+				// TODO pass visibleAnts and visibleSugar and messages
+				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
 			}
 		}
 
@@ -86,7 +86,7 @@ public class GameWorld {
 	}
 	
 	/** führt die Aktion für das AntObject aus */
-	private static void executeAction(AntObject actor) {
+	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
 		
 		// TODO remove this test ----------------------
@@ -107,6 +107,7 @@ public class GameWorld {
 		actor.move(Vector.fromPolar(action.getMovementDistance(), action.getMovementDirection()));
 		
 		// Messages
-		// TODO Messages
+		if (action.getMessage() != null)
+			messages.add(action.getMessage());
 	}
 }
