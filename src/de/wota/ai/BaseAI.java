@@ -5,12 +5,13 @@ import java.util.List;
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.Sugar;
 import de.wota.gameobjects.SugarObject;
 
 /**
  * Contains AI PI common to ants and the ant hill, i.e. perception.
- *  
+ * 
  * @author Daniel
  * 
  */
@@ -22,7 +23,10 @@ public abstract class BaseAI {
 
 	public abstract void tick();
 	
-	// TODO add perception
+	/** Gets called when Ant dies. */
+	public void die() {
+		
+	}
 	
 	/** CAUTION! THIS METHOD DELETES THE ACTION */
 	public Action popAction() {
@@ -30,6 +34,4 @@ public abstract class BaseAI {
 		action = new Action();
 		return returnAction;
 	}
-	
-	// TODO Methoden um Konstanten abzufragen
 }

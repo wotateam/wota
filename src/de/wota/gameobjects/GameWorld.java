@@ -63,7 +63,10 @@ public class GameWorld {
 			//LinkedList<AntObject> antObjectsToDie = new LinkedList<AntObject>();
 
 			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator(); antObjectIter.hasNext();) {
-				if (antObjectIter.next().isDying()) {
+				AntObject maybeDead = antObjectIter.next();
+				if (maybeDead.isDying()) {
+					// hat neue Aktionen erzeugt.
+					executeLastWill(maybeDead);
 					antObjectIter.remove();
 				}
 			}
@@ -103,13 +106,14 @@ public class GameWorld {
 		}
 		
 		// Movement
+		//executeMovement(actor, action);
 		actor.move(Vector.fromPolar(action.getMovementDistance(), action.getMovementDirection()));
 		
 		// Messages
-		if (action.getMessage() != null)
-			messages.add(action.getMessage());
+		handleMessages(actor, action);
 	}
 	
+<<<<<<< Upstream, based on origin/master
 	/**
 	 * Assumes that p1 and p2 are in the fundamental region.
 	 * @param p1
@@ -225,4 +229,24 @@ public class GameWorld {
 			return cells[coordinatesToCellXIndex(p)][coordinatesToCellYIndex(p)];
 		}
 	}
+=======
+	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr */
+	private void executeLastWill(AntObject actor) {
+		Action action = actor.getAction();
+
+		// Messages
+		handleMessages(actor, action);
+	}
+	
+	private void handleMessages(AntObject actor, Action action) {
+		if (action.getMessage() != null) {
+			Message message = action.getMessage();
+			messages.add(message);
+			System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
+		}
+	}
+	
+	/*private void executeMovement(AntObject actor, Action action) {
+	}*/ 
+>>>>>>> dd4e798 die() und erzeugen von Nachrichten.
 }

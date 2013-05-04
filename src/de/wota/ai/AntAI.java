@@ -28,7 +28,7 @@ public abstract class AntAI extends BaseAI{
 	/** Move in certain direction with maximum distance
 	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
 	 */
-	protected void moveInDirection(double direction) { // TODO name
+	protected void moveInDirection(double direction) {
 		action.setMovementDirection(direction);
 		action.setMovementDistance(GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}

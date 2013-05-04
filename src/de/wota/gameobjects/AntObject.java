@@ -92,7 +92,13 @@ public class AntObject extends GameObject{
 	}
 	
 	private void die() {
-		// TODO AntObject.die() schreiben. z.B. könnte die AI einen letzten Todesschrei abgeben
+		ai.die();
+		action = ai.popAction();
+		Message message = action.getMessage();
+		if (message != null) {
+			message.setSender(ant);
+		}
+		action.setMessage(message);
 	}
 
 	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar,
