@@ -158,9 +158,10 @@ public class GameWorld {
 	 * @author daniel
 	 *
 	 */
-	public class SpacePartioning {
+	private static class SpacePartioning {
 
-		public SpacePartioning(double width, double height, double minimumCellSize) {
+		public SpacePartioning(double width, double height, double minimumCellSize, 
+				List<Player> players, List<SugarObject> sugarObjects) {
 			this.minimumCellSize = minimumCellSize;
 			numberOfHorizontalCells = (int) Math.round(Math.floor(width/minimumCellSize));
 			numberOfVerticalCells = (int) Math.round(Math.floor(height/minimumCellSize));
@@ -191,6 +192,38 @@ public class GameWorld {
 				}
 				coordinatesToCell(player.hillObject.getPosition()).hillObjects.add(player.hillObject);
 			}
+			
+			for (SugarObject sugarObject : sugarObjects) {
+				coordinatesToCell(sugarObject.getPosition()).sugarObjects.add(sugarObject);
+			}
+		}
+		
+		public void update() {
+			for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
+				for (int j = 1; j < numberOfVerticalCells + 1; j++) {
+					Cell cell = cells[i][j];
+					update(cell, i, j, Cell.antObjectsField);
+					update(cell, i, j, Cell.hillObjectsField);
+					update(cell, i, j, Cell.sugarObjectsField);
+				}
+			}
+		}
+		
+		private <T extends GameObject> void update(Cell cell, int i, int j, GameObjectListField<T> field) {
+			List<T> listOfTs = field.get(cell);
+			
+			Iterator<T> iterator = listOfTs.iterator();
+			while (iterator.hasNext()) {
+				T t = iterator.next();
+				Vector p = t.getPosition();
+				int newI = coordinatesToCellXIndex(p);
+				int newJ = coordinatesToCellYIndex(p);
+				
+				if (i != newI || j != newJ) {
+					iterator.remove();
+					field.get(cells[newI][newJ]).add(t);
+				}
+			}
 		}
 		
 		// Relative coordinates of visible cells, i.e. the cell itself and the adjacent ones.
@@ -218,30 +251,15 @@ public class GameWorld {
 		}
 		
 		public List<AntObject> antObjectsInsideCircle(double radius, Vector center) {
-			return TsInsideCircle(radius, center, new GameObjectListField<AntObject>() {
-				@Override
-				public List<AntObject> get(Cell cell) {
-					return cell.antObjects;
-				}
-			});
+			return TsInsideCircle(radius, center, Cell.antObjectsField);
 		}
 		
 		public List<HillObject> hillObjectsInsideCircle(double radius, Vector center) {
-			return TsInsideCircle(radius, center, new GameObjectListField<HillObject>() {
-				@Override
-				public List<HillObject> get(Cell cell) {
-					return cell.hillObjects;
-				}
-			});
+			return TsInsideCircle(radius, center, Cell.hillObjectsField);
 		}
 		
 		public List<SugarObject> sugarObjectsInsideCircle(double radius, Vector center) {
-			return TsInsideCircle(radius, center, new GameObjectListField<SugarObject>() {
-				@Override
-				public List<SugarObject> get(Cell cell) {
-					return cell.sugarObjects;
-				}
-			});
+			return TsInsideCircle(radius, center, Cell.sugarObjectsField);
 		}
 		
 		private final double minimumCellSize;
@@ -252,14 +270,35 @@ public class GameWorld {
 		
 		private final Cell[][] cells;
 		
-		private abstract class GameObjectListField<T extends GameObject> {
-			public abstract List<T> get(Cell cell);
+		
+		private static class Cell {
+			private final List<AntObject> antObjects = new LinkedList<AntObject>();
+			private static final GameObjectListField<AntObject> antObjectsField = new GameObjectListField<AntObject>() {
+				@Override
+				public List<AntObject> get(Cell cell) {
+					return cell.antObjects;
+				}
+			};
+			
+			private final List<HillObject> hillObjects = new LinkedList<HillObject>();
+			private static final GameObjectListField<HillObject> hillObjectsField = new GameObjectListField<HillObject>() {
+				@Override
+				public List<HillObject> get(Cell cell) {
+					return cell.hillObjects;
+				}
+			};
+			
+			private final List<SugarObject> sugarObjects = new LinkedList<SugarObject>();
+			private static final GameObjectListField<SugarObject> sugarObjectsField = new GameObjectListField<SugarObject>() {
+				@Override
+				public List<SugarObject> get(Cell cell) {
+					return cell.sugarObjects;
+				}
+			};
 		}
 		
-		public class Cell {
-			private final List<AntObject> antObjects = new LinkedList<AntObject>();
-			private final List<HillObject> hillObjects = new LinkedList<HillObject>();
-			private final List<SugarObject> sugarObjects = new LinkedList<SugarObject>();
+		private static abstract class GameObjectListField<T extends GameObject> {
+			public abstract List<T> get(Cell cell);
 		}
 		
 		private final int mod(int x, int m) {
