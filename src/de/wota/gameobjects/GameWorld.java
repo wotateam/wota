@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.Message;
-import de.wota.GameWorldParameters;
+import de.wota.gameobjects.GameWorldParameters;
 import de.wota.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
