@@ -1,23 +1,16 @@
 package de.wota.gameobjects;
 
-import de.wota.Vector;
-
-
 /**
- * Ein Zuckerhaufen.
+ * Large amount of sugar which wants to be collected
  * @author pascal
  *
  */
-public class Sugar extends GameObject {
+public class Sugar {
+	public final double amount;
+	final SugarObject sugarObject;
 	
-	private double amount;
-	
-	public Sugar(double amount, Vector position) {
-		super(position);
-		this.amount = amount;
-	}
-	
-	public double getAmount() {
-		return amount;
+	public Sugar(SugarObject sugarObject) {
+		this.sugarObject = sugarObject;
+		amount = sugarObject.getAmount();
 	}
 }

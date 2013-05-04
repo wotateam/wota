@@ -40,7 +40,8 @@ public class AntObject extends GameObject{
 		
 		this.ai = antAI;
 		this.caste = caste;
-		this.ant = new Ant(this);
+		
+		this.ant = new Ant(this); // das muss ganz am Ende passieren
 	}
 
 	public AntAI getAI() {

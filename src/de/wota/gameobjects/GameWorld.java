@@ -21,16 +21,20 @@ import de.wota.ai.AntAI;
 public class GameWorld {
 
 	public final List<Player> players = new LinkedList<Player>();
-	private LinkedList<Sugar> sugars;
+	private LinkedList<SugarObject> sugarObjects;
 
 	public void tick() {
 		
 		// create Ants for all AntObjects and sets them in the AntAI
 		// (the latter happens in AntObject.createAnt() )
+		// also create Sugar for SugarObjects
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
 				antObject.createAnt();
 			}
+		}
+		for (SugarObject sugarObject : sugarObjects) {
+			sugarObject.createSugar();
 		}
 		
 		// call tick for all AntObjects

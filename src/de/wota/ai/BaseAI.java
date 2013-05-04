@@ -10,6 +10,7 @@ import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.Sugar;
+import de.wota.gameobjects.SugarObject;
 
 /**
  * Contains AI PI common to ants and the ant hill, i.e. perception.
