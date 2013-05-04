@@ -10,11 +10,7 @@ import de.wota.gameobjects.GameWorldParameters;
 /** 
  * Basisklasse für die Ant-KI 
  */
-public abstract class AntAI extends BaseAI{	
-	public AntAI() {
-		// TODO comment this
-	}
-	
+public abstract class AntAI extends BaseAI{		
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value!
 	

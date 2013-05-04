@@ -2,10 +2,6 @@ package de.wota.ai;
 
 import java.util.List;
 
-import org.omg.PortableInterceptor.USER_EXCEPTION;
-
-import sun.awt.windows.ThemeReader;
-
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
@@ -22,8 +18,8 @@ public abstract class BaseAI {
 	public List<Ant> visibleAnts;
 	public List<Sugar> visibleSugar;
 	public List<Message> incomingMessages;
-	protected Action action = new Action();
-	
+	protected Action action = new Action(); // FIXME really protected?
+
 	public abstract void tick();
 	
 	// TODO add perception

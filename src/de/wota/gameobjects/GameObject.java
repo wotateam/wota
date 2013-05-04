@@ -10,9 +10,10 @@ import de.wota.Vector;
 public class GameObject {
 
 	private Vector position;
-
+	
 	public GameObject(Vector position) {
 		setPosition(position);
+		
 	}
 	
 	public void setPosition(Vector position) {
@@ -25,7 +26,7 @@ public class GameObject {
 	
 
 	public void move(Vector moveVector) {
-		position = position.add(moveVector);
+		position = Vector.add(position,moveVector);
 	}
 
 }
