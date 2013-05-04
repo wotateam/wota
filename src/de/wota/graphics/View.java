@@ -12,12 +12,12 @@ import java.awt.geom.Point2D;
 import java.nio.FloatBuffer;
 
 
-import de.wota.GameWorldParameters;
 import de.wota.Player;
 import de.wota.Vector;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
+import de.wota.gameobjects.GameWorldParameters;
 import de.wota.testing.TestWorld;
 
 /**

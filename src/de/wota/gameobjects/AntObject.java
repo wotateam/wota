@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
+import de.wota.Player;
 import de.wota.Vector;
 import de.wota.ai.AntAI;
 
@@ -18,10 +19,10 @@ public class AntObject extends GameObject{
 	private Ant ant;
 	private final AntAI ai;
 	public final int id;
-	private double health;
-	private double speed;
+	private double health = GameWorldParameters.ANT_HEALTH_INIT;
+	private double speed = GameWorldParameters.ANT_SPEED_INIT;
 	/** Angriffspunkte */
-	private double attack;
+	private double attack = GameWorldParameters.ANT_ATTACK_INIT;
 	private Action action;
 	final private Ant.Caste caste;
 	
@@ -72,18 +73,25 @@ public class AntObject extends GameObject{
 	
 	public void createAnt() {
 		ant = new Ant(this);
-		this.ai.self = ant;
+		this.ai.setAnt(ant);
 	}
 	
 	public void takesDamage(double attack) {
 		health = health - attack;
+	}
+	
+	/** Checks if AntObject has positive health. If not, die() is called */
+	public boolean isDying() {
 		if (health <= 0) {
 			die();
+			return true;
 		}
+		else
+			return false;
 	}
 	
 	private void die() {
-		// TODO write AntObject.die()
+		// TODO AntObject.die() schreiben. z.B. könnte die AI einen letzten Todesschrei abgeben
 	}
 
 	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar) {
@@ -105,4 +113,5 @@ public class AntObject extends GameObject{
 		idCounter++;
 		return idCounter - 1;
 	}
+
 }

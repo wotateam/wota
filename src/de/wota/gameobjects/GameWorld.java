@@ -1,7 +1,11 @@
 package de.wota.gameobjects;
 
+import java.util.Random;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
 import de.wota.Vector;
 import de.wota.Action;
@@ -48,6 +52,19 @@ public class GameWorld {
 			// order does matter since the hill creates new ants!
 			executeAction(player.hillObject); 
 		}
+		
+		// let Ants die!
+		for (Player player : players) {
+			//LinkedList<AntObject> antObjectsToDie = new LinkedList<AntObject>();
+
+			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator(); antObjectIter.hasNext();) {
+				if (antObjectIter.next().isDying()) {
+					antObjectIter.remove();
+				}
+			}
+		}
+
+		
 	}
 
 	private static void executeAction(HillObject hill) {
@@ -67,6 +84,11 @@ public class GameWorld {
 	/** führt die Aktion für das AntObject aus */
 	private static void executeAction(AntObject actor) {
 		Action action = actor.getAction();
+		
+		// TODO remove this test ----------------------
+		Random random = new Random();
+		actor.takesDamage(3*random.nextDouble());
+		// --------------------------------------------
 		
 		// Attack
 		// TODO add collateral damage

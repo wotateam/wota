@@ -6,7 +6,7 @@ public class MoveAI extends AntAI {
 
 	@Override
 	public void tick() {
-		moveTo(90);
+		moveInDirection(90);
 	}
 	
 }

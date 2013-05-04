@@ -1,39 +1,47 @@
 package de.wota.ai;
 
-import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
-
 import de.wota.Action;
-import de.wota.GameWorldParameters;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
+import de.wota.gameobjects.GameWorldParameters;
 
 
 /** 
- * Basisklasse für die KI 
+ * Basisklasse für die Ant-KI 
  */
 public abstract class AntAI extends BaseAI{	
 	public AntAI() {
 		// TODO comment this
 	}
 	
-	public Ant self; // user AI may have changed this value!
+	/** Reference to Ant itself */
+	protected Ant self; // user AI may have changed this value!
 	
+	/** Attack target of type Ant */
 	protected void attack(Ant target) {
 		action.setAttackTarget(target);
 	}
 	
+	/** Send message of type int */
 	protected void talk(int content) {
 		Message message = new Message(content);
 		action.setMessage(message);
 	}
 	
-	protected void moveTo(double direction) { // TODO name
+	/** Move in certain direction with maximum distance
+	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
+	 */
+	protected void moveInDirection(double direction) { // TODO name
 		action.setMovementDirection(direction);
 		action.setMovementDistance(GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
-	protected void moveTo(double direction, double distance) {
+	/** Move in direction with specified distance
+	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
+	 * @param distance distance to move in one tick
+	 */
+	protected void moveInDirection(double direction, double distance) {
 		action.setMovementDirection(direction);
 		action.setMovementDistance(distance);
 	}
