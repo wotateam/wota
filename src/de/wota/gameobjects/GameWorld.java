@@ -21,7 +21,7 @@ import de.wota.ai.AntAI;
 public class GameWorld {
 
 	public final List<Player> players = new LinkedList<Player>();
-	private LinkedList<SugarObject> sugarObjects;
+	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 
 	public void tick() {
 		
