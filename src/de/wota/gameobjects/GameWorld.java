@@ -113,7 +113,22 @@ public class GameWorld {
 		handleMessages(actor, action);
 	}
 	
-<<<<<<< Upstream, based on origin/master
+	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr */
+	private void executeLastWill(AntObject actor) {
+		Action action = actor.getAction();
+
+		// Messages
+		handleMessages(actor, action);
+	}
+	
+	private void handleMessages(AntObject actor, Action action) {
+		if (action.getMessage() != null) {
+			Message message = action.getMessage();
+			messages.add(message);
+			System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
+		}
+	}
+	
 	/**
 	 * Assumes that p1 and p2 are in the fundamental region.
 	 * @param p1
@@ -229,24 +244,4 @@ public class GameWorld {
 			return cells[coordinatesToCellXIndex(p)][coordinatesToCellYIndex(p)];
 		}
 	}
-=======
-	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr */
-	private void executeLastWill(AntObject actor) {
-		Action action = actor.getAction();
-
-		// Messages
-		handleMessages(actor, action);
-	}
-	
-	private void handleMessages(AntObject actor, Action action) {
-		if (action.getMessage() != null) {
-			Message message = action.getMessage();
-			messages.add(message);
-			System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
-		}
-	}
-	
-	/*private void executeMovement(AntObject actor, Action action) {
-	}*/ 
->>>>>>> dd4e798 die() und erzeugen von Nachrichten.
 }
