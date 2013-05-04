@@ -93,7 +93,11 @@ public class AntObject extends GameObject{
 		action = ai.popAction();
 		// modify the action such that the actor is the right one
 		Message message = action.getMessage();
-		message.setSender(ant);
+		if (message != null) {
+			message.setSender(ant);
+		}
+		// TODO not sure if set message is supposed to do something other than just setting the message in the future.
+		// if not, get rid of this. 
 		action.setMessage(message);
 	}
 	

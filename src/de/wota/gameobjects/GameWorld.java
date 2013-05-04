@@ -71,9 +71,11 @@ public class GameWorld {
 		// Attack
 		// TODO add collateral damage
 		Ant targetAnt = action.getAttackTarget();
-		// TODO check if target is in range.
-		AntObject target = targetAnt.antObject;
-		target.takesDamage(actor.getAttack());
+		if (targetAnt != null) {
+			// TODO check if target is in range.
+			AntObject target = targetAnt.antObject;
+			target.takesDamage(actor.getAttack());
+		}
 		
 		// Movement
 		actor.move(Vector.fromPolar(action.getMovementDistance(), action.getMovementDirection()));
