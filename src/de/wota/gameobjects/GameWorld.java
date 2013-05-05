@@ -8,7 +8,9 @@ import java.util.List;
 
 import de.wota.Message;
 import de.wota.gameobjects.GameWorldParameters;
+
 import de.wota.statistics.AbstractLogger;
+
 import de.wota.utility.Vector;
 import de.wota.utility.Modulo;
 import de.wota.Action;
@@ -26,12 +28,12 @@ public class GameWorld {
 	public final List<Player> players = new LinkedList<Player>();
 	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 	private LinkedList<Message> messages = new LinkedList<Message>();
-
+ 
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
 	public void tick() {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
-		
+
 		// create Ants for all AntObjects and sets them in the AntAI
 		// (the latter happens in AntObject.createAnt() )
 		// also create Sugar for SugarObjects
@@ -51,9 +53,13 @@ public class GameWorld {
 				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
 				LinkedList<Message> audibleMessages = new LinkedList<Message>();
 
-				// TODO pass visibleAnts and visibleSugar and messages
 				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
 			}
+			// TODO objekte richtig befüllen.
+			LinkedList<Ant> visibleAnts = new LinkedList<Ant>();
+			LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
+			LinkedList<Message> audibleMessages = new LinkedList<Message>();
+			player.queenObject.tick(visibleAnts, visibleSugar, audibleMessages);
 		}
 
 		// execute all actions
@@ -62,7 +68,7 @@ public class GameWorld {
 				executeAction(antObject);
 			}
 			// order does matter since the hill creates new ants!
-			executeAction(player.hillObject); 
+			executeAction(player.queenObject); 
 		}
 		
 		// Let ants die!
@@ -79,24 +85,36 @@ public class GameWorld {
 			}
 		}
 	}
-
-	private static void executeAction(HillObject hill) {
-		// can only produce units
-		List<AntOrder> antOrders = hill.getAntOrders();
+	
+	private static void executeAction(QueenObject queen) {
+		List<AntOrder> antOrders = queen.getAntOrders();
 		for (AntOrder antOrder : antOrders) {
 			AntObject antObject = 
 					new AntObject(
-						hill.getPosition(),
+						queen.player.hillObject.getPosition(),
 						antOrder.getCaste(),
-						antOrder.getAntAIClass()
+						antOrder.getAntAIClass(),
+						queen.player
 					);
-			hill.getPlayer().antObjects.add(antObject);
+			queen.player.antObjects.add(antObject);
 		}
 	}
+/*
+	private static void executeAction(HillObject hill) {
+		// can only produce units
+
+	}
 	
+	*/
+
 	/** führt die Aktion für das AntObject aus */
 	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
+
+		if (action == null) {
+			System.err.println("Action sollte nicht null sein! -> Exit");
+			System.exit(1);
+		}
 		
 		// Attack
 		// TODO add collateral damage
@@ -105,6 +123,15 @@ public class GameWorld {
 			// TODO check if target is in range.
 			AntObject target = targetAnt.antObject;
 			target.takesDamage(actor.getAttack());
+		}
+		
+		// Pick up sugar
+		Sugar sugarSource = action.getSugarSource();
+		if (sugarSource != null) {
+			// TODO change to unspecific caste
+			int amount = Math.min(GameWorldParameters.Gatherer.MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
+			actor.picksUpSugar(amount);
+			sugarSource.sugarObject.reduceAmount(amount);
 		}
 		
 		// Movement
