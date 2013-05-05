@@ -1,9 +1,10 @@
 package de.wota;
 
+import java.awt.DisplayMode;
+
 import de.wota.gameobjects.GameWorld;
-import de.wota.graphics.DisplayMode;
-import de.wota.graphics.LWJGLException;
 import de.wota.graphics.View;
+import de.wota.statistics.TestLogger;
 import de.wota.testing.TestWorld;
 
 /**
@@ -36,6 +37,8 @@ public class Simulation {
 		
 		//FIXME: Solange es keine Karten gibt, Testwelt verwenden
 		gameWorld = TestWorld.testWorld();
+		
+		gameWorld.registerLogger(new TestLogger());
 		
 		if (isGraphical = true)
 		{
