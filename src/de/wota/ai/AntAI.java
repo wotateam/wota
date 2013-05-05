@@ -5,6 +5,7 @@ import de.wota.Message;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Sugar;
 
 
 /** 
@@ -17,6 +18,11 @@ public abstract class AntAI extends BaseAI{
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
 		action.setAttackTarget(target);
+	}
+	
+	/** Pick up sugar */
+	protected void pickUpSugar(Sugar source) {
+		action.setSugarSource(source);
 	}
 	
 	/** Send message of type int */

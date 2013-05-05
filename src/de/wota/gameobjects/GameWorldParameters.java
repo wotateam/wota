@@ -11,6 +11,7 @@ public class GameWorldParameters {
 	
 	public static final double ANT_HEALTH_INIT = 100;
 	public static final double ANT_SPEED_INIT = 1;
+	public static final int MAX_SUGAR_CARRY = 10;
 	/** Angriffspunkte */
 	public static final double ANT_ATTACK_INIT = 5;
 	

@@ -46,7 +46,6 @@ public class GameWorld {
 				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
 				LinkedList<Message> audibleMessages = new LinkedList<Message>();
 
-				// TODO pass visibleAnts and visibleSugar and messages
 				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
 			}
 		}
@@ -100,6 +99,14 @@ public class GameWorld {
 			// TODO check if target is in range.
 			AntObject target = targetAnt.antObject;
 			target.takesDamage(actor.getAttack());
+		}
+		
+		// Pick up sugar
+		Sugar sugarSource = action.getSugarSource();
+		if (sugarSource != null) {
+			int amount = Math.min(GameWorldParameters.MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
+			actor.picksUpSugar(amount);
+			sugarSource.sugarObject.reduceAmount(amount);
 		}
 		
 		// Movement
