@@ -1,6 +1,11 @@
 package de.wota;
 
-import java.awt.DisplayMode;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.*;
+
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 
 import de.wota.gameobjects.GameWorld;
 import de.wota.graphics.View;
@@ -16,6 +21,9 @@ public class Simulation {
 	//FIXME: N_PLAYER durch Karte/Ausgangsstellung ersetzen
 	private final int N_PLAYER;
 	private boolean isGraphical;
+	
+	final int width = 700;
+	final int height = 700;
 	
 	private GameWorld gameWorld;	
 	private View view;
@@ -43,8 +51,6 @@ public class Simulation {
 		if (isGraphical = true)
 		{
 			View view = new View(gameWorld);
-			final int width = 700;
-			final int height = 700;
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create();

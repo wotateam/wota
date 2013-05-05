@@ -38,7 +38,7 @@ public class View {
 		this.world = world;
 	}
 
-	private void setup(int width, int height) {
+	public void setup(int width, int height) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
@@ -53,7 +53,7 @@ public class View {
 
 	private static final int ANT_RADIUS = 2;
 
-	private void render(int width, int height) {
+	public void render(int width, int height) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
