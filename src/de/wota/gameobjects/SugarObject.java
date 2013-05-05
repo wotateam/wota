@@ -11,10 +11,10 @@ import de.wota.utility.Vector;
  */
 public class SugarObject extends GameObject {
 	
-	private double amount;
+	private int amount;
 	private Sugar sugar;
 	
-	public SugarObject(double amount, Vector position) {
+	public SugarObject(int amount, Vector position) {
 		super(position);
 		this.amount = amount;
 		this.sugar = new Sugar(this);
@@ -28,7 +28,11 @@ public class SugarObject extends GameObject {
 		return sugar;
 	}
 	
-	public double getAmount() {
+	public int getAmount() {
 		return amount;
+	}
+	
+	public void reduceAmount(int reduction) {
+		amount = Math.max(amount - reduction, 0);
 	}
 }

@@ -21,6 +21,8 @@ public class AntObject extends GameObject{
 	public final int id;
 	private double health;
 	private double speed;
+	private int sugarCarry = 0;
+
 	/** Angriffspunkte */
 	private double attack;
 	private Action action;
@@ -96,6 +98,10 @@ public class AntObject extends GameObject{
 		return action;
 	}
 	
+	public int getSugarCarry() {
+		return sugarCarry;
+	}
+	
 	public void createAnt() {
 		ant = new Ant(this);
 		this.ai.setAnt(ant);
@@ -103,6 +109,10 @@ public class AntObject extends GameObject{
 	
 	public void takesDamage(double attack) {
 		health = health - attack;
+	}
+	
+	public void picksUpSugar(int amount) {
+		sugarCarry = Math.min(GameWorldParameters.MAX_SUGAR_CARRY, sugarCarry + amount);
 	}
 	
 	/** Checks if AntObject has positive health. If not, die() is called */

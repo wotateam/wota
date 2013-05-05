@@ -6,7 +6,7 @@ package de.wota.gameobjects;
  *
  */
 public class Sugar {
-	public final double amount;
+	public final int amount;
 	final SugarObject sugarObject;
 	
 	public Sugar(SugarObject sugarObject) {

@@ -33,6 +33,11 @@ public abstract class AntAI {
 		action.setAttackTarget(target);
 	}
 	
+	/** Pick up sugar */
+	protected void pickUpSugar(Sugar source) {
+		action.setSugarSource(source);
+	}
+	
 	/** Send message of type int */
 	protected void talk(int content) {
 		Message message = new Message(content);
