@@ -16,7 +16,7 @@ public class TestWorld {
 	public static GameWorld testWorld() throws InstantiationException, IllegalAccessException {
 		GameWorld world = new GameWorld();
 		for (int i = 0; i < 2; i++) {
-			Player player = new Player(DummyHillAI.class, new Vector(100 + i * 200, 100 + i * 200));
+			Player player = new Player(new Vector(100 + i * 200, 100 + i * 200));
 			for (int j = 0; j < 10; j++) {
 				AntObject antObject = new AntObject(new Vector(j * 10, 20 + i * 20), Ant.Caste.GATHERER, MoveAI.class);
 
