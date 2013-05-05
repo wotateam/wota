@@ -112,7 +112,8 @@ public class AntObject extends GameObject{
 	}
 	
 	public void picksUpSugar(int amount) {
-		sugarCarry = Math.min(GameWorldParameters.MAX_SUGAR_CARRY, sugarCarry + amount);
+		// TODO change to unspecific caste
+		sugarCarry = Math.min(GameWorldParameters.Gatherer.MAX_SUGAR_CARRY, sugarCarry + amount);
 	}
 	
 	/** Checks if AntObject has positive health. If not, die() is called */

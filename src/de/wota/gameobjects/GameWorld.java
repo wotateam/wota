@@ -120,7 +120,8 @@ public class GameWorld {
 		// Pick up sugar
 		Sugar sugarSource = action.getSugarSource();
 		if (sugarSource != null) {
-			int amount = Math.min(GameWorldParameters.MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
+			// TODO change to unspecific caste
+			int amount = Math.min(GameWorldParameters.Gatherer.MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
 			actor.picksUpSugar(amount);
 			sugarSource.sugarObject.reduceAmount(amount);
 		}
