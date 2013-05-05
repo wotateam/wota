@@ -1,5 +1,5 @@
 // taken from http://lwjgl.org/wiki/index.php?title=LWJGL_Basics_1_%28The_Display%29
-/*import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
@@ -30,4 +30,3 @@ public class HelloLWJGL {
 		hello.start();
 	}
 }
-*/

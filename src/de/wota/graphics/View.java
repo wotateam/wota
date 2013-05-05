@@ -1,4 +1,4 @@
-/*package de.wota.graphics;
+package de.wota.graphics;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
@@ -18,7 +18,7 @@ import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.testing.TestWorld;
-import de.wota.utility.Vector;*/
+import de.wota.utility.Vector;
 
 /**
  * Renders everything.
@@ -27,7 +27,7 @@ import de.wota.utility.Vector;*/
  * 
  * @author Daniel
  */
-/*public class View {
+public class View {
 	// hardcoded number of players = 8
 	private static final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN,
 			Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.YELLOW };
@@ -94,14 +94,14 @@ import de.wota.utility.Vector;*/
 			glVertex2d(Math.cos(angle), Math.sin(angle));
 		}
 		glEnd();
-	}*/
+	}
 
 	/**
 	 * @param args
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	/*public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		GameWorld gameWorld = TestWorld.testWorld();
 		View view = new View(gameWorld);
 		final int width = 700;
@@ -126,4 +126,4 @@ import de.wota.utility.Vector;*/
 		
 		Display.destroy();
 	}
-}*/
+}
