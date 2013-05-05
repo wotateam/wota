@@ -1,5 +1,7 @@
 package de.wota.testing;
 
+import java.util.Random;
+
 import de.wota.ai.AntAI;
 
 public class MoveAI extends AntAI {
@@ -11,7 +13,8 @@ public class MoveAI extends AntAI {
 	
 	@Override
 	public void tick() {
-		moveInDirection(45);
+		Random random = new Random();
+		moveInDirection(random.nextInt(20));
 		talk(1);
 	}
 	

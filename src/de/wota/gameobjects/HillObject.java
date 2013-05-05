@@ -18,11 +18,6 @@ public class HillObject extends GameObject {
 		this.player = player;
 	}
 	
-	public List<AntOrder> getAntOrders() {
-		// TODO //return ai.popAntOrders();
-		return new LinkedList<AntOrder>();
-	}
-	
 	public Player getPlayer() {
 		return player;
 	}

@@ -1,7 +1,7 @@
 package de.wota.ai;
 
 
-public class DummyHillAI extends HillAI {	
+public class DummyHillAI extends QueenAI {	
 
 	@Override
 	public void tick() {

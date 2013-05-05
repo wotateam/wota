@@ -38,6 +38,6 @@ public class Ant {
 	}
 	
 	public enum Caste {
-		GATHERER, SOLDIER
+		GATHERER, SOLDIER, QUEEN
 	}
 }

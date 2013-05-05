@@ -17,17 +17,19 @@ public class AntObject extends GameObject{
 	
 	private static int idCounter = 0;
 	private Ant ant;
-	private final AntAI ai;
+	protected final AntAI ai;
 	public final int id;
-	private double health = GameWorldParameters.ANT_HEALTH_INIT;
-	private double speed = GameWorldParameters.ANT_SPEED_INIT;
+	private double health;
+	private double speed;
 	/** Angriffspunkte */
-	private double attack = GameWorldParameters.ANT_ATTACK_INIT;
+	private double attack;
 	private Action action;
 	final private Ant.Caste caste;
+	final public Player player;
 	
-	public AntObject(Vector position, Ant.Caste caste, Class<? extends AntAI> antAIClass) {
+	public AntObject(Vector position, Ant.Caste caste, Class<? extends AntAI> antAIClass, Player player) {
 		super(position);
+		this.player = player;
 		this.id = getNewID();
 		AntAI antAI = null;
 		try {
@@ -38,8 +40,30 @@ public class AntObject extends GameObject{
 			System.exit(1);
 		}
 		
-		this.ai = antAI;
 		this.caste = caste;
+		
+		// set parameters
+		switch (caste) {
+		case GATHERER:
+			health = GameWorldParameters.Gatherer.ANT_HEALTH_INIT;
+			speed = GameWorldParameters.Gatherer.ANT_SPEED;
+			attack = GameWorldParameters.Gatherer.ANT_ATTACK;
+			break;
+		
+		case SOLDIER:
+			health = GameWorldParameters.Soldier.ANT_HEALTH_INIT;
+			speed = GameWorldParameters.Soldier.ANT_SPEED;
+			attack = GameWorldParameters.Soldier.ANT_ATTACK;
+			break;
+			
+		case QUEEN:
+			health = GameWorldParameters.Queen.ANT_HEALTH_INIT;
+			speed = GameWorldParameters.Queen.ANT_SPEED;
+			attack = GameWorldParameters.Queen.ANT_ATTACK;
+			break;
+		}
+		
+		this.ai = antAI;
 		
 		this.ant = new Ant(this); // das muss ganz am Ende passieren
 	}

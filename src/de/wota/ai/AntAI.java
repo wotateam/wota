@@ -1,18 +1,32 @@
 package de.wota.ai;
 
+import java.util.List;
+
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Sugar;
 
 
 /** 
  * Basisklasse für die Ant-KI 
  */
-public abstract class AntAI extends BaseAI{		
+public abstract class AntAI {		
+	public List<Ant> visibleAnts;
+	public List<Sugar> visibleSugar;
+	public List<Message> incomingMessages;
+	protected Action action = new Action(); // FIXME really protected?
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value!
+	
+	public abstract void tick();
+	
+	/** Gets called when Ant dies. */
+	public void die() {
+		
+	}
 	
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
@@ -51,5 +65,12 @@ public abstract class AntAI extends BaseAI{
 	 */
 	public Ant getAnt() {
 		return self;
+	}
+	
+	/** CAUTION! THIS METHOD DELETES THE ACTION */
+	public Action popAction() {
+		Action returnAction = action;
+		action = new Action();
+		return returnAction;
 	}
 }

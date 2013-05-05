@@ -9,10 +9,11 @@ import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.HillObject;
 
-
-public abstract class HillAI extends BaseAI {
-	protected Hill self;
-	//private HillObject hillObject; // only to pass information to e.g. message objects
+/**
+ * QueenAI ist wie AntAI + hat die Möglichkeit Einheiten zu ordern
+ * @author pascal
+ */
+public abstract class QueenAI extends AntAI {
 	private List<AntOrder> antOrders;
 	
 	protected void createAnt(Ant.Caste caste, Class<? extends AntAI> antAIClass) {
@@ -31,12 +32,8 @@ public abstract class HillAI extends BaseAI {
 	 *  Pascal: The constructor must not have any parameters or
 	 *  newInstance() will not work. 
 	 */
-	public HillAI() { 
+	public QueenAI() { 
 		antOrders = new LinkedList<AntOrder>();
 	}
 	
-	/** CAUTION! USER AI MAY HAVE CHANGED THIS! */
-	public Hill getHill() {
-		return self;
-	}
 }
