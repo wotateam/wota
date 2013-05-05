@@ -44,13 +44,21 @@ public class Simulation {
 		this.isGraphical = isGraphical;
 		
 		//FIXME: Solange es keine Karten gibt, Testwelt verwenden
-		gameWorld = TestWorld.testWorld();
+		try {
+			gameWorld = TestWorld.testWorld();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		gameWorld.registerLogger(new TestLogger());
 		
-		if (isGraphical = true)
+		if (isGraphical)
 		{
-			View view = new View(gameWorld);
+			view = new View(gameWorld);
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create();
