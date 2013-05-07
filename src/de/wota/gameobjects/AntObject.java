@@ -6,6 +6,7 @@ import de.wota.Action;
 import de.wota.Message;
 import de.wota.Player;
 import de.wota.ai.AntAI;
+import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 
 /**
@@ -21,15 +22,16 @@ public class AntObject extends GameObject{
 	public final int id;
 	private double health;
 	private double speed;
+	/** amount of sugar carried now */
 	private int sugarCarry = 0;
 
 	/** Angriffspunkte */
 	private double attack;
 	private Action action;
-	final private Ant.Caste caste;
+	final private Caste caste;
 	final public Player player;
 	
-	public AntObject(Vector position, Ant.Caste caste, Class<? extends AntAI> antAIClass, Player player) {
+	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, Player player) {
 		super(position);
 		this.player = player;
 		this.id = getNewID();
@@ -41,32 +43,12 @@ public class AntObject extends GameObject{
 			System.err.println("Could not create AntAI -> exit");
 			System.exit(1);
 		}
-		
 		this.caste = caste;
-		
 		// set parameters
-		switch (caste) {
-		case GATHERER:
-			health = GameWorldParameters.Gatherer.ANT_HEALTH_INIT;
-			speed = GameWorldParameters.Gatherer.ANT_SPEED;
-			attack = GameWorldParameters.Gatherer.ANT_ATTACK;
-			break;
-		
-		case SOLDIER:
-			health = GameWorldParameters.Soldier.ANT_HEALTH_INIT;
-			speed = GameWorldParameters.Soldier.ANT_SPEED;
-			attack = GameWorldParameters.Soldier.ANT_ATTACK;
-			break;
-			
-		case QUEEN:
-			health = GameWorldParameters.Queen.ANT_HEALTH_INIT;
-			speed = GameWorldParameters.Queen.ANT_SPEED;
-			attack = GameWorldParameters.Queen.ANT_ATTACK;
-			break;
-		}
+		health = caste.ANT_HEALTH_INIT;
+		speed = caste.ANT_SPEED;
 		
 		this.ai = antAI;
-		
 		this.ant = new Ant(this); // das muss ganz am Ende passieren
 	}
 
@@ -78,7 +60,7 @@ public class AntObject extends GameObject{
 		return ant;
 	}
 	
-	public Ant.Caste getCaste() {
+	public Caste getCaste() {
 		return caste;
 	}
 
@@ -113,7 +95,7 @@ public class AntObject extends GameObject{
 	
 	public void picksUpSugar(int amount) {
 		// TODO change to unspecific caste
-		sugarCarry = Math.min(GameWorldParameters.Gatherer.MAX_SUGAR_CARRY, sugarCarry + amount);
+		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + amount);
 	}
 	
 	/** Checks if AntObject has positive health. If not, die() is called */

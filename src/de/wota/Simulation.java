@@ -99,7 +99,6 @@ public class Simulation {
 	{
 		Simulation sim = new Simulation(2, true);
 		sim.runSimulation();
-		
 	}
 	
 }

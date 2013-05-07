@@ -36,8 +36,4 @@ public class Ant {
 	public double getAttack() {
 		return attack;
 	}
-	
-	public enum Caste {
-		GATHERER, SOLDIER, QUEEN
-	}
 }

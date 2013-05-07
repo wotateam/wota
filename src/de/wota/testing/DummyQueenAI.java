@@ -2,14 +2,12 @@ package de.wota.testing;
 
 import de.wota.ai.QueenAI;
 import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.caste.Caste;
 
 public class DummyQueenAI extends QueenAI {
 	
 	@Override
 	public void tick() {
-		createAnt(Ant.Caste.GATHERER, MoveAI.class);
-		System.out.println("ich bin die Queen");
+		createAnt(Caste.Gatherer, MoveAI.class);
 	}
-
-	
 }

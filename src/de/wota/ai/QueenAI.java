@@ -8,6 +8,7 @@ import de.wota.AntOrder;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.HillObject;
+import de.wota.gameobjects.caste.Caste;
 
 /**
  * QueenAI ist wie AntAI + hat die Möglichkeit Einheiten zu ordern
@@ -16,7 +17,7 @@ import de.wota.gameobjects.HillObject;
 public abstract class QueenAI extends AntAI {
 	private List<AntOrder> antOrders;
 	
-	protected void createAnt(Ant.Caste caste, Class<? extends AntAI> antAIClass) {
+	protected void createAnt(Caste caste, Class<? extends AntAI> antAIClass) {
 		AntOrder antOrder = new AntOrder(caste, antAIClass);
 		antOrders.add(antOrder);
 	}

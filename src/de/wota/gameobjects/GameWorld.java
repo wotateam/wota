@@ -62,7 +62,7 @@ public class GameWorld {
 			player.queenObject.tick(visibleAnts, visibleSugar, audibleMessages);
 		}
 
-		// execute all actions
+		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
 				executeAction(antObject);
@@ -128,8 +128,7 @@ public class GameWorld {
 		// Pick up sugar
 		Sugar sugarSource = action.getSugarSource();
 		if (sugarSource != null) {
-			// TODO change to unspecific caste
-			int amount = Math.min(GameWorldParameters.Gatherer.MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
+			int amount = Math.min(actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
 			actor.picksUpSugar(amount);
 			sugarSource.sugarObject.reduceAmount(amount);
 		}
@@ -154,7 +153,8 @@ public class GameWorld {
 		if (action.getMessage() != null) {
 			Message message = action.getMessage();
 			messages.add(message);
-			System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
+			if (GameWorldParameters.DEBUG)
+				System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
 		}
 	}
 	

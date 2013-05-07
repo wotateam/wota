@@ -14,7 +14,7 @@ public class MoveAI extends AntAI {
 	@Override
 	public void tick() {
 		Random random = new Random();
-		moveInDirection(random.nextInt(20));
+		moveInDirection(random.nextInt(30));
 		talk(1);
 	}
 	

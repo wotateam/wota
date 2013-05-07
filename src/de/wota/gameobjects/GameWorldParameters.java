@@ -9,29 +9,7 @@ public class GameWorldParameters {
 	public static final double SIZE_Y = 1000;
 	public static final double HILL_RADIUS = 20;
 	
-	public class Gatherer {
-		public static final double ANT_HEALTH_INIT = 100;
-		public static final double ANT_SPEED = 1;
-		/** Angriffspunkte */
-		public static final double ANT_ATTACK = 5;
-		public static final int MAX_SUGAR_CARRY = 10;
-	}
-	
-	public class Soldier {
-		public static final double ANT_HEALTH_INIT = 100;
-		public static final double ANT_SPEED = 0.5;
-		/** Angriffspunkte */
-		public static final double ANT_ATTACK = 10;
-		public static final int MAX_SUGAR_CARRY = 10;
-	}
-	
-	public class Queen {
-		public static final double ANT_HEALTH_INIT = 1000;
-		public static final double ANT_SPEED = 0;
-		/** Angriffspunkte */
-		public static final double ANT_ATTACK = 0;
-		public static final int MAX_SUGAR_CARRY = 0;
-	}
+	public static final boolean DEBUG = false;
 	
 	public static Vector normalize(Vector p) {
 		Vector r = new Vector(p);
