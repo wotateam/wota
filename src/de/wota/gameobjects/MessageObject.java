@@ -4,19 +4,28 @@ import de.wota.Message;
 import de.wota.utility.Vector;
 
 public class MessageObject extends GameObject {
-
-	private Message message;
-
-	public MessageObject(Vector position) {
+	public MessageObject(Vector position, Ant sender, int content) {
 		super(position);
+		this.sender = sender;
+		this.content = content;
+		
+		message = new Message(this);
 	}
+	
+	private final int content;
+	private final Ant sender; 
 
-	public void createMessage() {
-		// TODO message = new Message(this);
-	}
+	private final Message message;
 	
 	public Message getMessage() {
 		return message;
 	}
 
+	public int getContent() {
+		return content;
+	}
+
+	public Ant getSender() {
+		return sender;
+	}
 }

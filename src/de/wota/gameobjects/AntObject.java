@@ -111,11 +111,7 @@ public class AntObject extends GameObject{
 	private void die() {
 		ai.die();
 		action = ai.popAction();
-		Message message = action.getMessage();
-		if (message != null) {
-			message.setSender(ant);
-		}
-		action.setMessage(message);
+		setMessageObjectForAction();
 	}
 
 	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar,
@@ -125,14 +121,16 @@ public class AntObject extends GameObject{
 		ai.incomingMessages = incomingMessages;
 		ai.tick();
 		action = ai.popAction();
-		// modify the action such that the actor is the right one
-		Message message = action.getMessage();
-		if (message != null) {
-			message.setSender(ant);
+		setMessageObjectForAction();
+	}
+
+	private void setMessageObjectForAction() {
+		// modify the action so that the actor is the right one
+		int messageContent = action.getMessageContent();
+		if (messageContent != Action.NO_MESSAGE) {
+			MessageObject messageObject = new MessageObject(getPosition(), ant, messageContent);
+			action.setMessageObject(messageObject);
 		}
-		// TODO not sure if set message is supposed to do something other than just setting the message in the future.
-		// if not, get rid of this. 
-		action.setMessage(message);
 	}
 	
 	private static int getNewID() {

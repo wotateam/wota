@@ -17,7 +17,7 @@ public class TestWorld {
 			Player player = new Player(new Vector(100 + i * 200, 100 + i * 200), DummyQueenAI.class);
 			for (int j = 0; j < 0; j++) {
 				AntObject antObject = new AntObject(new Vector(j * 10, 20 + i * 20), Caste.Gatherer, MoveAI.class, player);
-				player.antObjects.add(antObject);
+				world.addAntObject(antObject, player);
 			}
 			world.players.add(player);
 		}

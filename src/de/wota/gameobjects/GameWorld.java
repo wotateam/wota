@@ -65,6 +65,9 @@ public class GameWorld {
 			sugarObject.createSugar();
 		}
 		
+		// The MessageObjects don't need a "createMessage", because one can construct the Message instance when the
+		// MessageObject instance is constructed.
+		
 		// call tick for all AntObjects
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
@@ -89,9 +92,8 @@ public class GameWorld {
 			}
 		}
 
+		// Includes discarding the MessageObject instances.
 		spacePartioning.update();
-		
-		// FIXME somewhere, the old message objects need to be gotten rid of
 		
 		// execute all actions, ants get created
 		for (Player player : players) {
@@ -178,12 +180,11 @@ public class GameWorld {
 	}
 	
 	private void handleMessages(AntObject actor, Action action) {
-		if (action.getMessage() != null) {
-			Message message = action.getMessage();
-			spacePartioning.addMessageObject(null); // FIXME
-			messages.add(message);
+		if (action.getMessageObject() != null) {
+			spacePartioning.addMessageObject(action.getMessageObject()); 
+			Message message = action.getMessageObject().getMessage();
 			if (GameWorldParameters.DEBUG)
-				System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");
+				System.out.println("\"" + message.content + "\" sagt " + message.sender + ".");
 		}
 	}
 	

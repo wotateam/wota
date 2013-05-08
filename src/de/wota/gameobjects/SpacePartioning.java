@@ -92,6 +92,7 @@ public class SpacePartioning {
 				update(cell, i, j, Cell.antObjectsField);
 				update(cell, i, j, Cell.hillObjectsField);
 				update(cell, i, j, Cell.sugarObjectsField);
+				cell.messageObjects.clear();
 			}
 		}
 	}
@@ -153,6 +154,19 @@ public class SpacePartioning {
 		return TsInsideCircle(radius, center, Cell.messageObjectsField);
 	}
 	
+
+	public final int coordinatesToCellXIndex(Vector p) {
+		return Modulo.mod((int) Math.round(Math.floor(p.x/cellWidth)), numberOfHorizontalCells) + 1;
+	}
+	
+	public final int coordinatesToCellYIndex(Vector p) {
+		return Modulo.mod((int) Math.round(Math.floor(p.y/cellHeight)), numberOfVerticalCells) + 1;
+	}
+	
+	public final Cell coordinatesToCell(Vector p) {
+		return cells[coordinatesToCellXIndex(p)][coordinatesToCellYIndex(p)];
+	}
+	
 	private final double minimumCellSize;
 	private int numberOfHorizontalCells;
 	private int numberOfVerticalCells;
@@ -198,17 +212,5 @@ public class SpacePartioning {
 	
 	private static abstract class GameObjectListField<T extends GameObject> {
 		public abstract List<T> get(Cell cell);
-	}
-	
-	public final int coordinatesToCellXIndex(Vector p) {
-		return Modulo.mod((int) Math.round(Math.floor(p.x/cellWidth)), numberOfHorizontalCells) + 1;
-	}
-	
-	public final int coordinatesToCellYIndex(Vector p) {
-		return Modulo.mod((int) Math.round(Math.floor(p.y/cellHeight)), numberOfVerticalCells) + 1;
-	}
-	
-	public final Cell coordinatesToCell(Vector p) {
-		return cells[coordinatesToCellXIndex(p)][coordinatesToCellYIndex(p)];
 	}
 }

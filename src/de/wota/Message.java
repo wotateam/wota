@@ -2,28 +2,14 @@ package de.wota;
 
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
+import de.wota.gameobjects.MessageObject;
 
-/**
- * Klasse für Nachrichten.
- * @author pascal
- */
 public class Message {
-	private int content;
-	private Ant sender;
+	public final int content;
+	public final Ant sender;
 	
-	public Message(int content) {
-		this.content = content;
-	}
-	
-	public int getContent() {
-		return content;
-	}
-	
-	public Ant getTalkingAnt() {
-		return sender;
-	}
-	
-	public void setSender(Ant ant) {
-		sender = ant;
+	public Message(MessageObject messageObject) {
+		this.content = messageObject.getContent();
+		this.sender = messageObject.getSender();
 	}
 }
