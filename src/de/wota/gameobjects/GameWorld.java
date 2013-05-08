@@ -53,13 +53,9 @@ public class GameWorld {
 				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
 				LinkedList<Message> audibleMessages = new LinkedList<Message>();
 
+				// TODO objekte richtig befüllen.
 				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
 			}
-			// TODO objekte richtig befüllen.
-			LinkedList<Ant> visibleAnts = new LinkedList<Ant>();
-			LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
-			LinkedList<Message> audibleMessages = new LinkedList<Message>();
-			player.queenObject.tick(visibleAnts, visibleSugar, audibleMessages);
 		}
 
 		// execute all actions, ants get created
@@ -68,13 +64,11 @@ public class GameWorld {
 				executeAction(antObject);
 			}
 			// order does matter since the hill creates new ants!
-			executeAction(player.queenObject); 
+			executeAntOrders(player.queenObject); 
 		}
 		
 		// Let ants die!
 		for (Player player : players) {
-			//LinkedList<AntObject> antObjectsToDie = new LinkedList<AntObject>();
-
 			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator(); antObjectIter.hasNext();) {
 				AntObject maybeDead = antObjectIter.next();
 				if (maybeDead.isDying()) {
@@ -86,7 +80,7 @@ public class GameWorld {
 		}
 	}
 	
-	private static void executeAction(QueenObject queen) {
+	private static void executeAntOrders(QueenObject queen) {
 		List<AntOrder> antOrders = queen.getAntOrders();
 		for (AntOrder antOrder : antOrders) {
 			AntObject antObject = 
@@ -97,16 +91,10 @@ public class GameWorld {
 						queen.player
 					);
 			queen.player.antObjects.add(antObject);
+			
 		}
 	}
-/*
-	private static void executeAction(HillObject hill) {
-		// can only produce units
-
-	}
 	
-	*/
-
 	/** führt die Aktion für das AntObject aus */
 	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
