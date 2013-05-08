@@ -1,6 +1,8 @@
 package de.wota.gameobjects;
 
 import java.lang.Math;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,6 +11,7 @@ import java.util.List;
 import de.wota.Message;
 import de.wota.gameobjects.SpacePartioning;
 import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.caste.Caste;
 
 import de.wota.statistics.AbstractLogger;
 
@@ -31,6 +34,21 @@ public class GameWorld {
  
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
+	private static double maximumSight() {
+		double maximum = 0;
+		for (Caste caste : Caste.values()) {
+			if (caste.SIGHT_RANGE > maximum) {
+				maximum = caste.SIGHT_RANGE;
+			}
+			if (caste.HEARING_RANGE > maximum) {
+				maximum = caste.HEARING_RANGE;
+			}
+		}
+		return maximum;
+	}
+	
+	private SpacePartioning spacePartioning = new SpacePartioning(GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y, maximumSight());
+	
 	public void tick() {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 
@@ -42,6 +60,7 @@ public class GameWorld {
 				antObject.createAnt();
 			}
 		}
+		
 		for (SugarObject sugarObject : sugarObjects) {
 			sugarObject.createSugar();
 		}
@@ -49,15 +68,31 @@ public class GameWorld {
 		// call tick for all AntObjects
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
-				LinkedList<Ant> visibleAnts = new LinkedList<Ant>();
+				List<Ant> visibleAnts = new LinkedList<Ant>();
 				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
 				LinkedList<Message> audibleMessages = new LinkedList<Message>();
 
-				// TODO objekte richtig befüllen.
+				for (AntObject visibleAntObject : spacePartioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					visibleAnts.add(visibleAntObject.getAnt());
+				}
+				
+				for (SugarObject visibleSugarObject :
+					spacePartioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					visibleSugar.add(visibleSugarObject.getSugar());
+				}
+				
+				for (MessageObject audibleMessageObject : 
+					spacePartioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
+					audibleMessages.add(audibleMessageObject.getMessage());
+				}
 				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
 			}
 		}
 
+		spacePartioning.update();
+		
+		// FIXME somewhere, the old message objects need to be gotten rid of
+		
 		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
@@ -75,24 +110,29 @@ public class GameWorld {
 					// hat neue Aktionen erzeugt.
 					executeLastWill(maybeDead);
 					antObjectIter.remove();
+					spacePartioning.removeAntObject(maybeDead);
 				}
 			}
 		}
 	}
 	
-	private static void executeAntOrders(QueenObject queen) {
-		List<AntOrder> antOrders = queen.getAntOrders();
+	private void executeAntOrders(QueenObject queenObject) {
+		List<AntOrder> antOrders = queenObject.getAntOrders();
 		for (AntOrder antOrder : antOrders) {
 			AntObject antObject = 
 					new AntObject(
-						queen.player.hillObject.getPosition(),
+						queenObject.player.hillObject.getPosition(),
 						antOrder.getCaste(),
 						antOrder.getAntAIClass(),
-						queen.player
+						queenObject.player
 					);
-			queen.player.antObjects.add(antObject);
-			
+			addAntObject(antObject, queenObject.player);
 		}
+	}
+	
+	public void addAntObject(AntObject antObject, Player player) {
+		player.antObjects.add(antObject);
+		spacePartioning.addAntObject(antObject);
 	}
 	
 	/** führt die Aktion für das AntObject aus */
@@ -140,6 +180,7 @@ public class GameWorld {
 	private void handleMessages(AntObject actor, Action action) {
 		if (action.getMessage() != null) {
 			Message message = action.getMessage();
+			spacePartioning.addMessageObject(null); // FIXME
 			messages.add(message);
 			if (GameWorldParameters.DEBUG)
 				System.out.println("\"" + message.getContent() + "\" sagt " + message.getTalkingAnt() + ".");

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.wota.Message;
 import de.wota.Player;
 import de.wota.utility.Modulo;
 import de.wota.utility.Vector;
@@ -57,6 +58,10 @@ public class SpacePartioning {
 
 	public void addSugarObject(SugarObject sugarObject) {
 		addT(sugarObject, Cell.sugarObjectsField);
+	}
+	
+	public void addMessageObject(MessageObject messageObject) {
+		addT(messageObject, Cell.messageObjectsField);
 	}
 	
 	private <T extends GameObject> void addT(T t, GameObjectListField<T> field) {
@@ -144,6 +149,10 @@ public class SpacePartioning {
 		return TsInsideCircle(radius, center, Cell.sugarObjectsField);
 	}
 	
+	public List<MessageObject> messageObjectsInsideCircle(double radius, Vector center) {
+		return TsInsideCircle(radius, center, Cell.messageObjectsField);
+	}
+	
 	private final double minimumCellSize;
 	private int numberOfHorizontalCells;
 	private int numberOfVerticalCells;
@@ -175,6 +184,14 @@ public class SpacePartioning {
 			@Override
 			public List<SugarObject> get(Cell cell) {
 				return cell.sugarObjects;
+			}
+		};
+		
+		private final List<MessageObject> messageObjects = new LinkedList<MessageObject>();
+		private static final GameObjectListField<MessageObject> messageObjectsField = new GameObjectListField<MessageObject>() {
+			@Override
+			public List<MessageObject> get(Cell cell) {
+				return cell.messageObjects;
 			}
 		};
 	}
