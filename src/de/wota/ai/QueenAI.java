@@ -2,12 +2,7 @@ package de.wota.ai;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
-
 import de.wota.AntOrder;
-import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.AntObject;
-import de.wota.gameobjects.HillObject;
 import de.wota.gameobjects.caste.Caste;
 
 /**

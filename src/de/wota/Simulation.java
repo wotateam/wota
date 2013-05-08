@@ -4,9 +4,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-
 import de.wota.gameobjects.GameWorld;
 import de.wota.graphics.View;
 import de.wota.statistics.TestLogger;

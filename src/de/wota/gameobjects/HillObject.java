@@ -1,9 +1,5 @@
 package de.wota.gameobjects;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import de.wota.AntOrder;
 import de.wota.Player;
 import de.wota.ai.Hill;
 import de.wota.utility.Vector;

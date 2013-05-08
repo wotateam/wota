@@ -1,9 +1,6 @@
 package de.wota.gameobjects;
 
 import java.lang.Math;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +16,6 @@ import de.wota.utility.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
 import de.wota.Player;
-import de.wota.ai.AntAI;
 
 /**
  * Enthält alle Elemente der Spielwelt.

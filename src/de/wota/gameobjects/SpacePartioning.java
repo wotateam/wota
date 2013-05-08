@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.wota.Message;
-import de.wota.Player;
 import de.wota.utility.Modulo;
 import de.wota.utility.Vector;
 

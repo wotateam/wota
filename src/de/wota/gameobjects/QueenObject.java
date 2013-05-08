@@ -1,13 +1,10 @@
 package de.wota.gameobjects;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.AntOrder;
 import de.wota.Player;
-import de.wota.ai.AntAI;
 import de.wota.ai.QueenAI;
-import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 

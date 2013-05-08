@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.ai.QueenAI;
-import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.HillObject;
 import de.wota.gameobjects.QueenObject;

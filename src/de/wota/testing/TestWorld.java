@@ -1,10 +1,5 @@
 package de.wota.testing;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-
 import de.wota.Player;
-import de.wota.ai.DemoAntAI;
-import de.wota.ai.DummyHillAI;
 import de.wota.gameobjects.*;
 import de.wota.gameobjects.caste.*;
 import de.wota.utility.Vector;

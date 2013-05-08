@@ -1,6 +1,5 @@
 package de.wota;
 
-import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.caste.Caste;
 import de.wota.ai.AntAI;
 

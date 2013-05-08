@@ -1,7 +1,6 @@
 package de.wota.testing;
 
 import de.wota.ai.QueenAI;
-import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.caste.Caste;
 
 public class DummyQueenAI extends QueenAI {

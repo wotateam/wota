@@ -5,15 +5,8 @@ import org.lwjgl.opengl.*;
 
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-
 import java.awt.Color;
-import java.awt.geom.Point2D;
-import java.nio.FloatBuffer;
-
-
 import de.wota.Player;
-import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;

@@ -1,7 +1,6 @@
 package de.wota;
 
 import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.MessageObject;
 import de.wota.gameobjects.Sugar;
 

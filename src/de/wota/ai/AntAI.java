@@ -5,7 +5,6 @@ import java.util.List;
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.Sugar;
 
