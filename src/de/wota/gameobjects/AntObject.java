@@ -114,10 +114,11 @@ public class AntObject extends GameObject{
 		setMessageObjectForAction();
 	}
 
-	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar,
-			List<Message> incomingMessages) {
+	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar, 
+			List<Hill> visibleHills, List<Message> incomingMessages) {
 		ai.visibleAnts = visibleAnts;
 		ai.visibleSugar = visibleSugar;
+		ai.visibleHills = visibleHills;
 		ai.incomingMessages = incomingMessages;
 		ai.tick();
 		action = ai.popAction();

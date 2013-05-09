@@ -6,6 +6,7 @@ import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Hill;
 import de.wota.gameobjects.Snapshot;
 import de.wota.gameobjects.Sugar;
 import de.wota.utility.Vector;
@@ -17,6 +18,7 @@ import de.wota.utility.Vector;
 public abstract class AntAI {		
 	public List<Ant> visibleAnts;
 	public List<Sugar> visibleSugar;
+	public List<Hill> visibleHills;
 	public List<Message> incomingMessages;
 	protected Action action = new Action(); // FIXME really protected?
 	/** Reference to Ant itself */
