@@ -6,7 +6,9 @@ import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Snapshot;
 import de.wota.gameobjects.Sugar;
+import de.wota.utility.Vector;
 
 
 /** 
@@ -56,6 +58,19 @@ public abstract class AntAI {
 	 */
 	protected void moveInDirection(double direction, double distance) {
 		action.setMovementDirection(direction);
+		action.setMovementDistance(distance);
+	}
+	
+	/** Move in direction of an Object
+	 * @param target can be anything like Ant, Sugar, ...
+	 */
+	protected void moveTo(Snapshot target) {
+		action.setMovementTarget(target);
+		action.setMovementDistance(GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+	}
+	
+	protected void moveTo(Snapshot target, double distance) {
+		action.setMovementTarget(target);
 		action.setMovementDistance(distance);
 	}
 	

@@ -14,6 +14,7 @@ import de.wota.statistics.AbstractLogger;
 
 import de.wota.utility.Vector;
 import de.wota.Action;
+import de.wota.Action.MovementType;
 import de.wota.AntOrder;
 import de.wota.Player;
 
@@ -25,11 +26,14 @@ import de.wota.Player;
 public class GameWorld {
 
 	public final List<Player> players = new LinkedList<Player>();
-	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
-	private LinkedList<Message> messages = new LinkedList<Message>();
-
+	private final LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
+	
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
+	private SpacePartioning spacePartioning = new SpacePartioning(
+			GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y,
+			maximumSight());
+	
 	private static double maximumSight() {
 		double maximum = 0;
 		for (Caste caste : Caste.values()) {
@@ -42,11 +46,17 @@ public class GameWorld {
 		}
 		return maximum;
 	}
-
-	private SpacePartioning spacePartioning = new SpacePartioning(
-			GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y,
-			maximumSight());
-
+	
+	public void addSugarObject(SugarObject sugarObject) {
+		sugarObjects.add(sugarObject);
+		spacePartioning.addSugarObject(sugarObject);
+	}
+	
+	/** Do not modify the list! Use addSugarObject instead */
+	public List<SugarObject> getSugarObjects() {
+		return sugarObjects;
+	}
+		
 	public void addPlayer(Player player) {
 		notifyLoggers(AbstractLogger.LogEventType.PLAYER_REGISTERED);
 
@@ -118,8 +128,8 @@ public class GameWorld {
 
 		// Let ants die!
 		for (Player player : players) {
-			for (Iterator<AntObject> antObjectIter = player.antObjects
-					.iterator(); antObjectIter.hasNext();) {
+			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator();
+					antObjectIter.hasNext();) {
 				AntObject maybeDead = antObjectIter.next();
 				if (maybeDead.isDying()) {
 					// hat neue Aktionen erzeugt.
@@ -128,7 +138,18 @@ public class GameWorld {
 					spacePartioning.removeAntObject(maybeDead);
 				}
 			}
-		}		
+		}	
+		
+		// remove empty sugar sources
+		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
+				sugarObjectIter.hasNext();) {
+			SugarObject sugarObject = sugarObjectIter.next();
+			if (sugarObject.getAmount() <= 0) {
+				sugarObjectIter.remove();
+				spacePartioning.removeSugarObject(sugarObject);
+			}
+		}
+		
 	}
 
 	private void executeAntOrders(QueenObject queenObject) {
@@ -176,9 +197,21 @@ public class GameWorld {
 		}
 
 		// Movement
-		// executeMovement(actor, action);
-		actor.move(Vector.fromPolar(action.getMovementDistance(),
-				action.getMovementDirection()));
+		switch (action.getMovementType()) {
+		case DIRECTION:
+			actor.move(
+					Vector.fromPolar(
+							action.getMovementDistance(),action.getMovementDirection()));
+			break;
+		case TARGET:
+			actor.move(
+					Vector.subtract(
+							action.getMovementTarget().getCoordinates(),
+							actor.getPosition()
+							).scaleTo(action.getMovementDistance())
+					);
+			break;
+		}
 
 		// Messages
 		handleMessages(actor, action);

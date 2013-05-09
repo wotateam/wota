@@ -10,6 +10,7 @@ import de.wota.Player;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.SugarObject;
 import de.wota.testing.TestWorld;
 import de.wota.utility.Vector;
 
@@ -56,11 +57,19 @@ public class View {
 			float[] colorComponents = color.getColorComponents(null);
 			glColor3f(colorComponents[0], colorComponents[1], colorComponents[2]);
 			
+			// Ants
 			for (AntObject antObject : player.antObjects) {
 				renderCircle(antObject.getPosition(), ANT_RADIUS);
-			}
+			}			
 
+			// Hill
 			renderCircle(player.hillObject.getPosition(), GameWorldParameters.HILL_RADIUS);
+		}
+		// Sugar Sources
+		glColor3f(1.f, 1.f, 1.f);
+		for (SugarObject sugarObject : world.getSugarObjects()) {
+			renderCircle(sugarObject.getPosition(), 
+					GameWorldParameters.SUGAR_RADIUS * sugarObject.getAmount() / GameWorldParameters.INITIAL_SUGAR);
 		}
 
 	}

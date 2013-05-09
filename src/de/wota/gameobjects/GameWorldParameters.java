@@ -8,6 +8,9 @@ public class GameWorldParameters {
 	public static final double SIZE_X = 1000;
 	public static final double SIZE_Y = 1000;
 	public static final double HILL_RADIUS = 20;
+	public static final double SUGAR_RADIUS = 10;
+	/** Amount of Sugar in a new source */
+	public static final int INITIAL_SUGAR = 500;
 	
 	public static final boolean DEBUG = false;
 	

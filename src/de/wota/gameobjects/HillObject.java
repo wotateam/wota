@@ -1,7 +1,6 @@
 package de.wota.gameobjects;
 
 import de.wota.Player;
-import de.wota.ai.Hill;
 import de.wota.utility.Vector;
 
 public class HillObject extends GameObject {
@@ -10,7 +9,7 @@ public class HillObject extends GameObject {
 
 	public HillObject(Vector position, Player player) {
 		super(position);
-		this.hill = new Hill();
+		this.hill = new Hill(this);
 		this.player = player;
 	}
 	
