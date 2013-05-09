@@ -84,7 +84,9 @@ public class GameWorld {
 
 				for (AntObject visibleAntObject : 
 					spacePartioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
-					visibleAnts.add(visibleAntObject.getAnt());
+					if (visibleAntObject != antObject) {
+						visibleAnts.add(visibleAntObject.getAnt());
+					}
 				}
 
 				for (SugarObject visibleSugarObject : 
