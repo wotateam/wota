@@ -9,19 +9,27 @@ import java.security.Policy;
 import de.wota.ai.QueenAI;
 
 public class AILoader {
+	private String searchpath;
+	
 	public AILoader() {
+		this("./");
+	}
+
+	public AILoader(String path) {
 		Policy.setPolicy(new AIPolicy());
 		System.setSecurityManager(new SecurityManager());
+		
+		searchpath = path;
 	}
 
 	// FIXME: This is ugly, but I don't know a way around it
 	@SuppressWarnings("unchecked")
 	public Class<? extends QueenAI> loadQueen(String className) {
 		File queenFile = new File(className + ".jar");
-		File searchPath = new File("./");
+		File searchFile = new File(searchpath);
 		try {
 			ClassLoader queenLoader = URLClassLoader.newInstance(new URL[] {
-					queenFile.toURI().toURL(), searchPath.toURI().toURL() });
+					queenFile.toURI().toURL(), searchFile.toURI().toURL() });
 
 			Class<?> queenClass = queenLoader.loadClass(className);
 
@@ -42,11 +50,10 @@ public class AILoader {
 	}
 
 	public String getAIName(Class<? extends QueenAI> queenClass) {
-		if (queenClass.isAnnotationPresent(de.wota.ai.AIInformation.class))
-		{
-			return queenClass.getAnnotation(de.wota.ai.AIInformation.class).value();
-		} else
-		{
+		if (queenClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
+			return queenClass.getAnnotation(de.wota.ai.AIInformation.class)
+					.value();
+		} else {
 			return queenClass.getSimpleName();
 		}
 	}
