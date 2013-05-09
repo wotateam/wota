@@ -25,6 +25,7 @@ public class Player {
 			throws InstantiationException, IllegalAccessException {
 		hillObject = new HillObject(position, this);
 		queenObject = new QueenObject(position, queenAIClass, this);
+		antObjects.add(queenObject);
 
 		// TODO fail early w.r.t. to ants, too, by creating one to test ant
 		// creation

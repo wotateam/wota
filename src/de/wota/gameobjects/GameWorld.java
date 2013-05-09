@@ -96,7 +96,7 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				executeAction(antObject);
 			}
-			// order does matter since the hill creates new ants!
+			// order does matter since the queen creates new ants!
 			executeAntOrders(player.queenObject); 
 		}
 		
