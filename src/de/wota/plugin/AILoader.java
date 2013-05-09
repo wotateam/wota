@@ -31,11 +31,11 @@ public class AILoader {
 			ClassLoader queenLoader = URLClassLoader.newInstance(new URL[] {
 					queenFile.toURI().toURL(), searchFile.toURI().toURL() });
 
-			Class<?> queenClass = queenLoader.loadClass(className);
+			Class<?> queenAIClass = queenLoader.loadClass(className);
 
 			// Check whether loaded class is a QueenAI
-			if (!QueenAI.class.isAssignableFrom(queenClass)) {
-				System.out.println("Class " + queenClass
+			if (!QueenAI.class.isAssignableFrom(queenAIClass)) {
+				System.out.println("Class " + queenAIClass
 						+ " does not extend QueenAI");
 				return null;
 			}
@@ -49,12 +49,21 @@ public class AILoader {
 		}
 	}
 
-	public String getAIName(Class<? extends QueenAI> queenClass) {
-		if (queenClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
-			return queenClass.getAnnotation(de.wota.ai.AIInformation.class)
-					.value();
+	public static String getAIName(Class<? extends QueenAI> queenAIClass) {
+		if (queenAIClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
+			return queenAIClass.getAnnotation(de.wota.ai.AIInformation.class)
+					.name();
 		} else {
-			return queenClass.getSimpleName();
+			return queenAIClass.getSimpleName();
+		}
+	}
+	
+	public static String getAICreator(Class<? extends QueenAI> queenAIClass) {
+		if (queenAIClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
+			return queenAIClass.getAnnotation(de.wota.ai.AIInformation.class)
+					.creator();
+		} else {
+			return "Anonymous";
 		}
 	}
 }

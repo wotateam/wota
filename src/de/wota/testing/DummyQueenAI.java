@@ -4,7 +4,7 @@ import de.wota.ai.AIInformation;
 import de.wota.ai.QueenAI;
 import de.wota.gameobjects.caste.Caste;
 
-@AIInformation("Testname")
+@AIInformation(creator = "WotA-Team", name = "DummyQueen")
 public class DummyQueenAI extends QueenAI {
 	
 	@Override
