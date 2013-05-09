@@ -102,12 +102,13 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				antObject.createAnt();
 			}
+			player.hillObject.createHill();
 		}
 
 		for (SugarObject sugarObject : sugarObjects) {
 			sugarObject.createSugar();
 		}
-
+		
 		// The MessageObjects don't need a "createMessage", because one can
 		// construct the Message instance when the
 		// MessageObject instance is constructed.
