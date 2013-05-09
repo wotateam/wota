@@ -27,7 +27,9 @@ public class Player {
 	public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
 		hillObject = new HillObject(position, this);
 		queenObject = new QueenObject(position, queenAIClass, this);
-
+		
+		antObjects.add(queenObject);
+	
 		name = AILoader.getAIName(queenAIClass);
 
 		// TODO fail early w.r.t. to ants, too, by creating one to test ant
