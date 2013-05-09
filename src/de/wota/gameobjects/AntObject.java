@@ -20,7 +20,7 @@ public class AntObject extends GameObject{
 	private Ant ant;
 	protected final AntAI ai;
 	public final int id;
-	private double health;
+	protected double health;
 	private double speed;
 	/** amount of sugar carried now */
 	private int sugarCarry = 0;

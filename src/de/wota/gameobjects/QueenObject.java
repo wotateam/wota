@@ -19,4 +19,8 @@ public class QueenObject extends AntObject {
 	public List<AntOrder> getAntOrders() {
 		return queenAI.popAntOrders();
 	}
+	
+	public boolean isDead() {
+		return (health <= 0);
+	}
 }

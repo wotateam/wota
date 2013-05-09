@@ -111,7 +111,7 @@ public class GameWorld {
 					spacePartioning.removeAntObject(maybeDead);
 				}
 			}
-		}
+		}		
 	}
 	
 	private void executeAntOrders(QueenObject queenObject) {
@@ -173,6 +173,22 @@ public class GameWorld {
 
 		// Messages
 		handleMessages(actor, action);
+	}
+	
+	/** tests if victory condition is fulfilled and notifies the Logger
+	 * Victory condition: is the queen alive? */
+	public Player checkVictoryCondition() {
+		List<Player> possibleWinners = new LinkedList<Player>(players);
+		for (Player player : players) {
+			if (player.queenObject.isDead()) {
+				possibleWinners.remove(player);
+			}
+		}
+		if (possibleWinners.size() == 1) {
+			return possibleWinners.get(0);
+		}
+		else
+			return null;
 	}
 	
 	private void handleMessages(AntObject actor, Action action) {

@@ -33,6 +33,13 @@ public class Simulation {
 	
 	public void tick() {
 		gameWorld.tick();
+		
+		// check for victory condition
+		Player winner = gameWorld.checkVictoryCondition();
+		if (winner != null) {
+			System.out.println(winner.name + " has won the game in tick " + tickCount);
+			running = false;
+		}
 	}
 	
 	/*
@@ -75,7 +82,7 @@ public class Simulation {
 		//Test AI-Loading
 		AILoader loader = new AILoader();
 		Class <? extends QueenAI> queen = loader.loadQueen("de.wota.testing.DummyQueenAI");
-		System.out.println(loader.getAIName(queen));
+		System.out.println(AILoader.getAIName(queen));
 	}
 	
 	public void runSimulation()

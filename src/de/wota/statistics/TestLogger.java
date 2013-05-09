@@ -6,8 +6,16 @@ public class TestLogger extends AbstractLogger {
 
 	@Override
 	public void log(LogEventType event) {
-		if (GameWorldParameters.DEBUG)
-			System.out.println("TICK");
+		switch (event) {
+		case TICK:
+			if (GameWorldParameters.DEBUG) {
+				System.out.println("TICK");
+			}
+			break;
+			
+		case VICTORY:
+			System.out.println("VICTORY");
+		}			
 	}
 
 }
