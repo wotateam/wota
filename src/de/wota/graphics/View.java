@@ -6,7 +6,6 @@ import org.lwjgl.opengl.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import java.awt.Color;
-import de.wota.Player;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
@@ -51,7 +50,7 @@ public class View {
 
 		glLoadIdentity();
 
-		for (Player player : world.players) {
+		for (GameWorld.Player player : world.getPlayers()) {
 			Color color = colors[player.getId()];
 			float[] colorComponents = color.getColorComponents(null);
 			glColor3f(colorComponents[0], colorComponents[1], colorComponents[2]);

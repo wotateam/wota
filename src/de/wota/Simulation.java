@@ -37,7 +37,7 @@ public class Simulation {
 		gameWorld.tick();
 		
 		// check for victory condition
-		Player winner = gameWorld.checkVictoryCondition();
+		GameWorld.Player winner = gameWorld.checkVictoryCondition();
 		if (winner != null) {
 			System.out.println(winner.name + " has won the game in tick " + tickCount);
 			running = false;

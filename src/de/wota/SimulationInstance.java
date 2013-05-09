@@ -25,7 +25,7 @@ public class SimulationInstance {
 		SeededRandomizer.resetSeed(seed);
 
 		for (String aiName : aiList) {
-			Player player = new Player(new Vector(
+			GameWorld.Player player = world.new Player(new Vector(
 					SeededRandomizer.nextInt(700),
 					SeededRandomizer.nextInt(700)), aiLoader.loadQueen(aiName));
 			world.addPlayer(player);

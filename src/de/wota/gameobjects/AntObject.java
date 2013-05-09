@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
-import de.wota.Player;
 import de.wota.ai.AntAI;
 import de.wota.ai.Hill;
 import de.wota.gameobjects.caste.Caste;
@@ -29,10 +28,10 @@ public class AntObject extends GameObject{
 	/** Angriffspunkte */
 	private double attack;
 	private Action action;
-	final private Caste caste;
-	final public Player player;
+	private final Caste caste;
+	public final GameWorld.Player player;
 	
-	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, Player player) {
+	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player) {
 		super(position);
 		this.player = player;
 		this.id = getNewID();

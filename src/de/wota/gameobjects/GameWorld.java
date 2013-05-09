@@ -1,22 +1,24 @@
 package de.wota.gameobjects;
 
 import java.lang.Math;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.Message;
 import de.wota.ai.Hill;
+import de.wota.ai.QueenAI;
 import de.wota.gameobjects.SpacePartioning;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.caste.Caste;
 
+import de.wota.plugin.AILoader;
 import de.wota.statistics.AbstractLogger;
 
 import de.wota.utility.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
-import de.wota.Player;
 
 /**
  * Enthält alle Elemente der Spielwelt.
@@ -25,7 +27,7 @@ import de.wota.Player;
  */
 public class GameWorld {
 
-	public final List<Player> players = new LinkedList<Player>();
+	private final List<Player> players = new LinkedList<Player>();
 	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 	private LinkedList<Message> messages = new LinkedList<Message>();
 
@@ -54,6 +56,42 @@ public class GameWorld {
 		players.add(player);
 	}
 
+	private static int nextPlayerId = 0; // TODO can this somehow go into Player?
+	
+	public class Player {
+		public final List<AntObject> antObjects = new LinkedList<AntObject>();
+		public final HillObject hillObject;
+		public final QueenObject queenObject;
+
+		public final String name;
+
+		private final int id;
+
+		public int getId() {
+			return id;
+		}
+
+		// TODO make this private and change addPlayer
+		public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
+			hillObject = new HillObject(position, this);
+			queenObject = new QueenObject(position, queenAIClass, this);
+			
+			antObjects.add(queenObject);
+		
+			name = AILoader.getAIName(queenAIClass);
+
+			// TODO fail early w.r.t. to ants, too, by creating one to test ant
+			// creation
+			id = nextPlayerId;
+			nextPlayerId++;
+		}
+		
+		public void addAntObject(AntObject antObject) {
+			antObjects.add(antObject);
+			spacePartioning.addAntObject(antObject);
+		}
+	}
+	
 	public void tick() {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 
@@ -141,13 +179,8 @@ public class GameWorld {
 					queenObject.player.hillObject.getPosition(),
 					antOrder.getCaste(), antOrder.getAntAIClass(),
 					queenObject.player);
-			addAntObject(antObject, queenObject.player);
+			queenObject.player.addAntObject(antObject);
 		}
-	}
-
-	public void addAntObject(AntObject antObject, Player player) {
-		player.antObjects.add(antObject);
-		spacePartioning.addAntObject(antObject);
 	}
 
 	/** führt die Aktion für das AntObject aus */
@@ -228,5 +261,9 @@ public class GameWorld {
 	private void notifyLoggers(AbstractLogger.LogEventType event) {
 		for (AbstractLogger logger : registeredLoggers)
 			logger.log(event);
+	}
+
+	public List<Player> getPlayers() {
+		return Collections.unmodifiableList(players); // TODO is it possible to ensure this statically?
 	}
 }

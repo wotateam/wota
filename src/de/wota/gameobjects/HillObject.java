@@ -1,20 +1,19 @@
 package de.wota.gameobjects;
 
-import de.wota.Player;
 import de.wota.ai.Hill;
 import de.wota.utility.Vector;
 
 public class HillObject extends GameObject {
 	private Hill hill;
-	private Player player;
+	private GameWorld.Player player;
 	private double food;
 	
-	public HillObject(Vector position, Player player) {
+	public HillObject(Vector position, GameWorld.Player player) {
 		super(position);
 		this.player = player;
 	}
 	
-	public Player getPlayer() {
+	public GameWorld.Player getPlayer() {
 		return player;
 	}
 
