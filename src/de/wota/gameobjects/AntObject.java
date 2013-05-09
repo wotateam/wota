@@ -48,7 +48,6 @@ public class AntObject extends GameObject{
 		speed = caste.ANT_SPEED;
 		
 		this.ai = antAI;
-		this.ant = new Ant(this); // das muss ganz am Ende passieren
 	}
 
 	public AntAI getAI() {
