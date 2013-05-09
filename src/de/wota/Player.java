@@ -14,9 +14,9 @@ public class Player {
 	public final List<AntObject> antObjects = new LinkedList<AntObject>();
 	public final HillObject hillObject;
 	public final QueenObject queenObject;
-	
+
 	public final String name;
-	
+
 	private final int id;
 	private static int nextId = 0;
 
@@ -24,10 +24,10 @@ public class Player {
 		return id;
 	}
 
-	public Player(Vector position, Class<? extends QueenAI> queenAIClass)
-			throws InstantiationException, IllegalAccessException {
+	public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
 		hillObject = new HillObject(position, this);
 		queenObject = new QueenObject(position, queenAIClass, this);
+		
 		antObjects.add(queenObject);
 	
 		name = AILoader.getAIName(queenAIClass);

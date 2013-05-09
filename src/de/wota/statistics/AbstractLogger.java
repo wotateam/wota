@@ -5,6 +5,6 @@ public abstract class AbstractLogger {
 
 	public enum LogEventType
 	{
-		TICK, VICTORY
+		PLAYER_REGISTERED, TICK
 	}
 }

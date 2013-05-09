@@ -11,11 +11,8 @@ public class TestLogger extends AbstractLogger {
 			if (GameWorldParameters.DEBUG) {
 				System.out.println("TICK");
 			}
-			break;
-			
-		case VICTORY:
-			System.out.println("VICTORY");
-		}			
+			break;	
+		}
 	}
 
 }
