@@ -15,6 +15,7 @@ import de.wota.gameobjects.Sugar;
 public abstract class AntAI {		
 	public List<Ant> visibleAnts;
 	public List<Sugar> visibleSugar;
+	public List<Hill> visibleHills;
 	public List<Message> incomingMessages;
 	protected Action action = new Action(); // FIXME really protected?
 	/** Reference to Ant itself */

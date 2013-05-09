@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.Message;
+import de.wota.ai.Hill;
 import de.wota.gameobjects.SpacePartioning;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.caste.Caste;
@@ -77,30 +78,30 @@ public class GameWorld {
 		for (Player player : players) {			
 			for (AntObject antObject : player.antObjects) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
-				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
-				LinkedList<Message> audibleMessages = new LinkedList<Message>();
+				List<Sugar> visibleSugar = new LinkedList<Sugar>();
+				List<Hill> visibleHills = new LinkedList<Hill>();
+				List<Message> audibleMessages = new LinkedList<Message>();
 
-				for (AntObject visibleAntObject : spacePartioning
-						.antObjectsInsideCircle(
-								antObject.getCaste().SIGHT_RANGE,
-								antObject.getPosition())) {
+				for (AntObject visibleAntObject : 
+					spacePartioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
 					visibleAnts.add(visibleAntObject.getAnt());
 				}
 
-				for (SugarObject visibleSugarObject : spacePartioning
-						.sugarObjectsInsideCircle(
-								antObject.getCaste().SIGHT_RANGE,
-								antObject.getPosition())) {
+				for (SugarObject visibleSugarObject : 
+					spacePartioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
 					visibleSugar.add(visibleSugarObject.getSugar());
 				}
-
-				for (MessageObject audibleMessageObject : spacePartioning
-						.messageObjectsInsideCircle(
-								antObject.getCaste().HEARING_RANGE,
-								antObject.getPosition())) {
+				
+				for (HillObject visibleHillObject :
+					spacePartioning.hillObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					visibleHills.add(visibleHillObject.getHill());
+				}				
+				
+				for (MessageObject audibleMessageObject : 
+					spacePartioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
 					audibleMessages.add(audibleMessageObject.getMessage());
 				}
-				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
+				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
 		}
 
