@@ -14,8 +14,12 @@ public class MoveAI extends AntAI {
 	@Override
 	public void tick() {
 		Random random = new Random();
-		moveInDirection(random.nextInt(30));
-		talk(1);
+		if (visibleSugar.size() != 0) {
+			moveTo(visibleSugar.get(0));
+		}
+		else {
+			moveInDirection(random.nextInt(30));
+		}
 	}
 	
 }

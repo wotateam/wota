@@ -5,13 +5,20 @@ import org.lwjgl.opengl.*;
 
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+
 import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.nio.FloatBuffer;
+
+
+import de.wota.GameWorldParameters;
+import de.wota.Player;
+import de.wota.Vector;
+import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
-import de.wota.gameobjects.GameWorldParameters;
-import de.wota.gameobjects.SugarObject;
 import de.wota.testing.TestWorld;
-import de.wota.utility.Vector;
 
 /**
  * Renders everything.
@@ -31,13 +38,13 @@ public class View {
 		this.world = world;
 	}
 
-	public void setup(int width, int height) {
+	private void setup(int width, int height) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
 		// coordinate system origin at lower left with width and height same as
 		// the window
-		glOrtho(0, GameWorldParameters.SIZE_X, 0, GameWorldParameters.SIZE_Y, -1, 1);
+		glOrtho(0, width, 0, height, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
@@ -46,39 +53,40 @@ public class View {
 
 	private static final int ANT_RADIUS = 2;
 
-	public void render(int width, int height) {
+	private void render(int width, int height) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
 
-		for (GameWorld.Player player : world.getPlayers()) {
+		for (Player player : world.players) {
 			Color color = colors[player.getId()];
 			float[] colorComponents = color.getColorComponents(null);
 			glColor3f(colorComponents[0], colorComponents[1], colorComponents[2]);
 			
-			// Ants
 			for (AntObject antObject : player.antObjects) {
 				renderCircle(antObject.getPosition(), ANT_RADIUS);
-			}			
+			}
 
-			// Hill
 			renderCircle(player.hillObject.getPosition(), GameWorldParameters.HILL_RADIUS);
-		}
-		// Sugar Sources
-		glColor3f(1.f, 1.f, 1.f);
-		for (SugarObject sugarObject : world.getSugarObjects()) {
-			renderCircle(sugarObject.getPosition(), 
-					GameWorldParameters.SUGAR_RADIUS * sugarObject.getAmount() / GameWorldParameters.INITIAL_SUGAR);
 		}
 
 	}
 
+<<<<<<< HEAD
+	private void translate(Point2D.Double p) {
+		glTranslated(p.getX(), p.getY(), 0);
+	}
+
+	private void renderCircle(Point2D.Double p, double radius) {
+		glPushMatrix();
+=======
 	private void translate(Vector p) {
-		glTranslated(p.x, p.y, 0);
+		gl.glTranslated(p.x, p.y, 0);
 	}
 
 	private void renderCircle(Vector p, double radius) {
-		glPushMatrix();
+		gl.glPushMatrix();
+>>>>>>> Added Vector.
 		translate(p);
 		glScaled(radius, radius, radius);
 		renderUnitCircle();
@@ -105,8 +113,8 @@ public class View {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		GameWorld gameWorld = TestWorld.testWorld();
 		View view = new View(gameWorld);
-		final int width = 700;
-		final int height = 700;
+		final int width = 800;
+		final int height = 600;
 		try {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();

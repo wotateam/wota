@@ -29,4 +29,19 @@ public class Vector {
 	public static Vector fromPolar(double amplitude, double direction) {
 		return new Vector(amplitude*Math.cos(direction/360.*2*Math.PI), amplitude*Math.sin(direction/360.*2*Math.PI));
 	}
+	
+	public static Vector subtract(Vector v1, Vector v2) {
+		return new Vector(v1.x - v2.x, v1.y - v2.y);
+	}
+	
+	/** does not change instance */
+	public Vector scale(double a) {
+		return Vector.scale(a, this);
+	}
+
+	/** Scales the Vector to specified length
+	 * does not change instance */
+	public Vector scaleTo(double length) {
+		return Vector.scale(length / this.length(), this);
+	}
 }

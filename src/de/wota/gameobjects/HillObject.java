@@ -1,6 +1,6 @@
 package de.wota.gameobjects;
 
-import de.wota.ai.Hill;
+import de.wota.gameobjects.Hill;
 import de.wota.utility.Vector;
 
 public class HillObject extends GameObject {

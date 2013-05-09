@@ -1,5 +1,7 @@
 package de.wota.gameobjects;
 
+import de.wota.utility.Vector;
+
 
 /**
  * Beschreibt die Ameisen.
@@ -10,7 +12,7 @@ package de.wota.gameobjects;
  * 
  * @author pascal
  */
-public class Ant {
+public class Ant extends Snapshot{
 	
 	private final double health;
 	private final double speed;
@@ -36,4 +38,10 @@ public class Ant {
 	public double getAttack() {
 		return attack;
 	}
+
+	@Override
+	Vector getCoordinates() {
+		return antObject.getPosition();
+	}
+	
 }

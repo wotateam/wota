@@ -5,7 +5,6 @@ import java.util.List;
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.ai.AntAI;
-import de.wota.ai.Hill;
 import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 
