@@ -27,7 +27,7 @@ public class GameWorld {
 	public final List<Player> players = new LinkedList<Player>();
 	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 	private LinkedList<Message> messages = new LinkedList<Message>();
- 
+
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
 	private static double maximumSight() {
@@ -42,46 +42,62 @@ public class GameWorld {
 		}
 		return maximum;
 	}
-	
-	private SpacePartioning spacePartioning = new SpacePartioning(GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y, maximumSight());
-	
+
+	private SpacePartioning spacePartioning = new SpacePartioning(
+			GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y,
+			maximumSight());
+
+	public void addPlayer(Player player) {
+		notifyLoggers(AbstractLogger.LogEventType.PLAYER_REGISTERED);
+
+		players.add(player);
+	}
+
 	public void tick() {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 
-		// create Ants for all AntObjects and sets them in the AntAI
-		// (the latter happens in AntObject.createAnt() )
+		// create Ants for all AntObjects and the QueenObject and sets them in
+		// the AntAI (the latter happens in AntObject.createAnt() )
 		// also create Sugar for SugarObjects
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
 				antObject.createAnt();
 			}
 		}
-		
+
 		for (SugarObject sugarObject : sugarObjects) {
 			sugarObject.createSugar();
 		}
-		
-		// The MessageObjects don't need a "createMessage", because one can construct the Message instance when the
+
+		// The MessageObjects don't need a "createMessage", because one can
+		// construct the Message instance when the
 		// MessageObject instance is constructed.
-		
+
 		// call tick for all AntObjects
-		for (Player player : players) {
+		for (Player player : players) {			
 			for (AntObject antObject : player.antObjects) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
 				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
 				LinkedList<Message> audibleMessages = new LinkedList<Message>();
 
-				for (AntObject visibleAntObject : spacePartioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+				for (AntObject visibleAntObject : spacePartioning
+						.antObjectsInsideCircle(
+								antObject.getCaste().SIGHT_RANGE,
+								antObject.getPosition())) {
 					visibleAnts.add(visibleAntObject.getAnt());
 				}
-				
-				for (SugarObject visibleSugarObject :
-					spacePartioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+
+				for (SugarObject visibleSugarObject : spacePartioning
+						.sugarObjectsInsideCircle(
+								antObject.getCaste().SIGHT_RANGE,
+								antObject.getPosition())) {
 					visibleSugar.add(visibleSugarObject.getSugar());
 				}
-				
-				for (MessageObject audibleMessageObject : 
-					spacePartioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
+
+				for (MessageObject audibleMessageObject : spacePartioning
+						.messageObjectsInsideCircle(
+								antObject.getCaste().HEARING_RANGE,
+								antObject.getPosition())) {
 					audibleMessages.add(audibleMessageObject.getMessage());
 				}
 				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
@@ -90,19 +106,20 @@ public class GameWorld {
 
 		// Includes discarding the MessageObject instances.
 		spacePartioning.update();
-		
+
 		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
 				executeAction(antObject);
 			}
 			// order does matter since the hill creates new ants!
-			executeAntOrders(player.queenObject); 
+			executeAntOrders(player.queenObject);
 		}
-		
+
 		// Let ants die!
 		for (Player player : players) {
-			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator(); antObjectIter.hasNext();) {
+			for (Iterator<AntObject> antObjectIter = player.antObjects
+					.iterator(); antObjectIter.hasNext();) {
 				AntObject maybeDead = antObjectIter.next();
 				if (maybeDead.isDying()) {
 					// hat neue Aktionen erzeugt.
@@ -113,26 +130,23 @@ public class GameWorld {
 			}
 		}
 	}
-	
+
 	private void executeAntOrders(QueenObject queenObject) {
 		List<AntOrder> antOrders = queenObject.getAntOrders();
 		for (AntOrder antOrder : antOrders) {
-			AntObject antObject = 
-					new AntObject(
-						queenObject.player.hillObject.getPosition(),
-						antOrder.getCaste(),
-						antOrder.getAntAIClass(),
-						queenObject.player
-					);
+			AntObject antObject = new AntObject(
+					queenObject.player.hillObject.getPosition(),
+					antOrder.getCaste(), antOrder.getAntAIClass(),
+					queenObject.player);
 			addAntObject(antObject, queenObject.player);
 		}
 	}
-	
+
 	public void addAntObject(AntObject antObject, Player player) {
 		player.antObjects.add(antObject);
 		spacePartioning.addAntObject(antObject);
 	}
-	
+
 	/** führt die Aktion für das AntObject aus */
 	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
@@ -141,7 +155,7 @@ public class GameWorld {
 			System.err.println("Action sollte nicht null sein! -> Exit");
 			System.exit(1);
 		}
-		
+
 		// Attack
 		// TODO add collateral damage
 		Ant targetAnt = action.getAttackTarget();
@@ -150,23 +164,26 @@ public class GameWorld {
 			AntObject target = targetAnt.antObject;
 			target.takesDamage(actor.getAttack());
 		}
-		
+
 		// Pick up sugar
 		Sugar sugarSource = action.getSugarSource();
 		if (sugarSource != null) {
-			int amount = Math.min(actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(), sugarSource.amount);
+			int amount = Math.min(
+					actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
+					sugarSource.amount);
 			actor.picksUpSugar(amount);
 			sugarSource.sugarObject.reduceAmount(amount);
 		}
-		
+
 		// Movement
-		//executeMovement(actor, action);
-		actor.move(Vector.fromPolar(action.getMovementDistance(), action.getMovementDirection()));
-		
+		// executeMovement(actor, action);
+		actor.move(Vector.fromPolar(action.getMovementDistance(),
+				action.getMovementDirection()));
+
 		// Messages
 		handleMessages(actor, action);
 	}
-	
+
 	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr */
 	private void executeLastWill(AntObject actor) {
 		Action action = actor.getAction();
@@ -174,23 +191,22 @@ public class GameWorld {
 		// Messages
 		handleMessages(actor, action);
 	}
-	
+
 	private void handleMessages(AntObject actor, Action action) {
 		if (action.getMessageObject() != null) {
-			spacePartioning.addMessageObject(action.getMessageObject()); 
+			spacePartioning.addMessageObject(action.getMessageObject());
 			Message message = action.getMessageObject().getMessage();
 			if (GameWorldParameters.DEBUG)
-				System.out.println("\"" + message.content + "\" sagt " + message.sender + ".");
+				System.out.println("\"" + message.content + "\" sagt "
+						+ message.sender + ".");
 		}
 	}
-	
-	public void registerLogger(AbstractLogger logger)
-	{
+
+	public void registerLogger(AbstractLogger logger) {
 		registeredLoggers.add(logger);
 	}
-	
-	private void notifyLoggers(AbstractLogger.LogEventType event)
-	{
+
+	private void notifyLoggers(AbstractLogger.LogEventType event) {
 		for (AbstractLogger logger : registeredLoggers)
 			logger.log(event);
 	}

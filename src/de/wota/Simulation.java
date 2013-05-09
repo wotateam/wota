@@ -1,62 +1,54 @@
 package de.wota;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import de.wota.ai.QueenAI;
 import de.wota.gameobjects.GameWorld;
 import de.wota.graphics.View;
-import de.wota.plugin.AILoader;
 import de.wota.statistics.TestLogger;
 import de.wota.testing.TestWorld;
 
 /**
- * Enthält die Hauptschleife des Spiels, aktualisiert View und Statistik.
+ * Contains the main loop that calls tick() and updates both the view and the
+ * statistics.
+ * 
  * @author Fabian
- *
+ * 
  */
 public class Simulation {
-	//FIXME: N_PLAYER durch Karte/Ausgangsstellung ersetzen
+	// FIXME: N_PLAYER durch Karte/Ausgangsstellung ersetzen
 	private final int N_PLAYER;
 	private boolean isGraphical;
-	
+
 	final int width = 700;
 	final int height = 700;
-	
-	private GameWorld gameWorld;	
+
+	private GameWorld gameWorld;
 	private View view;
-	
+
 	private boolean running;
 	private int tickCount;
 
-	
 	public void tick() {
 		gameWorld.tick();
 	}
-	
+
 	/*
 	 * TODO: Die Simulation bekommt eine Ausgangsstellung, keine GameWorld
 	 */
-	public Simulation(int nPlayer, boolean isGraphical) {
-		N_PLAYER = nPlayer;
+	public Simulation(SimulationInstance inst, boolean isGraphical) {
+		N_PLAYER = inst.getNumPlayers();
 		this.isGraphical = isGraphical;
-		
-		//FIXME: Solange es keine Karten gibt, Testwelt verwenden
-		try {
-			gameWorld = TestWorld.testWorld();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+
+		gameWorld = inst.constructGameWorld();
+
 		gameWorld.registerLogger(new TestLogger());
-		
-		if (isGraphical)
-		{
+
+		if (isGraphical) {
 			view = new View(gameWorld);
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
@@ -65,44 +57,43 @@ public class Simulation {
 				e.printStackTrace();
 				System.exit(0);
 			}
-			
+
 			view.setup(width, height);
 		}
-		
+
 		running = false;
 		tickCount = 0;
-		
-		//Test AI-Loading
-		AILoader loader = new AILoader();
-		Class <? extends QueenAI> queen = loader.loadQueen("de.wota.testing.DummyQueenAI");
-		System.out.println(loader.getAIName(queen));
 	}
-	
-	public void runSimulation()
-	{
+
+	public void runSimulation() {
 		running = true;
-		
-		while (running)
-		{
+
+		while (running) {
 			gameWorld.tick();
-			tickCount++;			
-			
-			if (isGraphical)
-			{
+			tickCount++;
+
+			if (isGraphical) {
 				view.render(width, height);
 				Display.update();
 				running = !Display.isCloseRequested();
 			}
-		}		
-		
+		}
+
 		if (isGraphical)
 			Display.destroy();
 	}
-	
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException
-	{
-		Simulation sim = new Simulation(2, true);
+
+	public static void main(String[] args) throws InstantiationException,
+			IllegalAccessException {
+		List<String> ais = new LinkedList<String>();
+		ais.add("de.wota.testing.DummyQueenAI");
+		ais.add("de.wota.testing.DummyQueenAI");
+		ais.add("de.wota.testing.DummyQueenAI");
+
+		SimulationInstance inst = new SimulationInstance(ais, 42);
+		
+		Simulation sim = new Simulation(inst, true);
 		sim.runSimulation();
 	}
-	
+
 }
