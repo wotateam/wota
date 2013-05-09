@@ -8,6 +8,7 @@ public class GameWorldParameters {
 	public static final double SIZE_X = 1000;
 	public static final double SIZE_Y = 1000;
 	public static final double HILL_RADIUS = 20;
+	public static final double ATTACK_RANGE = 2; 
 	
 	public static final boolean DEBUG = false;
 	

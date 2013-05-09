@@ -197,9 +197,11 @@ public class GameWorld {
 		// TODO add collateral damage
 		Ant targetAnt = action.getAttackTarget();
 		if (targetAnt != null) {
-			// TODO check if target is in range.
-			AntObject target = targetAnt.antObject;
-			target.takesDamage(actor.getAttack());
+			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+					< GameWorldParameters.ATTACK_RANGE) {
+				AntObject target = targetAnt.antObject;
+				target.takesDamage(actor.getAttack());
+			}
 		}
 
 		// Pick up sugar
