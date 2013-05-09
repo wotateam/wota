@@ -35,4 +35,8 @@ public class GameWorldParameters {
 		}
 		return d;
 	}
+	
+	public static double distance(Vector p1, Vector p2) {
+		return shortestDifferenceOnTorus(p1, p2).length();
+	}
 }
