@@ -1,11 +1,13 @@
 package de.wota;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 
-
+import de.wota.ai.QueenAI;
 import de.wota.gameobjects.GameWorld;
 import de.wota.graphics.View;
+import de.wota.plugin.AILoader;
 import de.wota.statistics.TestLogger;
 import de.wota.testing.TestWorld;
 
@@ -69,6 +71,11 @@ public class Simulation {
 		
 		running = false;
 		tickCount = 0;
+		
+		//Test AI-Loading
+		AILoader loader = new AILoader();
+		Class <? extends QueenAI> queen = loader.loadQueen("de.wota.testing.DummyQueenAI");
+		System.out.println(loader.getAIName(queen));
 	}
 	
 	public void runSimulation()

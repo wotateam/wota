@@ -1,15 +1,19 @@
 package de.wota.testing;
 import de.wota.Player;
-import de.wota.gameobjects.*;
-import de.wota.gameobjects.caste.*;
+import de.wota.gameobjects.AntObject;
+import de.wota.gameobjects.GameWorld;
+import de.wota.gameobjects.caste.Caste;
+import de.wota.plugin.AILoader;
 import de.wota.utility.Vector;
 
 public class TestWorld {
 
 	public static GameWorld testWorld() throws InstantiationException, IllegalAccessException {
+		AILoader loader = new AILoader();
+		
 		GameWorld world = new GameWorld();
 		for (int i = 0; i < 2; i++) {
-			Player player = new Player(new Vector(100 + i * 200, 100 + i * 200), DummyQueenAI.class);
+			Player player = new Player(new Vector(100 + i * 200, 100 + i * 200), loader.loadQueen("de.wota.testing.DummyQueenAI"));
 			for (int j = 0; j < 0; j++) {
 				AntObject antObject = new AntObject(new Vector(j * 10, 20 + i * 20), Caste.Gatherer, MoveAI.class, player);
 				world.addAntObject(antObject, player);
