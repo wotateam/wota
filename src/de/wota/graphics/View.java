@@ -21,17 +21,22 @@ import de.wota.utility.Vector;
  * @author Daniel
  */
 public class View {
-	// hardcoded number of players = 8
+	// hardcoded maximum number of players = 8
 	private static final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN,
 			Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.YELLOW };
 
 	private GameWorld world;
 
-	public View(GameWorld world) {
+	private int width;
+	private int height;
+
+	public View(GameWorld world, int width, int height) {
 		this.world = world;
+		this.width = width;
+		this.height = height;
 	}
 
-	public void setup(int width, int height) {
+	public void setup() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
@@ -46,7 +51,7 @@ public class View {
 
 	private static final int ANT_RADIUS = 2;
 
-	public void render(int width, int height) {
+	public void render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
@@ -104,9 +109,9 @@ public class View {
 	 */
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		GameWorld gameWorld = TestWorld.testWorld();
-		View view = new View(gameWorld);
 		final int width = 700;
 		final int height = 700;
+		View view = new View(gameWorld, width, height);
 		try {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();
@@ -114,14 +119,12 @@ public class View {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
-		// init OpenGL here
 
-		view.setup(width, height);
+		view.setup();
 		
 		while (!Display.isCloseRequested()) {
 			gameWorld.tick();
-			view.render(width, height);
+			view.render();
 			Display.update();
 		}
 		
