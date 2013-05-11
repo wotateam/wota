@@ -5,45 +5,45 @@ package de.wota.gameobjects.caste;
  */
 public enum Caste {
 	Gatherer(
-			100, // ANT_HEALTH_INIT
-			1, 	// ANT_SPEED
-			5,	// ANT_ATTACK
+			100, // INITIAL_HEALTH
+			1, 	// SPEED
+			5,	// ATTACK
 			10,	// MAX_SUGAR_CARRY
 			50, // SIGHT_RANGE
 			50 // HEARING_RANGE
 	),
 
 	Soldier(
-			100, // ANT_HEALTH_INIT
-			0.5, 	// ANT_SPEED
-			10,	// ANT_ATTACK
+			100, // INITIAL_HEALTH
+			0.5, 	// SPEED
+			10,	// ATTACK
 			5,	// MAX_SUGAR_CARRY
 			50, // SIGHT_RANGE
 			50 // HEARING_RANGE
 	),
 
 	Queen(
-			1000, // ANT_HEALTH_INIT
-			0, 	// ANT_SPEED
-			0,	// ANT_ATTACK
+			1000, // INITIAL_HEALTH
+			0, 	// SPEED
+			0,	// ATTACK
 			0,	// MAX_SUGAR_CARRY
 			50, // SIGHT_RANGE
 			50 // HEARING_RANGE
 	);
 	
-	public final double ANT_HEALTH_INIT;
-	public final double ANT_SPEED;
+	public final double INITIAL_HEALTH;
+	public final double SPEED;
 	/** Angriffspunkte */
-	public final double ANT_ATTACK;
+	public final double ATTACK;
 	public final int MAX_SUGAR_CARRY;	
 	public final double SIGHT_RANGE;
 	public final double HEARING_RANGE;
 	
-	private Caste(double ANT_HEALTH_INIT, double ANT_SPEED, double ANT_ATTACK,
+	private Caste(double INITIAL_HEALTH, double SPEED, double ATTACK,
 			int MAX_SUGAR_CARRY, double SIGHT_RANGE, double HEARING_RANGE) {
-		this.ANT_HEALTH_INIT = ANT_HEALTH_INIT;
-		this.ANT_SPEED = ANT_SPEED;
-		this.ANT_ATTACK = ANT_ATTACK;
+		this.INITIAL_HEALTH = INITIAL_HEALTH;
+		this.SPEED = SPEED;
+		this.ATTACK = ATTACK;
 		this.MAX_SUGAR_CARRY = MAX_SUGAR_CARRY;
 		this.SIGHT_RANGE = SIGHT_RANGE;
 		this.HEARING_RANGE = HEARING_RANGE;

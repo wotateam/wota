@@ -44,8 +44,8 @@ public class AntObject extends GameObject{
 		}
 		this.caste = caste;
 		// set parameters
-		health = caste.ANT_HEALTH_INIT;
-		speed = caste.ANT_SPEED;
+		health = caste.INITIAL_HEALTH;
+		speed = caste.SPEED;
 		
 		this.ai = antAI;
 	}
