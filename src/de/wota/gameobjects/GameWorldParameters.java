@@ -12,7 +12,9 @@ public class GameWorldParameters {
 	public static final double SUGAR_RADIUS = 10;	
 	/** Amount of sugar in a new source. */
 	public static final int INITIAL_SUGAR = 500;
-
+	public static final int ANT_COST = 100;
+	public static final int STARTING_FOOD = 1000;
+	
 	public static final boolean DEBUG = false;
 	
 	public static Vector normalize(Vector p) {

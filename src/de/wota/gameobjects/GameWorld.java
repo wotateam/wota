@@ -194,12 +194,21 @@ public class GameWorld {
 
 	private void executeAntOrders(QueenObject queenObject) {
 		List<AntOrder> antOrders = queenObject.getAntOrders();
-		for (AntOrder antOrder : antOrders) {
-			AntObject antObject = new AntObject(
-					queenObject.player.hillObject.getPosition(),
-					antOrder.getCaste(), antOrder.getAntAIClass(),
-					queenObject.player);
-			queenObject.player.addAntObject(antObject);
+		Iterator<AntOrder> iterator = antOrders.iterator();
+		final Player player = queenObject.player;
+		
+		while (iterator.hasNext()) {
+			AntOrder antOrder = iterator.next();
+		
+			if (GameWorldParameters.ANT_COST <= player.hillObject.getFood()) {
+				player.hillObject.changeFoodBy(-GameWorldParameters.ANT_COST);
+				
+				AntObject antObject = new AntObject(
+						queenObject.player.hillObject.getPosition(),
+						antOrder.getCaste(), antOrder.getAntAIClass(),
+						queenObject.player);
+				queenObject.player.addAntObject(antObject);
+			}
 		}
 	}
 
