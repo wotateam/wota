@@ -227,7 +227,7 @@ public class GameWorld {
 		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
 			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
-					< GameWorldParameters.ATTACK_RANGE) {
+					<= GameWorldParameters.ATTACK_RANGE) {
 				AntObject target = targetAnt.antObject;
 				target.takesDamage(actor.getAttack());
 			}
@@ -236,7 +236,7 @@ public class GameWorld {
 		// Drop sugar at the hill.
 		// TODO possible optimization: Use space partioning for dropping sugar at the hill, don't test for all ants.
 		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
-				< GameWorldParameters.HILL_RADIUS) {
+				<= GameWorldParameters.HILL_RADIUS) {
 			actor.player.hillObject.changeFoodBy(actor.getSugarCarry());
 			actor.dropSugar();
 		}
@@ -245,7 +245,7 @@ public class GameWorld {
 		Sugar sugarSource = action.sugarTarget;
 		if (sugarSource != null) {
 			if (GameWorldParameters.distance(actor.getPosition(),sugarSource.sugarObject.getPosition())
-					< GameWorldParameters.SUGAR_RADIUS) {
+					<= GameWorldParameters.SUGAR_RADIUS) {
 				int amount = Math.min(
 						actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
 						sugarSource.amount);
