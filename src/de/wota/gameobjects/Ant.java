@@ -14,29 +14,19 @@ import de.wota.utility.Vector;
  */
 public class Ant extends Snapshot{
 	
-	private final double health;
-	private final double speed;
+	public final double health;
+	public final double speed;
 	/** Angriffspunkte */
-	private final double attack;
+	public final double attack;
+	public final int sugarCarry;
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
 	public Ant(AntObject antObject) {
 		health = antObject.getHealth();
 		speed = antObject.getSpeed();
 		attack = antObject.getAttack();
+		sugarCarry = antObject.getSugarCarry();
 		this.antObject = antObject;
-	}
-
-	public double getHealth() {
-		return health;
-	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public double getAttack() {
-		return attack;
 	}
 
 	@Override
