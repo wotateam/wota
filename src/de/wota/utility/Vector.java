@@ -48,4 +48,8 @@ public class Vector {
 	public static double distanceBetween(Vector v1, Vector v2) {
 		return subtract(v1, v2).length();
 	}
+	
+	public String toString() {
+		return "Vector. x = " + x + " y = " + y;
+	}
 }
