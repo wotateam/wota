@@ -234,11 +234,14 @@ public class GameWorld {
 		// Pick up sugar
 		Sugar sugarSource = action.sugarTarget;
 		if (sugarSource != null) {
-			int amount = Math.min(
-					actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
-					sugarSource.amount);
-			actor.picksUpSugar(amount);
-			sugarSource.sugarObject.reduceAmount(amount);
+			if (GameWorldParameters.distance(actor.getPosition(),sugarSource.sugarObject.getPosition())
+					< GameWorldParameters.SUGAR_RADIUS) {
+				int amount = Math.min(
+						actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
+						sugarSource.amount);
+				actor.picksUpSugar(amount);
+				sugarSource.sugarObject.reduceAmount(amount);
+			}
 		}
 
 		// Movement
