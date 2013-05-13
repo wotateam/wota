@@ -1,15 +1,24 @@
 package de.wota.testing;
 
+import java.util.Random;
+
 import de.wota.ai.*;
 import de.wota.gameobjects.AntAI;
 import de.wota.gameobjects.Hill;
 import de.wota.gameobjects.Sugar;
+import de.wota.utility.SeededRandomizer;
 
-@AIInformation(creator = "WotA-Team", name = "SolitaryAI")
+//@AIInformation(creator = "WotA-Team", name = "SolitaryAI")
 public class SolitaryAI extends AntAI {
 
 	private double lastDir = 0;
 	private Hill ownHill;
+	
+	@Override
+	public void die() {
+		talk(5);
+	}
+	
 	@Override
 	public void tick() {
 		// visibleAnts
@@ -20,6 +29,9 @@ public class SolitaryAI extends AntAI {
 		if (visibleHills.size() > 0) {
 			ownHill = visibleHills.get(0); 
 		}
+		
+		if (lastDir == 0)
+			lastDir = SeededRandomizer.nextInt(360);
 		
 		if (self.sugarCarry == 0) {
 			if (visibleSugar.size() == 0)
@@ -45,6 +57,7 @@ public class SolitaryAI extends AntAI {
 		else { // sugarCarry > 0
 			moveHome();
 		}
+		
 	}
 
 }

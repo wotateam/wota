@@ -9,6 +9,7 @@ public class DummyQueenAI extends QueenAI {
 	
 	@Override
 	public void tick() {
-		createAnt(Caste.Gatherer, MoveAI.class);
+		//createAnt(Caste.Gatherer, MoveAI.class);
+		createAnt(Caste.Gatherer, SolitaryAI.class);
 	}
 }
