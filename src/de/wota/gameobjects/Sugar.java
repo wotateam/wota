@@ -17,7 +17,7 @@ public class Sugar extends Snapshot {
 	}
 
 	@Override
-	Vector getCoordinates() {
+	Vector getPosition() {
 		return sugarObject.getPosition();
 	}
 }

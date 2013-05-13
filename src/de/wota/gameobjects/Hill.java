@@ -13,7 +13,7 @@ public class Hill extends Snapshot{
 	}
 
 	@Override
-	Vector getCoordinates() {
+	Vector getPosition() {
 		return hillObject.getPosition();
 	}
 	

@@ -69,7 +69,7 @@ public abstract class AntAI {
 	}
 	
 	protected void moveTo(Snapshot target, double distance) {
-		action.movement = Vector.subtract(target.getCoordinates(), antObject.getPosition())
+		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition())
 				.scaleTo(distance);
 	}
 	
@@ -79,7 +79,7 @@ public abstract class AntAI {
 	
 	/** return true if target is in view range. */
 	private boolean isInView(Snapshot target) {
-		return (Vector.distanceBetween(target.getCoordinates(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
+		return (Vector.distanceBetween(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 		
 	/** 
@@ -91,7 +91,7 @@ public abstract class AntAI {
 	 */
 	protected Vector vectorTo(Snapshot target) {
 		if (isInView(target)) {
-			return Vector.subtract(target.getCoordinates(), antObject.getPosition());
+			return Vector.subtract(target.getPosition(), antObject.getPosition());
 		}
 		else
 			return null;
@@ -106,7 +106,7 @@ public abstract class AntAI {
 	 */
 	protected Vector vectorBetween(Snapshot start, Snapshot end) {
 		if (isInView(start) && isInView(end)) {
-			return Vector.subtract(end.getCoordinates(), start.getCoordinates());
+			return Vector.subtract(end.getPosition(), start.getPosition());
 		}
 		else
 			return null;

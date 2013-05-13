@@ -33,7 +33,7 @@ public class Ant extends Snapshot{
 	}
 
 	@Override
-	Vector getCoordinates() {
+	Vector getPosition() {
 		return antObject.getPosition();
 	}
 	
