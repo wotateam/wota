@@ -44,4 +44,8 @@ public class Vector {
 	public Vector scaleTo(double length) {
 		return Vector.scale(length / this.length(), this);
 	}
+	
+	public static double distanceBetween(Vector v1, Vector v2) {
+		return subtract(v1, v2).length();
+	}
 }

@@ -1,5 +1,6 @@
 package de.wota.gameobjects;
 
+import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 
 
@@ -19,6 +20,7 @@ public class Ant extends Snapshot{
 	/** Angriffspunkte */
 	public final double attack;
 	public final int sugarCarry;
+	public final Caste caste;
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
 	public Ant(AntObject antObject) {
@@ -26,6 +28,7 @@ public class Ant extends Snapshot{
 		speed = antObject.getSpeed();
 		attack = antObject.getAttack();
 		sugarCarry = antObject.getSugarCarry();
+		caste = antObject.getCaste();
 		this.antObject = antObject;
 	}
 

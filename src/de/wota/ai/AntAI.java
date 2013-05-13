@@ -5,6 +5,7 @@ import java.util.List;
 import de.wota.Action;
 import de.wota.Message;
 import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.Hill;
 import de.wota.gameobjects.Snapshot;
@@ -23,6 +24,11 @@ public abstract class AntAI {
 	protected Action action = new Action(); // FIXME really protected?
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value!
+	private AntObject antObject;
+	
+	public AntAI() {
+		ownHill = antObject.player.hillObject.getHill();
+	}
 	
 	public abstract void tick();
 	
@@ -74,6 +80,47 @@ public abstract class AntAI {
 	protected void moveTo(Snapshot target, double distance) {
 		action.setMovementTarget(target);
 		action.setMovementDistance(distance);
+	}
+	
+	protected void moveHome() {
+		action.setMovementTarget(antObject.player.hillObject.getHill());
+	}
+	
+	/** 
+	 * returns the Vector between start and end.
+	 * Is null if the objects are not in view.
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	protected Vector vectorBetween(Snapshot start, Snapshot end) {
+		if (isInView(start) && isInView(end)) {
+			return Vector.subtract(end.getCoordinates(), start.getCoordinates());
+		}
+		else
+			return null;
+	}
+	
+	// TODO do not use self here! Use AntObject instead!
+	
+	/** 
+	 * returns the Vector between the Ant itself and target
+	 * Is null if the target is not in view.
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	protected Vector vectorTo(Snapshot target) {
+		if (isInView(target)) {
+			return Vector.subtract(target.getCoordinates(), self.getCoordinates());
+		}
+		else
+			return null;
+	}
+	
+	/** return true if target is in view range. */
+	private boolean isInView(Snapshot target) {
+		return (Vector.distanceBetween(target.getCoordinates(), self.getCoordinates()) <= self.caste.SIGHT_RANGE);
 	}
 	
 	public void setAnt(Ant ant) {
