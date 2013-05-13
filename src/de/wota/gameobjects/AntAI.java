@@ -50,7 +50,7 @@ public abstract class AntAI {
 	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
 	 */
 	protected void moveInDirection(double direction) {
-		moveInDirection(GameWorldParameters.MAX_MOVEMENT_DISTANCE, direction);
+		moveInDirection(direction, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction with specified distance
@@ -124,7 +124,7 @@ public abstract class AntAI {
 	}
 	
 	/** CAUTION! THIS METHOD DELETES THE ACTION */
-	public Action popAction() {
+	Action popAction() {
 		Action returnAction = action;
 		action = new Action();
 		return returnAction;
