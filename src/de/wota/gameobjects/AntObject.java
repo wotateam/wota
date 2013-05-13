@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
-import de.wota.ai.AntAI;
 import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 
@@ -48,6 +47,7 @@ public class AntObject extends GameObject{
 		speed = caste.SPEED;
 		
 		this.ai = antAI;
+		this.ai.setAntObject(this);
 	}
 
 	public AntAI getAI() {
@@ -125,7 +125,7 @@ public class AntObject extends GameObject{
 
 	private void setMessageObjectForAction() {
 		// modify the action so that the actor is the right one
-		int messageContent = action.getMessageContent();
+		int messageContent = action.messageContent;
 		if (messageContent != Action.NO_MESSAGE) {
 			MessageObject messageObject = new MessageObject(getPosition(), ant, messageContent);
 			action.setMessageObject(messageObject);

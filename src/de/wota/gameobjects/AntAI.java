@@ -1,14 +1,9 @@
-package de.wota.ai;
+package de.wota.gameobjects;
 
 import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
-import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.GameWorldParameters;
-import de.wota.gameobjects.Hill;
-import de.wota.gameobjects.Snapshot;
-import de.wota.gameobjects.Sugar;
 import de.wota.utility.Vector;
 
 
@@ -20,9 +15,14 @@ public abstract class AntAI {
 	public List<Sugar> visibleSugar;
 	public List<Hill> visibleHills;
 	public List<Message> incomingMessages;
-	protected Action action = new Action(); // FIXME really protected?
+	private Action action = new Action();
 	/** Reference to Ant itself */
-	protected Ant self; // user AI may have changed this value!
+	protected Ant self; // user AI may have changed this value! Use antObject instead.
+	private AntObject antObject;
+			
+	void setAntObject(AntObject antObject) {
+		this.antObject = antObject;
+	}
 	
 	public abstract void tick();
 	
@@ -33,25 +33,24 @@ public abstract class AntAI {
 	
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
-		action.setAttackTarget(target);
+		action.attackTarget = target;
 	}
 	
 	/** Pick up sugar */
 	protected void pickUpSugar(Sugar source) {
-		action.setSugarSource(source);
+		action.sugarTarget = source;
 	}
 	
 	/** Send message of type int */
 	protected void talk(int content) {
-		action.setMessageContent(content);
+		action.messageContent = content;
 	}
 	
 	/** Move in certain direction with maximum distance
 	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
 	 */
 	protected void moveInDirection(double direction) {
-		action.setMovementDirection(direction);
-		action.setMovementDistance(GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+		moveInDirection(GameWorldParameters.MAX_MOVEMENT_DISTANCE, direction);
 	}
 	
 	/** Move in direction with specified distance
@@ -59,21 +58,19 @@ public abstract class AntAI {
 	 * @param distance distance to move in one tick
 	 */
 	protected void moveInDirection(double direction, double distance) {
-		action.setMovementDirection(direction);
-		action.setMovementDistance(distance);
+		action.movement = Vector.fromPolar(distance, direction);
 	}
 	
 	/** Move in direction of an Object
 	 * @param target can be anything like Ant, Sugar, ...
 	 */
-	protected void moveTo(Snapshot target) {
-		action.setMovementTarget(target);
-		action.setMovementDistance(GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+	protected void moveTo(Snapshot target) { // TODO rename me to moveTowards
+		moveTo(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	protected void moveTo(Snapshot target, double distance) {
-		action.setMovementTarget(target);
-		action.setMovementDistance(distance);
+		action.movement = Vector.subtract(target.getCoordinates(), antObject.getPosition())
+				.scaleTo(distance);
 	}
 	
 	public void setAnt(Ant ant) {
