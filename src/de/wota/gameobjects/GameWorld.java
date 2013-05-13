@@ -17,7 +17,6 @@ import de.wota.statistics.AbstractLogger;
 
 import de.wota.utility.Vector;
 import de.wota.Action;
-import de.wota.Action.MovementType;
 import de.wota.AntOrder;
 
 /**
@@ -223,7 +222,7 @@ public class GameWorld {
 
 		// Attack
 		// TODO add collateral damage
-		Ant targetAnt = action.getAttackTarget();
+		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
 			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 					< GameWorldParameters.ATTACK_RANGE) {
@@ -233,7 +232,7 @@ public class GameWorld {
 		}
 
 		// Pick up sugar
-		Sugar sugarSource = action.getSugarSource();
+		Sugar sugarSource = action.sugarTarget;
 		if (sugarSource != null) {
 			int amount = Math.min(
 					actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
@@ -243,22 +242,8 @@ public class GameWorld {
 		}
 
 		// Movement
-		switch (action.getMovementType()) {
-		case DIRECTION:
-			actor.move(
-					Vector.fromPolar(
-							action.getMovementDistance(),action.getMovementDirection()));
-			break;
-		case TARGET:
-			actor.move(
-					Vector.subtract(
-							action.getMovementTarget().getCoordinates(),
-							actor.getPosition()
-							).scaleTo(action.getMovementDistance())
-					);
-			break;
-		}
-
+		actor.move(action.movement);
+		
 		// Messages
 		handleMessages(actor, action);
 	}
