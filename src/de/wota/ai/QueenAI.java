@@ -3,6 +3,7 @@ package de.wota.ai;
 import java.util.LinkedList;
 import java.util.List;
 import de.wota.AntOrder;
+import de.wota.gameobjects.AntAI;
 import de.wota.gameobjects.caste.Caste;
 
 /**

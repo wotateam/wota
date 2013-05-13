@@ -2,7 +2,7 @@ package de.wota.testing;
 
 import java.util.Random;
 
-import de.wota.ai.AntAI;
+import de.wota.gameobjects.AntAI;
 
 public class MoveAI extends AntAI {
 

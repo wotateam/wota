@@ -1,15 +1,9 @@
-package de.wota.ai;
+package de.wota.gameobjects;
 
 import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
-import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.AntObject;
-import de.wota.gameobjects.GameWorldParameters;
-import de.wota.gameobjects.Hill;
-import de.wota.gameobjects.Snapshot;
-import de.wota.gameobjects.Sugar;
 import de.wota.utility.Vector;
 
 

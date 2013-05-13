@@ -1,6 +1,7 @@
 package de.wota.testing;
 
 import de.wota.ai.*;
+import de.wota.gameobjects.AntAI;
 import de.wota.gameobjects.Hill;
 import de.wota.gameobjects.Sugar;
 
