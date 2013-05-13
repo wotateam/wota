@@ -211,7 +211,9 @@ public class GameWorld {
 		}
 	}
 
-	/** führt die Aktion für das AntObject aus */
+	/** Führt die Aktion für das AntObject aus. 
+	 * Beinhaltet Zucker abliefern.
+	 *  */
 	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
 
@@ -231,6 +233,14 @@ public class GameWorld {
 			}
 		}
 
+		// Drop sugar at the hill.
+		// TODO possible optimization: Use space partioning for dropping sugar at the hill, don't test for all ants.
+		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
+				< GameWorldParameters.HILL_RADIUS) {
+			actor.player.hillObject.changeFoodBy(actor.getSugarCarry());
+			actor.dropSugar();
+		}
+		
 		// Pick up sugar
 		Sugar sugarSource = action.sugarTarget;
 		if (sugarSource != null) {

@@ -96,6 +96,10 @@ public class AntObject extends GameObject{
 		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + amount);
 	}
 	
+	public void dropSugar() {
+		sugarCarry = 0;
+	}
+	
 	/** Checks if AntObject has positive health. If not, die() is called */
 	public boolean isDying() {
 		if (health <= 0) {
