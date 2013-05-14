@@ -122,7 +122,14 @@ public class AntObject extends GameObject{
 		ai.visibleSugar = visibleSugar;
 		ai.visibleHills = visibleHills;
 		ai.incomingMessages = incomingMessages;
-		ai.tick();
+		
+		try {
+			ai.tick();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		action = ai.popAction();
 		setMessageObjectForAction();
 	}

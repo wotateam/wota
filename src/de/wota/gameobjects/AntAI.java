@@ -24,7 +24,7 @@ public abstract class AntAI {
 		this.antObject = antObject;
 	}
 	
-	public abstract void tick();
+	public abstract void tick() throws Exception;
 	
 	/** Gets called when Ant dies. */
 	public void die() {
