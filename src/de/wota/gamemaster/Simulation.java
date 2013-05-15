@@ -14,8 +14,6 @@ import de.wota.graphics.View;
  * Contains the main loop that calls tick() and updates both the view and the
  * statistics.
  * 
- * @author Fabian
- * 
  */
 public class Simulation {
 	// FIXME: N_PLAYER durch Karte/Ausgangsstellung ersetzen
@@ -31,19 +29,30 @@ public class Simulation {
 	private boolean running;
 	private int tickCount;
 
-	public void tick() {
+	/**
+	 * Advance the game world by one tick and check for victory.
+	 */
+	private void tick() {
 		gameWorld.tick();
-		
+
 		// check for victory condition
 		GameWorld.Player winner = gameWorld.checkVictoryCondition();
 		if (winner != null) {
-			System.out.println(winner.name + " has won the game in tick " + tickCount);
+			System.out.println(winner.name + " has won the game in tick "
+					+ tickCount);
 			running = false;
 		}
 	}
 
 	/*
 	 * TODO: Die Simulation bekommt eine Ausgangsstellung, keine GameWorld
+	 */
+	/**
+	 * Creates a runnable simulation from a SimulationInstance with the option
+	 * for visualization.
+	 * 
+	 * @param inst the instance to be simulated
+	 * @param isGraphical true, if the simulation should be graphical
 	 */
 	public Simulation(SimulationInstance inst, boolean isGraphical) {
 		N_PLAYER = inst.getNumPlayers();
@@ -54,7 +63,7 @@ public class Simulation {
 		gameWorld.registerLogger(new TestLogger());
 
 		if (isGraphical) {
-			view = new View(gameWorld,width, height);
+			view = new View(gameWorld, width, height);
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create();
@@ -70,6 +79,9 @@ public class Simulation {
 		tickCount = 0;
 	}
 
+	/**
+	 * Start the simulation and keep the view up to date.
+	 */
 	public void runSimulation() {
 		running = true;
 
@@ -77,7 +89,8 @@ public class Simulation {
 		long time;
 
 		while (running) {
-			gameWorld.tick();
+			tick();
+
 			time = System.currentTimeMillis();
 			tickCount++;
 

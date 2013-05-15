@@ -6,6 +6,9 @@ import java.security.PermissionCollection;
 import java.security.Permissions;
 import java.security.Policy;
 
+/**
+ * Controls the permitted actions of a dynamically loaded AI.
+ */
 public class AIPolicy extends Policy {
 
 	public PermissionCollection getPermissions(CodeSource codeSource) {
