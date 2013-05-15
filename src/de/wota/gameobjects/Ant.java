@@ -4,11 +4,11 @@ import de.wota.utility.Vector;
 
 
 /**
- * Beschreibt die Ameisen.
- * Ist nach dem Erzeugen read-only
+ * Describes an ant.
+ * After creation it is read-only
  * 
- * KI sieht eigene und fremde Ameisen in dieser Form. Wird einmal pro Rund für
- * alle Ameisen erstellt.
+ * This is what an AI gets when it sees any ants. 
+ * Created once per round for all the ants.
  * 
  * @author pascal
  */
@@ -16,7 +16,7 @@ public class Ant extends Snapshot{
 	
 	public final double health;
 	public final double speed;
-	/** Angriffspunkte */
+	/** Damage caused when attacking */
 	public final double attack;
 	public final int sugarCarry;
 	public final Caste caste;

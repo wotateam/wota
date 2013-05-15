@@ -1,7 +1,10 @@
 package de.wota.gameobjects;
 
 import de.wota.utility.Vector;
-
+/**
+ * This is the place where the food is collected and new ants are born. 
+ *
+ */
 public class Hill extends Snapshot{
 	/** the amount of available food */
 	public double food;
