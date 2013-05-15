@@ -5,11 +5,6 @@ import java.util.Random;
 import de.wota.gameobjects.AntAI;
 
 public class MoveAI extends AntAI {
-
-	@Override
-	public void die() {
-		talk(5);
-	}
 	
 	@Override
 	public void tick() {

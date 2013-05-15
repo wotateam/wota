@@ -16,11 +16,6 @@ public class SolitaryAI extends AntAI {
 	private Hill ownHill;
 	
 	@Override
-	public void die() {
-		talk(5);
-	}
-	
-	@Override
 	public void tick() {
 		// visibleAnts
 		// visibleHills
