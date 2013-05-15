@@ -1,5 +1,8 @@
 package de.wota.gameobjects;
 
+import de.wota.gameobjects.caste.Caste;
+import de.wota.utility.Vector;
+
 
 /**
  * Beschreibt die Ameisen.
@@ -10,30 +13,28 @@ package de.wota.gameobjects;
  * 
  * @author pascal
  */
-public class Ant {
+public class Ant extends Snapshot{
 	
-	private final double health;
-	private final double speed;
+	public final double health;
+	public final double speed;
 	/** Angriffspunkte */
-	private final double attack;
+	public final double attack;
+	public final int sugarCarry;
+	public final Caste caste;
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
 	public Ant(AntObject antObject) {
 		health = antObject.getHealth();
 		speed = antObject.getSpeed();
 		attack = antObject.getAttack();
+		sugarCarry = antObject.getSugarCarry();
+		caste = antObject.getCaste();
 		this.antObject = antObject;
 	}
 
-	public double getHealth() {
-		return health;
+	@Override
+	Vector getPosition() {
+		return antObject.getPosition();
 	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public double getAttack() {
-		return attack;
-	}
+	
 }

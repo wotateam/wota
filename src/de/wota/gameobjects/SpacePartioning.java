@@ -127,7 +127,7 @@ public class SpacePartioning {
 		
 		for (int i = 0; i < numberOfVisibleCells; i++) {
 			for (T t : field.get(cells[x+deltaX[i]][y+deltaY[i]])) {
-				if (GameWorldParameters.shortestDifferenceOnTorus(t.getPosition(),center).length() < radius) {
+				if (GameWorldParameters.distance(t.getPosition(), center) < radius) {
 					listOfTsInsideCircle.add(t);
 				}
 			}

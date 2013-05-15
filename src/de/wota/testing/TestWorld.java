@@ -1,5 +1,5 @@
 package de.wota.testing;
-import de.wota.Player;
+
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.caste.Caste;
@@ -13,12 +13,13 @@ public class TestWorld {
 		
 		GameWorld world = new GameWorld();
 		for (int i = 0; i < 2; i++) {
-			Player player = new Player(new Vector(100 + i * 200, 100 + i * 200), loader.loadQueen("de.wota.testing.DummyQueenAI"));
+			GameWorld.Player player = world.new Player(new Vector(100 + i * 200, 100 + i * 200), 
+					loader.loadQueen("de.wota.testing.DummyQueenAI"));
 			for (int j = 0; j < 0; j++) {
 				AntObject antObject = new AntObject(new Vector(j * 10, 20 + i * 20), Caste.Gatherer, MoveAI.class, player);
-				world.addAntObject(antObject, player);
+				player.addAntObject(antObject);
 			}
-			world.players.add(player);
+			world.addPlayer(player);
 		}
 		return world;
 	}

@@ -17,7 +17,6 @@ public class SugarObject extends GameObject {
 	public SugarObject(int amount, Vector position) {
 		super(position);
 		this.amount = amount;
-		this.sugar = new Sugar(this);
 	}
 	
 	public void createSugar() {

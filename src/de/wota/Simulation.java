@@ -34,6 +34,13 @@ public class Simulation {
 
 	public void tick() {
 		gameWorld.tick();
+		
+		// check for victory condition
+		GameWorld.Player winner = gameWorld.checkVictoryCondition();
+		if (winner != null) {
+			System.out.println(winner.name + " has won the game in tick " + tickCount);
+			running = false;
+		}
 	}
 
 	/*
@@ -48,7 +55,7 @@ public class Simulation {
 		gameWorld.registerLogger(new TestLogger());
 
 		if (isGraphical) {
-			view = new View(gameWorld);
+			view = new View(gameWorld,width, height);
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create();
@@ -57,7 +64,7 @@ public class Simulation {
 				System.exit(0);
 			}
 
-			view.setup(width, height);
+			view.setup();
 		}
 
 		running = false;
@@ -82,7 +89,7 @@ public class Simulation {
 			}
 
 			if (isGraphical) {
-				view.render(width, height);
+				view.render();
 				Display.update();
 				running = !Display.isCloseRequested();
 			}

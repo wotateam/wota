@@ -1,21 +1,23 @@
 package de.wota.gameobjects;
 
 import java.lang.Math;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.Message;
+import de.wota.ai.QueenAI;
 import de.wota.gameobjects.SpacePartioning;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.caste.Caste;
 
+import de.wota.plugin.AILoader;
 import de.wota.statistics.AbstractLogger;
 
 import de.wota.utility.Vector;
 import de.wota.Action;
 import de.wota.AntOrder;
-import de.wota.Player;
 
 /**
  * Enthält alle Elemente der Spielwelt.
@@ -23,13 +25,15 @@ import de.wota.Player;
  * @author pascal
  */
 public class GameWorld {
-
-	public final List<Player> players = new LinkedList<Player>();
-	private LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
-	private LinkedList<Message> messages = new LinkedList<Message>();
-
+	private final List<Player> players = new LinkedList<Player>();
+	private final LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
+	
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
+	private SpacePartioning spacePartioning = new SpacePartioning(
+			GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y,
+			maximumSight());
+	
 	private static double maximumSight() {
 		double maximum = 0;
 		for (Caste caste : Caste.values()) {
@@ -42,17 +46,59 @@ public class GameWorld {
 		}
 		return maximum;
 	}
-
-	private SpacePartioning spacePartioning = new SpacePartioning(
-			GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y,
-			maximumSight());
-
+	
+	public void addSugarObject(SugarObject sugarObject) {
+		sugarObjects.add(sugarObject);
+		spacePartioning.addSugarObject(sugarObject);
+	}
+	
+	/** Do not modify the list! Use addSugarObject instead */
+	public List<SugarObject> getSugarObjects() {
+		return sugarObjects;
+	}
+		
 	public void addPlayer(Player player) {
 		notifyLoggers(AbstractLogger.LogEventType.PLAYER_REGISTERED);
 
 		players.add(player);
 	}
 
+	private static int nextPlayerId = 0; // TODO can this somehow go into Player?
+	
+	public class Player {
+		public final List<AntObject> antObjects = new LinkedList<AntObject>();
+		public final HillObject hillObject;
+		public final QueenObject queenObject;
+
+		public final String name;
+
+		private final int id;
+
+		public int getId() {
+			return id;
+		}
+
+		// TODO make this private and change addPlayer
+		public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
+			hillObject = new HillObject(position, this);
+			queenObject = new QueenObject(position, queenAIClass, this);
+			
+			antObjects.add(queenObject);
+		
+			name = AILoader.getAIName(queenAIClass);
+
+			// TODO fail early w.r.t. to ants, too, by creating one to test ant
+			// creation
+			id = nextPlayerId;
+			nextPlayerId++;
+		}
+		
+		public void addAntObject(AntObject antObject) {
+			antObjects.add(antObject);
+			spacePartioning.addAntObject(antObject);
+		}
+	}
+	
 	public void tick() {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 
@@ -63,12 +109,13 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				antObject.createAnt();
 			}
+			player.hillObject.createHill();
 		}
 
 		for (SugarObject sugarObject : sugarObjects) {
 			sugarObject.createSugar();
 		}
-
+		
 		// The MessageObjects don't need a "createMessage", because one can
 		// construct the Message instance when the
 		// MessageObject instance is constructed.
@@ -77,30 +124,32 @@ public class GameWorld {
 		for (Player player : players) {			
 			for (AntObject antObject : player.antObjects) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
-				LinkedList<Sugar> visibleSugar = new LinkedList<Sugar>();
-				LinkedList<Message> audibleMessages = new LinkedList<Message>();
+				List<Sugar> visibleSugar = new LinkedList<Sugar>();
+				List<Hill> visibleHills = new LinkedList<Hill>();
+				List<Message> audibleMessages = new LinkedList<Message>();
 
-				for (AntObject visibleAntObject : spacePartioning
-						.antObjectsInsideCircle(
-								antObject.getCaste().SIGHT_RANGE,
-								antObject.getPosition())) {
-					visibleAnts.add(visibleAntObject.getAnt());
+				for (AntObject visibleAntObject : 
+					spacePartioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					if (visibleAntObject != antObject) {
+						visibleAnts.add(visibleAntObject.getAnt());
+					}
 				}
 
-				for (SugarObject visibleSugarObject : spacePartioning
-						.sugarObjectsInsideCircle(
-								antObject.getCaste().SIGHT_RANGE,
-								antObject.getPosition())) {
+				for (SugarObject visibleSugarObject : 
+					spacePartioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
 					visibleSugar.add(visibleSugarObject.getSugar());
 				}
-
-				for (MessageObject audibleMessageObject : spacePartioning
-						.messageObjectsInsideCircle(
-								antObject.getCaste().HEARING_RANGE,
-								antObject.getPosition())) {
+				
+				for (HillObject visibleHillObject :
+					spacePartioning.hillObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					visibleHills.add(visibleHillObject.getHill());
+				}				
+				
+				for (MessageObject audibleMessageObject : 
+					spacePartioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
 					audibleMessages.add(audibleMessageObject.getMessage());
 				}
-				antObject.tick(visibleAnts, visibleSugar, audibleMessages);
+				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
 		}
 
@@ -118,8 +167,8 @@ public class GameWorld {
 
 		// Let ants die!
 		for (Player player : players) {
-			for (Iterator<AntObject> antObjectIter = player.antObjects
-					.iterator(); antObjectIter.hasNext();) {
+			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator();
+					antObjectIter.hasNext();) {
 				AntObject maybeDead = antObjectIter.next();
 				if (maybeDead.isDying()) {
 					// hat neue Aktionen erzeugt.
@@ -128,26 +177,43 @@ public class GameWorld {
 					spacePartioning.removeAntObject(maybeDead);
 				}
 			}
+		}	
+		
+		// remove empty sugar sources
+		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
+				sugarObjectIter.hasNext();) {
+			SugarObject sugarObject = sugarObjectIter.next();
+			if (sugarObject.getAmount() <= 0) {
+				sugarObjectIter.remove();
+				spacePartioning.removeSugarObject(sugarObject);
+			}
 		}
+		
 	}
 
 	private void executeAntOrders(QueenObject queenObject) {
 		List<AntOrder> antOrders = queenObject.getAntOrders();
-		for (AntOrder antOrder : antOrders) {
-			AntObject antObject = new AntObject(
-					queenObject.player.hillObject.getPosition(),
-					antOrder.getCaste(), antOrder.getAntAIClass(),
-					queenObject.player);
-			addAntObject(antObject, queenObject.player);
+		Iterator<AntOrder> iterator = antOrders.iterator();
+		final Player player = queenObject.player;
+		
+		while (iterator.hasNext()) {
+			AntOrder antOrder = iterator.next();
+		
+			if (GameWorldParameters.ANT_COST <= player.hillObject.getFood()) {
+				player.hillObject.changeFoodBy(-GameWorldParameters.ANT_COST);
+				
+				AntObject antObject = new AntObject(
+						queenObject.player.hillObject.getPosition(),
+						antOrder.getCaste(), antOrder.getAntAIClass(),
+						queenObject.player);
+				queenObject.player.addAntObject(antObject);
+			}
 		}
 	}
 
-	public void addAntObject(AntObject antObject, Player player) {
-		player.antObjects.add(antObject);
-		spacePartioning.addAntObject(antObject);
-	}
-
-	/** führt die Aktion für das AntObject aus */
+	/** Führt die Aktion für das AntObject aus. 
+	 * Beinhaltet Zucker abliefern.
+	 *  */
 	private void executeAction(AntObject actor) {
 		Action action = actor.getAction();
 
@@ -158,28 +224,39 @@ public class GameWorld {
 
 		// Attack
 		// TODO add collateral damage
-		Ant targetAnt = action.getAttackTarget();
+		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
-			// TODO check if target is in range.
-			AntObject target = targetAnt.antObject;
-			target.takesDamage(actor.getAttack());
+			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+					<= GameWorldParameters.ATTACK_RANGE) {
+				AntObject target = targetAnt.antObject;
+				target.takesDamage(actor.getAttack());
+			}
 		}
 
+		// Drop sugar at the hill.
+		// TODO possible optimization: Use space partioning for dropping sugar at the hill, don't test for all ants.
+		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
+				<= GameWorldParameters.HILL_RADIUS) {
+			actor.player.hillObject.changeFoodBy(actor.getSugarCarry());
+			actor.dropSugar();
+		}
+		
 		// Pick up sugar
-		Sugar sugarSource = action.getSugarSource();
+		Sugar sugarSource = action.sugarTarget;
 		if (sugarSource != null) {
-			int amount = Math.min(
-					actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
-					sugarSource.amount);
-			actor.picksUpSugar(amount);
-			sugarSource.sugarObject.reduceAmount(amount);
+			if (GameWorldParameters.distance(actor.getPosition(),sugarSource.sugarObject.getPosition())
+					<= GameWorldParameters.SUGAR_RADIUS) {
+				int amount = Math.min(
+						actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
+						sugarSource.amount);
+				actor.picksUpSugar(amount);
+				sugarSource.sugarObject.reduceAmount(amount);
+			}
 		}
 
 		// Movement
-		// executeMovement(actor, action);
-		actor.move(Vector.fromPolar(action.getMovementDistance(),
-				action.getMovementDirection()));
-
+		actor.move(action.movement);
+		
 		// Messages
 		handleMessages(actor, action);
 	}
@@ -190,6 +267,22 @@ public class GameWorld {
 
 		// Messages
 		handleMessages(actor, action);
+	}
+	
+	/** tests if victory condition is fulfilled and notifies the Logger
+	 * Victory condition: is the queen alive? */
+	public Player checkVictoryCondition() {
+		List<Player> possibleWinners = new LinkedList<Player>(players);
+		for (Player player : players) {
+			if (player.queenObject.isDead()) {
+				possibleWinners.remove(player);
+			}
+		}
+		if (possibleWinners.size() == 1) {
+			return possibleWinners.get(0);
+		}
+		else
+			return null;
 	}
 
 	private void handleMessages(AntObject actor, Action action) {
@@ -209,5 +302,9 @@ public class GameWorld {
 	private void notifyLoggers(AbstractLogger.LogEventType event) {
 		for (AbstractLogger logger : registeredLoggers)
 			logger.log(event);
+	}
+
+	public List<Player> getPlayers() {
+		return Collections.unmodifiableList(players); // TODO is it possible to ensure this statically?
 	}
 }

@@ -4,8 +4,6 @@ import java.util.List;
 
 import de.wota.Action;
 import de.wota.Message;
-import de.wota.Player;
-import de.wota.ai.AntAI;
 import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 
@@ -20,7 +18,7 @@ public class AntObject extends GameObject{
 	private Ant ant;
 	protected final AntAI ai;
 	public final int id;
-	private double health;
+	protected double health;
 	private double speed;
 	/** amount of sugar carried now */
 	private int sugarCarry = 0;
@@ -28,10 +26,10 @@ public class AntObject extends GameObject{
 	/** Angriffspunkte */
 	private double attack;
 	private Action action;
-	final private Caste caste;
-	final public Player player;
+	private final Caste caste;
+	public final GameWorld.Player player;
 	
-	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, Player player) {
+	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player) {
 		super(position);
 		this.player = player;
 		this.id = getNewID();
@@ -45,11 +43,11 @@ public class AntObject extends GameObject{
 		}
 		this.caste = caste;
 		// set parameters
-		health = caste.ANT_HEALTH_INIT;
-		speed = caste.ANT_SPEED;
+		health = caste.INITIAL_HEALTH;
+		speed = caste.SPEED;
 		
 		this.ai = antAI;
-		this.ant = new Ant(this); // das muss ganz am Ende passieren
+		this.ai.setAntObject(this);
 	}
 
 	public AntAI getAI() {
@@ -98,6 +96,10 @@ public class AntObject extends GameObject{
 		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + amount);
 	}
 	
+	public void dropSugar() {
+		sugarCarry = 0;
+	}
+	
 	/** Checks if AntObject has positive health. If not, die() is called */
 	public boolean isDying() {
 		if (health <= 0) {
@@ -114,19 +116,27 @@ public class AntObject extends GameObject{
 		setMessageObjectForAction();
 	}
 
-	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar,
-			List<Message> incomingMessages) {
+	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar, 
+			List<Hill> visibleHills, List<Message> incomingMessages) {
 		ai.visibleAnts = visibleAnts;
 		ai.visibleSugar = visibleSugar;
+		ai.visibleHills = visibleHills;
 		ai.incomingMessages = incomingMessages;
-		ai.tick();
+		
+		try {
+			ai.tick();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		action = ai.popAction();
 		setMessageObjectForAction();
 	}
 
 	private void setMessageObjectForAction() {
 		// modify the action so that the actor is the right one
-		int messageContent = action.getMessageContent();
+		int messageContent = action.messageContent;
 		if (messageContent != Action.NO_MESSAGE) {
 			MessageObject messageObject = new MessageObject(getPosition(), ant, messageContent);
 			action.setMessageObject(messageObject);
