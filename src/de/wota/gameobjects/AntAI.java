@@ -41,7 +41,12 @@ public abstract class AntAI {
 	
 	/** Send message of type int */
 	protected void talk(int content) {
-		action.messageContent = content;
+		MessageObject mo = new MessageObject(
+											self.getPosition(),
+											self,
+											content);
+			
+		action.setMessageObject(mo);
 	}
 	
 	/** Move in certain direction with maximum distance
