@@ -2,8 +2,6 @@ package de.wota.gameobjects;
 
 import java.util.List;
 
-import de.wota.AntOrder;
-import de.wota.ai.QueenAI;
 import de.wota.utility.Vector;
 
 public class QueenObject extends AntObject {

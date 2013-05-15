@@ -1,8 +1,9 @@
-package de.wota;
+package de.wota.gameobjects;
 
 import java.util.LinkedList;
 import java.util.List;
-import de.wota.AntOrder;
+
+import de.wota.gameobjects.AntOrder;
 
 /** Abgeleitete Action Klasse für die HillAI. 
  *  

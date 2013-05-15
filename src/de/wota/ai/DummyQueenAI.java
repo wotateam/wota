@@ -1,8 +1,8 @@
-package de.wota.testing;
+package de.wota.ai;
 
-import de.wota.ai.AIInformation;
-import de.wota.ai.QueenAI;
+import de.wota.gamemaster.AIInformation;
 import de.wota.gameobjects.Caste;
+import de.wota.gameobjects.QueenAI;
 
 @AIInformation(creator = "WotA-Team", name = "DummyQueen")
 public class DummyQueenAI extends QueenAI {

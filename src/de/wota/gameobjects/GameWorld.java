@@ -6,17 +6,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.wota.Message;
-import de.wota.ai.QueenAI;
-import de.wota.gameobjects.SpacePartioning;
+import de.wota.gamemaster.AILoader;
+import de.wota.gamemaster.AbstractLogger;
 import de.wota.gameobjects.GameWorldParameters;
 
-import de.wota.plugin.AILoader;
-import de.wota.statistics.AbstractLogger;
 
 import de.wota.utility.Vector;
-import de.wota.Action;
-import de.wota.AntOrder;
 
 /**
  * Enthält alle Elemente der Spielwelt.

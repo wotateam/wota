@@ -1,4 +1,4 @@
-package de.wota.testing;
+package de.wota.ai;
 
 import java.util.Random;
 

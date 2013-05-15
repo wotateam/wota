@@ -6,6 +6,7 @@ import org.lwjgl.opengl.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import java.awt.Color;
+
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;

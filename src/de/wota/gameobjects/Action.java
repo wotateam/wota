@@ -1,9 +1,5 @@
-package de.wota;
+package de.wota.gameobjects;
 
-import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.MessageObject;
-import de.wota.gameobjects.Sugar;
-import de.wota.gameobjects.Snapshot;
 import de.wota.utility.Vector;
 
 /**

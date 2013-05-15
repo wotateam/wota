@@ -1,11 +1,10 @@
-package de.wota;
+package de.wota.gamemaster;
 
 import java.util.List;
 
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.SugarObject;
-import de.wota.plugin.AILoader;
 import de.wota.utility.SeededRandomizer;
 import de.wota.utility.Vector;
 

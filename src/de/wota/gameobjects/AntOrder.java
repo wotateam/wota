@@ -1,7 +1,5 @@
-package de.wota;
+package de.wota.gameobjects;
 
-import de.wota.gameobjects.AntAI;
-import de.wota.gameobjects.Caste;
 
 /**
  * Auftrag für eine neue Ant

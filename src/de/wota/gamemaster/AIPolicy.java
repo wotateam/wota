@@ -1,4 +1,4 @@
-package de.wota.plugin;
+package de.wota.gamemaster;
 
 import java.security.AllPermission;
 import java.security.CodeSource;

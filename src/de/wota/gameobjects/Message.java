@@ -1,7 +1,5 @@
-package de.wota;
+package de.wota.gameobjects;
 
-import de.wota.gameobjects.Ant;
-import de.wota.gameobjects.MessageObject;
 
 public class Message {
 	public final int content;

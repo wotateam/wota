@@ -1,4 +1,4 @@
-package de.wota;
+package de.wota.gamemaster;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.lwjgl.opengl.DisplayMode;
 
 import de.wota.gameobjects.GameWorld;
 import de.wota.graphics.View;
-import de.wota.statistics.TestLogger;
 
 /**
  * Contains the main loop that calls tick() and updates both the view and the
@@ -109,7 +108,7 @@ public class Simulation {
 
 		SimulationInstance inst = new SimulationInstance(ais, 42);
 
-		Simulation sim = new Simulation(inst, false);
+		Simulation sim = new Simulation(inst, true);
 		sim.runSimulation();
 	}
 

@@ -2,8 +2,6 @@ package de.wota.gameobjects;
 
 import java.util.List;
 
-import de.wota.Action;
-import de.wota.Message;
 import de.wota.utility.Vector;
 
 /**

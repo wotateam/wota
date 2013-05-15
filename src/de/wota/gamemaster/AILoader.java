@@ -1,4 +1,4 @@
-package de.wota.plugin;
+package de.wota.gamemaster;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -6,13 +6,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.Policy;
 
-import de.wota.ai.QueenAI;
 import de.wota.gameobjects.Ant;
+import de.wota.gameobjects.QueenAI;
 
 public class AILoader {
 	private String searchpath;
 
-	private final String PLAYER_PACKAGE = "de.wota.ai";
+	private final String AI_PACKAGE = "de.wota.ai.";
 
 	public AILoader() {
 		this("./");
@@ -28,13 +28,13 @@ public class AILoader {
 	// FIXME: This is ugly, but I don't know a way around it
 	@SuppressWarnings("unchecked")
 	public Class<? extends QueenAI> loadQueen(String className) {
-		File queenFile = new File(PLAYER_PACKAGE + className + ".jar");
+		File queenFile = new File(className + ".jar");
 		File searchFile = new File(searchpath);
 		try {
 			ClassLoader queenLoader = URLClassLoader.newInstance(new URL[] {
 					queenFile.toURI().toURL(), searchFile.toURI().toURL() });
 
-			Class<?> queenAIClass = queenLoader.loadClass(className);
+			Class<?> queenAIClass = queenLoader.loadClass(AI_PACKAGE + className);
 
 			// Check whether loaded class is a QueenAI
 			if (!QueenAI.class.isAssignableFrom(queenAIClass)) {
@@ -42,7 +42,7 @@ public class AILoader {
 						+ " does not extend QueenAI");
 				return null;
 			}
-			return (Class<? extends QueenAI>) queenLoader.loadClass(className);
+			return (Class<? extends QueenAI>) queenAIClass;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			return null;
@@ -53,8 +53,8 @@ public class AILoader {
 	}
 
 	public static String getAIName(Class<? extends QueenAI> queenAIClass) {
-		if (queenAIClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
-			return queenAIClass.getAnnotation(de.wota.ai.AIInformation.class)
+		if (queenAIClass.isAnnotationPresent(de.wota.gamemaster.AIInformation.class)) {
+			return queenAIClass.getAnnotation(de.wota.gamemaster.AIInformation.class)
 					.name();
 		} else {
 			return queenAIClass.getSimpleName();
@@ -62,8 +62,8 @@ public class AILoader {
 	}
 
 	public static String getAICreator(Class<? extends QueenAI> queenAIClass) {
-		if (queenAIClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
-			return queenAIClass.getAnnotation(de.wota.ai.AIInformation.class)
+		if (queenAIClass.isAnnotationPresent(de.wota.gamemaster.AIInformation.class)) {
+			return queenAIClass.getAnnotation(de.wota.gamemaster.AIInformation.class)
 					.creator();
 		} else {
 			return "Anonymous";

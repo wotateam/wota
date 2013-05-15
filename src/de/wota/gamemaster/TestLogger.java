@@ -1,4 +1,4 @@
-package de.wota.statistics;
+package de.wota.gamemaster;
 
 import de.wota.gameobjects.GameWorldParameters;
 

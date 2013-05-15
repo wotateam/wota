@@ -1,10 +1,7 @@
-package de.wota.ai;
+package de.wota.gameobjects;
 
 import java.util.LinkedList;
 import java.util.List;
-import de.wota.AntOrder;
-import de.wota.gameobjects.AntAI;
-import de.wota.gameobjects.Caste;
 
 /**
  * QueenAI ist wie AntAI + hat die Möglichkeit Einheiten zu ordern

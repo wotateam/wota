@@ -1,3 +1,4 @@
+package de.wota.testing;
 
 public class ModuloTest {
 

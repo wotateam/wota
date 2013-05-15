@@ -1,4 +1,4 @@
-package de.wota.ai;
+package de.wota.gamemaster;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
