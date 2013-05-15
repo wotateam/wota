@@ -3,6 +3,7 @@ package de.wota;
 import java.util.List;
 
 import de.wota.gameobjects.GameWorld;
+import de.wota.gameobjects.GameWorldParameters;
 import de.wota.plugin.AILoader;
 import de.wota.utility.SeededRandomizer;
 import de.wota.utility.Vector;
@@ -26,8 +27,8 @@ public class SimulationInstance {
 
 		for (String aiName : aiList) {
 			Player player = new Player(new Vector(
-					SeededRandomizer.nextInt(700),
-					SeededRandomizer.nextInt(700)), aiLoader.loadQueen(aiName));
+					SeededRandomizer.nextInt((int) GameWorldParameters.SIZE_X),
+					SeededRandomizer.nextInt((int) GameWorldParameters.SIZE_Y)), aiLoader.loadQueen(aiName));
 			world.addPlayer(player);
 		}
 

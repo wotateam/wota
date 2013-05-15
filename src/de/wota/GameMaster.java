@@ -3,6 +3,8 @@ package de.wota;
 import de.wota.gameobjects.GameWorld;
 
 /**
+ * Deprecated. 
+ * 
  * Der Spielleiter. Verwaltet alle Ants und ruft tick auf.
  * @author pascal
  *
