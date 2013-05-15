@@ -1,4 +1,4 @@
-package de.wota.gameobjects.caste;
+package de.wota.gameobjects;
 
 /**
  * Contains the constants of different castes
