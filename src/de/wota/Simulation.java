@@ -10,7 +10,6 @@ import org.lwjgl.opengl.DisplayMode;
 import de.wota.gameobjects.GameWorld;
 import de.wota.graphics.View;
 import de.wota.statistics.TestLogger;
-import de.wota.testing.TestWorld;
 
 /**
  * Contains the main loop that calls tick() and updates both the view and the
@@ -75,9 +74,19 @@ public class Simulation {
 	public void runSimulation() {
 		running = true;
 
+		long startTime = System.currentTimeMillis();
+		long time;
+
 		while (running) {
 			gameWorld.tick();
+			time = System.currentTimeMillis();
 			tickCount++;
+
+			if (tickCount % 100 == 0) {
+				System.out.format("TPS: %.1f\n",
+						(100.0 * 1000.0 / (time - startTime)));
+				startTime = time;
+			}
 
 			if (isGraphical) {
 				view.render();
@@ -96,9 +105,10 @@ public class Simulation {
 		ais.add("de.wota.testing.DummyQueenAI");
 		ais.add("de.wota.testing.DummyQueenAI");
 		ais.add("de.wota.testing.DummyQueenAI");
+		ais.add("de.wota.testing.DummyQueenAI");
 
 		SimulationInstance inst = new SimulationInstance(ais, 42);
-		
+
 		Simulation sim = new Simulation(inst, true);
 		sim.runSimulation();
 	}
