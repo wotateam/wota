@@ -79,7 +79,7 @@ public class View {
 
 	}
 
-	private void translate(Vector p) {
+	private static void translate(Vector p) {
 		glTranslated(p.x, p.y, 0);
 	}
 
