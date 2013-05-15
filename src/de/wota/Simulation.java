@@ -102,14 +102,14 @@ public class Simulation {
 	public static void main(String[] args) throws InstantiationException,
 			IllegalAccessException {
 		List<String> ais = new LinkedList<String>();
-		ais.add("de.wota.testing.DummyQueenAI");
-		ais.add("de.wota.testing.DummyQueenAI");
-		ais.add("de.wota.testing.DummyQueenAI");
-		ais.add("de.wota.testing.DummyQueenAI");
+		ais.add("DummyQueenAI");
+		ais.add("DummyQueenAI");
+		ais.add("DummyQueenAI");
+		ais.add("DummyQueenAI");
 
 		SimulationInstance inst = new SimulationInstance(ais, 42);
 
-		Simulation sim = new Simulation(inst, true);
+		Simulation sim = new Simulation(inst, false);
 		sim.runSimulation();
 	}
 

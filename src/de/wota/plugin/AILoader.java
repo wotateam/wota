@@ -7,10 +7,13 @@ import java.net.URLClassLoader;
 import java.security.Policy;
 
 import de.wota.ai.QueenAI;
+import de.wota.gameobjects.Ant;
 
 public class AILoader {
 	private String searchpath;
-	
+
+	private final String PLAYER_PACKAGE = "de.wota.ai";
+
 	public AILoader() {
 		this("./");
 	}
@@ -18,14 +21,14 @@ public class AILoader {
 	public AILoader(String path) {
 		Policy.setPolicy(new AIPolicy());
 		System.setSecurityManager(new SecurityManager());
-		
+
 		searchpath = path;
 	}
 
 	// FIXME: This is ugly, but I don't know a way around it
 	@SuppressWarnings("unchecked")
 	public Class<? extends QueenAI> loadQueen(String className) {
-		File queenFile = new File(className + ".jar");
+		File queenFile = new File(PLAYER_PACKAGE + className + ".jar");
 		File searchFile = new File(searchpath);
 		try {
 			ClassLoader queenLoader = URLClassLoader.newInstance(new URL[] {
@@ -57,7 +60,7 @@ public class AILoader {
 			return queenAIClass.getSimpleName();
 		}
 	}
-	
+
 	public static String getAICreator(Class<? extends QueenAI> queenAIClass) {
 		if (queenAIClass.isAnnotationPresent(de.wota.ai.AIInformation.class)) {
 			return queenAIClass.getAnnotation(de.wota.ai.AIInformation.class)
