@@ -6,7 +6,8 @@ import de.wota.utility.Vector;
 
 
 /** 
- * Basisklasse für die Ant-KI 
+ * Basisclass for ais by the user.
+ * Contains several lists describing the objects which are visible to the ant.
  */
 public abstract class AntAI {		
 	public List<Ant> visibleAnts;
@@ -22,12 +23,11 @@ public abstract class AntAI {
 		this.antObject = antObject;
 	}
 	
+	/** tick() gets called in every step of the game. 
+	 *  The ai has to call methods of AntAI to specify the desired action.
+	 * @throws Exception Any Exception generated in tick() gets thrown!
+	 */
 	public abstract void tick() throws Exception;
-	
-	/** Gets called when Ant dies. */
-	public void die() {
-		
-	}
 	
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
@@ -71,16 +71,22 @@ public abstract class AntAI {
 		moveTo(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
+	/** Move in direction of target but only the specified distance.
+	 * @param target Target to move to.
+	 */
 	protected void moveTo(Snapshot target, double distance) {
 		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition())
 				.scaleTo(distance);
 	}
 	
+	/**
+	 * Move maximal distance in direction of the own hill.
+	 */
 	protected void moveHome() {
 		moveTo(antObject.player.hillObject.getHill());
 	}
 	
-	/** return true if target is in view range. */
+	/** returns true if target is in view range. */
 	private boolean isInView(Snapshot target) {
 		return (Vector.distanceBetween(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
@@ -90,7 +96,7 @@ public abstract class AntAI {
 	 * Is null if the target is not in view.
 	 * @param start
 	 * @param end
-	 * @return
+	 * @return vector between this ant and target
 	 */
 	protected Vector vectorTo(Snapshot target) {
 		if (isInView(target)) {
@@ -101,11 +107,10 @@ public abstract class AntAI {
 	}
 	
 	/** 
-	 * returns the Vector between start and end.
-	 * Is null if the objects are not in view.
+	 * Is null if the targets are not in view.
 	 * @param start
 	 * @param end
-	 * @return
+	 * @return the Vector between start and end.
 	 */
 	protected Vector vectorBetween(Snapshot start, Snapshot end) {
 		if (isInView(start) && isInView(end)) {

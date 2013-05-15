@@ -93,26 +93,17 @@ public class AntObject extends GameObject{
 		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + amount);
 	}
 	
+	/** sets amount of carried sugar to 0 */
 	public void dropSugar() {
 		sugarCarry = 0;
 	}
 	
-	/** Checks if AntObject has positive health. If not, die() is called */
+	/** Checks if AntObject has positive health. */
 	public boolean isDying() {
-		if (health <= 0) {
-			die();
-			return true;
-		}
-		else
-			return false;
+		return (health <= 0);
 	}
 	
-	private void die() {
-		ai.die();
-		action = ai.popAction();
-		setMessageObjectForAction();
-	}
-
+	/** calls ai.tick(), handles exceptions and saves the action */
 	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar, 
 			List<Hill> visibleHills, List<Message> incomingMessages) {
 		ai.visibleAnts = visibleAnts;
@@ -128,18 +119,9 @@ public class AntObject extends GameObject{
 		}
 		
 		action = ai.popAction();
-		setMessageObjectForAction();
-	}
-
-	private void setMessageObjectForAction() {
-		// modify the action so that the actor is the right one
-		int messageContent = action.messageContent;
-		if (messageContent != Action.NO_MESSAGE) {
-			MessageObject messageObject = new MessageObject(getPosition(), ant, messageContent);
-			action.setMessageObject(messageObject);
-		}
 	}
 	
+	/** get new id for antObject */
 	private static int getNewID() {
 		idCounter++;
 		return idCounter - 1;

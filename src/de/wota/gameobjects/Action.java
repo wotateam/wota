@@ -8,9 +8,7 @@ import de.wota.utility.Vector;
  * items to grab.
  *
  */
-public class Action {
-	public static final int NO_MESSAGE = -1;
-		
+public class Action {		
 	/** Ant which should be attacked */
 	public Ant attackTarget;
 	
