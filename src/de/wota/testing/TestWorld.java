@@ -1,8 +1,8 @@
 package de.wota.testing;
 
 import de.wota.gameobjects.AntObject;
+import de.wota.gameobjects.Caste;
 import de.wota.gameobjects.GameWorld;
-import de.wota.gameobjects.caste.Caste;
 import de.wota.plugin.AILoader;
 import de.wota.utility.Vector;
 

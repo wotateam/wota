@@ -10,7 +10,6 @@ import de.wota.Message;
 import de.wota.ai.QueenAI;
 import de.wota.gameobjects.SpacePartioning;
 import de.wota.gameobjects.GameWorldParameters;
-import de.wota.gameobjects.caste.Caste;
 
 import de.wota.plugin.AILoader;
 import de.wota.statistics.AbstractLogger;

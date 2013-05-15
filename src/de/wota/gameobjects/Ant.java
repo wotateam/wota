@@ -1,6 +1,5 @@
 package de.wota.gameobjects;
 
-import de.wota.gameobjects.caste.Caste;
 import de.wota.utility.Vector;
 
 
