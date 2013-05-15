@@ -33,7 +33,7 @@ public enum Caste {
 	
 	public final double INITIAL_HEALTH;
 	public final double SPEED;
-	/** Angriffspunkte */
+	/** Damage caused when attacking */
 	public final double ATTACK;
 	public final int MAX_SUGAR_CARRY;	
 	public final double SIGHT_RANGE;

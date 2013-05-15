@@ -3,8 +3,8 @@ package de.wota.gameobjects;
 import de.wota.utility.Vector;
 
 /**
- * Gibt die Aktion einer Ant an.
- * Besteht aus Message, Angriffsziel (AntObject) und Bewegungsrichtung / Amplitude
+ * An ant's planned action.
+ * Contains a message, an AntObject to be attacked and a movement vector.
  * 
  * @author pascal
  *
@@ -30,7 +30,7 @@ public class Action {
 	
 	/**
 	 * In contrast to other setters, this setter is not intended to be called by methods callable
-	 * from AntAI.tick. Instead, it is intended to called afterwards using messageContent.
+	 * from AntAI.tick. Instead, it is intended to be called afterwards using messageContent.
 	 * @param messageObject
 	 */
 	public void setMessageObject(MessageObject messageObject) {
