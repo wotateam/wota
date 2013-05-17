@@ -21,7 +21,6 @@ public class AntObject extends GameObject{
 	private int sugarCarry = 0;
 
 	/** Angriffspunkte */
-	private double attack;
 	private Action action;
 	private final Caste caste;
 	public final GameWorld.Player player;
@@ -67,10 +66,6 @@ public class AntObject extends GameObject{
 		return speed;
 	}
 	
-	public double getAttack() {
-		return attack;
-	}
-	
 	public Action getAction() {
 		return action;
 	}
@@ -86,6 +81,7 @@ public class AntObject extends GameObject{
 	
 	public void takesDamage(double attack) {
 		health = health - attack;
+		System.out.println("health = " + health);
 	}
 	
 	public void picksUpSugar(int amount) {
@@ -99,8 +95,8 @@ public class AntObject extends GameObject{
 	}
 	
 	/** Checks if AntObject has positive health. */
-	public boolean isDying() {
-		return (health <= 0);
+	public boolean isDead() {
+		return (health <= 1e-9);
 	}
 	
 	/** calls ai.tick(), handles exceptions and saves the action */

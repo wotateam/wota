@@ -19,10 +19,7 @@ public class Ant extends Snapshot{
 	
 	/** distance with which Ants can move each tick */
 	public final double speed;
-	
-	/** Damage caused when attacking */
-	public final double attack;
-	
+		
 	/** amount of sugar which is carried */
 	public final int sugarCarry;
 	
@@ -37,7 +34,6 @@ public class Ant extends Snapshot{
 	public Ant(AntObject antObject) {
 		health = antObject.getHealth();
 		speed = antObject.getSpeed();
-		attack = antObject.getAttack();
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
 		playerID = antObject.player.getId();

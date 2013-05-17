@@ -103,7 +103,8 @@ public class Simulation {
 			if (isGraphical) {
 				view.render();
 				Display.update();
-				running = !Display.isCloseRequested();
+				if (running)
+					running = !Display.isCloseRequested();
 			}
 		}
 

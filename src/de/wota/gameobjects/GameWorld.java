@@ -29,7 +29,7 @@ public class GameWorld {
 			maximumSight());
 	
 	private static double maximumSight() {
-		double maximum = 0;
+		double maximum = 0.0;
 		for (Caste caste : Caste.values()) {
 			if (caste.SIGHT_RANGE > maximum) {
 				maximum = caste.SIGHT_RANGE;
@@ -78,6 +78,7 @@ public class GameWorld {
 			queenObject = new QueenObject(position, queenAIClass, this);
 			
 			antObjects.add(queenObject);
+			spacePartioning.addAntObject(queenObject);
 		
 			name = AILoader.getAIName(queenAIClass);
 
@@ -93,8 +94,14 @@ public class GameWorld {
 		}
 	}
 	
-	public void tick() {
+	public void tick() {		
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
+		
+		// can be removed as soon as SpacePartitioning is well tested!
+		if (GameWorldParameters.DEBUG) {
+			System.out.println("SpacePartitioning: " + spacePartioning.totalNumberOfAntObjects());
+			System.out.println("Total number: " + totalNumberOfAntObjects());
+		}
 
 		// create Ants for all AntObjects and the QueenObject and sets them in
 		// the AntAI (the latter happens in AntObject.createAnt() )
@@ -164,20 +171,20 @@ public class GameWorld {
 			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator();
 					antObjectIter.hasNext();) {
 				AntObject maybeDead = antObjectIter.next();
-				if (maybeDead.isDying()) {
+				if (maybeDead.isDead()) {
 					// hat neue Aktionen erzeugt.
-					executeLastWill(maybeDead);
+					//executeLastWill(maybeDead);
 					antObjectIter.remove();
 					spacePartioning.removeAntObject(maybeDead);
 				}
 			}
-		}	
+		}
 		
 		// remove empty sugar sources
 		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
 				sugarObjectIter.hasNext();) {
 			SugarObject sugarObject = sugarObjectIter.next();
-			if (sugarObject.getAmount() <= 0) {
+			if (sugarObject.getAmount() <= 1e-9) {
 				sugarObjectIter.remove();
 				spacePartioning.removeSugarObject(sugarObject);
 			}
@@ -185,7 +192,7 @@ public class GameWorld {
 		
 	}
 
-	private void executeAntOrders(QueenObject queenObject) {
+	private static void executeAntOrders(QueenObject queenObject) {
 		List<AntOrder> antOrders = queenObject.getAntOrders();
 		Iterator<AntOrder> iterator = antOrders.iterator();
 		final Player player = queenObject.player;
@@ -220,10 +227,17 @@ public class GameWorld {
 		// TODO add collateral damage
 		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
-			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
-					<= GameWorldParameters.ATTACK_RANGE) {
-				AntObject target = targetAnt.antObject;
-				target.takesDamage(actor.getAttack());
+			if (targetAnt.antObject.isDead() == true) {
+				if (GameWorldParameters.DEBUG) {
+					System.out.println("target is already dead");
+				}
+			} // target is not dead.
+			else {
+				if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+						<= GameWorldParameters.ATTACK_RANGE) {
+					AntObject target = targetAnt.antObject;
+					target.takesDamage(actor.getCaste().ATTACK);
+				}
 			}
 		}
 
@@ -255,13 +269,15 @@ public class GameWorld {
 		handleMessages(actor, action);
 	}
 
-	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr */
+	/*
+	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr
 	private void executeLastWill(AntObject actor) {
 		Action action = actor.getAction();
 
 		// Messages
 		handleMessages(actor, action);
 	}
+	*/
 	
 	/** tests if victory condition is fulfilled and notifies the Logger
 	 * Victory condition: is the queen alive? */
@@ -298,6 +314,14 @@ public class GameWorld {
 			logger.log(event);
 	}
 
+	public int totalNumberOfAntObjects() {
+		int n = 0;
+		for (Player player : players) {
+			n += player.antObjects.size();
+		}
+		return n;
+	}
+	
 	public List<Player> getPlayers() {
 		return Collections.unmodifiableList(players); // TODO is it possible to ensure this statically?
 	}

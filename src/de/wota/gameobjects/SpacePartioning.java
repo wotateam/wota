@@ -208,6 +208,16 @@ public class SpacePartioning {
 		};
 	}
 	
+	public int totalNumberOfAntObjects() {
+		int n = 0;
+		for (int i=0; i<numberOfHorizontalCells; i++) {
+			for (int j=0; j<numberOfVerticalCells; j++) {
+				n += cells[i][j].antObjects.size();
+			}
+		}
+		return n;
+	}
+	
 	private static abstract class GameObjectListField<T extends GameObject> {
 		public abstract List<T> get(Cell cell);
 	}

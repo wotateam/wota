@@ -3,6 +3,7 @@ package de.wota.gamemaster;
 import java.util.List;
 
 import de.wota.gameobjects.GameWorld;
+import de.wota.gameobjects.GameWorld.Player;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.SugarObject;
 import de.wota.utility.SeededRandomizer;
@@ -60,6 +61,11 @@ public class SimulationInstance {
 									* SeededRandomizer.nextDouble()));
 			world.addSugarObject(sugarObject);
 		}
+		/*
+		// add queens
+		for (Player player : world.getPlayers()) {
+			player.
+		}*/
 
 		return world;
 	}
