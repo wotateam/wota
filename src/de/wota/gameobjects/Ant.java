@@ -40,7 +40,7 @@ public class Ant extends Snapshot{
 		attack = antObject.getAttack();
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
-		playerID = antObject.id;
+		playerID = antObject.player.getId();
 		this.antObject = antObject;
 	}
 

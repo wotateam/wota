@@ -9,9 +9,11 @@ public class Hill extends Snapshot{
 	/** the amount of available food */
 	public double food;
 	public HillObject hillObject;
+	public final int playerID;
 	
 	public Hill(HillObject hillObject) {
 		this.hillObject = hillObject;
+		this.playerID = hillObject.getPlayer().getId();
 		food = 0;
 	}
 
