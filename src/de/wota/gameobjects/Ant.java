@@ -29,6 +29,8 @@ public class Ant extends Snapshot{
 	/** Caste which this ant belongs to */
 	public final Caste caste;
 	
+	public final int playerID;
+	
 	/** corresponding physical element of this Ant */ 
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
@@ -38,6 +40,7 @@ public class Ant extends Snapshot{
 		attack = antObject.getAttack();
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
+		playerID = antObject.id;
 		this.antObject = antObject;
 	}
 
