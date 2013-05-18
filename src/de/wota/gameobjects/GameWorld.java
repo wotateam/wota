@@ -147,9 +147,6 @@ public class GameWorld {
 			}
 		}
 
-		// Includes discarding the MessageObject instances.
-		spacePartioning.update();
-
 		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
@@ -158,6 +155,10 @@ public class GameWorld {
 			// order does matter since the queen creates new ants!
 			executeAntOrders(player.queenObject); 
 		}
+		
+		// Includes discarding the MessageObject instances.
+		spacePartioning.update(); 
+				
 
 		// Let ants die!
 		for (Player player : players) {
