@@ -64,11 +64,6 @@ public class Vector {
 		return Vector.scale(length / this.length(), this);
 	}
 	
-	/** L_2 distance between two vectors = length of v1 - v2 */
-	public static double distanceBetween(Vector v1, Vector v2) {
-		return subtract(v1, v2).length();
-	}
-	
 	/** prints vector like: "Vector: x = 5; y = 3" */
 	public String toString() {
 		return "Vector: x = " + x + "; y = " + y;

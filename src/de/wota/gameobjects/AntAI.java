@@ -88,7 +88,7 @@ public abstract class AntAI {
 	
 	/** returns true if target is in view range. */
 	private boolean isInView(Snapshot target) {
-		return (Vector.distanceBetween(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
+		return (GameWorldParameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 		
 	/** 
