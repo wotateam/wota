@@ -36,6 +36,6 @@ public class SugarObject extends GameObject {
 	}
 	
 	public double getRadius() {
-		return GameWorldParameters.INITIAL_SUGAR_RADIUS * amount / GameWorldParameters.INITIAL_SUGAR;
+		return GameWorldParameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / GameWorldParameters.INITIAL_SUGAR);
 	}
 }
