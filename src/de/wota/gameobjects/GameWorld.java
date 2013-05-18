@@ -240,11 +240,7 @@ public class GameWorld {
 		if (sugar != null) {
 			if (GameWorldParameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
 					<= sugar.sugarObject.getRadius()) {
-				int amount = Math.min(
-						actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
-						sugar.amount);
-				actor.picksUpSugar(amount);
-				sugar.sugarObject.reduceAmount(amount);
+				actor.pickUpSugar(sugar.sugarObject);
 			}
 		}
 

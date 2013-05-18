@@ -88,9 +88,11 @@ public class AntObject extends GameObject{
 		health = health - attack;
 	}
 	
-	public void picksUpSugar(int amount) {
+	public void pickUpSugar(SugarObject sugarObject) {
 		// TODO change to unspecific caste
-		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + amount);
+		int oldAmountOfSugarCarried = sugarCarry;
+		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarObject.getAmount());
+		sugarObject.reduceAmount(sugarCarry - oldAmountOfSugarCarried);
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -120,7 +122,7 @@ public class AntObject extends GameObject{
 		
 		action = ai.popAction();
 	}
-	
+
 	/** get new id for antObject */
 	private static int getNewID() {
 		idCounter++;
