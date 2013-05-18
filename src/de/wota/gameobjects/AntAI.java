@@ -67,14 +67,14 @@ public abstract class AntAI {
 	/** Move in direction of an Object
 	 * @param target can be anything like Ant, Sugar, ...
 	 */
-	protected void moveTo(Snapshot target) { // TODO rename me to moveTowards
-		moveTo(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+	protected void moveTowards(Snapshot target) {
+		moveTowards(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction of target but only the specified distance.
 	 * @param target Target to move to.
 	 */
-	protected void moveTo(Snapshot target, double distance) {
+	protected void moveTowards(Snapshot target, double distance) {
 		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition())
 				.scaleTo(distance);
 	}
@@ -83,7 +83,7 @@ public abstract class AntAI {
 	 * Move maximal distance in direction of the own hill.
 	 */
 	protected void moveHome() {
-		moveTo(antObject.player.hillObject.getHill());
+		moveTowards(antObject.player.hillObject.getHill());
 	}
 	
 	/** returns true if target is in view range. */
