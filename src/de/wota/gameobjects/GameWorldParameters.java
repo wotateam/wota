@@ -15,6 +15,7 @@ public class GameWorldParameters {
 	public static final int STARTING_FOOD = 1000;
 	// MAX_MOVEMENT_DISTANCE needs to greater than the speed of all castes.
 	public static final double MAX_MOVEMENT_DISTANCE = 5;
+	public static final double ANGLE_ERROR_PER_DISTANCE = 20; 
 	
 	public static final boolean DEBUG = false;
 	

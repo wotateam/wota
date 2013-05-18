@@ -22,7 +22,7 @@ public class Vector {
 		this.y = v.y;
 	}
 	
-	/** returns the lengths of the vector in L_2 norm */
+	/** @return The length of the vector. */
 	public double length() {
 		return Math.sqrt(x*x + y*y);
 	}
@@ -80,5 +80,9 @@ public class Vector {
 		} else {
 			return new Vector(this); // TODO Optimization: Change x and y to be final and get rid of this.
 		}
+	}
+
+	public double angle() {
+		return 180 / Math.PI * Math.acos(x/length()) * Math.signum(y);
 	}
 }
