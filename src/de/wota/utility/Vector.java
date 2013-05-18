@@ -54,13 +54,12 @@ public class Vector {
 		return new Vector(v1.x - v2.x, v1.y - v2.y);
 	}
 	
-	/** does not change instance */
 	public Vector scale(double a) {
 		return Vector.scale(a, this);
 	}
 
-	/** returns this Vector scaled to specified length
-	 * does not change instance */
+	/** returns this Vector scaled to specified length 
+	 * */
 	public Vector scaleTo(double length) {
 		return Vector.scale(length / this.length(), this);
 	}
