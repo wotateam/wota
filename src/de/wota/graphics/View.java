@@ -73,8 +73,7 @@ public class View {
 		// Sugar Sources
 		glColor3f(1.f, 1.f, 1.f);
 		for (SugarObject sugarObject : world.getSugarObjects()) {
-			renderCircle(sugarObject.getPosition(), 
-					GameWorldParameters.SUGAR_RADIUS * sugarObject.getAmount() / GameWorldParameters.INITIAL_SUGAR);
+			renderCircle(sugarObject.getPosition(), sugarObject.getRadius());
 		}
 
 	}

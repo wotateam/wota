@@ -43,7 +43,7 @@ public class SolitaryAI extends AntAI {
 					}
 				}
 				// if reachable grab it!
-				if (closestDistance < GameWorldParameters.SUGAR_RADIUS) {
+				if (closestDistance < closest.radius) { 
 					pickUpSugar(closest);
 				}
 				else { // go to next

@@ -9,11 +9,13 @@ import de.wota.utility.Vector;
  */
 public class Sugar extends Snapshot {
 	public final int amount;
+	public final double radius;
 	final SugarObject sugarObject;
 	
 	public Sugar(SugarObject sugarObject) {
 		this.sugarObject = sugarObject;
 		amount = sugarObject.getAmount();
+		radius = sugarObject.getRadius();
 	}
 
 	@Override
