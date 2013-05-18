@@ -1,6 +1,6 @@
 wota
 
-War of the Ants/Apes
+War of the Ants
 
 http://lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_Eclipse
 
