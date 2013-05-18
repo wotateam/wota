@@ -218,12 +218,14 @@ public class GameWorld {
 
 		// Attack
 		// TODO add collateral damage
+		boolean isAttacking = false;
 		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
 			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 					<= GameWorldParameters.ATTACK_RANGE) {
 				AntObject target = targetAnt.antObject;
 				target.takesDamage(actor.getAttack());
+				isAttacking = true;
 			}
 		}
 
@@ -245,8 +247,13 @@ public class GameWorld {
 		}
 
 		// Movement
-		actor.move(action.movement);
-		
+		if (isAttacking) {
+			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_ATTACKING));
+		} else if (actor.getSugarCarry() > 0) {
+			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_CARRYING_SUGAR));
+		} else {
+			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED));
+		}
 		// Messages
 		handleMessages(actor, action);
 	}

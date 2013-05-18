@@ -74,4 +74,12 @@ public class Vector {
 	public String toString() {
 		return "Vector: x = " + x + "; y = " + y;
 	}
+
+	public Vector boundLengthBy(double maximumLength) {
+		if (length() > maximumLength) {
+			return this.scaleTo(maximumLength);
+		} else {
+			return new Vector(this); // TODO Optimization: Change x and y to be final and get rid of this.
+		}
+	}
 }
