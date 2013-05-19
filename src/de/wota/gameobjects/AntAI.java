@@ -133,13 +133,6 @@ public abstract class AntAI {
 		self = ant;
 	}
 	
-	/**
-	 * CAUTION! USER AI MAY HAVE CHANGED THIS
-	 */
-	public Ant getAnt() {
-		return self;
-	}
-	
 	/** CAUTION! THIS METHOD DELETES THE ACTION */
 	Action popAction() {
 		Action returnAction = action;

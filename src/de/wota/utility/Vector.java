@@ -58,6 +58,12 @@ public class Vector {
 	public Vector scale(double a) {
 		return Vector.scale(a, this);
 	}
+	
+	/** prints vector like: "Vector: x = 5; y = 3" */
+	@Override
+	public String toString() {
+		return "Vector: x = " + x + "; y = " + y;
+	}
 
 	/** returns this Vector scaled to specified length
 	 * does not change instance */
@@ -69,9 +75,5 @@ public class Vector {
 	public static double distanceBetween(Vector v1, Vector v2) {
 		return subtract(v1, v2).length();
 	}
-	
-	/** prints vector like: "Vector: x = 5; y = 3" */
-	public String toString() {
-		return "Vector: x = " + x + "; y = " + y;
-	}
+
 }
