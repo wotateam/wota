@@ -17,7 +17,7 @@ public class SoldierAI extends AntAI {
 		for (Ant ant : visibleAnts) {
 			if (ant.playerID != self.playerID) {
 				if (ant.caste == Caste.Queen) {
-					moveTo(ant);
+					moveTowards(ant);
 					attack(ant);
 					hasTarget = true;
 				}

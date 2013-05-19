@@ -10,7 +10,7 @@ public class MoveAI extends AntAI {
 	public void tick() {
 		Random random = new Random();
 		if (visibleSugar.size() != 0) {
-			moveTo(visibleSugar.get(0));
+			moveTowards(visibleSugar.get(0));
 		}
 		else {
 			moveInDirection(random.nextInt(30));
