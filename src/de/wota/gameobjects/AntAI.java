@@ -75,8 +75,7 @@ public abstract class AntAI {
 	 * @param target Target to move to.
 	 */
 	protected void moveTowards(Snapshot target, double distance) {
-		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition())
-				.boundLengthBy(distance);
+		action.movement = vectorTo(target).boundLengthBy(distance);
 	}
 	
 	/**

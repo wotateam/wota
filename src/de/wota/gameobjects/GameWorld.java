@@ -218,20 +218,28 @@ public class GameWorld {
 		}
 
 		// Attack
-		// TODO add collateral damage
 		boolean isAttacking = false;
 		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
 			if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 					<= GameWorldParameters.ATTACK_RANGE) {
+				// main damage:
 				AntObject target = targetAnt.antObject;
 				target.takesDamage(actor.getAttack());
 				isAttacking = true;
+				// collateral damage:
+				// TODO: Do we want all ants to take damage or only the enemy ones?
+				for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(GameWorldParameters.ATTACK_RANGE, target.getPosition())) {
+					if (closeAntObject != target && closeAntObject.player != actor.player) {
+						// TODO: Find a good rate, maybe depending on distance.
+						closeAntObject.takesDamage(actor.getAttack()/2);
+					}
+				}
 			}
 		}
 
 		// Drop sugar at the hill.
-		// TODO possible optimization: Use space partioning for dropping sugar at the hill, don't test for all ants.
+		// TODO possible optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
 		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= GameWorldParameters.HILL_RADIUS) {
 			actor.player.hillObject.changeFoodBy(actor.getSugarCarry());
