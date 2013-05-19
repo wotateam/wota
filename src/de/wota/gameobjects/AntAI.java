@@ -72,17 +72,27 @@ public abstract class AntAI {
 	}
 	
 	/** Move in direction of target but only the specified distance.
-	 * @param target Target to move to.
+	 * @param target Target to move towards.
 	 */
 	protected void moveTowards(Snapshot target, double distance) {
-		action.movement = vectorTo(target).boundLengthBy(distance);
+		if (isInView(target)) {
+			uncheckedMoveTowards(target, distance);
+		}
+	}
+
+	private void uncheckedMoveTowards(Snapshot target) {
+		uncheckedMoveTowards(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+	}
+	
+	private void uncheckedMoveTowards(Snapshot target, double distance) {
+		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
 	}
 	
 	/**
-	 * Move maximal distance in direction of the own hill.
+	 * Move maximal distance in direction of the own hill, even if it is not visible. 
 	 */
 	protected void moveHome() {
-		moveTowards(antObject.player.hillObject.getHill());
+		uncheckedMoveTowards(antObject.player.hillObject.getHill());
 	}
 	
 	/** returns true if target is in view range. */
