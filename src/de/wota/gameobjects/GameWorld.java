@@ -200,8 +200,8 @@ public class GameWorld {
 		while (iterator.hasNext()) {
 			AntOrder antOrder = iterator.next();
 		
-			if (GameWorldParameters.ANT_COST <= player.hillObject.getFood()) {
-				player.hillObject.changeFoodBy(-GameWorldParameters.ANT_COST);
+			if (GameWorldParameters.ANT_COST <= player.hillObject.getStoredFood()) {
+				player.hillObject.changeStoredFoodBy(-GameWorldParameters.ANT_COST);
 				
 				AntObject antObject = new AntObject(
 						queenObject.player.hillObject.getPosition(),
@@ -245,7 +245,12 @@ public class GameWorld {
 		// TODO possible optimization: Use space partioning for dropping sugar at the hill, don't test for all ants.
 		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= GameWorldParameters.HILL_RADIUS) {
-			actor.player.hillObject.changeFoodBy(actor.getSugarCarry());
+			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
+			actor.dropSugar();
+		}
+		
+		// or drop sugar if desired
+		if (action.dropItem == true) {
 			actor.dropSugar();
 		}
 		
@@ -296,9 +301,9 @@ public class GameWorld {
 	}
 
 	private void handleMessages(AntObject actor, Action action) {
-		if (action.getMessageObject() != null) {
-			spacePartioning.addMessageObject(action.getMessageObject());
-			Message message = action.getMessageObject().getMessage();
+		if (action.messageObject != null) {
+			spacePartioning.addMessageObject(action.messageObject);
+			Message message = action.messageObject.getMessage();
 			if (GameWorldParameters.DEBUG)
 				System.out.println("\"" + message.content + "\" sagt "
 						+ message.sender + ".");

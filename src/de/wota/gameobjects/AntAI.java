@@ -32,11 +32,17 @@ public abstract class AntAI {
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
 		action.attackTarget = target;
+		action.dropItem = true;
 	}
 	
 	/** Pick up sugar */
 	protected void pickUpSugar(Sugar source) {
 		action.sugarTarget = source;
+	}
+	
+	/** Drop sugar if some is carried. Can not be undone. */
+	protected void dropSugar() {
+		action.dropItem = true;
 	}
 	
 	/** Send message of type int */
@@ -46,7 +52,7 @@ public abstract class AntAI {
 											self,
 											content);
 			
-		action.setMessageObject(mo);
+		action.messageObject = mo;
 	}
 	
 	/** Move in certain direction with maximum distance
