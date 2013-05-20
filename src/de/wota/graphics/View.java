@@ -10,7 +10,7 @@ import java.awt.Color;
 
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
-import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Parameters;
 import de.wota.gameobjects.SugarObject;
 import de.wota.utility.Vector;
 
@@ -47,7 +47,7 @@ public class View {
 
 		// coordinate system origin at lower left with width and height same as
 		// the window
-		glOrtho(0, GameWorldParameters.SIZE_X, 0, GameWorldParameters.SIZE_Y, -1, 1);
+		glOrtho(0, Parameters.SIZE_X, 0, Parameters.SIZE_Y, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
@@ -86,7 +86,7 @@ public class View {
 			}			
 
 			// Hill
-			renderCircle(player.hillObject.getPosition(), GameWorldParameters.HILL_RADIUS);
+			renderCircle(player.hillObject.getPosition(), Parameters.HILL_RADIUS);
 		}
 		// Sugar Sources
 		glColor4f(1.f, 1.f, 1.f,1.0f/(SAMPLES*SAMPLES));

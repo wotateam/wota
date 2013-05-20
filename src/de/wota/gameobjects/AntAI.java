@@ -59,7 +59,7 @@ public abstract class AntAI {
 	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
 	 */
 	protected void moveInDirection(double direction) {
-		moveInDirection(direction, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+		moveInDirection(direction, Parameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction with specified distance
@@ -75,7 +75,7 @@ public abstract class AntAI {
 	 * @param target can be anything like Ant, Sugar, ...
 	 */
 	protected void moveToward(Snapshot target) {
-		moveToward(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+		moveToward(target, Parameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction of target but only the specified distance.
@@ -88,7 +88,7 @@ public abstract class AntAI {
 	}
 
 	private void uncheckedMoveToward(Snapshot target) {
-		uncheckedMoveToward(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+		uncheckedMoveToward(target, Parameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	private void uncheckedMoveToward(Snapshot target, double distance) {
@@ -104,7 +104,7 @@ public abstract class AntAI {
 	
 	/** returns true if target is in view range. */
 	private boolean isInView(Snapshot target) {
-		return (GameWorldParameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
+		return (Parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 		
 	/** 

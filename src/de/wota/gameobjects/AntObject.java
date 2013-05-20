@@ -123,7 +123,7 @@ public class AntObject extends GameObject{
 	@Override
 	public void move(Vector moveVector) {
 		if (moveVector.length() != 0) {
-			double angleError = GameWorldParameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
+			double angleError = Parameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
 					* 2 * (SeededRandomizer.nextDouble() - 0.5); 
 			super.move(Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError));
 		} else {

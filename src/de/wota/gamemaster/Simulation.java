@@ -9,7 +9,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
 import de.wota.gameobjects.GameWorld;
-import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Parameters;
 import de.wota.graphics.View;
 
 /**
@@ -28,8 +28,8 @@ public class Simulation {
 	private GameWorld gameWorld;
 	private View view;
 	
-	public final int FRAMES_PER_SECOND = GameWorldParameters.FRAMES_PER_SECOND;
-	public final int TICKS_PER_SECOND = GameWorldParameters.TICKS_PER_SECOND;
+	public final int FRAMES_PER_SECOND = Parameters.FRAMES_PER_SECOND;
+	public final int TICKS_PER_SECOND = Parameters.TICKS_PER_SECOND;
 
 	private double measuredFramesPerSecond;
 	private double measuredTicksPerSecond;

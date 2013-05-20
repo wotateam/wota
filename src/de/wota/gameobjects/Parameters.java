@@ -3,7 +3,7 @@ package de.wota.gameobjects;
 import de.wota.utility.Vector;
 import de.wota.utility.Modulo;
 
-public class GameWorldParameters {
+public class Parameters {
 	public static final double SIZE_X = 1000;
 	public static final double SIZE_Y = 1000;
 	public static final double HILL_RADIUS = 20;
@@ -26,8 +26,8 @@ public class GameWorldParameters {
 	
 	public static Vector normalize(Vector p) {
 		Vector r = new Vector(p);
-		r.x = Modulo.mod(r.x, GameWorldParameters.SIZE_X);
-		r.y = Modulo.mod(r.y, GameWorldParameters.SIZE_Y);
+		r.x = Modulo.mod(r.x, Parameters.SIZE_X);
+		r.y = Modulo.mod(r.y, Parameters.SIZE_Y);
 		return r;
 	}
 	

@@ -8,7 +8,7 @@ import java.util.List;
 
 import de.wota.gamemaster.AILoader;
 import de.wota.gamemaster.AbstractLogger;
-import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Parameters;
 
 
 import de.wota.utility.Vector;
@@ -25,7 +25,7 @@ public class GameWorld {
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
 	private SpacePartioning spacePartioning = new SpacePartioning(
-			GameWorldParameters.SIZE_X, GameWorldParameters.SIZE_Y,
+			Parameters.SIZE_X, Parameters.SIZE_Y,
 			maximumSight());
 	
 	private static double maximumSight() {
@@ -98,7 +98,7 @@ public class GameWorld {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 		
 		// can be removed as soon as SpacePartitioning is well tested!
-		if (GameWorldParameters.DEBUG) {
+		if (Parameters.DEBUG) {
 			System.out.println("SpacePartitioning: " + spacePartioning.totalNumberOfAntObjects());
 			System.out.println("Total number: " + totalNumberOfAntObjects());
 		}
@@ -201,8 +201,8 @@ public class GameWorld {
 		while (iterator.hasNext()) {
 			AntOrder antOrder = iterator.next();
 		
-			if (GameWorldParameters.ANT_COST <= player.hillObject.getStoredFood()) {
-				player.hillObject.changeStoredFoodBy(-GameWorldParameters.ANT_COST);
+			if (Parameters.ANT_COST <= player.hillObject.getStoredFood()) {
+				player.hillObject.changeStoredFoodBy(-Parameters.ANT_COST);
 				
 				AntObject antObject = new AntObject(
 						queenObject.player.hillObject.getPosition(),
@@ -232,8 +232,8 @@ public class GameWorld {
 				System.out.println("Warning: AI tried to attack dead target.");
 			} 
 			else { // target is not dead.
-				if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
-						<= GameWorldParameters.ATTACK_RANGE) {
+				if (Parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+						<= Parameters.ATTACK_RANGE) {
 					
 					// main damage:
 					AntObject target = targetAnt.antObject;
@@ -242,10 +242,10 @@ public class GameWorld {
 					
 					// collateral damage:
 					// TODO: Do we want all ants to take damage or only the enemy ones?
-					for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(GameWorldParameters.ATTACK_RANGE, target.getPosition())) {
+					for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
 						if (closeAntObject != target && closeAntObject.player != actor.player) {
 							// TODO: Find a good rate, maybe depending on distance.
-							closeAntObject.takesDamage(actor.getCaste().ATTACK*GameWorldParameters.COLLATERAL_DAMAGE_FACTOR);
+							closeAntObject.takesDamage(actor.getCaste().ATTACK*Parameters.COLLATERAL_DAMAGE_FACTOR);
 						}
 					}
 				}
@@ -254,8 +254,8 @@ public class GameWorld {
 
 		// Drop sugar at the hill.
 		// TODO possible optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
-		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
-				<= GameWorldParameters.HILL_RADIUS) {
+		if (Parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
+				<= Parameters.HILL_RADIUS) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
 			actor.dropSugar();
 		}
@@ -268,7 +268,7 @@ public class GameWorld {
 		// Pick up sugar
 		Sugar sugar = action.sugarTarget;
 		if (sugar != null) {
-			if (GameWorldParameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
+			if (Parameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
 					<= sugar.sugarObject.getRadius()) {
 				actor.pickUpSugar(sugar.sugarObject);
 			}
@@ -316,7 +316,7 @@ public class GameWorld {
 		if (action.messageObject != null) {
 			spacePartioning.addMessageObject(action.messageObject);
 			Message message = action.messageObject.getMessage();
-			if (GameWorldParameters.DEBUG)
+			if (Parameters.DEBUG)
 				System.out.println("\"" + message.content + "\" sagt "
 						+ message.sender + ".");
 		}

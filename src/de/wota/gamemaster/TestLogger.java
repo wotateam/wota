@@ -1,6 +1,6 @@
 package de.wota.gamemaster;
 
-import de.wota.gameobjects.GameWorldParameters;
+import de.wota.gameobjects.Parameters;
 
 public class TestLogger extends AbstractLogger {
 
@@ -8,7 +8,7 @@ public class TestLogger extends AbstractLogger {
 	public void log(LogEventType event) {
 		switch (event) {
 		case TICK:
-			if (GameWorldParameters.DEBUG) {
+			if (Parameters.DEBUG) {
 				System.out.println("TICK");
 			}
 			break;	

@@ -6,7 +6,7 @@ import de.wota.utility.Vector;
 public class HillObject extends GameObject {
 	private Hill hill;
 	private GameWorld.Player player;
-	private double storedFood = GameWorldParameters.STARTING_FOOD;
+	private double storedFood = Parameters.STARTING_FOOD;
 	
 	public HillObject(Vector position, GameWorld.Player player) {
 		super(position);

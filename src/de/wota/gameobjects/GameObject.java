@@ -17,7 +17,7 @@ public class GameObject {
 	}
 	
 	public void setPosition(Vector position) {
-		this.position = GameWorldParameters.normalize(position);
+		this.position = Parameters.normalize(position);
 	}
 
 	public Vector getPosition() {
