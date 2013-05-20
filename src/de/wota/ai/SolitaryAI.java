@@ -47,7 +47,7 @@ public class SolitaryAI extends AntAI {
 					pickUpSugar(closest);
 				}
 				else { // go to next
-					moveTowards(closest);
+					moveToward(closest);
 				}
 			}
 		}
