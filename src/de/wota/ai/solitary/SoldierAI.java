@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.wota.ai;
+package de.wota.ai.solitary;
 
 import de.wota.gameobjects.*;
 import de.wota.utility.SeededRandomizer;

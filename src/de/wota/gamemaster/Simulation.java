@@ -155,10 +155,10 @@ public class Simulation {
 	public static void main(String[] args) throws InstantiationException,
 			IllegalAccessException {
 		List<String> ais = new LinkedList<String>();
-		ais.add("DummyQueenAI");
-		ais.add("DummyQueenAI");
-		ais.add("DummyQueenAI");
-		ais.add("DummyQueenAI");
+		ais.add("dummy.DummyQueenAI");
+		ais.add("dummy.DummyQueenAI");
+		ais.add("solitary.SolitaryQueenAI");
+		ais.add("solitary.SolitaryQueenAI");
 
 		SimulationInstance inst = new SimulationInstance(ais, 42);
 

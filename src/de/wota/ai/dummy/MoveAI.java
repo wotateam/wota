@@ -1,4 +1,4 @@
-package de.wota.ai;
+package de.wota.ai.dummy;
 
 import java.util.Random;
 

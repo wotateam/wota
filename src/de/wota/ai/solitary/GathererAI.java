@@ -1,4 +1,4 @@
-package de.wota.ai;
+package de.wota.ai.solitary;
 
 import java.util.Random;
 
@@ -10,7 +10,7 @@ import de.wota.gameobjects.Sugar;
 import de.wota.utility.SeededRandomizer;
 
 //@AIInformation(creator = "WotA-Team", name = "SolitaryAI")
-public class SolitaryAI extends AntAI {
+public class GathererAI extends AntAI {
 
 	private double lastDir = 0;
 	private Hill ownHill;

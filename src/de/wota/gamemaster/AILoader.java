@@ -70,9 +70,11 @@ public class AILoader {
 			return (Class<? extends QueenAI>) queenAIClass;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+			System.exit(-1);
 			return null;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			System.exit(-1);
 			return null;
 		}
 	}
