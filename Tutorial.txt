@@ -4,24 +4,30 @@
 
 1. Create at least two classes. One should inherit de.wota.gameobjects.AntAI
    and the other de.wota.gameobjects.QueenAI. These files will contain your AI.
-   It is important that your files are located in de.wota.ai. 
+   It is important that your files are located in src/de/wota/ai/ or one of its 
+   subfolders. Correspondingly, your class should reside in de.wota.ai or one of 
+   its subpackages, write 
+     package de.wota.ai.<my-subpackage>;
+   at the top of your files.
    
 2. Both classes have to override the method 
      public void tick()
-   this method gets called in every tick of the game and for every Ant seperately.
+   this method gets called in every tick of the game and for every ant separately.
    
-3. You have one Queen which is able to produce new Ants if enough food is available.
+3. You have one queen which is able to produce new ants if enough food is available.
    Have a look at the sample AIs in de.wota.ai to see how you can order new Ants.   
    
-4. For the other Ants use the methods and fields from AntAI to perceive the environment
-   of the Ant and to interact. You can also find sample AIs in de.wota.ai.
-   Game constants are saved in gameobjects.Parameters.
+4. For the other ants use the methods and fields from AntAI to perceive the environment
+   of the ant and to interact. You can find sample AIs in de.wota.ai.
+   Game constants may be found in de.wota.gameobjects.Parameters.
 
-5. You can start the Game by loading your AIs in de.wota.gamemaster.Wota and executing
+5. You can start the game by loading your AIs in de.wota.gamemaster.Wota and executing
    its main. Keep in mind that you have to specify the name of your QueenAI. Your QueenAI
-   should then order (=build) the other Ants.
+   should then order (=build) the other ants.
    
-6. If you have any questions do not hesitate to ask them.
+6. If you have any questions do not hesitate to ask them, for example by emailing one of 
+   us, talking to us or creating an issue on:
+     http://github.com/DanielBruegmann/wota/issues 
 
 7. Please send us your AIs no matter how primitive they are. This will help us a lot.
 
