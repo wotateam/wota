@@ -151,19 +151,4 @@ public class Simulation {
 		if (isGraphical)
 			Display.destroy();
 	}
-
-	public static void main(String[] args) throws InstantiationException,
-			IllegalAccessException {
-		List<String> ais = new LinkedList<String>();
-		ais.add("dummy.DummyQueenAI");
-		ais.add("dummy.DummyQueenAI");
-		ais.add("solitary.SolitaryQueenAI");
-		ais.add("solitary.SolitaryQueenAI");
-
-		SimulationInstance inst = new SimulationInstance(ais, 42);
-
-		Simulation sim = new Simulation(inst, true);
-		sim.runSimulation();
-	}
-
 }

@@ -82,7 +82,6 @@ public class AntObject extends GameObject{
 	
 	public void takesDamage(double attack) {
 		health = health - attack;
-		System.out.println("health = " + health);
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
@@ -99,7 +98,7 @@ public class AntObject extends GameObject{
 	
 	/** Checks if AntObject has positive health. */
 	public boolean isDead() {
-		return (health <= 1e-9);
+		return (health <= 0);
 	}
 	
 	/** calls ai.tick(), handles exceptions and saves the action */
