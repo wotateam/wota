@@ -7,7 +7,7 @@ import de.wota.gameobjects.QueenAI;
 import de.wota.utility.SeededRandomizer;
 
 @AIInformation(creator = "WotA-Team", name = "AgressiveQueen")
-public class AgressiveQueenAI extends QueenAI {
+public class AggressiveQueenAI extends QueenAI {
 	
 	@Override
 	public void tick() {

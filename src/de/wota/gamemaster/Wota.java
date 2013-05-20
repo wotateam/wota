@@ -17,8 +17,8 @@ public class Wota {
 //		use ais.add to add AIs to the game
 		ais.add("dummy.DummyQueenAI");
 		ais.add("solitary.SolitaryQueenAI");
-		ais.add("AgressiveQueenAI");
-		ais.add("AgressiveQueenAI");
+		ais.add("AggressiveQueenAI");
+		ais.add("AggressiveQueenAI");
 	
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
