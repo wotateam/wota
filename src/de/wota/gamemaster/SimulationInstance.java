@@ -1,6 +1,7 @@
 package de.wota.gamemaster;
 
 import java.util.List;
+import java.util.Random;
 
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorld.Player;
@@ -31,6 +32,17 @@ public class SimulationInstance {
 		this.seed = seed;
 
 		aiLoader = new AILoader();
+	}
+	
+	/**
+	 * Create an instance from a list of participating AIs and a randomly choosen seed
+	 * used to generate a map and initialize the RNGs.
+	 * 
+	 * @param aiList
+	 *            list with class names of the participating AIs
+	 */
+	public SimulationInstance(List<String> aiList) {
+		this(aiList, (new Random()).nextLong());
 	}
 
 	/**
