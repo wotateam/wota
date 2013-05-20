@@ -77,8 +77,7 @@ public class GameWorld {
 			hillObject = new HillObject(position, this);
 			queenObject = new QueenObject(position, queenAIClass, this);
 			
-			antObjects.add(queenObject);
-			spacePartioning.addAntObject(queenObject);
+			addAntObject(queenObject);
 		
 			name = AILoader.getAIName(queenAIClass);
 
@@ -228,25 +227,19 @@ public class GameWorld {
 		boolean isAttacking = false;
 		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
-			if (targetAnt.antObject.isDead() == true) {
-				System.out.println("Warning: AI tried to attack dead target.");
-			} 
-			else { // target is not dead.
-				if (Parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
-						<= Parameters.ATTACK_RANGE) {
-					
-					// main damage:
-					AntObject target = targetAnt.antObject;
-					target.takesDamage(actor.getCaste().ATTACK);
-					isAttacking = true;
-					
-					// collateral damage:
-					// TODO: Do we want all ants to take damage or only the enemy ones?
-					for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
-						if (closeAntObject != target && closeAntObject.player != actor.player) {
-							// TODO: Find a good rate, maybe depending on distance.
-							closeAntObject.takesDamage(actor.getCaste().ATTACK*Parameters.COLLATERAL_DAMAGE_FACTOR);
-						}
+			if (Parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+					<= Parameters.ATTACK_RANGE) {
+				
+				// main damage:
+				AntObject target = targetAnt.antObject;
+				target.takesDamage(actor.getCaste().ATTACK);
+				isAttacking = true;
+				
+				// collateral damage:
+				for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
+					if (closeAntObject != target && closeAntObject.player != actor.player) {
+						// TODO: Find a good rate, maybe depending on distance.
+						closeAntObject.takesDamage(actor.getCaste().ATTACK*Parameters.COLLATERAL_DAMAGE_FACTOR);
 					}
 				}
 			}
