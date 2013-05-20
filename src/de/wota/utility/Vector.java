@@ -27,33 +27,6 @@ public class Vector {
 		return Math.sqrt(x*x + y*y);
 	}
 	
-	/** returns the sum of p1 and p2 */
-	public static Vector add(final Vector p1, final Vector p2) {
-		return new Vector(p1.x + p2.x, p1.y + p2.y);
-	}
-	
-	/** returns the vector p, scaled by scaling_factor */
-	public static Vector scale(double scalingFactor, final Vector p) {
-		return new Vector(p.x * scalingFactor, p.y * scalingFactor);
-	}
-	
-	/** creates a vector from polar coordinates. 
-	 *  
-	 * @param amplitude length of the vector
-	 * @param direction phi-component. direction = 0 generates a vector along the x-axis.
-	 * @return
-	 */
-	public static Vector fromPolar(double amplitude, double direction) {
-		return new Vector(amplitude*Math.cos(direction/360.*2*Math.PI), amplitude*Math.sin(direction/360.*2*Math.PI));
-	}
-	
-	/**
-	 * returns the result of v1 - v2
-	 */
-	public static Vector subtract(Vector v1, Vector v2) {
-		return new Vector(v1.x - v2.x, v1.y - v2.y);
-	}
-	
 	/** does not change instance */
 	public Vector scale(double a) {
 		return Vector.scale(a, this);
@@ -71,6 +44,40 @@ public class Vector {
 		return Vector.scale(length / this.length(), this);
 	}
 	
+	/** returns the polar coordinate of the vector 
+	 * special case: null vector returns 0.0
+	 * @return angle in degrees */
+	public double getPolar() {
+		return Math.atan2(y, x)/(2.*Math.PI)*360.;
+	}
+	
+	/** returns the sum of p1 and p2 */
+	public static Vector add(final Vector p1, final Vector p2) {
+		return new Vector(p1.x + p2.x, p1.y + p2.y);
+	}
+
+	/** returns the vector p, scaled by scaling_factor */
+	public static Vector scale(double scalingFactor, final Vector p) {
+		return new Vector(p.x * scalingFactor, p.y * scalingFactor);
+	}
+
+	/** creates a vector from polar coordinates. 
+	 *  
+	 * @param amplitude length of the vector
+	 * @param direction phi-component. direction = 0 generates a vector along the x-axis.
+	 * @return
+	 */
+	public static Vector fromPolar(double amplitude, double direction) {
+		return new Vector(amplitude*Math.cos(direction/360.*2*Math.PI), amplitude*Math.sin(direction/360.*2*Math.PI));
+	}
+
+	/**
+	 * returns the result of v1 - v2
+	 */
+	public static Vector subtract(Vector v1, Vector v2) {
+		return new Vector(v1.x - v2.x, v1.y - v2.y);
+	}
+
 	/** L_2 distance between two vectors = length of v1 - v2 */
 	public static double distanceBetween(Vector v1, Vector v2) {
 		return subtract(v1, v2).length();
