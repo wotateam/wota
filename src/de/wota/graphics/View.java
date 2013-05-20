@@ -102,33 +102,4 @@ public class View {
 		}
 		glEnd();
 	}
-
-	/**
-	 * @param args
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 */
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
-		GameWorld gameWorld = TestWorld.testWorld();
-		final int width = 700;
-		final int height = 700;
-		View view = new View(gameWorld, width, height);
-		try {
-			Display.setDisplayMode(new DisplayMode(width, height));
-			Display.create();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(0);
-		}
-
-		view.setup();
-		
-		while (!Display.isCloseRequested()) {
-			gameWorld.tick();
-			view.render();
-			Display.update();
-		}
-		
-		Display.destroy();
-	}
 }
