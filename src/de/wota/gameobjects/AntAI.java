@@ -74,30 +74,37 @@ public abstract class AntAI {
 	 *  Stops when target is reached.
 	 * @param target can be anything like Ant, Sugar, ...
 	 */
-	protected void moveTowards(Snapshot target) {
-		moveTowards(target, Math.min(GameWorldParameters.MAX_MOVEMENT_DISTANCE,
-								Vector.distanceBetween(target.getPosition(), antObject.getPosition()))
-			   );
+	protected void moveToward(Snapshot target) {
+		moveToward(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction of target but only the specified distance.
-	 * @param target Target to move to.
+	 * @param target Target to move towards.
 	 */
-	protected void moveTowards(Snapshot target, double distance) {
-		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition())
-				.scaleTo(distance);
+	protected void moveToward(Snapshot target, double distance) {
+		if (isInView(target)) {
+			uncheckedMoveToward(target, distance);
+		}
+	}
+
+	private void uncheckedMoveToward(Snapshot target) {
+		uncheckedMoveToward(target, GameWorldParameters.MAX_MOVEMENT_DISTANCE);
+	}
+	
+	private void uncheckedMoveToward(Snapshot target, double distance) {
+		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
 	}
 	
 	/**
-	 * Move maximal distance in direction of the own hill.
+	 * Move maximal distance in direction of the own hill, even if it is not visible. 
 	 */
 	protected void moveHome() {
-		moveTowards(antObject.player.hillObject.getHill());
+		uncheckedMoveToward(antObject.player.hillObject.getHill());
 	}
 	
 	/** returns true if target is in view range. */
 	private boolean isInView(Snapshot target) {
-		return (Vector.distanceBetween(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
+		return (GameWorldParameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 		
 	/** 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.PixelFormat;
 
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
@@ -80,7 +81,7 @@ public class Simulation {
 			view = new View(gameWorld, width, height);
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
-				Display.create();
+				Display.create(new PixelFormat(8,0,0,0));
 			} catch (LWJGLException e) {
 				e.printStackTrace();
 				System.exit(0);

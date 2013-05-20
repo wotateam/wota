@@ -22,7 +22,7 @@ public class Vector {
 		this.y = v.y;
 	}
 	
-	/** returns the lengths of the vector in L_2 norm */
+	/** @return The length of the vector. */
 	public double length() {
 		return Math.sqrt(x*x + y*y);
 	}
@@ -47,10 +47,18 @@ public class Vector {
 	/** returns the polar coordinate of the vector 
 	 * special case: null vector returns 0.0
 	 * @return angle in degrees */
-	public double getPolar() {
+	public double angle() {
 		return Math.atan2(y, x)/(2.*Math.PI)*360.;
 	}
 	
+	public Vector boundLengthBy(double maximumLength) {
+		if (length() > maximumLength) {
+			return this.scaleTo(maximumLength);
+		} else {
+			return new Vector(this); // TODO Optimization: Change x and y to be final and get rid of this.
+		}
+	}
+
 	/** returns the sum of p1 and p2 */
 	public static Vector add(final Vector p1, final Vector p2) {
 		return new Vector(p1.x + p2.x, p1.y + p2.y);
@@ -77,10 +85,4 @@ public class Vector {
 	public static Vector subtract(Vector v1, Vector v2) {
 		return new Vector(v1.x - v2.x, v1.y - v2.y);
 	}
-
-	/** L_2 distance between two vectors = length of v1 - v2 */
-	public static double distanceBetween(Vector v1, Vector v2) {
-		return subtract(v1, v2).length();
-	}
-
 }

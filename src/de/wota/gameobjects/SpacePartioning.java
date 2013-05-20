@@ -66,7 +66,7 @@ public class SpacePartioning {
 		field.get(coordinatesToCell(t.getPosition())).add(t);
 	}
 	
-	// WARNING: The methods for removing objects depend the object being in the correct cell.
+	// WARNING: The methods for removing objects depend on the object being in the correct cell.
 	public void removeAntObject(AntObject antObject) {
 		removeT(antObject, Cell.antObjectsField);
 	}

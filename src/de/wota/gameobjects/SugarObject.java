@@ -34,4 +34,8 @@ public class SugarObject extends GameObject {
 	public void reduceAmount(int reduction) {
 		amount = Math.max(amount - reduction, 0);
 	}
+	
+	public double getRadius() {
+		return GameWorldParameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / GameWorldParameters.INITIAL_SUGAR);
+	}
 }

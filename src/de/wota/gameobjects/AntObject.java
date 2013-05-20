@@ -2,6 +2,7 @@ package de.wota.gameobjects;
 
 import java.util.List;
 
+import de.wota.utility.SeededRandomizer;
 import de.wota.utility.Vector;
 
 /**
@@ -84,9 +85,11 @@ public class AntObject extends GameObject{
 		System.out.println("health = " + health);
 	}
 	
-	public void picksUpSugar(int amount) {
+	public void pickUpSugar(SugarObject sugarObject) {
 		// TODO change to unspecific caste
-		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + amount);
+		int oldAmountOfSugarCarried = sugarCarry;
+		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarObject.getAmount());
+		sugarObject.reduceAmount(sugarCarry - oldAmountOfSugarCarried);
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -115,6 +118,17 @@ public class AntObject extends GameObject{
 		}
 		
 		action = ai.popAction();
+	}
+
+	@Override
+	public void move(Vector moveVector) {
+		if (moveVector.length() != 0) {
+			double angleError = GameWorldParameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
+					* 2 * (SeededRandomizer.nextDouble() - 0.5); 
+			super.move(Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError));
+		} else {
+			super.move(moveVector);
+		}
 	}
 	
 	/** get new id for antObject */

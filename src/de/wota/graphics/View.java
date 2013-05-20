@@ -5,13 +5,13 @@ import org.lwjgl.opengl.*;
 
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL14.*;
 import java.awt.Color;
 
 import de.wota.gameobjects.AntObject;
 import de.wota.gameobjects.GameWorld;
 import de.wota.gameobjects.GameWorldParameters;
 import de.wota.gameobjects.SugarObject;
-import de.wota.testing.TestWorld;
 import de.wota.utility.Vector;
 
 /**
@@ -38,6 +38,10 @@ public class View {
 	}
 
 	public void setup() {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+		glBlendEquation(GL_FUNC_ADD);
+		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
@@ -52,15 +56,29 @@ public class View {
 
 	private static final int ANT_RADIUS = 2;
 
+	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
+	
 	public void render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
+		
+		for (int i = 0; i < SAMPLES; i++) {
+			glPushMatrix();
+			for (int j = 0; j < SAMPLES; j++) {
+				renderImpl();
+				glTranslated(1.0/SAMPLES, 0, 0);
+			}
+			glPopMatrix();
+			glTranslated(0, 1.0/SAMPLES, 0);
+		}
+	}
 
+	private void renderImpl() {
 		for (GameWorld.Player player : world.getPlayers()) {
 			Color color = colors[player.getId()];
 			float[] colorComponents = color.getColorComponents(null);
-			glColor3f(colorComponents[0], colorComponents[1], colorComponents[2]);
+			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
 			
 			// Ants
 			for (AntObject antObject : player.antObjects) {
@@ -71,12 +89,10 @@ public class View {
 			renderCircle(player.hillObject.getPosition(), GameWorldParameters.HILL_RADIUS);
 		}
 		// Sugar Sources
-		glColor3f(1.f, 1.f, 1.f);
+		glColor4f(1.f, 1.f, 1.f,1.0f/(SAMPLES*SAMPLES));
 		for (SugarObject sugarObject : world.getSugarObjects()) {
-			renderCircle(sugarObject.getPosition(), 
-					GameWorldParameters.SUGAR_RADIUS * sugarObject.getAmount() / GameWorldParameters.INITIAL_SUGAR);
+			renderCircle(sugarObject.getPosition(), sugarObject.getRadius());
 		}
-
 	}
 
 	private static void translate(Vector p) {

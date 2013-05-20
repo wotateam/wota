@@ -8,13 +8,16 @@ public class GameWorldParameters {
 	public static final double SIZE_Y = 1000;
 	public static final double HILL_RADIUS = 20;
 	public static final double ATTACK_RANGE = 2; 
-	public static final double SUGAR_RADIUS = 10;	
+	/** Ration of damage: normal/collateral */
+	public static final double COLLATERAL_DAMAGE_FACTOR = 0.5;
+	public static final double INITIAL_SUGAR_RADIUS = 10;	
 	/** Amount of sugar in a new source. */
 	public static final int INITIAL_SUGAR = 500;
 	public static final int ANT_COST = 100;
 	public static final int STARTING_FOOD = 10000;
 	// MAX_MOVEMENT_DISTANCE needs to greater than the speed of all castes.
 	public static final double MAX_MOVEMENT_DISTANCE = 5;
+	public static final double ANGLE_ERROR_PER_DISTANCE = 20; 
 	
 	public static final int FRAMES_PER_SECOND = 30;
 	public static final int TICKS_PER_SECOND = 50;

@@ -154,9 +154,6 @@ public class GameWorld {
 			}
 		}
 
-		// Includes discarding the MessageObject instances.
-		spacePartioning.update();
-
 		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
@@ -165,6 +162,10 @@ public class GameWorld {
 			// order does matter since the queen creates new ants!
 			executeAntOrders(player.queenObject); 
 		}
+		
+		// Includes discarding the MessageObject instances.
+		spacePartioning.update(); 
+				
 
 		// Let ants die!
 		for (Player player : players) {
@@ -224,25 +225,35 @@ public class GameWorld {
 		}
 
 		// Attack
-		// TODO add collateral damage
+		boolean isAttacking = false;
 		Ant targetAnt = action.attackTarget;
 		if (targetAnt != null) {
 			if (targetAnt.antObject.isDead() == true) {
-				if (GameWorldParameters.DEBUG) {
-					System.out.println("target is already dead");
-				}
-			} // target is not dead.
-			else {
+				System.out.println("Warning: AI tried to attack dead target.");
+			} 
+			else { // target is not dead.
 				if (GameWorldParameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 						<= GameWorldParameters.ATTACK_RANGE) {
+					
+					// main damage:
 					AntObject target = targetAnt.antObject;
 					target.takesDamage(actor.getCaste().ATTACK);
+					isAttacking = true;
+					
+					// collateral damage:
+					// TODO: Do we want all ants to take damage or only the enemy ones?
+					for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(GameWorldParameters.ATTACK_RANGE, target.getPosition())) {
+						if (closeAntObject != target && closeAntObject.player != actor.player) {
+							// TODO: Find a good rate, maybe depending on distance.
+							closeAntObject.takesDamage(actor.getCaste().ATTACK*GameWorldParameters.COLLATERAL_DAMAGE_FACTOR);
+						}
+					}
 				}
 			}
 		}
 
 		// Drop sugar at the hill.
-		// TODO possible optimization: Use space partioning for dropping sugar at the hill, don't test for all ants.
+		// TODO possible optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
 		if (GameWorldParameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= GameWorldParameters.HILL_RADIUS) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
@@ -255,21 +266,22 @@ public class GameWorld {
 		}
 		
 		// Pick up sugar
-		Sugar sugarSource = action.sugarTarget;
-		if (sugarSource != null) {
-			if (GameWorldParameters.distance(actor.getPosition(),sugarSource.sugarObject.getPosition())
-					<= GameWorldParameters.SUGAR_RADIUS) {
-				int amount = Math.min(
-						actor.getCaste().MAX_SUGAR_CARRY - actor.getSugarCarry(),
-						sugarSource.amount);
-				actor.picksUpSugar(amount);
-				sugarSource.sugarObject.reduceAmount(amount);
+		Sugar sugar = action.sugarTarget;
+		if (sugar != null) {
+			if (GameWorldParameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
+					<= sugar.sugarObject.getRadius()) {
+				actor.pickUpSugar(sugar.sugarObject);
 			}
 		}
 
 		// Movement
-		actor.move(action.movement);
-		
+		if (isAttacking) {
+			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_ATTACKING));
+		} else if (actor.getSugarCarry() > 0) {
+			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_CARRYING_SUGAR));
+		} else {
+			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED));
+		}
 		// Messages
 		handleMessages(actor, action);
 	}
