@@ -156,10 +156,17 @@ public class GameWorld {
 		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
-				executeAction(antObject);
+				executeActionExceptMovement(antObject);
+			} 
+		}
+		
+		for (Player player : players) {
+			for (AntObject antObject : player.antObjects) {
+				executeMovement(antObject);
 			}
+
 			// order does matter since the queen creates new ants!
-			executeAntOrders(player.queenObject); 
+			executeAntOrders(player.queenObject);
 		}
 		
 		// Includes discarding the MessageObject instances.
@@ -215,17 +222,12 @@ public class GameWorld {
 	/** Führt die Aktion für das AntObject aus. 
 	 * Beinhaltet Zucker abliefern.
 	 *  */
-	private void executeAction(AntObject actor) {
+	private void executeActionExceptMovement(AntObject actor) {
 		Action action = actor.getAction();
 
-		if (action == null) {
-			System.err.println("Action sollte nicht null sein! -> Exit");
-			System.exit(1);
-		}
-
 		// Attack
-		boolean isAttacking = false;
 		Ant targetAnt = action.attackTarget;
+		actor.isAttacking = false;
 		if (targetAnt != null) {
 			if (Parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 					<= Parameters.ATTACK_RANGE) {
@@ -233,7 +235,7 @@ public class GameWorld {
 				// main damage:
 				AntObject target = targetAnt.antObject;
 				target.takesDamage(actor.getCaste().ATTACK);
-				isAttacking = true;
+				actor.isAttacking = true;
 				
 				// collateral damage:
 				for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
@@ -266,17 +268,21 @@ public class GameWorld {
 				actor.pickUpSugar(sugar.sugarObject);
 			}
 		}
+		
+		// Messages
+		handleMessages(actor, action);
+	}
+	
+	private void executeMovement(AntObject actor) {
+		Action action = actor.getAction();
 
-		// Movement
-		if (isAttacking) {
+		if (actor.isAttacking) {
 			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_ATTACKING));
 		} else if (actor.getSugarCarry() > 0) {
 			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_CARRYING_SUGAR));
 		} else {
 			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED));
 		}
-		// Messages
-		handleMessages(actor, action);
 	}
 
 	/*

@@ -25,6 +25,7 @@ public class AntObject extends GameObject{
 	private Action action;
 	private final Caste caste;
 	public final GameWorld.Player player;
+	boolean isAttacking = false;
 	
 	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player) {
 		super(position);
