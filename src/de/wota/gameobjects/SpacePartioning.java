@@ -175,7 +175,7 @@ public class SpacePartioning {
 	
 	
 	private static class Cell {
-		private final List<AntObject> antObjects = new LinkedList<AntObject>();
+		public final List<AntObject> antObjects = new LinkedList<AntObject>();
 		private static final GameObjectListField<AntObject> antObjectsField = new GameObjectListField<AntObject>() {
 			@Override
 			public List<AntObject> get(Cell cell) {
@@ -183,7 +183,7 @@ public class SpacePartioning {
 			}
 		};
 		
-		private final List<HillObject> hillObjects = new LinkedList<HillObject>();
+		public final List<HillObject> hillObjects = new LinkedList<HillObject>();
 		private static final GameObjectListField<HillObject> hillObjectsField = new GameObjectListField<HillObject>() {
 			@Override
 			public List<HillObject> get(Cell cell) {
@@ -191,7 +191,7 @@ public class SpacePartioning {
 			}
 		};
 		
-		private final List<SugarObject> sugarObjects = new LinkedList<SugarObject>();
+		public final List<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 		private static final GameObjectListField<SugarObject> sugarObjectsField = new GameObjectListField<SugarObject>() {
 			@Override
 			public List<SugarObject> get(Cell cell) {
@@ -199,7 +199,7 @@ public class SpacePartioning {
 			}
 		};
 		
-		private final List<MessageObject> messageObjects = new LinkedList<MessageObject>();
+		public final List<MessageObject> messageObjects = new LinkedList<MessageObject>();
 		private static final GameObjectListField<MessageObject> messageObjectsField = new GameObjectListField<MessageObject>() {
 			@Override
 			public List<MessageObject> get(Cell cell) {
@@ -217,8 +217,8 @@ public class SpacePartioning {
 		}
 		return n;
 	}
-	
-	private static abstract class GameObjectListField<T extends GameObject> {
+
+	static abstract class GameObjectListField<T extends GameObject> {
 		public abstract List<T> get(Cell cell);
 	}
 }
