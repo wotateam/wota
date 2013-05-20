@@ -82,16 +82,16 @@ public class View {
 			
 			// Ants
 			for (AntObject antObject : player.antObjects) {
-				renderCircle(antObject.getPosition(), ANT_RADIUS);
+				renderCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
 			}			
 
 			// Hill
-			renderCircle(player.hillObject.getPosition(), Parameters.HILL_RADIUS);
+			renderCircle(player.hillObject.getPosition(), Parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 		// Sugar Sources
 		glColor4f(1.f, 1.f, 1.f,1.0f/(SAMPLES*SAMPLES));
 		for (SugarObject sugarObject : world.getSugarObjects()) {
-			renderCircle(sugarObject.getPosition(), sugarObject.getRadius());
+			renderCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
 		}
 	}
 
@@ -99,17 +99,19 @@ public class View {
 		glTranslated(p.x, p.y, 0);
 	}
 
-	private void renderCircle(Vector p, double radius) {
+	private void renderCircle(Vector p, double radius, int numberOfCircleCorners) {
 		glPushMatrix();
 		translate(p);
 		glScaled(radius, radius, radius);
-		renderUnitCircle();
+		renderUnitCircle(numberOfCircleCorners);
 		glPopMatrix();
 	}
 
-	final int numberOfCircleCorners = 24;
+	private static final int HILL_CIRCLE_CORNERS = 50;
+	private static final int SUGAR_CIRCLE_CORNERS = 24;
+	private static final int ANT_CIRCLE_CORNERS = 6;
 
-	private void renderUnitCircle() {
+	private void renderUnitCircle(int numberOfCircleCorners) {
 		glBegin(GL_TRIANGLE_FAN);
 		glVertex2f(0, 0);
 		for (int i = 0; i <= numberOfCircleCorners; i++) {
