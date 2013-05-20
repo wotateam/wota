@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import de.wota.gameobjects.GameWorld;
+import de.wota.gameobjects.GameWorldParameters;
 import de.wota.graphics.View;
 
 /**
@@ -25,9 +26,22 @@ public class Simulation {
 
 	private GameWorld gameWorld;
 	private View view;
+	
+	public final int FRAMES_PER_SECOND = GameWorldParameters.FRAMES_PER_SECOND;
+	public final int TICKS_PER_SECOND = GameWorldParameters.TICKS_PER_SECOND;
 
+	private double measuredFramesPerSecond;
+	private double measuredTicksPerSecond;
+	
+	/** time between two measurements of FPS / TPS in seconds */
+	private double measurementInterval = 1.0; 
+	
+	/** time of simulation start in nano seconds. */
+	private long startTime; 
+	
 	private boolean running;
 	private int tickCount;
+	private int frameCount;
 
 	/**
 	 * Advance the game world by one tick and check for victory.
@@ -81,30 +95,55 @@ public class Simulation {
 
 	/**
 	 * Start the simulation and keep the view up to date.
+	 * 1. Update the Graphics at the rate FRAMES_PER_SECOND
+	 * 2. Update the Simulation with rate TICKS_PER_SECOND 
+	 * do nothing in the remaining time or if times get in conflict only update the graphics.
+	 * 
+	 * keyboard/mouse input should be fetched before graphics in every loop. 
 	 */
 	public void runSimulation() {
 		running = true;
+		startTime = System.nanoTime();
+		
+		long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
+		int measureFrameCount = 0; // Frame counter to determine TPS
+		int measureTickCount = 0; // Tick counter to determine FPS
+		
+		// events for graphics update and tick are created uniformly. Call them with priority on graphics
+		while (running) { 
 
-		long startTime = System.currentTimeMillis();
-		long time;
-
-		while (running) {
-			tick();
-
-			time = System.currentTimeMillis();
-			tickCount++;
-
-			if (tickCount % 100 == 0) {
-				System.out.format("TPS: %.1f\n",
-						(100.0 * 1000.0 / (time - startTime)));
-				startTime = time;
-			}
-
-			if (isGraphical) {
+			// Update Graphics if event for graphic update is swept.
+			if (isGraphical && frameCount <= (System.nanoTime() - startTime) / 1.e9 * FRAMES_PER_SECOND) {
+				frameCount++;
+				measureFrameCount++;
 				view.render();
 				Display.update();
 				if (running)
 					running = !Display.isCloseRequested();
+			}
+			
+			// now update simulation if tick event 
+			if ((double)tickCount < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
+				tick();
+				tickCount++;
+				measureTickCount++;
+			}
+
+			// measurements of FPS / TPS 
+			long timeDiff = System.nanoTime() - lastMeasurementTime;
+			if (timeDiff > 1.e9*measurementInterval) {
+				measuredFramesPerSecond = measureFrameCount * 1.e9 / timeDiff;
+				measuredTicksPerSecond = measureTickCount * 1.e9 / timeDiff;
+				
+				measureFrameCount = 0;
+				measureTickCount = 0;
+				
+				lastMeasurementTime = System.nanoTime();
+				
+				System.out.format("Frames per second: %.1f\n",
+					measuredFramesPerSecond);
+				System.out.format("Ticks per second: %.1f\n",
+						measuredTicksPerSecond);
 			}
 		}
 

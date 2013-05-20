@@ -16,7 +16,10 @@ public class GameWorldParameters {
 	// MAX_MOVEMENT_DISTANCE needs to greater than the speed of all castes.
 	public static final double MAX_MOVEMENT_DISTANCE = 5;
 	
-	public static final boolean DEBUG = true;
+	public static final int FRAMES_PER_SECOND = 30;
+	public static final int TICKS_PER_SECOND = 50;
+	
+	public static final boolean DEBUG = false;
 	
 	public static Vector normalize(Vector p) {
 		Vector r = new Vector(p);
