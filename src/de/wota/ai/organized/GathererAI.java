@@ -11,13 +11,15 @@ import de.wota.gameobjects.Sugar;
 import de.wota.utility.SeededRandomizer;
 
 public class GathererAI extends AntAI {
+	// TODO it seems to be a double-edged sword that these gatherers are telling each other 
+	// where they should go next, this is a problem when the sugar source is depleted and they 
+	// do not realize this. Maybe this is not worth it when the queen starts talking, too.
 	
 	private boolean havePickedUpSugar = false;
 	private double direction = SeededRandomizer.nextInt(360);
 	private boolean wasToldSugarDirection = false;
 	@Override
 	public void tick() throws Exception {
-		// FIXME wasToldSugarDirection needs to be set to false at some point
 		if (audibleMessages.size() > 0) {
 			Message message = audibleMessages.get(0);
 			if (message.sender.caste == Caste.Queen && 
@@ -36,7 +38,7 @@ public class GathererAI extends AntAI {
 			// keep moving home even if the ant is not carrying sugar, 
 			// havePickedUpSugar will be set to false once the ant sees its queen
 			moveHome();
-			talk(Math.round((float) direction));  // FIXME create issue
+			talk(Math.round((float) direction));
 		} else if (visibleSugar.size() > 0) {
 			Sugar sugar = visibleSugar.get(0); // TODO use method for closest sugar once it exists
 			if (vectorTo(sugar).length() < sugar.radius) {
