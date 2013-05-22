@@ -17,7 +17,7 @@ public class Parameters {
 	public static final int STARTING_FOOD = 10000;
 	// MAX_MOVEMENT_DISTANCE needs to greater than the speed of all castes.
 	public static final double MAX_MOVEMENT_DISTANCE = 5;
-	public static final double ANGLE_ERROR_PER_DISTANCE = 20; 
+	public static final double ANGLE_ERROR_PER_DISTANCE = 0; 
 	
 	/** number of ticks picking up sugar takes */
 	public static final int TICKS_SUGAR_PICKUP = 100;

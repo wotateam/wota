@@ -15,10 +15,10 @@ public class Wota {
 		List<String> ais = new LinkedList<String>();
 		
 //		use ais.add to add AIs to the game
-		ais.add("dummy.DummyQueenAI");
-		ais.add("solitary.SolitaryQueenAI");
-		ais.add("AggressiveQueenAI");
-		ais.add("AggressiveQueenAI");
+		ais.add("organized.OrganizedQueenAI");
+		ais.add("organized.OrganizedQueenAI");
+//		ais.add("AggressiveQueenAI");
+//		ais.add("AggressiveQueenAI");
 	
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;

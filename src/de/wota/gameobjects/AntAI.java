@@ -102,11 +102,15 @@ public abstract class AntAI {
 		uncheckedMoveToward(antObject.player.hillObject.getHill());
 	}
 	
+	protected double getHomeDirection() {
+		return Vector.subtract(antObject.player.hillObject.getPosition(), antObject.getPosition()).angle();
+	}
+	
 	/** returns true if target is in view range. */
 	private boolean isInView(Snapshot target) {
 		return (Parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
-		
+	
 	/** 
 	 * returns the Vector between the Ant itself and target
 	 * Is null if the target is not in view.
