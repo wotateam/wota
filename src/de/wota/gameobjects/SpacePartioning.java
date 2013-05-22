@@ -90,6 +90,14 @@ public class SpacePartioning {
 				update(cell, i, j, Cell.antObjectsField);
 				update(cell, i, j, Cell.hillObjectsField);
 				update(cell, i, j, Cell.sugarObjectsField);
+			}
+		}
+	}
+	
+	public void discardMessageObjects() {
+		for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
+			for (int j = 1; j < numberOfVerticalCells + 1; j++) {
+				Cell cell = cells[i][j];
 				cell.messageObjects.clear();
 			}
 		}

@@ -152,7 +152,9 @@ public class GameWorld {
 				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
 		}
-
+		// Only do this now that we used last ticks message objects.
+		spacePartioning.discardMessageObjects();
+		
 		// execute all actions, ants get created
 		for (Player player : players) {
 			for (AntObject antObject : player.antObjects) {
@@ -169,7 +171,8 @@ public class GameWorld {
 			executeAntOrders(player.queenObject);
 		}
 		
-		// Includes discarding the MessageObject instances.
+		// Needs to go before removing dead ants, because they need to be in 
+		// the correct cell to be removed.
 		spacePartioning.update(); 
 				
 
