@@ -15,7 +15,7 @@
    this method gets called in every tick of the game and for every ant separately.
    
 3. You have one queen which is able to produce new ants if enough food is available.
-   Have a look at the sample AIs in de.wota.ai to see how you can order new Ants.   
+   Have a look at the sample AIs in de.wota.ai to see how you can create new Ants.   
    
 4. For the other ants use the methods and fields from AntAI to perceive the environment
    of the ant and to interact. You can find sample AIs in de.wota.ai.
@@ -23,7 +23,7 @@
 
 5. You can start the game by loading your AIs in de.wota.gamemaster.Wota and executing
    its main. Keep in mind that you have to specify the name of your QueenAI. Your QueenAI
-   should then order (=build) the other ants.
+   should then create the other ants using QueenAI.createAnt(...).
    
 6. If you have any questions do not hesitate to ask them, for example by emailing one of 
    us, talking to us or creating an issue on:
