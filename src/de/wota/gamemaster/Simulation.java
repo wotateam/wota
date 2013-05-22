@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
@@ -14,7 +15,7 @@ import de.wota.graphics.View;
 
 /**
  * Contains the main loop that calls tick() and updates both the view and the
- * statistics.
+ * statistics. Also handels keyboard.
  * 
  */
 public class Simulation {
@@ -44,21 +45,6 @@ public class Simulation {
 	private int tickCount;
 	private int frameCount;
 
-	/**
-	 * Advance the game world by one tick and check for victory.
-	 */
-	private void tick() {
-		gameWorld.tick();
-
-		// check for victory condition
-		GameWorld.Player winner = gameWorld.checkVictoryCondition();
-		if (winner != null) {
-			System.out.println(winner.name + " has won the game in tick "
-					+ tickCount);
-			running = false;
-		}
-	}
-
 	/*
 	 * TODO: Die Simulation bekommt eine Ausgangsstellung, keine GameWorld
 	 */
@@ -72,11 +58,11 @@ public class Simulation {
 	public Simulation(SimulationInstance inst, boolean isGraphical) {
 		N_PLAYER = inst.getNumPlayers();
 		this.isGraphical = isGraphical;
-
+	
 		gameWorld = inst.constructGameWorld();
-
+	
 		gameWorld.registerLogger(new TestLogger());
-
+			
 		if (isGraphical) {
 			view = new View(gameWorld, width, height);
 			try {
@@ -86,12 +72,29 @@ public class Simulation {
 				e.printStackTrace();
 				System.exit(0);
 			}
-
+	
 			view.setup();
 		}
-
+	
+		createKeyboard();
+		
 		running = false;
 		tickCount = 0;
+	}
+
+	/**
+	 * Advance the game world by one tick and check for victory.
+	 */
+	private void tick() {
+		gameWorld.tick();
+
+		// check for victory condition
+		GameWorld.Player winner = gameWorld.checkVictoryCondition();
+		if (winner != null) {
+			System.out.println(winner.name + " has won the game in tick "
+					+ tickCount);
+			running = false;
+		}
 	}
 
 	/**
@@ -113,14 +116,27 @@ public class Simulation {
 		// events for graphics update and tick are created uniformly. Call them with priority on graphics
 		while (running) { 
 
+			// check for keyboard input, buffered
+			// 
+			Keyboard.poll();
+			
+			while (Keyboard.next()) {
+				switch (Keyboard.getEventKey()) {
+				case Keyboard.KEY_ESCAPE:
+					running = false;
+					break;
+				}
+			}
+			
 			// Update Graphics if event for graphic update is swept.
 			if (isGraphical && frameCount <= (System.nanoTime() - startTime) / 1.e9 * FRAMES_PER_SECOND) {
 				frameCount++;
 				measureFrameCount++;
 				view.render();
 				Display.update();
-				if (running)
+				if (running) {
 					running = !Display.isCloseRequested();
+				}
 			}
 			
 			// now update simulation if tick event 
@@ -148,7 +164,18 @@ public class Simulation {
 			}
 		}
 
-		if (isGraphical)
+		if (isGraphical) {
 			Display.destroy();
+		}
 	}
+	
+	private static void createKeyboard() {
+		try {
+			Keyboard.create();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+	
 }
