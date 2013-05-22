@@ -18,8 +18,8 @@ public class GathererAI extends AntAI {
 	@Override
 	public void tick() throws Exception {
 		// FIXME wasToldSugarDirection needs to be set to false at some point
-		if (incomingMessages.size() > 0) {
-			Message message = incomingMessages.get(0);
+		if (audibleMessages.size() > 0) {
+			Message message = audibleMessages.get(0);
 			if (message.sender.caste == Caste.Queen && 
 					message.content >= OrganizedQueenAI.SUGAR_DIRECTION_START &&
 					message.content < OrganizedQueenAI.SUGAR_DIRECTION_START + 360) {

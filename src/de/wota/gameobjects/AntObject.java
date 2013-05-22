@@ -119,7 +119,7 @@ public class AntObject extends GameObject{
 		ai.visibleAnts = visibleAnts;
 		ai.visibleSugar = visibleSugar;
 		ai.visibleHills = visibleHills;
-		ai.incomingMessages = incomingMessages;
+		ai.audibleMessages = incomingMessages;
 		
 		if (freezeTime == 0) {
 			try {

@@ -13,7 +13,7 @@ public abstract class AntAI {
 	public List<Ant> visibleAnts;
 	public List<Sugar> visibleSugar;
 	public List<Hill> visibleHills;
-	public List<Message> incomingMessages;
+	public List<Message> audibleMessages;
 	private Action action = new Action();
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.
