@@ -147,7 +147,9 @@ public class GameWorld {
 				
 				for (MessageObject audibleMessageObject : 
 					spacePartitioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
-					audibleMessages.add(audibleMessageObject.getMessage());
+					if (audibleMessageObject.getSender().playerID == antObject.player.id) {
+						audibleMessages.add(audibleMessageObject.getMessage());
+					}
 				}
 				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
