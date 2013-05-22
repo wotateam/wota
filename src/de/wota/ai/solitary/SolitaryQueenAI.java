@@ -12,9 +12,11 @@ public class SolitaryQueenAI extends QueenAI {
 	public void tick() {
 		//System.out.println("Player: " + self.playerID + " has Queen has " + self.health);
 		//createAnt(Caste.Gatherer, MoveAI.class);
-		if (false)//(SeededRandomizer.nextInt(2) == 0)
+		if (SeededRandomizer.nextInt(2) == 0) {
 			createAnt(Caste.Gatherer, GathererAI.class);
-		else
+		}
+		else {
 			createAnt(Caste.Soldier, SoldierAI.class);
+		}
 	}
 }

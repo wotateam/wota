@@ -6,7 +6,7 @@ import de.wota.gameobjects.Caste;
 import de.wota.gameobjects.QueenAI;
 import de.wota.utility.SeededRandomizer;
 
-@AIInformation(creator = "WotA-Team", name = "AgressiveQueen")
+@AIInformation(creator = "WotA-Team", name = "AggressiveQueen")
 public class AggressiveQueenAI extends QueenAI {
 	
 	@Override
