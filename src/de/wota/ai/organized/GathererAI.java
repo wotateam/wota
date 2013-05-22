@@ -17,7 +17,6 @@ public class GathererAI extends AntAI {
 	private boolean wasToldSugarDirection = false;
 	@Override
 	public void tick() throws Exception {
-		
 		// FIXME wasToldSugarDirection needs to be set to false at some point
 		if (incomingMessages.size() > 0) {
 			Message message = incomingMessages.get(0);
