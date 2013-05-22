@@ -18,9 +18,13 @@ public class AntObject extends GameObject{
 	public final int id;
 	protected double health;
 	private double speed;
+	
 	/** amount of sugar carried now */
 	private int sugarCarry = 0;
-
+	
+	/** number of ticks Ant is unable to act (ai.tick doesn't get called */
+	private int freezeTime = 0;
+	
 	/** Angriffspunkte */
 	private Action action;
 	private final Caste caste;
@@ -86,10 +90,17 @@ public class AntObject extends GameObject{
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
-		// TODO change to unspecific caste
 		int oldAmountOfSugarCarried = sugarCarry;
 		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarObject.getAmount());
+		
+		// freeze if some sugar got picked up.
+		if (sugarCarry - oldAmountOfSugarCarried > 0) {
+			freezeTime = sugarObject.getTicksToWait();
+		}
+		
+		// be careful! calling reduceAmount increases sugarObject.ticksToWait
 		sugarObject.reduceAmount(sugarCarry - oldAmountOfSugarCarried);
+		
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -110,11 +121,16 @@ public class AntObject extends GameObject{
 		ai.visibleHills = visibleHills;
 		ai.incomingMessages = incomingMessages;
 		
-		try {
-			ai.tick();
+		if (freezeTime == 0) {
+			try {
+				ai.tick();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		else {
+			freezeTime--;
 		}
 		
 		action = ai.popAction();

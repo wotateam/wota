@@ -187,11 +187,15 @@ public class GameWorld {
 			}
 		}
 		
-		// remove empty sugar sources
+		// remove empty sugar sources and decrease sugarObject.ticksToWait
 		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
 				sugarObjectIter.hasNext();) {
 			SugarObject sugarObject = sugarObjectIter.next();
-			if (sugarObject.getAmount() <= 1e-9) {
+			
+			sugarObject.tick();
+			
+			// remove if empty 
+			if (sugarObject.getAmount() <= 0) {
 				sugarObjectIter.remove();
 				spacePartioning.removeSugarObject(sugarObject);
 			}

@@ -19,6 +19,9 @@ public class Parameters {
 	public static final double MAX_MOVEMENT_DISTANCE = 5;
 	public static final double ANGLE_ERROR_PER_DISTANCE = 20; 
 	
+	/** number of ticks picking up sugar takes */
+	public static final int TICKS_SUGAR_PICKUP = 100;
+	
 	public static final int FRAMES_PER_SECOND = 30;
 	public static final int TICKS_PER_SECOND = 50;
 	
