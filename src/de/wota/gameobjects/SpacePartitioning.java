@@ -19,9 +19,9 @@ import de.wota.utility.Vector;
  * @author daniel
  *
  */
-public class SpacePartioning {
+public class SpacePartitioning {
 
-	public SpacePartioning(double width, double height, double minimumCellSize) {
+	public SpacePartitioning(double width, double height, double minimumCellSize) {
 		this.minimumCellSize = minimumCellSize;
 		numberOfHorizontalCells = (int) Math.round(Math.floor(width/minimumCellSize));
 		numberOfVerticalCells = (int) Math.round(Math.floor(height/minimumCellSize));

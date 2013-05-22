@@ -24,7 +24,7 @@ public class GameWorld {
 	
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
-	private SpacePartioning spacePartioning = new SpacePartioning(
+	private SpacePartitioning spacePartitioning = new SpacePartitioning(
 			Parameters.SIZE_X, Parameters.SIZE_Y,
 			maximumSight());
 	
@@ -43,7 +43,7 @@ public class GameWorld {
 	
 	public void addSugarObject(SugarObject sugarObject) {
 		sugarObjects.add(sugarObject);
-		spacePartioning.addSugarObject(sugarObject);
+		spacePartitioning.addSugarObject(sugarObject);
 	}
 	
 	/** Do not modify the list! Use addSugarObject instead */
@@ -89,7 +89,7 @@ public class GameWorld {
 		
 		public void addAntObject(AntObject antObject) {
 			antObjects.add(antObject);
-			spacePartioning.addAntObject(antObject);
+			spacePartitioning.addAntObject(antObject);
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class GameWorld {
 		
 		// can be removed as soon as SpacePartitioning is well tested!
 		if (Parameters.DEBUG) {
-			System.out.println("SpacePartitioning: " + spacePartioning.totalNumberOfAntObjects());
+			System.out.println("SpacePartitioning: " + spacePartitioning.totalNumberOfAntObjects());
 			System.out.println("Total number: " + totalNumberOfAntObjects());
 		}
 
@@ -129,31 +129,31 @@ public class GameWorld {
 				List<Message> audibleMessages = new LinkedList<Message>();
 
 				for (AntObject visibleAntObject : 
-					spacePartioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					spacePartitioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
 					if (visibleAntObject != antObject) {
 						visibleAnts.add(visibleAntObject.getAnt());
 					}
 				}
 
 				for (SugarObject visibleSugarObject : 
-					spacePartioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					spacePartitioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
 					visibleSugar.add(visibleSugarObject.getSugar());
 				}
 				
 				for (HillObject visibleHillObject :
-					spacePartioning.hillObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+					spacePartitioning.hillObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
 					visibleHills.add(visibleHillObject.getHill());
 				}				
 				
 				for (MessageObject audibleMessageObject : 
-					spacePartioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
+					spacePartitioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
 					audibleMessages.add(audibleMessageObject.getMessage());
 				}
 				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
 		}
 		// Only do this now that we used last ticks message objects.
-		spacePartioning.discardMessageObjects();
+		spacePartitioning.discardMessageObjects();
 		
 		// execute all actions, ants get created
 		for (Player player : players) {
@@ -173,7 +173,7 @@ public class GameWorld {
 		
 		// Needs to go before removing dead ants, because they need to be in 
 		// the correct cell to be removed.
-		spacePartioning.update(); 
+		spacePartitioning.update(); 
 				
 
 		// Let ants die!
@@ -185,7 +185,7 @@ public class GameWorld {
 					// hat neue Aktionen erzeugt.
 					//executeLastWill(maybeDead);
 					antObjectIter.remove();
-					spacePartioning.removeAntObject(maybeDead);
+					spacePartitioning.removeAntObject(maybeDead);
 				}
 			}
 		}
@@ -200,7 +200,7 @@ public class GameWorld {
 			// remove if empty 
 			if (sugarObject.getAmount() <= 0) {
 				sugarObjectIter.remove();
-				spacePartioning.removeSugarObject(sugarObject);
+				spacePartitioning.removeSugarObject(sugarObject);
 			}
 		}
 		
@@ -245,7 +245,7 @@ public class GameWorld {
 				actor.isAttacking = true;
 				
 				// collateral damage:
-				for (AntObject closeAntObject : spacePartioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
+				for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
 					if (closeAntObject != target && closeAntObject.player != actor.player) {
 						// TODO: Find a good rate, maybe depending on distance.
 						closeAntObject.takesDamage(actor.getCaste().ATTACK*Parameters.COLLATERAL_DAMAGE_FACTOR);
@@ -320,7 +320,7 @@ public class GameWorld {
 
 	private void handleMessages(AntObject actor, Action action) {
 		if (action.messageObject != null) {
-			spacePartioning.addMessageObject(action.messageObject);
+			spacePartitioning.addMessageObject(action.messageObject);
 			Message message = action.messageObject.getMessage();
 			if (Parameters.DEBUG)
 				System.out.println("\"" + message.content + "\" sagt "
