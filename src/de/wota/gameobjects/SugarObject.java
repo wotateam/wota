@@ -46,10 +46,13 @@ public class SugarObject extends GameObject {
 	}
 	
 	public void tick() {
-		ticksToWait--;
+		if (ticksToWait > Parameters.TICKS_SUGAR_PICKUP)
+			ticksToWait--;
 	}
 	
 	public int getTicksToWait() {
+		if (ticksToWait < Parameters.TICKS_SUGAR_PICKUP)
+			System.out.println("unexpected behavior in SugarObject.getTicksToWait()");
 		return ticksToWait;
 	}
 	
