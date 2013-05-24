@@ -27,10 +27,10 @@ public class GathererAI extends AntAI {
 					message.content < OrganizedQueenAI.SUGAR_DIRECTION_START + 360) {
 				direction = message.content - OrganizedQueenAI.SUGAR_DIRECTION_START;
 				wasToldSugarDirection = true;
-			} else if (message.sender.caste == Caste.Gatherer) {
+			} /*else if (message.sender.caste == Caste.Gatherer) {
 				direction = message.content;
 				wasToldSugarDirection = true;
-			}
+			}*/
 		}
 		
 		if (self.sugarCarry > 0 || havePickedUpSugar) { 
@@ -50,7 +50,6 @@ public class GathererAI extends AntAI {
 				moveToward(sugar);
 			}
 		} else {
-			moveInDirection(direction);
 			if (wasToldSugarDirection) {
 				moveInDirection(direction);
 			} else {
