@@ -92,7 +92,7 @@ public abstract class AntAI {
 	}
 	
 	private void uncheckedMoveToward(Snapshot target, double distance) {
-		action.movement = Vector.subtract(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
+		action.movement = Parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public abstract class AntAI {
 	}
 	
 	protected double getHomeDirection() {
-		return Vector.subtract(antObject.player.hillObject.getPosition(), antObject.getPosition()).angle();
+		return Parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition()).angle();
 	}
 	
 	/** returns true if target is in view range. */
@@ -120,7 +120,7 @@ public abstract class AntAI {
 	 */
 	protected Vector vectorTo(Snapshot target) {
 		if (isInView(target)) {
-			return Vector.subtract(target.getPosition(), antObject.getPosition());
+			return Parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition());
 		}
 		else
 			return null;
@@ -134,7 +134,7 @@ public abstract class AntAI {
 	 */
 	protected Vector vectorBetween(Snapshot start, Snapshot end) {
 		if (isInView(start) && isInView(end)) {
-			return Vector.subtract(end.getPosition(), start.getPosition());
+			return Parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
 		}
 		else
 			return null;

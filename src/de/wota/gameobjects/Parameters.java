@@ -39,17 +39,14 @@ public class Parameters {
 	 * Assumes that p1 and p2 are in the fundamental region.
 	 * @param p1
 	 * @param p2
-	 * @return The shortest vector from p1 to a point equivalent to p2.
+	 * @return The shortest vector from p2 to a point equivalent to p1.
 	 */
 	public static Vector shortestDifferenceOnTorus(Vector p1, Vector p2) {
-		Vector d = Vector.add(p1, Vector.scale(-1,p2));
-		if (d.x > SIZE_X) {
-			d.x = SIZE_X - d.x; 
-		}
-		if (d.y > SIZE_Y) {
-			d.y = SIZE_Y - d.y; 
-		}
-		return d;
+		Vector lowerLeftCornerOfImageOfGaussDiffeom = new Vector(-SIZE_X/2.,-SIZE_Y/2.);
+		Vector differenceShifted = Vector.subtract(Vector.subtract(p1,p2),lowerLeftCornerOfImageOfGaussDiffeom);
+		Vector differenceShiftedNormalized = 
+				new Vector(Modulo.mod(differenceShifted.x, SIZE_X), Modulo.mod(differenceShifted.y, SIZE_Y));
+		return Vector.add(differenceShiftedNormalized, lowerLeftCornerOfImageOfGaussDiffeom);
 	}
 	
 	public static double distance(Vector p1, Vector p2) {
