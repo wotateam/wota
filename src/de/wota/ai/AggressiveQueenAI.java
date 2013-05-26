@@ -11,6 +11,6 @@ public class AggressiveQueenAI extends QueenAI {
 	
 	@Override
 	public void tick() {
-		createAnt(Caste.Gatherer, SoldierAI.class);
+		createAnt(Caste.Soldier, SoldierAI.class);
 	}
 }
