@@ -3,6 +3,8 @@ package de.wota.gamemaster;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.jws.soap.SOAPBinding.ParameterStyle;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -89,11 +91,17 @@ public class Simulation {
 		gameWorld.tick();
 
 		// check for victory condition
-		GameWorld.Player winner = gameWorld.checkVictoryCondition();
-		if (winner != null) {
-			System.out.println(winner.name + " has won the game in tick "
-					+ tickCount);
-			running = false;
+		if (gameWorld.checkVictoryCondition()) {
+			GameWorld.Player winner = gameWorld.getWinner();
+			if (winner != null) {
+				System.out.println(winner.name + " has won the game in tick "
+						+ tickCount);
+				running = false;
+			}
+			else {
+				System.out.println("draw! nobody has won the game after " + tickCount + " ticks.");
+				running = false;
+			}
 		}
 	}
 

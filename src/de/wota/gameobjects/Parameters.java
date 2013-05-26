@@ -27,6 +27,12 @@ public class Parameters {
 	
 	public static final boolean DEBUG = false;
 	
+	public static final VictoryCondition VICTORY_CONDITION = VictoryCondition.KILL_ANTS;
+	public enum VictoryCondition {
+		KILL_QUEEN,
+		KILL_ANTS;
+	}
+	
 	public static Vector normalize(Vector p) {
 		Vector r = new Vector(p);
 		r.x = Modulo.mod(r.x, Parameters.SIZE_X);

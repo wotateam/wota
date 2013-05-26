@@ -67,6 +67,8 @@ public class GameWorld {
 		public final String name;
 
 		private final int id;
+		
+		public boolean hasLost = false;
 
 		public int getId() {
 			return id;
@@ -304,20 +306,47 @@ public class GameWorld {
 	}
 	*/
 	
-	/** tests if victory condition is fulfilled and notifies the Logger
-	 * Victory condition: is the queen alive? */
-	public Player checkVictoryCondition() {
-		List<Player> possibleWinners = new LinkedList<Player>(players);
+	/** tests if victory condition is fulfilled
+	 * @return is the victory condition fulfilled or can nobody win anymore? */
+	public boolean checkVictoryCondition() {	
+		int nPossibleWinners = players.size();
 		for (Player player : players) {
-			if (player.queenObject.isDead()) {
-				possibleWinners.remove(player);
+			switch (Parameters.VICTORY_CONDITION) {
+			case KILL_QUEEN:
+				if (player.queenObject.isDead()) {
+					player.hasLost = true;
+					nPossibleWinners--;
+				}
+				break;
+
+			case KILL_ANTS: // all dead or only queen is living
+				if ( (player.antObjects.size() == 1 && !player.queenObject.isDead() ) ||
+						player.antObjects.size() == 0) {
+					player.hasLost = true;
+					nPossibleWinners--;
+				}
+				break;
 			}
 		}
-		if (possibleWinners.size() == 1) {
-			return possibleWinners.get(0);
+		
+		return (nPossibleWinners <= 1);
+
+	}
+	
+	/** 
+	 * Assumes that checkVictoryCondition returns true.
+	 * @return the player who won the game or null for draws. 
+	 */
+	public Player getWinner() {
+		if (!checkVictoryCondition()) {
+			System.err.println("getWinner() should only be called if checkVictoryCondition() return true!");
 		}
-		else
-			return null;
+		for (Player player : players) {
+			if (player.hasLost == false) {
+				return player;
+			}
+		}
+		return null;
 	}
 
 	private void handleMessages(AntObject actor, Action action) {
