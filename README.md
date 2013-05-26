@@ -1,6 +1,10 @@
-wota
+wota - War of the Ants
+=====================
 
-War of the Ants
+Download stable release:
+https://github.com/wotateam/wota/archive/release_0.1.zip
+
+------------------------------------------------------------------------------------------
 
 http://lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_Eclipse
 
