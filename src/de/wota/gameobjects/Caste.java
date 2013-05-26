@@ -2,25 +2,32 @@ package de.wota.gameobjects;
 
 /**
  * Contains the constants of different castes
+ * 
+ * Normierung so, dass
+ * 100 ticks = einmal die Karte laufen für einen Arbeiter ohne Nahrung
+ * 5 ticks = einmal Radius der Sichtbarkeit durchlaufen
+ * 1 tick laufen = Angriffsreichweite
+ * Soldier vs. Soldier: Kampf dauert 5 Spielfeldlängen = 500 ticks
+ * Soldier vs. Gatherer: noch nicht festgelegt (es gibt VULNERABILITY_WHILE_CARRYING in Parameters)
  */
 public enum Caste {
 	Gatherer(
-			100, // INITIAL_HEALTH
-			1.0, // SPEED
-			0.5, // SPEED_WHILE_ATTACKING TODO Gatherer SPEED_WHILE_ATTACKING too high?
-			0.5, // SPEED_WHILE_CARRYING_SUGAR
-			5,	 // ATTACK
+			40.0, // INITIAL_HEALTH
+			10.0, // SPEED
+			5.0, // SPEED_WHILE_ATTACKING TODO Gatherer SPEED_WHILE_ATTACKING too high?
+			5.0, // SPEED_WHILE_CARRYING_SUGAR
+			0.15,	 // ATTACK
 			10,	 // MAX_SUGAR_CARRY
 			50,  // SIGHT_RANGE
 			50   // HEARING_RANGE
 	),
 
 	Soldier(
-			100, // INITIAL_HEALTH
-			1.0, // SPEED
-			0.5, // SPEED_WHILE_ATTACKING
-			0.5, // SPEED_WHILE_CARRYING_SUGAR
-			10,  // ATTACK
+			100.0, // INITIAL_HEALTH
+			10.0, // SPEED
+			5.0, // SPEED_WHILE_ATTACKING
+			5.0, // SPEED_WHILE_CARRYING_SUGAR
+			0.2,  // ATTACK
 			5,   // MAX_SUGAR_CARRY
 			50,  // SIGHT_RANGE
 			50   // HEARING_RANGE
@@ -28,9 +35,9 @@ public enum Caste {
 	
 	Scout(
 			100, // INITIAL_HEALTH
-			1.5, // SPEED
-			1.5, // SPEED_WHILE_ATTACKING
-			0.5, // SPEED_WHILE_CARRYING_SUGAR
+			15.0, // SPEED
+			15.0, // SPEED_WHILE_ATTACKING
+			5.0, // SPEED_WHILE_CARRYING_SUGAR
 			0.0, // ATTACK
 			0,	 // MAX_SUGAR_CARRY
 			100, // SIGHT_RANGE 

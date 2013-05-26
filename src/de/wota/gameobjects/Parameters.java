@@ -7,9 +7,12 @@ public class Parameters {
 	public static final double SIZE_X = 1000;
 	public static final double SIZE_Y = 1000;
 	public static final double HILL_RADIUS = 20;
-	public static final double ATTACK_RANGE = 2; 
+	public static final double ATTACK_RANGE = 15; 
 	/** Ration of damage: normal/collateral */
 	public static final double COLLATERAL_DAMAGE_FACTOR = 0.5;
+	/** Factor with which taken damage gets multiplied while carrying stuff */
+	public static final double VULNERABILITY_WHILE_CARRYING = 5;
+	
 	public static final double INITIAL_SUGAR_RADIUS = 10;	
 	/** Amount of sugar in a new source. */
 	public static final int INITIAL_SUGAR = 500;
@@ -22,8 +25,8 @@ public class Parameters {
 	/** number of ticks picking up sugar takes */
 	public static final int TICKS_SUGAR_PICKUP = 100;
 	
-	public static final int FRAMES_PER_SECOND = 30;
-	public static final int TICKS_PER_SECOND = 50;
+	public static final int FRAMES_PER_SECOND = 40;
+	public static final int TICKS_PER_SECOND = 10;
 	
 	public static final boolean DEBUG = false;
 	

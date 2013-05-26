@@ -86,7 +86,15 @@ public class AntObject extends GameObject{
 	}
 	
 	public void takesDamage(double attack) {
-		health = health - attack;
+		double takenDamage;
+		if (isCarrying()) {
+			takenDamage = Parameters.VULNERABILITY_WHILE_CARRYING * attack;
+		}
+		else {
+			takenDamage = attack;
+		}
+			
+		health = health - takenDamage;
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
@@ -134,6 +142,10 @@ public class AntObject extends GameObject{
 		}
 		
 		action = ai.popAction();
+	}
+	
+	public boolean isCarrying() {
+		return sugarCarry > 0;
 	}
 
 	@Override

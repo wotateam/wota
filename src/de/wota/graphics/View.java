@@ -54,7 +54,7 @@ public class View {
 		glViewport(0, 0, width, height);
 	}
 
-	private static final int ANT_RADIUS = 2;
+	private static final int ANT_RADIUS = 5;
 
 	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
 	
