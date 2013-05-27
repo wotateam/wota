@@ -30,7 +30,7 @@ public abstract class AntAI {
 	 */
 	public abstract void tick() throws Exception;
 	
-	protected List<Ant> ownVisibleAnts() {
+	protected List<Ant> visibleFriends() {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
 			if (ant.playerID == antObject.player.getId()) {
@@ -40,7 +40,7 @@ public abstract class AntAI {
 		return output;
 	}
 	
-	protected List<Ant> enemyVisibleAnts() {
+	protected List<Ant> visibleEnemies() {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
 			if (ant.playerID != antObject.player.getId()) {
@@ -50,7 +50,7 @@ public abstract class AntAI {
 		return output;
 	}
 	
-	protected List<Ant> visibleAnts(int playerId) {
+	protected List<Ant> visibleAntsOfPlayer(int playerId) {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
 			if (ant.playerID == playerId) {
@@ -60,7 +60,17 @@ public abstract class AntAI {
 		return output;
 	}
 	
-	
+	protected Ant getClosestAnt(List<Ant> antsToConsider) {
+		Ant closest = null;
+		double distance = Double.MAX_VALUE;
+		for (Ant ant : antsToConsider) {
+			if (vectorTo(ant).length() < distance) {
+				closest = ant;
+				distance = vectorTo(ant).length();
+			}
+		}
+		return closest;
+	}
 	
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
@@ -169,8 +179,9 @@ public abstract class AntAI {
 		if (isInView(start) && isInView(end)) {
 			return Parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
 		}
-		else
+		else {
 			return null;
+		}
 	}
 	
 	public void setAnt(Ant ant) {
