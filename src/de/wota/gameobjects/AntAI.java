@@ -1,5 +1,6 @@
 package de.wota.gameobjects;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import de.wota.utility.Vector;
@@ -28,6 +29,38 @@ public abstract class AntAI {
 	 * @throws Exception Any Exception generated in tick() gets thrown!
 	 */
 	public abstract void tick() throws Exception;
+	
+	protected List<Ant> ownVisibleAnts() {
+		LinkedList<Ant> output = new LinkedList<Ant>();
+		for (Ant ant : visibleAnts) {
+			if (ant.playerID == antObject.player.getId()) {
+				output.add(ant);
+			}
+		}
+		return output;
+	}
+	
+	protected List<Ant> enemyVisibleAnts() {
+		LinkedList<Ant> output = new LinkedList<Ant>();
+		for (Ant ant : visibleAnts) {
+			if (ant.playerID != antObject.player.getId()) {
+				output.add(ant);
+			}
+		}
+		return output;
+	}
+	
+	protected List<Ant> visibleAnts(int playerId) {
+		LinkedList<Ant> output = new LinkedList<Ant>();
+		for (Ant ant : visibleAnts) {
+			if (ant.playerID == playerId) {
+				output.add(ant);
+			}
+		}
+		return output;
+	}
+	
+	
 	
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
