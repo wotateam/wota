@@ -30,6 +30,7 @@ public abstract class AntAI {
 	 */
 	public abstract void tick() throws Exception;
 	
+	/** get a List of visible Ants of the own tribe */
 	protected List<Ant> visibleFriends() {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
@@ -40,6 +41,7 @@ public abstract class AntAI {
 		return output;
 	}
 	
+	/** get a List of visible Ants of all enemy tribes */
 	protected List<Ant> visibleEnemies() {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
@@ -50,6 +52,11 @@ public abstract class AntAI {
 		return output;
 	}
 	
+	/** 
+	 * get a List of visible Ants of a specific player
+	 * 
+	 * @param playerId id of the specific player
+	 */
 	protected List<Ant> visibleAntsOfPlayer(int playerId) {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
@@ -60,7 +67,12 @@ public abstract class AntAI {
 		return output;
 	}
 	
-	protected Ant getClosestAnt(List<Ant> antsToConsider) {
+	/**
+	 * determines the ant of a List of candidates which is closest to the player ant. 
+	 * @param antsToConsider List of ants from which the closest gets chosen
+	 * @return null if antsToConsider is empty otherwise the closest ant
+	 */
+	protected Ant closestAnt(List<Ant> antsToConsider) {
 		Ant closest = null;
 		double distance = Double.MAX_VALUE;
 		for (Ant ant : antsToConsider) {
