@@ -79,7 +79,13 @@ public class GameWorld {
 			hillObject = new HillObject(position, this);
 			queenObject = new QueenObject(position, queenAIClass, this);
 			
-			addAntObject(queenObject);
+			if (Parameters.QUEEN_IS_VISIBLE) {
+				addAntObject(queenObject);
+			}
+			else {
+				antObjects.add(queenObject);
+			}
+				
 		
 			name = AILoader.getAIName(queenAIClass);
 
