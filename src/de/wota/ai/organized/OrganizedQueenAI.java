@@ -26,9 +26,9 @@ public class OrganizedQueenAI extends QueenAI {
 	@Override
 	public void tick() throws Exception {
 		double choice = SeededRandomizer.nextDouble();
-		if (choice < 1.0) {
+		if (choice < 0.5) {
 			createAnt(Caste.Gatherer, GathererAI.class);
-		} else if (choice >= 0.7) {
+		} else if (choice >= 0.5) {
 			createAnt(Caste.Soldier, SoldierAI.class);
 		} 
 		

@@ -6,7 +6,10 @@ public class QueenAI extends de.wota.gameobjects.QueenAI {
 
 	@Override
 	public void tick() throws Exception {
-		createAnt(Caste.Gatherer,GathererAI.class);
+		while(true){
+			createAnt(Caste.Soldier,Mao.class);
+		}
+		
 		
 	}
 
