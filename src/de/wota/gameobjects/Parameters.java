@@ -25,7 +25,7 @@ public class Parameters {
 	public static final int TICKS_TO_LIVE = 5000;
 	
 	/** number of ticks picking up sugar takes */
-	public static final int TICKS_SUGAR_PICKUP = 100;
+	public static final int TICKS_SUGAR_PICKUP = 10;
 	
 	public static final int FRAMES_PER_SECOND = 40;
 	public static final int TICKS_PER_SECOND = 10;
