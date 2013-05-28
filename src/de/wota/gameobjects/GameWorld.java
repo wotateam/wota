@@ -323,6 +323,9 @@ public class GameWorld {
 					player.hasLost = true;
 					nPossibleWinners--;
 				}
+				else {
+					player.hasLost = false;
+				}
 				break;
 
 			case KILL_ANTS: // all dead or only queen is living
@@ -330,6 +333,9 @@ public class GameWorld {
 						player.antObjects.size() == 0) {
 					player.hasLost = true;
 					nPossibleWinners--;
+				}
+				else {
+					player.hasLost = false;
 				}
 				break;
 			}
