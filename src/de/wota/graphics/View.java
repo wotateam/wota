@@ -58,6 +58,8 @@ public class View {
 
 	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
 	
+	private static final float HILL_ALPHA = 0.65f;
+	
 	public void render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -78,14 +80,15 @@ public class View {
 		for (GameWorld.Player player : world.getPlayers()) {
 			Color color = colors[player.getId()];
 			float[] colorComponents = color.getColorComponents(null);
-			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
 			
 			// Ants
+			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
 			for (AntObject antObject : player.antObjects) {
 				renderCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
 			}			
 
 			// Hill
+			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],HILL_ALPHA * 1.0f/(SAMPLES*SAMPLES));
 			renderCircle(player.hillObject.getPosition(), Parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 		// Sugar Sources
