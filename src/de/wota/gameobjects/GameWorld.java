@@ -264,12 +264,14 @@ public class GameWorld {
 			}
 		}
 
-		// Drop sugar at the hill.
+		// Drop sugar at the hill and reset ticksToLive if inside the hill.
 		// TODO possible optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
 		if (Parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= Parameters.HILL_RADIUS) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
 			actor.dropSugar();
+			
+			actor.resetTicksToLive();
 		}
 		
 		// or drop sugar if desired
