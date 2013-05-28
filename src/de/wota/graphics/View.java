@@ -55,6 +55,7 @@ public class View {
 	}
 
 	private static final int ANT_RADIUS = 5;
+	private static final double CARRIED_SUGAR_RADIUS = 3;
 
 	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
 	
@@ -82,9 +83,13 @@ public class View {
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ants
-			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
 			for (AntObject antObject : player.antObjects) {
+				glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
 				renderCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
+				if (antObject.isCarrying()) {
+					glColor4f(1, 1, 1, 1.0f/(SAMPLES*SAMPLES));
+					renderCircle(antObject.getPosition(), CARRIED_SUGAR_RADIUS, ANT_CIRCLE_CORNERS);
+				}
 			}			
 
 			// Hill
