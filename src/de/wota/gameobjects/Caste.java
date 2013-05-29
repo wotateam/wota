@@ -14,7 +14,7 @@ public enum Caste {
 	Gatherer(
 			40.0, // INITIAL_HEALTH
 			10.0, // SPEED
-			5.0, // SPEED_WHILE_ATTACKING TODO Gatherer SPEED_WHILE_ATTACKING too high?
+			5.0, // SPEED_WHILE_ATTACKING 
 			5.0, // SPEED_WHILE_CARRYING_SUGAR
 			0.15,	 // ATTACK
 			10,	 // MAX_SUGAR_CARRY
@@ -45,7 +45,7 @@ public enum Caste {
 	),
 
 	Queen(
-			Integer.MAX_VALUE, // INITIAL_HEALTH TODO
+			Integer.MAX_VALUE, // INITIAL_HEALTH 
 			0, 	// SPEED
 			0, // SPEED_WHILE_ATTACKING
 			0, // SPEED_WHILE_CARRYING_SUGAR

@@ -61,7 +61,7 @@ public class GameWorld {
 		players.add(player);
 	}
 
-	private static int nextPlayerId = 0; // TODO can this somehow go into Player?
+	private static int nextPlayerId = 0;
 	
 	public class Player {
 		public final List<AntObject> antObjects = new LinkedList<AntObject>();
@@ -93,8 +93,6 @@ public class GameWorld {
 		
 			name = AILoader.getAIName(queenAIClass);
 
-			// TODO fail early w.r.t. to ants, too, by creating one to test ant
-			// creation
 			id = nextPlayerId;
 			nextPlayerId++;
 		}
@@ -261,7 +259,6 @@ public class GameWorld {
 				// collateral damage:
 				for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
 					if (closeAntObject != target && closeAntObject.player != actor.player) {
-						// TODO: Find a good rate, maybe depending on distance.
 						closeAntObject.takesDamage(actor.getCaste().ATTACK*parameters.COLLATERAL_DAMAGE_FACTOR);
 					}
 				}
@@ -269,7 +266,7 @@ public class GameWorld {
 		}
 
 		// Drop sugar at the hill and reset ticksToLive if inside the hill.
-		// TODO possible optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
+		// Optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
 		if (parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= parameters.HILL_RADIUS) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
@@ -395,6 +392,6 @@ public class GameWorld {
 	}
 	
 	public List<Player> getPlayers() {
-		return Collections.unmodifiableList(players); // TODO is it possible to ensure this statically?
+		return Collections.unmodifiableList(players); 
 	}
 }

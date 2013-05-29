@@ -13,19 +13,12 @@ import de.wota.utility.SeededRandomizer;
 public class GathererAI extends AntAI {
 
 	private double lastDir = 0;
-	private Hill ownHill;
 	
 	@Override
 	public void tick() {
 		// visibleAnts
 		// visibleHills
 		// visibleSugar
-		
-		
-		// FIXME this should be the own hill
-		if (visibleHills.size() > 0) {
-			ownHill = visibleHills.get(0); 
-		}
 		
 		if (lastDir == 0)
 			lastDir = SeededRandomizer.nextInt(360);

@@ -55,7 +55,7 @@ public class Vector {
 		if (length() > maximumLength) {
 			return this.scaleTo(maximumLength);
 		} else {
-			return new Vector(this); // TODO Optimization: Change x and y to be final and get rid of this.
+			return new Vector(this); // Optimization: Change x and y to be final and get rid of this.
 		}
 	}
 
