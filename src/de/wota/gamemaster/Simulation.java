@@ -12,7 +12,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
 import de.wota.gameobjects.GameWorld;
-import de.wota.gameobjects.Parameters;
+import de.wota.gameobjects.LeftoverParameters;
 import de.wota.graphics.View;
 
 /**
@@ -31,8 +31,8 @@ public class Simulation {
 	private GameWorld gameWorld;
 	private View view;
 	
-	public final int FRAMES_PER_SECOND = Parameters.FRAMES_PER_SECOND;
-	public final int TICKS_PER_SECOND = Parameters.TICKS_PER_SECOND;
+	public final int FRAMES_PER_SECOND = LeftoverParameters.FRAMES_PER_SECOND;
+	public final int TICKS_PER_SECOND = LeftoverParameters.TICKS_PER_SECOND;
 
 	private double measuredFramesPerSecond;
 	private double measuredTicksPerSecond;
@@ -66,7 +66,7 @@ public class Simulation {
 		gameWorld.registerLogger(new TestLogger());
 			
 		if (isGraphical) {
-			view = new View(gameWorld, width, height);
+			view = new View(gameWorld, width, height, inst.getParameters());
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create(new PixelFormat(8,0,0,0));

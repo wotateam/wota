@@ -6,7 +6,7 @@ import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.AntAI;
 import de.wota.gameobjects.Caste;
 import de.wota.gameobjects.Message;
-import de.wota.gameobjects.Parameters;
+import de.wota.gameobjects.LeftoverParameters;
 import de.wota.gameobjects.Sugar;
 import de.wota.utility.SeededRandomizer;
 

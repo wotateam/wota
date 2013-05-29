@@ -1,6 +1,10 @@
 package de.wota.gamemaster;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 import de.wota.gameobjects.GameWorld;
@@ -17,7 +21,8 @@ public class SimulationInstance {
 	private final List<String> aiList;
 	private final AILoader aiLoader;
 	private final long seed;
-
+	private final Parameters parameters;
+	
 	/**
 	 * Create an instance from a list of participating AIs and a seed used to
 	 * generate a map and initialize the RNGs.
@@ -32,6 +37,19 @@ public class SimulationInstance {
 		this.seed = seed;
 
 		aiLoader = new AILoader();
+		
+		Properties propertiesForParameters = new Properties();
+		try {
+			propertiesForParameters.load(new FileReader("parameters.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.println("parameters.txt not found.");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		parameters = new Parameters(propertiesForParameters);
 	}
 	
 	/**
@@ -52,7 +70,7 @@ public class SimulationInstance {
 	 * @return a GameWorld instance to start the simulation with
 	 */
 	public GameWorld constructGameWorld() {
-		GameWorld world = new GameWorld();
+		GameWorld world = new GameWorld(parameters);
 
 		SeededRandomizer.resetSeed(seed);
 
@@ -66,11 +84,11 @@ public class SimulationInstance {
 		// add sugar for test usage
 		for (int i = 0; i < 10; i++) {
 			SugarObject sugarObject = new SugarObject(
-					Parameters.INITIAL_SUGAR, new Vector(
-							Parameters.SIZE_X
+					parameters.INITIAL_SUGAR, new Vector(
+							parameters.SIZE_X
 									* SeededRandomizer.nextDouble(),
-							Parameters.SIZE_Y
-									* SeededRandomizer.nextDouble()));
+							parameters.SIZE_Y
+									* SeededRandomizer.nextDouble()), parameters);
 			world.addSugarObject(sugarObject);
 		}
 		/*
@@ -84,5 +102,9 @@ public class SimulationInstance {
 
 	public int getNumPlayers() {
 		return aiList.size();
+	}
+
+	public Parameters getParameters() {
+		return parameters;
 	}
 }

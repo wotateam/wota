@@ -10,14 +10,15 @@ import de.wota.utility.Vector;
 public class GameObject {
 
 	private Vector position;
+	protected final Parameters parameters;
 	
-	public GameObject(Vector position) {
+	public GameObject(Vector position, Parameters parameters) {
+		this.parameters = parameters;
 		setPosition(position);
-		
 	}
 	
 	public void setPosition(Vector position) {
-		this.position = Parameters.normalize(position);
+		this.position = parameters.normalize(position);
 	}
 
 	public Vector getPosition() {

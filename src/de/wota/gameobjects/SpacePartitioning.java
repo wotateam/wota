@@ -20,13 +20,15 @@ import de.wota.utility.Vector;
  *
  */
 public class SpacePartitioning {
-
-	public SpacePartitioning(double width, double height, double minimumCellSize) {
+	public final Parameters parameters;
+	
+	public SpacePartitioning(double minimumCellSize, Parameters parameters) {
+		this.parameters = parameters;
 		this.minimumCellSize = minimumCellSize;
-		numberOfHorizontalCells = (int) Math.round(Math.floor(width/minimumCellSize));
-		numberOfVerticalCells = (int) Math.round(Math.floor(height/minimumCellSize));
-		cellWidth = width / numberOfHorizontalCells;
-		cellHeight = height / numberOfVerticalCells;
+		numberOfHorizontalCells = (int) Math.round(Math.floor(parameters.SIZE_X/minimumCellSize));
+		numberOfVerticalCells = (int) Math.round(Math.floor(parameters.SIZE_Y/minimumCellSize));
+		cellWidth = parameters.SIZE_X / numberOfHorizontalCells;
+		cellHeight = parameters.SIZE_Y / numberOfVerticalCells;
 		
 		cells = new Cell[numberOfHorizontalCells + 2][numberOfVerticalCells + 2];
 		for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
@@ -135,7 +137,7 @@ public class SpacePartitioning {
 		
 		for (int i = 0; i < numberOfVisibleCells; i++) {
 			for (T t : field.get(cells[x+deltaX[i]][y+deltaY[i]])) {
-				if (Parameters.distance(t.getPosition(), center) < radius) {
+				if (parameters.distance(t.getPosition(), center) < radius) {
 					listOfTsInsideCircle.add(t);
 				}
 			}

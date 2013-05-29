@@ -8,8 +8,7 @@ import java.util.List;
 
 import de.wota.gamemaster.AILoader;
 import de.wota.gamemaster.AbstractLogger;
-import de.wota.gameobjects.Parameters;
-
+import de.wota.gameobjects.LeftoverParameters;
 
 import de.wota.utility.Vector;
 
@@ -24,9 +23,14 @@ public class GameWorld {
 	
 	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
 
-	private SpacePartitioning spacePartitioning = new SpacePartitioning(
-			Parameters.SIZE_X, Parameters.SIZE_Y,
-			maximumSight());
+	private SpacePartitioning spacePartitioning;
+	
+	private final Parameters parameters;
+	
+	public GameWorld(Parameters parameters) {
+		this.parameters = parameters;
+		spacePartitioning = new SpacePartitioning(maximumSight(), parameters);
+	}
 	
 	private static double maximumSight() {
 		double maximum = 0.0;
@@ -76,10 +80,10 @@ public class GameWorld {
 
 		// TODO make this private and change addPlayer
 		public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
-			hillObject = new HillObject(position, this);
-			queenObject = new QueenObject(position, queenAIClass, this);
+			hillObject = new HillObject(position, this, parameters);
+			queenObject = new QueenObject(position, queenAIClass, this, parameters);
 			
-			if (Parameters.QUEEN_IS_VISIBLE) {
+			if (LeftoverParameters.QUEEN_IS_VISIBLE) {
 				addAntObject(queenObject);
 			}
 			else {
@@ -105,7 +109,7 @@ public class GameWorld {
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 		
 		// can be removed as soon as SpacePartitioning is well tested!
-		if (Parameters.DEBUG) {
+		if (LeftoverParameters.DEBUG) {
 			System.out.println("SpacePartitioning: " + spacePartitioning.totalNumberOfAntObjects());
 			System.out.println("Total number: " + totalNumberOfAntObjects());
 		}
@@ -216,7 +220,7 @@ public class GameWorld {
 		
 	}
 
-	private static void executeAntOrders(QueenObject queenObject) {
+	private void executeAntOrders(QueenObject queenObject) {
 		List<AntOrder> antOrders = queenObject.getAntOrders();
 		Iterator<AntOrder> iterator = antOrders.iterator();
 		final Player player = queenObject.player;
@@ -224,13 +228,13 @@ public class GameWorld {
 		while (iterator.hasNext()) {
 			AntOrder antOrder = iterator.next();
 		
-			if (Parameters.ANT_COST <= player.hillObject.getStoredFood()) {
-				player.hillObject.changeStoredFoodBy(-Parameters.ANT_COST);
+			if (parameters.ANT_COST <= player.hillObject.getStoredFood()) {
+				player.hillObject.changeStoredFoodBy(-parameters.ANT_COST);
 				
 				AntObject antObject = new AntObject(
 						queenObject.player.hillObject.getPosition(),
 						antOrder.getCaste(), antOrder.getAntAIClass(),
-						queenObject.player);
+						queenObject.player, parameters);
 				queenObject.player.addAntObject(antObject);
 			}
 		}
@@ -246,8 +250,8 @@ public class GameWorld {
 		Ant targetAnt = action.attackTarget;
 		actor.isAttacking = false;
 		if (targetAnt != null) {
-			if (Parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
-					<= Parameters.ATTACK_RANGE) {
+			if (parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+					<= parameters.ATTACK_RANGE) {
 				
 				// main damage:
 				AntObject target = targetAnt.antObject;
@@ -255,10 +259,10 @@ public class GameWorld {
 				actor.isAttacking = true;
 				
 				// collateral damage:
-				for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(Parameters.ATTACK_RANGE, target.getPosition())) {
+				for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
 					if (closeAntObject != target && closeAntObject.player != actor.player) {
 						// TODO: Find a good rate, maybe depending on distance.
-						closeAntObject.takesDamage(actor.getCaste().ATTACK*Parameters.COLLATERAL_DAMAGE_FACTOR);
+						closeAntObject.takesDamage(actor.getCaste().ATTACK*parameters.COLLATERAL_DAMAGE_FACTOR);
 					}
 				}
 			}
@@ -266,8 +270,8 @@ public class GameWorld {
 
 		// Drop sugar at the hill and reset ticksToLive if inside the hill.
 		// TODO possible optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
-		if (Parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
-				<= Parameters.HILL_RADIUS) {
+		if (parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
+				<= parameters.HILL_RADIUS) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
 			actor.dropSugar();
 			
@@ -282,7 +286,7 @@ public class GameWorld {
 		// Pick up sugar
 		Sugar sugar = action.sugarTarget;
 		if (sugar != null) {
-			if (Parameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
+			if (parameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
 					<= sugar.sugarObject.getRadius()) {
 				actor.pickUpSugar(sugar.sugarObject);
 			}
@@ -319,7 +323,7 @@ public class GameWorld {
 	public boolean checkVictoryCondition() {	
 		int nPossibleWinners = players.size();
 		for (Player player : players) {
-			switch (Parameters.VICTORY_CONDITION) {
+			switch (LeftoverParameters.VICTORY_CONDITION) {
 			case KILL_QUEEN:
 				if (player.queenObject.isDead()) {
 					player.hasLost = true;
@@ -367,7 +371,7 @@ public class GameWorld {
 		if (action.messageObject != null) {
 			spacePartitioning.addMessageObject(action.messageObject);
 			Message message = action.messageObject.getMessage();
-			if (Parameters.DEBUG)
+			if (LeftoverParameters.DEBUG)
 				System.out.println("\"" + message.content + "\" sagt "
 						+ message.sender + ".");
 		}

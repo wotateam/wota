@@ -18,10 +18,15 @@ public abstract class AntAI {
 	private Action action = new Action();
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.
+	protected Parameters parameters;
 	private AntObject antObject;
 			
 	void setAntObject(AntObject antObject) {
 		this.antObject = antObject;
+	}
+	
+	void setParameters(Parameters parameters) {
+		this.parameters = parameters;
 	}
 	
 	/** tick() gets called in every step of the game. 
@@ -102,10 +107,7 @@ public abstract class AntAI {
 	
 	/** Send message of type int */
 	protected void talk(int content) {
-		MessageObject mo = new MessageObject(
-											self.getPosition(),
-											self,
-											content);
+		MessageObject mo = new MessageObject(self.getPosition(), self, content, parameters);
 			
 		action.messageObject = mo;
 	}
@@ -114,7 +116,7 @@ public abstract class AntAI {
 	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
 	 */
 	protected void moveInDirection(double direction) {
-		moveInDirection(direction, Parameters.MAX_MOVEMENT_DISTANCE);
+		moveInDirection(direction, parameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction with specified distance
@@ -130,7 +132,7 @@ public abstract class AntAI {
 	 * @param target can be anything like Ant, Sugar, ...
 	 */
 	protected void moveToward(Snapshot target) {
-		moveToward(target, Parameters.MAX_MOVEMENT_DISTANCE);
+		moveToward(target, parameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	/** Move in direction of target but only the specified distance.
@@ -143,11 +145,11 @@ public abstract class AntAI {
 	}
 
 	private void uncheckedMoveToward(Snapshot target) {
-		uncheckedMoveToward(target, Parameters.MAX_MOVEMENT_DISTANCE);
+		uncheckedMoveToward(target, parameters.MAX_MOVEMENT_DISTANCE);
 	}
 	
 	private void uncheckedMoveToward(Snapshot target, double distance) {
-		action.movement = Parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
+		action.movement = parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
 	}
 	
 	/**
@@ -158,12 +160,12 @@ public abstract class AntAI {
 	}
 	
 	protected double getHomeDirection() {
-		return Parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition()).angle();
+		return parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition()).angle();
 	}
 	
 	/** returns true if target is in view range. */
 	private boolean isInView(Snapshot target) {
-		return (Parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
+		return (parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 	
 	/** 
@@ -175,7 +177,7 @@ public abstract class AntAI {
 	 */
 	protected Vector vectorTo(Snapshot target) {
 		if (isInView(target)) {
-			return Parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition());
+			return parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition());
 		}
 		else
 			return null;
@@ -189,7 +191,7 @@ public abstract class AntAI {
 	 */
 	protected Vector vectorBetween(Snapshot start, Snapshot end) {
 		if (isInView(start) && isInView(end)) {
-			return Parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
+			return parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
 		}
 		else {
 			return null;

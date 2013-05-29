@@ -6,11 +6,11 @@ import de.wota.utility.Vector;
 public class HillObject extends GameObject {
 	private Hill hill;
 	private GameWorld.Player player;
-	private double storedFood = Parameters.STARTING_FOOD;
-	
-	public HillObject(Vector position, GameWorld.Player player) {
-		super(position);
+	private double storedFood;
+	public HillObject(Vector position, GameWorld.Player player, Parameters parameters) {
+		super(position, parameters);
 		this.player = player;
+		this.storedFood = parameters.STARTING_FOOD;
 	}
 	
 	public GameWorld.Player getPlayer() {

@@ -1,67 +1,69 @@
 package de.wota.gameobjects;
 
-import de.wota.utility.Vector;
-import de.wota.utility.Modulo;
+import java.util.Properties;
 
+import de.wota.utility.Modulo;
+import de.wota.utility.Vector;
+
+// Please put comments in /parameters.txt, because this is where they are set.
 public class Parameters {
-	public static final double SIZE_X = 1000;
-	public static final double SIZE_Y = 1000;
-	public static final double HILL_RADIUS = 20;
-	public static final double ATTACK_RANGE = 15; 
-	/** Ration of damage: normal/collateral */
-	public static final double COLLATERAL_DAMAGE_FACTOR = 0.5;
-	/** Factor with which taken damage gets multiplied while carrying stuff */
-	public static final double VULNERABILITY_WHILE_CARRYING = 5;
+
+	public final double SIZE_X;
+	public final double SIZE_Y;
+	public final double HILL_RADIUS;
+	public final double ATTACK_RANGE;
+	public final double COLLATERAL_DAMAGE_FACTOR;
+	public final double VULNERABILITY_WHILE_CARRYING;
+	public final double INITIAL_SUGAR_RADIUS;
+	public final int INITIAL_SUGAR;
+	public final int ANT_COST;
+	public final int STARTING_FOOD;
+	public final double MAX_MOVEMENT_DISTANCE;
+	public final double ANGLE_ERROR_PER_DISTANCE;
+	public final int TICKS_TO_LIVE;
+	public final int TICKS_SUGAR_PICKUP;
 	
-	public static final double INITIAL_SUGAR_RADIUS = 10;	
-	/** Amount of sugar in a new source. */
-	public static final int INITIAL_SUGAR = 500;
-	public static final int ANT_COST = 100;
-	public static final int STARTING_FOOD = 10000;
-	// MAX_MOVEMENT_DISTANCE needs to greater than the speed of all castes.
-	public static final double MAX_MOVEMENT_DISTANCE = 5;
-	public static final double ANGLE_ERROR_PER_DISTANCE = 0; 
+	public Parameters(Properties p) {
+		SIZE_X = Double.parseDouble(p.getProperty("SIZE_X"));
+		SIZE_Y = Double.parseDouble(p.getProperty("SIZE_Y"));
+		HILL_RADIUS = Double.parseDouble(p.getProperty("HILL_RADIUS"));
+		ATTACK_RANGE = Double.parseDouble(p.getProperty("ATTACK_RANGE"));
+		COLLATERAL_DAMAGE_FACTOR = Double.parseDouble(p.getProperty("COLLATERAL_DAMAGE_FACTOR"));
+		VULNERABILITY_WHILE_CARRYING = Double.parseDouble(p.getProperty("VULNERABILITY_WHILE_CARRYING"));
+		INITIAL_SUGAR_RADIUS = Double.parseDouble(p.getProperty("INITIAL_SUGAR_RADIUS"));
 	
-	public static final int TICKS_TO_LIVE = 5000;
-	
-	/** number of ticks picking up sugar takes */
-	public static final int TICKS_SUGAR_PICKUP = 10;
-	
-	public static final int FRAMES_PER_SECOND = 40;
-	public static final int TICKS_PER_SECOND = 10;
-	
-	public static final boolean DEBUG = false;
-	
-	public static final VictoryCondition VICTORY_CONDITION = VictoryCondition.KILL_ANTS;
-	public static final boolean QUEEN_IS_VISIBLE = false;
-	public enum VictoryCondition {
-		KILL_QUEEN,
-		KILL_ANTS;
+		INITIAL_SUGAR = Integer.parseInt(p.getProperty("INITIAL_SUGAR"));
+		ANT_COST = Integer.parseInt(p.getProperty("ANT_COST"));
+		STARTING_FOOD = Integer.parseInt(p.getProperty("STARTING_FOOD"));
+		
+		MAX_MOVEMENT_DISTANCE = Double.parseDouble(p.getProperty("MAX_MOVEMENT_DISTANCE"));
+		ANGLE_ERROR_PER_DISTANCE  = Double.parseDouble(p.getProperty("ANGLE_ERROR_PER_DISTANCE"));
+		
+		TICKS_TO_LIVE = Integer.parseInt(p.getProperty("TICKS_TO_LIVE"));
+		TICKS_SUGAR_PICKUP = Integer.parseInt(p.getProperty("TICKS_SUGAR_PICKUP"));
 	}
 	
-	public static Vector normalize(Vector p) {
+	public Vector normalize(Vector p) {
 		Vector r = new Vector(p);
-		r.x = Modulo.mod(r.x, Parameters.SIZE_X);
-		r.y = Modulo.mod(r.y, Parameters.SIZE_Y);
+		r.x = Modulo.mod(r.x, SIZE_X);
+		r.y = Modulo.mod(r.y, SIZE_Y);
 		return r;
 	}
-	
-	
 	/**
 	 * Assumes that p1 and p2 are in the fundamental region.
 	 * @param p1
 	 * @param p2
 	 * @return The shortest vector from p2 to a point equivalent to p1.
 	 */
-	public static Vector shortestDifferenceOnTorus(Vector p1, Vector p2) {
-		Vector lowerLeftCornerOfImageOfGaussDiffeom = new Vector(-SIZE_X/2.,-SIZE_Y/2.);
-		Vector differenceShifted = Vector.subtract(Vector.subtract(p1,p2),lowerLeftCornerOfImageOfGaussDiffeom);
+	public Vector shortestDifferenceOnTorus(Vector p1, Vector p2) {
+		Vector lowerLeftCornerOfImageOfExpMap = new Vector(-SIZE_X/2.,-SIZE_Y/2.);
+		Vector differenceShifted = Vector.subtract(Vector.subtract(p1,p2),lowerLeftCornerOfImageOfExpMap);
 		Vector differenceShiftedNormalized = 
 				new Vector(Modulo.mod(differenceShifted.x, SIZE_X), Modulo.mod(differenceShifted.y, SIZE_Y));
-		return Vector.add(differenceShiftedNormalized, lowerLeftCornerOfImageOfGaussDiffeom);
+		return Vector.add(differenceShiftedNormalized, lowerLeftCornerOfImageOfExpMap);
 	}
-	
-	public static double distance(Vector p1, Vector p2) {
+	public double distance(Vector p1, Vector p2) {
 		return shortestDifferenceOnTorus(p1, p2).length();
 	}
+
 }

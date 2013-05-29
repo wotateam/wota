@@ -7,8 +7,8 @@ import de.wota.utility.Vector;
 public class QueenObject extends AntObject {
 	public final QueenAI queenAI;
 	
-	public QueenObject(Vector position, Class<? extends QueenAI> queenAIClass, GameWorld.Player player) {
-		super(position, Caste.Queen, queenAIClass, player);
+	public QueenObject(Vector position, Class<? extends QueenAI> queenAIClass, GameWorld.Player player, Parameters parameters) {
+		super(position, Caste.Queen, queenAIClass, player, parameters);
 		this.queenAI = (QueenAI) ai;
 	}
 	

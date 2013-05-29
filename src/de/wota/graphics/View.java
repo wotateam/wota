@@ -31,10 +31,13 @@ public class View {
 	private int width;
 	private int height;
 
-	public View(GameWorld world, int width, int height) {
+	private Parameters parameters;
+	
+	public View(GameWorld world, int width, int height, Parameters parameters) {
 		this.world = world;
 		this.width = width;
 		this.height = height;
+		this.parameters = parameters;
 	}
 
 	public void setup() {
@@ -47,7 +50,7 @@ public class View {
 
 		// coordinate system origin at lower left with width and height same as
 		// the window
-		glOrtho(0, Parameters.SIZE_X, 0, Parameters.SIZE_Y, -1, 1);
+		glOrtho(0, parameters.SIZE_X, 0, parameters.SIZE_Y, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
@@ -94,7 +97,7 @@ public class View {
 
 			// Hill
 			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],HILL_ALPHA * 1.0f/(SAMPLES*SAMPLES));
-			renderCircle(player.hillObject.getPosition(), Parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
+			renderCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 		// Sugar Sources
 		glColor4f(1.f, 1.f, 1.f,1.0f/(SAMPLES*SAMPLES));

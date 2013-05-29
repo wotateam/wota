@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.wota.utility.SeededRandomizer;
 import de.wota.utility.Vector;
+import de.wota.gameobjects.Parameters;
 
 /**
  * Interne Darstellung von Ants. Enthält alle Informationen.
@@ -32,8 +33,9 @@ public class AntObject extends GameObject{
 	public final GameWorld.Player player;
 	boolean isAttacking = false;
 	
-	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player) {
-		super(position);
+	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player, Parameters parameters) {
+		super(position, parameters);
+		
 		this.player = player;
 		this.id = getNewID();
 		AntAI antAI = null;
@@ -44,6 +46,7 @@ public class AntObject extends GameObject{
 			System.err.println("Could not create AntAI -> exit");
 			System.exit(1);
 		}
+		antAI.setParameters(parameters);
 		this.caste = caste;
 		// set parameters
 		health = caste.INITIAL_HEALTH;
@@ -91,7 +94,7 @@ public class AntObject extends GameObject{
 	public void takesDamage(double attack) {
 		double takenDamage;
 		if (isCarrying()) {
-			takenDamage = Parameters.VULNERABILITY_WHILE_CARRYING * attack;
+			takenDamage = parameters.VULNERABILITY_WHILE_CARRYING * attack;
 		}
 		else {
 			takenDamage = attack;
@@ -157,7 +160,7 @@ public class AntObject extends GameObject{
 	@Override
 	public void move(Vector moveVector) {
 		if (moveVector.length() != 0) {
-			double angleError = Parameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
+			double angleError = parameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
 					* 2 * (SeededRandomizer.nextDouble() - 0.5); 
 			super.move(Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError));
 		} else {
@@ -172,7 +175,7 @@ public class AntObject extends GameObject{
 	}
 
 	public void resetTicksToLive() {
-		ticksToLive = Parameters.TICKS_TO_LIVE;
+		ticksToLive = parameters.TICKS_TO_LIVE;
 	}
 
 }

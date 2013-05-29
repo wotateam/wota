@@ -17,11 +17,12 @@ public class SugarObject extends GameObject {
 	
 	private int amount;
 	private Sugar sugar;
-	/** number of ticks one ant will freeze when picking up */
-	private int ticksToWait = Parameters.TICKS_SUGAR_PICKUP;
+	/** number of ticks an ant will freeze when picking up */
+	private int ticksToWait;
 	
-	public SugarObject(int amount, Vector position) {
-		super(position);
+	public SugarObject(int amount, Vector position, Parameters parameters) {
+		super(position, parameters);
+		ticksToWait = parameters.TICKS_SUGAR_PICKUP;
 		this.amount = amount;
 	}
 	
@@ -42,21 +43,21 @@ public class SugarObject extends GameObject {
 	 */
 	public void reduceAmount(int reduction) {
 		amount = Math.max(amount - reduction, 0);
-		ticksToWait += Parameters.TICKS_SUGAR_PICKUP;
+		ticksToWait += parameters.TICKS_SUGAR_PICKUP;
 	}
 	
 	public void tick() {
-		if (ticksToWait > Parameters.TICKS_SUGAR_PICKUP)
+		if (ticksToWait > parameters.TICKS_SUGAR_PICKUP)
 			ticksToWait--;
 	}
 	
 	public int getTicksToWait() {
-		if (ticksToWait < Parameters.TICKS_SUGAR_PICKUP)
+		if (ticksToWait < parameters.TICKS_SUGAR_PICKUP)
 			System.out.println("unexpected behavior in SugarObject.getTicksToWait()");
 		return ticksToWait;
 	}
 	
 	public double getRadius() {
-		return Parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / Parameters.INITIAL_SUGAR);
+		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR);
 	}
 }

@@ -18,8 +18,8 @@ public class MessageObject extends GameObject {
 	/** Message instance which contains the information visible to other ants */
 	private final Message message;
 	
-	public MessageObject(Vector position, Ant sender, int content) {
-		super(position);
+	public MessageObject(Vector position, Ant sender, int content, Parameters parameters) {
+		super(position, parameters);
 		this.sender = sender;
 		this.content = content;
 		
