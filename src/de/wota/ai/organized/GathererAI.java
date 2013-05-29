@@ -42,7 +42,7 @@ public class GathererAI extends AntAI {
 			moveHome();
 			talk(Math.round((float) direction));
 		} else if (visibleSugar.size() > 0) {
-			Sugar sugar = visibleSugar.get(0); // TODO use method for closest sugar once it exists
+			Sugar sugar = closest(visibleSugar);
 			if (vectorTo(sugar).length() < sugar.radius) {
 				pickUpSugar(sugar);
 				direction = 180 + getHomeDirection();

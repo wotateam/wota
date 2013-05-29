@@ -11,11 +11,11 @@ int dir=0;
 			dir=audibleMessages.get(0).content;
 		}
 		if(visibleEnemies().size()>0){
-			moveToward(closestAnt(visibleEnemies()));	
+			moveToward(closest(visibleEnemies()));	
 		}else{
 			moveInDirection(dir);
 		}
-		attack(closestAnt(visibleEnemies()));
+		attack(closest(visibleEnemies()));
 
 	}
 

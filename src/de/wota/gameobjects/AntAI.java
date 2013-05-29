@@ -73,17 +73,17 @@ public abstract class AntAI {
 	}
 	
 	/**
-	 * determines the ant of a List of candidates which is closest to the player ant. 
-	 * @param antsToConsider List of ants from which the closest gets chosen
-	 * @return null if antsToConsider is empty otherwise the closest ant
+	 * Determines the object of a list of candidates which is closest to the player. 
+	 * @param toConsider list of Snapshots (e.g. Ants, Sugars, Hills) from which the closest gets chosen
+	 * @return null if toConsider is empty, otherwise the closest in toConsider
 	 */
-	protected Ant closestAnt(List<Ant> antsToConsider) {
-		Ant closest = null;
+	protected <T extends Snapshot> T closest(List<T> toConsider) {
+		T closest = null;
 		double distance = Double.MAX_VALUE;
-		for (Ant ant : antsToConsider) {
-			if (vectorTo(ant).length() < distance) {
-				closest = ant;
-				distance = vectorTo(ant).length();
+		for (T current : toConsider) {
+			if (vectorTo(current).length() < distance) {
+				closest = current;
+				distance = vectorTo(current).length();
 			}
 		}
 		return closest;

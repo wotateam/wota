@@ -15,8 +15,11 @@ public class Wota {
 		List<String> ais = new LinkedList<String>();
 		
 //		use ais.add to add AIs to the game
+//		ais.add("solitary.SolitaryQueenAI");
 		ais.add("solitary.SolitaryQueenAI");
-		ais.add("solitary.SolitaryQueenAI");
+		ais.add("organized.OrganizedQueenAI");
+		ais.add("organized.OrganizedQueenAI");
+		ais.add("bvb.QueenAI");
 //		ais.add("AggressiveQueenAI");
 //		ais.add("AggressiveQueenAI");
 	
