@@ -11,16 +11,31 @@ import de.wota.utility.Vector;
  * Contains several lists describing the objects which are visible to the ant.
  */
 public abstract class AntAI {		
-	public List<Ant> visibleAnts;
+	/** Ants which are seen by self */
+	public List<Ant> visibleAnts; 
+	
+	/** Sugar which is seen by self */
 	public List<Sugar> visibleSugar;
+	
+	/** Hills which are seen by self */
 	public List<Hill> visibleHills;
+	
+	/** Messages which are heard in this tick */
 	public List<Message> audibleMessages;
-	private Action action = new Action();
+	
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.
+	
+	/** Reference to the parameters of the game. e.g. cost of a new ant. */
 	protected Parameters parameters;
+	
+	/** Action object contains the things the ant wants to do */
+	private Action action = new Action();
+	
+	/** AntObject includes all information of this Ant */
 	private AntObject antObject;
 			
+	
 	void setAntObject(AntObject antObject) {
 		this.antObject = antObject;
 	}
@@ -171,8 +186,7 @@ public abstract class AntAI {
 	/** 
 	 * returns the Vector between the Ant itself and target
 	 * Is null if the target is not in view.
-	 * @param start
-	 * @param end
+	 * @param target
 	 * @return vector between this ant and target
 	 */
 	protected Vector vectorTo(Snapshot target) {
@@ -198,6 +212,11 @@ public abstract class AntAI {
 		}
 	}
 	
+	/** 
+	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
+	 * 
+	 * sets self to ant.
+	 */
 	public void setAnt(Ant ant) {
 		self = ant;
 	}

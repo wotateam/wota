@@ -73,7 +73,7 @@ public class Vector {
 	 *  
 	 * @param amplitude length of the vector
 	 * @param direction phi-component. direction = 0 generates a vector along the x-axis.
-	 * @return
+	 * @return vector in x-y-coordinates
 	 */
 	public static Vector fromPolar(double amplitude, double direction) {
 		return new Vector(amplitude*Math.cos(direction/360.*2*Math.PI), amplitude*Math.sin(direction/360.*2*Math.PI));
