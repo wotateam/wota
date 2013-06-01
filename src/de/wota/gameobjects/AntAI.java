@@ -158,6 +158,14 @@ public abstract class AntAI {
 			uncheckedMoveToward(target, distance);
 		}
 	}
+	
+	/**
+	 * Move in the same direction like last tick.
+	 * Moves in direction 0 if this is the first tick.
+	 */
+	protected void moveAhead() {
+		moveInDirection(antObject.getLastMovementDirection());
+	}
 
 	private void uncheckedMoveToward(Snapshot target) {
 		uncheckedMoveToward(target, parameters.MAX_MOVEMENT_DISTANCE);

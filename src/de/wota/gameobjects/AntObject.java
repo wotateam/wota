@@ -20,6 +20,7 @@ public class AntObject extends GameObject{
 	protected double health;
 	private double speed;
 	private int ticksToLive;
+	private double lastMovementDirection = 0;
 	
 	/** amount of sugar carried now */
 	private int sugarCarry = 0;
@@ -84,6 +85,10 @@ public class AntObject extends GameObject{
 	
 	public int getSugarCarry() {
 		return sugarCarry;
+	}
+	
+	public double getLastMovementDirection() {
+		return lastMovementDirection;
 	}
 	
 	public void createAnt() {
@@ -159,13 +164,14 @@ public class AntObject extends GameObject{
 
 	@Override
 	public void move(Vector moveVector) {
+		Vector realMovement = moveVector;
 		if (moveVector.length() != 0) {
 			double angleError = parameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
 					* 2 * (SeededRandomizer.nextDouble() - 0.5); 
-			super.move(Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError));
-		} else {
-			super.move(moveVector);
+			realMovement = Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError);
 		}
+		lastMovementDirection = realMovement.angle();
+		super.move(realMovement);
 	}
 	
 	/** get new id for antObject */
