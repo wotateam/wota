@@ -1,10 +1,11 @@
 /**
  * 
  */
-package de.wota.gamemaster;
+package de.wota;
 
 import java.util.LinkedList;
 import java.util.List;
+import de.wota.gamemaster.*;
 
 /**
  * Class used to start the game.
