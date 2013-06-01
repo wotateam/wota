@@ -18,25 +18,46 @@ import de.wota.utility.Vector;
  * Contains all the information needed for one round of simulation.
  */
 public class SimulationInstance {
-	private final List<String> aiList;
+	private final String[] aiArray;
 	private final AILoader aiLoader;
 	private final long seed;
 	private final Parameters parameters;
 	
 	/**
-	 * Create an instance from a list of participating AIs and a seed used to
+	 * Create an instance from a seed used to
 	 * generate a map and initialize the RNGs.
 	 * 
-	 * @param aiList
-	 *            list with class names of the participating AIs
+	 * Participating ais are read from the file "settings.txt"
+	 * 
+	 * Game parameters are read from "parameters.txt"
+	 * 
 	 * @param seed
 	 *            initial seed of the RNG
 	 */
-	public SimulationInstance(List<String> aiList, long seed) {
-		this.aiList = aiList;
+	public SimulationInstance(long seed) {
 		this.seed = seed;
 
-		aiLoader = new AILoader();
+		aiLoader = new AILoader("./");
+		
+		Properties propertiesForSettings = new Properties();
+		try {
+			propertiesForSettings.load(new FileReader("settings.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.println("settings.txt not found.");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		String aiString = propertiesForSettings.getProperty("aiString");
+		String[] ais = aiString.split(",");
+		for (int i=0; i<ais.length; i++) {
+			ais[i] = ais[i].trim();
+			System.out.println("AI #" + (i+1) + " " + ais[i] );
+		}
+		this.aiArray = ais;
 		
 		Properties propertiesForParameters = new Properties();
 		try {
@@ -53,14 +74,15 @@ public class SimulationInstance {
 	}
 	
 	/**
-	 * Create an instance from a list of participating AIs and a randomly choosen seed
+	 * Create an instance from a randomly choosen seed
 	 * used to generate a map and initialize the RNGs.
 	 * 
-	 * @param aiList
-	 *            list with class names of the participating AIs
+	 * Participating ais are read from the file "settings.txt"
+	 * 
+	 * Game parameters are read from "parameters.txt"
 	 */
-	public SimulationInstance(List<String> aiList) {
-		this(aiList, (new Random()).nextLong());
+	public SimulationInstance() {
+		this((new Random()).nextLong());
 	}
 
 	/**
@@ -74,7 +96,7 @@ public class SimulationInstance {
 
 		SeededRandomizer.resetSeed(seed);
 
-		for (String aiName : aiList) {
+		for (String aiName : aiArray) {
 			GameWorld.Player player = world.new Player(new Vector(
 					SeededRandomizer.nextInt(700),
 					SeededRandomizer.nextInt(700)), aiLoader.loadQueen(aiName));
@@ -101,7 +123,7 @@ public class SimulationInstance {
 	}
 
 	public int getNumPlayers() {
-		return aiList.size();
+		return aiArray.length;
 	}
 
 	public Parameters getParameters() {

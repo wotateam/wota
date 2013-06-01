@@ -12,23 +12,13 @@ import java.util.List;
 public class Wota {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
-		List<String> ais = new LinkedList<String>();
 		
-//		use ais.add to add AIs to the game
-//		ais.add("solitary.SolitaryQueenAI");
-		ais.add("solitary.SolitaryQueenAI");
-		ais.add("organized.OrganizedQueenAI");
-		ais.add("organized.OrganizedQueenAI");
-		ais.add("bvb.QueenAI");
-//		ais.add("AggressiveQueenAI");
-//		ais.add("AggressiveQueenAI");
-	
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
-//		SimulationInstance inst = new SimulationInstance(ais, specialSeed);
+//		SimulationInstance inst = new SimulationInstance(specialSeed);
 		
 //		use this constructor to obtain different games each run.
-		SimulationInstance inst = new SimulationInstance(ais);
+		SimulationInstance inst = new SimulationInstance();
 		
 		Simulation sim = new Simulation(inst, true);
 		sim.runSimulation();

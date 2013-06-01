@@ -1,0 +1,3 @@
+# settings.txt
+
+aiString = bvb.QueenAI, bvb.QueenAI
