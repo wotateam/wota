@@ -194,8 +194,6 @@ public class GameWorld {
 					antObjectIter.hasNext();) {
 				AntObject maybeDead = antObjectIter.next();
 				if (maybeDead.isDead()) {
-					// hat neue Aktionen erzeugt.
-					//executeLastWill(maybeDead);
 					antObjectIter.remove();
 					spacePartitioning.removeAntObject(maybeDead);
 				}
@@ -304,16 +302,6 @@ public class GameWorld {
 			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED));
 		}
 	}
-
-	/*
-	/** wird nur aufgerufen bevor die Ant stirbt -> kein Angriff mehr
-	private void executeLastWill(AntObject actor) {
-		Action action = actor.getAction();
-
-		// Messages
-		handleMessages(actor, action);
-	}
-	*/
 	
 	/** tests if victory condition is fulfilled
 	 * @return is the victory condition fulfilled or can nobody win anymore? */
