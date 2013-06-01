@@ -12,7 +12,7 @@ import de.wota.utility.Vector;
  * 
  * @author pascal
  */
-public class Ant extends Snapshot{
+public class Ant extends Snapshot {
 	
 	/** health is decreased by attacking enemies. Ant dies if health reaches 0. */
 	public final double health;
@@ -26,6 +26,9 @@ public class Ant extends Snapshot{
 	/** Caste which this ant belongs to */
 	public final Caste caste;
 	
+	/** The name of this ant's AI class, not including the package name.*/
+	public final String antAIClassName;
+	
 	public final int playerID;
 	
 	/** corresponding physical element of this Ant */ 
@@ -37,6 +40,7 @@ public class Ant extends Snapshot{
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
 		playerID = antObject.player.getId();
+		antAIClassName = antObject.getAI().getClass().getSimpleName();
 		this.antObject = antObject;
 	}
 
