@@ -104,6 +104,15 @@ public abstract class AntAI {
 		return closest;
 	}
 	
+	/**
+	 * get the direction of the last movement.
+	 * @return
+	 * 			direction of last movement. 0 if this is the first tick.
+	 */
+	public double getLastMovementDirection() {
+		return antObject.getLastMovementDirection();
+	}
+	
 	/** Attack target of type Ant */
 	protected void attack(Ant target) {
 		action.attackTarget = target;
