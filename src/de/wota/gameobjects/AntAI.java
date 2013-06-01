@@ -3,6 +3,7 @@ package de.wota.gameobjects;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.wota.utility.Modulo;
 import de.wota.utility.Vector;
 
 
@@ -243,5 +244,22 @@ public abstract class AntAI {
 		Action returnAction = action;
 		action = new Action();
 		return returnAction;
+	}
+	
+	/**
+	 * Modulo operation returning only non-negative numbers.
+	 * @return x mod m
+	 */
+	public static int mod(int x, int m) {
+		return Modulo.mod(x, m);
+	}
+	
+
+	/**
+	 * Modulo operation returning only non-negative numbers.
+	 * @return x mod m
+	 */
+	public static double mod(double x, double m) {
+		return Modulo.mod(x, m);
 	}
 }
