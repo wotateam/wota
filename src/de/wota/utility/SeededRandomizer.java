@@ -11,14 +11,23 @@ public class SeededRandomizer {
 		random.setSeed(seed);
 	}
 
+	/* I think this will only lead to confusion
 	public static int nextInt() {
 		return random.nextInt();
-	}
+	} */
 
+	/**
+	 * returns a random integer number between 0 and n-1
+	 * @param n Upper bound for random number
+	 * @return a random integer number between 0 and n-1
+	 */
 	public static int nextInt(int n) {
 		return random.nextInt(n);
 	}
 	
+	/**
+	 * @return Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0
+	 */
 	public static double nextDouble()
 	{
 		return random.nextDouble();
