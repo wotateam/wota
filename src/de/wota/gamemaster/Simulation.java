@@ -90,8 +90,8 @@ public class Simulation {
 	private void tick() {
 		gameWorld.tick();
 
-		// check for victory condition
-		if (gameWorld.checkVictoryCondition()) {
+		// check for victory condition if more than 100 ticks have passed
+		if (tickCount > 100 && gameWorld.checkVictoryCondition()) {
 			GameWorld.Player winner = gameWorld.getWinner();
 			if (winner != null) {
 				System.out.println(winner.name + " has won the game in tick "
