@@ -1,19 +1,17 @@
 package de.wota.ai.dummy;
 
-import java.util.Random;
-
 import de.wota.gameobjects.AntAI;
+import de.wota.utility.SeededRandomizer;
 
 public class MoveAI extends AntAI {
 	
 	@Override
 	public void tick() {
-		Random random = new Random();
 		if (visibleSugar.size() != 0) {
 			moveToward(visibleSugar.get(0));
 		}
 		else {
-			moveInDirection(random.nextInt(30));
+			moveInDirection(SeededRandomizer.nextInt(30));
 		}
 	}
 	
