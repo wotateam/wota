@@ -52,18 +52,28 @@ public class Parameters {
 		return r;
 	}
 	/**
-	 * Assumes that p1 and p2 are in the fundamental region.
+	 * 
 	 * @param p1
 	 * @param p2
 	 * @return The shortest vector from p2 to a point equivalent to p1.
 	 */
 	public Vector shortestDifferenceOnTorus(Vector p1, Vector p2) {
+		return shortestVectorOnTorusTo(Vector.subtract(p1,p2));
+	}
+	
+	/**
+	 * Returns the shortest vector from the origin to a point equivalent to the argument on the torus.
+	 * @param p Point on the torus.
+	 * @return Shortest vector to p on the torus.
+	 */
+	public Vector shortestVectorOnTorusTo(Vector p) {
 		Vector lowerLeftCornerOfImageOfExpMap = new Vector(-SIZE_X/2.,-SIZE_Y/2.);
-		Vector differenceShifted = Vector.subtract(Vector.subtract(p1,p2),lowerLeftCornerOfImageOfExpMap);
+		Vector differenceShifted = Vector.subtract(p,lowerLeftCornerOfImageOfExpMap);
 		Vector differenceShiftedNormalized = 
 				new Vector(Modulo.mod(differenceShifted.x, SIZE_X), Modulo.mod(differenceShifted.y, SIZE_Y));
 		return Vector.add(differenceShiftedNormalized, lowerLeftCornerOfImageOfExpMap);
 	}
+	
 	public double distance(Vector p1, Vector p2) {
 		return shortestDifferenceOnTorus(p1, p2).length();
 	}
