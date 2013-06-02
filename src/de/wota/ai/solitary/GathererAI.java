@@ -16,9 +16,6 @@ public class GathererAI extends AntAI {
 	
 	@Override
 	public void tick() {
-		// visibleAnts
-		// visibleHills
-		// visibleSugar
 		
 		if (lastDir == 0)
 			lastDir = SeededRandomizer.getInt(360);
@@ -46,6 +43,7 @@ public class GathererAI extends AntAI {
 		}
 		else { // sugarCarry > 0
 			moveHome();
+			lastDir = getLastMovementDirection() + 180;
 		}
 		
 	}
