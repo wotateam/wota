@@ -19,3 +19,5 @@ ANGLE_ERROR_PER_DISTANCE = 0
 TICKS_TO_LIVE = 5000
 # number of ticks picking up sugar takes 
 TICKS_SUGAR_PICKUP = 10
+# number of sugar sources
+N_SUGAR_SOURCES = 6

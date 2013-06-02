@@ -3,7 +3,7 @@ package de.wota.gameobjects;
 
 public class LeftoverParameters {
 	public static final int FRAMES_PER_SECOND = 40;
-	public static final int TICKS_PER_SECOND = 10;
+	public static final int TICKS_PER_SECOND = 20;
 	
 	public static final boolean DEBUG = false;
 	

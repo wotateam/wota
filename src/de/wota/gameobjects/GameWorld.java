@@ -10,6 +10,7 @@ import de.wota.gamemaster.AILoader;
 import de.wota.gamemaster.AbstractLogger;
 import de.wota.gameobjects.LeftoverParameters;
 
+import de.wota.utility.SeededRandomizer;
 import de.wota.utility.Vector;
 
 /**
@@ -43,6 +44,14 @@ public class GameWorld {
 			}
 		}
 		return maximum;
+	}
+	
+	public void createRandomSugarObject() {
+		SugarObject sugarObject = new SugarObject(parameters.INITIAL_SUGAR,
+												  new Vector(SeededRandomizer.nextDouble()*parameters.SIZE_X,
+														  	 SeededRandomizer.nextDouble()*parameters.SIZE_Y),
+												  parameters);
+		addSugarObject(sugarObject);
 	}
 	
 	public void addSugarObject(SugarObject sugarObject) {
@@ -200,7 +209,23 @@ public class GameWorld {
 			}
 		}
 		
-		// remove empty sugar sources and decrease sugarObject.ticksToWait
+		int removedSugarObjects = removeSugarAndDecreaseTicksToWait();
+		for (int i=0; i<removedSugarObjects; i++) {
+			createRandomSugarObject();
+		}
+		
+	}
+
+	/**
+	 * iterates through sugarObjects and
+	 * 1) removes the empty ones
+	 * 2) decreases their ticksToWait by calling tick()
+	 * 
+	 * @return 
+	 * 			The number of removed SugarObjects
+	 */
+	private int removeSugarAndDecreaseTicksToWait() {
+		int nRemovedSugarObjects = 0;
 		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
 				sugarObjectIter.hasNext();) {
 			SugarObject sugarObject = sugarObjectIter.next();
@@ -211,9 +236,10 @@ public class GameWorld {
 			if (sugarObject.getAmount() <= 0) {
 				sugarObjectIter.remove();
 				spacePartitioning.removeSugarObject(sugarObject);
+				nRemovedSugarObjects++;
 			}
 		}
-		
+		return nRemovedSugarObjects;
 	}
 
 	private void executeAntOrders(QueenObject queenObject) {

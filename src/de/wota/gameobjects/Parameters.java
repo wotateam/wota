@@ -22,6 +22,7 @@ public class Parameters {
 	public final double ANGLE_ERROR_PER_DISTANCE;
 	public final int TICKS_TO_LIVE;
 	public final int TICKS_SUGAR_PICKUP;
+	public final int N_SUGAR_SOURCES;
 	
 	public Parameters(Properties p) {
 		SIZE_X = Double.parseDouble(p.getProperty("SIZE_X"));
@@ -41,6 +42,7 @@ public class Parameters {
 		
 		TICKS_TO_LIVE = Integer.parseInt(p.getProperty("TICKS_TO_LIVE"));
 		TICKS_SUGAR_PICKUP = Integer.parseInt(p.getProperty("TICKS_SUGAR_PICKUP"));
+		N_SUGAR_SOURCES = Integer.parseInt(p.getProperty("N_SUGAR_SOURCES"));
 	}
 	
 	public Vector normalize(Vector p) {

@@ -104,14 +104,8 @@ public class SimulationInstance {
 		}
 
 		// add sugar for test usage
-		for (int i = 0; i < 10; i++) {
-			SugarObject sugarObject = new SugarObject(
-					parameters.INITIAL_SUGAR, new Vector(
-							parameters.SIZE_X
-									* SeededRandomizer.nextDouble(),
-							parameters.SIZE_Y
-									* SeededRandomizer.nextDouble()), parameters);
-			world.addSugarObject(sugarObject);
+		for (int i = 0; i < parameters.N_SUGAR_SOURCES; i++) {
+			world.createRandomSugarObject();
 		}
 		/*
 		// add queens
