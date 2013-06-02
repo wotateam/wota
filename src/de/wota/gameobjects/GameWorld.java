@@ -274,15 +274,16 @@ public class GameWorld {
 				&& parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 				   <= parameters.ATTACK_RANGE) {
 			
-			// main damage:
 			AntObject target = targetAnt.antObject;
-			target.takesDamage(actor.getCaste().ATTACK);
 			actor.setAttackTarget(target);
 			
-			// collateral damage:
+			// collateral damage, including damage to target:
+			// the formula how the damage decreases with distance yields full damage for distance 0.
+			// the radius of the area of effect equals ATTACK_RANGE
 			for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
-				if (closeAntObject != target && closeAntObject.player != actor.player) {
-					closeAntObject.takesDamage(actor.getCaste().ATTACK*parameters.COLLATERAL_DAMAGE_FACTOR);
+				if (closeAntObject.player != actor.player) {
+					closeAntObject.takesDamage(actor.getCaste().ATTACK*
+							fractionOfDamageInDistance(parameters.distance(closeAntObject.getPosition(),target.getPosition())));
 				}
 			}
 			
@@ -317,6 +318,11 @@ public class GameWorld {
 		
 		// Messages
 		handleMessages(actor, action);
+	}
+	
+	private double fractionOfDamageInDistance(double distance) {
+		double fraction = 1 - distance / parameters.ATTACK_RANGE;
+		return Math.max(fraction, 0); 
 	}
 	
 	private static void executeMovement(AntObject actor) {

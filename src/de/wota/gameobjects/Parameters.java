@@ -12,7 +12,6 @@ public class Parameters {
 	public final double SIZE_Y;
 	public final double HILL_RADIUS;
 	public final double ATTACK_RANGE;
-	public final double COLLATERAL_DAMAGE_FACTOR;
 	public final double VULNERABILITY_WHILE_CARRYING;
 	public final double INITIAL_SUGAR_RADIUS;
 	public final int INITIAL_SUGAR;
@@ -28,7 +27,6 @@ public class Parameters {
 		SIZE_Y = Double.parseDouble(p.getProperty("SIZE_Y"));
 		HILL_RADIUS = Double.parseDouble(p.getProperty("HILL_RADIUS"));
 		ATTACK_RANGE = Double.parseDouble(p.getProperty("ATTACK_RANGE"));
-		COLLATERAL_DAMAGE_FACTOR = Double.parseDouble(p.getProperty("COLLATERAL_DAMAGE_FACTOR"));
 		VULNERABILITY_WHILE_CARRYING = Double.parseDouble(p.getProperty("VULNERABILITY_WHILE_CARRYING"));
 		INITIAL_SUGAR_RADIUS = Double.parseDouble(p.getProperty("INITIAL_SUGAR_RADIUS"));
 	
