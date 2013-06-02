@@ -21,6 +21,7 @@ public class SimulationInstance {
 	private final String[] aiArray;
 	private final AILoader aiLoader;
 	private final long seed;
+
 	private final Parameters parameters;
 	
 	/**
@@ -122,5 +123,9 @@ public class SimulationInstance {
 
 	public Parameters getParameters() {
 		return parameters;
+	}
+	
+	public long getSeed() {
+		return seed;
 	}
 }

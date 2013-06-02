@@ -23,5 +23,6 @@ public class Wota {
 		
 		Simulation sim = new Simulation(inst, true);
 		sim.runSimulation();
+		System.out.println("seed: " + inst.getSeed() + "l");
 	}
 }
