@@ -129,10 +129,16 @@ public class Simulation {
 			Keyboard.poll();
 			
 			while (Keyboard.next()) {
-				switch (Keyboard.getEventKey()) {
-				case Keyboard.KEY_ESCAPE:
-					running = false;
-					break;
+				// only consider KeyDown Events
+				if (Keyboard.getEventKeyState() == true) {
+					switch (Keyboard.getEventKey()) {
+					case Keyboard.KEY_ESCAPE:
+						running = false;
+						break;
+					case Keyboard.KEY_S:
+						view.drawSightRange = !view.drawSightRange;
+						break;
+					}
 				}
 			}
 			
