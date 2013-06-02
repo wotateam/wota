@@ -274,7 +274,6 @@ public class GameWorld {
 				&& parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 				   <= parameters.ATTACK_RANGE) {
 			
-			System.out.println("attack!" +  parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) + " <= " + parameters.ATTACK_RANGE );
 			// main damage:
 			AntObject target = targetAnt.antObject;
 			target.takesDamage(actor.getCaste().ATTACK);

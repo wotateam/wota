@@ -31,6 +31,7 @@ public class View {
 	private static final int ANT_RADIUS = 5;
 	private static final double CARRIED_SUGAR_RADIUS = 3;
 	public boolean drawSightRange = false;
+	private static final boolean DRAW_ATTACK = true;
 	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
 	
 	private static final float HILL_ALPHA = 0.65f;
@@ -102,8 +103,16 @@ public class View {
 				}
 				if (drawSightRange) {
 					final float sightRangeAlpha = 0.3f;
-					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha*1.0f/(SAMPLES*SAMPLES));
+					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha/(SAMPLES*SAMPLES));
 					drawCircle(antObject.getPosition(), antObject.getCaste().SIGHT_RANGE, SIGHT_RANGE_CORNERS);
+				}
+				if (DRAW_ATTACK) {
+					AntObject attackTarget = antObject.getAttackTarget();
+					if (attackTarget != null) {
+						final float attackAlpha = 1.0f;
+						glColor4f(1.0f, 0.0f, 0.0f, attackAlpha/(SAMPLES*SAMPLES));
+						drawLine(antObject.getPosition(), attackTarget.getPosition());
+					}
 				}
 			}			
 
@@ -122,6 +131,13 @@ public class View {
 		glTranslated(p.x, p.y, 0);
 	}
 
+	private static void drawLine(Vector start, Vector end) {
+		glBegin(GL_LINES);
+		glVertex2d(start.x, start.y);
+		glVertex2d(end.x, end.y);
+		glEnd();
+	}
+	
 	private static void drawCircle(Vector p, double radius, int numberOfCircleCorners) {
 		glPushMatrix();
 		translate(p);

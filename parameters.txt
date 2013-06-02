@@ -12,7 +12,7 @@ INITIAL_SUGAR_RADIUS = 10
 # Amount of sugar in a new source. 
 INITIAL_SUGAR = 500
 ANT_COST = 50
-STARTING_FOOD = 50
+STARTING_FOOD = 5000
 ANGLE_ERROR_PER_DISTANCE = 0
 TICKS_TO_LIVE = 5000
 # number of ticks picking up sugar takes 
