@@ -167,7 +167,7 @@ public class AntObject extends GameObject{
 		Vector realMovement = moveVector;
 		if (moveVector.length() != 0) {
 			double angleError = parameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
-					* 2 * (SeededRandomizer.nextDouble() - 0.5); 
+					* 2 * (SeededRandomizer.getDouble() - 0.5); 
 			realMovement = Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError);
 		}
 		lastMovementDirection = realMovement.angle();

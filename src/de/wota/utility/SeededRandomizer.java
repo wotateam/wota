@@ -21,14 +21,14 @@ public class SeededRandomizer {
 	 * @param n Upper bound for random number
 	 * @return a random integer number between 0 and n-1
 	 */
-	public static int nextInt(int n) {
+	public static int getInt(int n) {
 		return random.nextInt(n);
 	}
 	
 	/**
 	 * @return Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0
 	 */
-	public static double nextDouble()
+	public static double getDouble()
 	{
 		return random.nextDouble();
 	}

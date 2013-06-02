@@ -25,7 +25,7 @@ public class OrganizedQueenAI extends QueenAI {
 	
 	@Override
 	public void tick() throws Exception {
-		double choice = SeededRandomizer.nextDouble();
+		double choice = SeededRandomizer.getDouble();
 		if (choice < 0.5) {
 			createAnt(Caste.Gatherer, GathererAI.class);
 		} else if (choice >= 0.5) {
@@ -50,7 +50,7 @@ public class OrganizedQueenAI extends QueenAI {
 		}
 		
 		if (sugarDirections.size() > 0 && gathererCloseEnough) {
-			int i = SeededRandomizer.nextInt(sugarDirections.size());
+			int i = SeededRandomizer.getInt(sugarDirections.size());
 			
 			int[] directionRepetitionsLeftPair = sugarDirections.get(i);
 			talk(SUGAR_DIRECTION_START + directionRepetitionsLeftPair[0]);

@@ -48,8 +48,8 @@ public class GameWorld {
 	
 	public void createRandomSugarObject() {
 		SugarObject sugarObject = new SugarObject(parameters.INITIAL_SUGAR,
-												  new Vector(SeededRandomizer.nextDouble()*parameters.SIZE_X,
-														  	 SeededRandomizer.nextDouble()*parameters.SIZE_Y),
+												  new Vector(SeededRandomizer.getDouble()*parameters.SIZE_X,
+														  	 SeededRandomizer.getDouble()*parameters.SIZE_Y),
 												  parameters);
 		addSugarObject(sugarObject);
 	}

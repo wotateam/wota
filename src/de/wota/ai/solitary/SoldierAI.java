@@ -10,7 +10,7 @@ import de.wota.utility.SeededRandomizer;
  *
  */
 public class SoldierAI extends AntAI {
-	int direction = SeededRandomizer.nextInt(360);
+	int direction = SeededRandomizer.getInt(360);
 	@Override
 	public void tick() throws Exception {
 		boolean hasTarget = false;

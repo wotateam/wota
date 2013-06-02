@@ -11,7 +11,7 @@ public class MoveAI extends AntAI {
 			moveToward(visibleSugar.get(0));
 		}
 		else {
-			moveInDirection(SeededRandomizer.nextInt(30));
+			moveInDirection(SeededRandomizer.getInt(30));
 		}
 	}
 	

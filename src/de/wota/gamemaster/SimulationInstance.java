@@ -98,8 +98,8 @@ public class SimulationInstance {
 
 		for (String aiName : aiArray) {
 			GameWorld.Player player = world.new Player(new Vector(
-					SeededRandomizer.nextInt(700),
-					SeededRandomizer.nextInt(700)), aiLoader.loadQueen(aiName));
+					SeededRandomizer.getInt(700),
+					SeededRandomizer.getInt(700)), aiLoader.loadQueen(aiName));
 			world.addPlayer(player);
 		}
 

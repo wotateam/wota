@@ -16,7 +16,7 @@ public class GathererAI extends AntAI {
 	// do not realize this. Maybe this is not worth it when the queen starts talking, too.
 	
 	private boolean havePickedUpSugar = false;
-	private double direction = SeededRandomizer.nextInt(360);
+	private double direction = SeededRandomizer.getInt(360);
 	private boolean wasToldSugarDirection = false;
 	
 	@Override
@@ -55,7 +55,7 @@ public class GathererAI extends AntAI {
 			if (wasToldSugarDirection) {
 				moveInDirection(direction);
 			} else {
-				direction = SeededRandomizer.nextInt(360);
+				direction = SeededRandomizer.getInt(360);
 				wasToldSugarDirection = true; // told myself where to go
 				moveInDirection(direction);
 			}

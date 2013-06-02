@@ -21,7 +21,7 @@ public class GathererAI extends AntAI {
 		// visibleSugar
 		
 		if (lastDir == 0)
-			lastDir = SeededRandomizer.nextInt(360);
+			lastDir = SeededRandomizer.getInt(360);
 		
 		if (self.sugarCarry == 0) {
 			if (visibleSugar.size() == 0)
