@@ -270,7 +270,6 @@ public class GameWorld {
 
 		// Attack
 		Ant targetAnt = action.attackTarget;
-		actor.isAttacking = false;
 		if (targetAnt != null) {
 			if (parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
 					<= parameters.ATTACK_RANGE) {
@@ -278,7 +277,7 @@ public class GameWorld {
 				// main damage:
 				AntObject target = targetAnt.antObject;
 				target.takesDamage(actor.getCaste().ATTACK);
-				actor.isAttacking = true;
+				actor.setAttackTarget(target);
 				
 				// collateral damage:
 				for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
@@ -287,6 +286,9 @@ public class GameWorld {
 					}
 				}
 			}
+		}
+		else {
+			actor.setAttackTarget(null);
 		}
 
 		// Drop sugar at the hill and reset ticksToLive if inside the hill.
@@ -317,10 +319,10 @@ public class GameWorld {
 		handleMessages(actor, action);
 	}
 	
-	private void executeMovement(AntObject actor) {
+	private static void executeMovement(AntObject actor) {
 		Action action = actor.getAction();
 
-		if (actor.isAttacking) {
+		if (actor.getAttackTarget() != null) {
 			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_ATTACKING));
 		} else if (actor.getSugarCarry() > 0) {
 			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_CARRYING_SUGAR));

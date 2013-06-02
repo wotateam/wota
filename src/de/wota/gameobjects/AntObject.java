@@ -32,7 +32,8 @@ public class AntObject extends GameObject{
 	private Action action;
 	private final Caste caste;
 	public final GameWorld.Player player;
-	boolean isAttacking = false;
+	private boolean isAttacking = false;
+	private AntObject attackTarget = null;
 	
 	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player, Parameters parameters) {
 		super(position, parameters);
@@ -73,6 +74,25 @@ public class AntObject extends GameObject{
 
 	public double getHealth() {
 		return health;
+	}
+	
+	public AntObject getAttackTarget() {
+		if(isAttacking) {
+			return attackTarget;
+		}
+		else
+			return null;
+	}
+	
+	void setAttackTarget(AntObject target) {
+		if (target == null) {
+			isAttacking = false;
+			attackTarget = null;
+		}
+		else {
+			isAttacking = true;
+			attackTarget = target;
+		}
 	}
 
 	public double getSpeed() {
