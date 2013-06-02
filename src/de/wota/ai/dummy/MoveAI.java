@@ -5,14 +5,9 @@ import de.wota.utility.SeededRandomizer;
 
 public class MoveAI extends AntAI {
 	
+	int i=SeededRandomizer.getInt(360);
 	@Override
 	public void tick() {
-		if (visibleSugar.size() != 0) {
-			moveToward(visibleSugar.get(0));
-		}
-		else {
-			moveInDirection(SeededRandomizer.getInt(30));
-		}
+		moveInDirection(i);
 	}
-	
 }

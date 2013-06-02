@@ -141,7 +141,7 @@ public abstract class AntAI {
 	 * @param direction measured in degrees (0 = East, 90 = North, 180 = West, 270 = South)
 	 */
 	protected void moveInDirection(double direction) {
-		moveInDirection(direction, parameters.MAX_MOVEMENT_DISTANCE);
+		moveInDirection(direction, parameters.SIZE_X/2);
 	}
 	
 	/** Move in direction with specified distance
@@ -157,7 +157,7 @@ public abstract class AntAI {
 	 * @param target can be anything like Ant, Sugar, ...
 	 */
 	protected void moveToward(Snapshot target) {
-		moveToward(target, parameters.MAX_MOVEMENT_DISTANCE);
+		moveToward(target, parameters.SIZE_X/2);
 	}
 	
 	/** Move in direction of target but only the specified distance.
@@ -178,7 +178,7 @@ public abstract class AntAI {
 	}
 
 	private void uncheckedMoveToward(Snapshot target) {
-		uncheckedMoveToward(target, parameters.MAX_MOVEMENT_DISTANCE);
+		uncheckedMoveToward(target, parameters.SIZE_X);
 	}
 	
 	private void uncheckedMoveToward(Snapshot target, double distance) {

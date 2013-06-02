@@ -18,7 +18,6 @@ public class Parameters {
 	public final int INITIAL_SUGAR;
 	public final int ANT_COST;
 	public final int STARTING_FOOD;
-	public final double MAX_MOVEMENT_DISTANCE;
 	public final double ANGLE_ERROR_PER_DISTANCE;
 	public final int TICKS_TO_LIVE;
 	public final int TICKS_SUGAR_PICKUP;
@@ -37,7 +36,6 @@ public class Parameters {
 		ANT_COST = Integer.parseInt(p.getProperty("ANT_COST"));
 		STARTING_FOOD = Integer.parseInt(p.getProperty("STARTING_FOOD"));
 		
-		MAX_MOVEMENT_DISTANCE = Double.parseDouble(p.getProperty("MAX_MOVEMENT_DISTANCE"));
 		ANGLE_ERROR_PER_DISTANCE  = Double.parseDouble(p.getProperty("ANGLE_ERROR_PER_DISTANCE"));
 		
 		TICKS_TO_LIVE = Integer.parseInt(p.getProperty("TICKS_TO_LIVE"));

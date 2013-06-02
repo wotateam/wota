@@ -270,22 +270,23 @@ public class GameWorld {
 
 		// Attack
 		Ant targetAnt = action.attackTarget;
-		if (targetAnt != null) {
-			if (parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
-					<= parameters.ATTACK_RANGE) {
-				
-				// main damage:
-				AntObject target = targetAnt.antObject;
-				target.takesDamage(actor.getCaste().ATTACK);
-				actor.setAttackTarget(target);
-				
-				// collateral damage:
-				for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
-					if (closeAntObject != target && closeAntObject.player != actor.player) {
-						closeAntObject.takesDamage(actor.getCaste().ATTACK*parameters.COLLATERAL_DAMAGE_FACTOR);
-					}
+		if (targetAnt != null 
+				&& parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) 
+				   <= parameters.ATTACK_RANGE) {
+			
+			System.out.println("attack!" +  parameters.distance(targetAnt.antObject.getPosition(), actor.getPosition()) + " <= " + parameters.ATTACK_RANGE );
+			// main damage:
+			AntObject target = targetAnt.antObject;
+			target.takesDamage(actor.getCaste().ATTACK);
+			actor.setAttackTarget(target);
+			
+			// collateral damage:
+			for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
+				if (closeAntObject != target && closeAntObject.player != actor.player) {
+					closeAntObject.takesDamage(actor.getCaste().ATTACK*parameters.COLLATERAL_DAMAGE_FACTOR);
 				}
 			}
+			
 		}
 		else {
 			actor.setAttackTarget(null);
