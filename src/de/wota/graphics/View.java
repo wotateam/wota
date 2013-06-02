@@ -110,7 +110,7 @@ public class View {
 					AntObject attackTarget = antObject.getAttackTarget();
 					if (attackTarget != null) {
 						final float attackAlpha = 1.0f;
-						glColor4f(1.0f, 0.0f, 0.0f, attackAlpha/(SAMPLES*SAMPLES));
+						glColor4f(colorComponents[0], colorComponents[1], colorComponents[2], attackAlpha/(SAMPLES*SAMPLES));
 						drawLine(antObject.getPosition(), attackTarget.getPosition());
 					}
 				}
