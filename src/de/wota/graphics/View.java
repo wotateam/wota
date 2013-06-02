@@ -29,7 +29,7 @@ public class View {
 	private static final int SIGHT_RANGE_CORNERS = 14;
 	
 	private static final int ANT_RADIUS = 5;
-	private static final double CARRIED_SUGAR_RADIUS = 3;
+	private static final double CARRIED_SUGAR_RADIUS = 2;
 	public boolean drawSightRange = false;
 	private static final boolean DRAW_ATTACK = true;
 	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
