@@ -101,7 +101,8 @@ public class View {
 					fillCircle(antObject.getPosition(), CARRIED_SUGAR_RADIUS, ANT_CIRCLE_CORNERS);
 				}
 				if (drawSightRange) {
-					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
+					final float sightRangeAlpha = 0.3f;
+					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha*1.0f/(SAMPLES*SAMPLES));
 					drawCircle(antObject.getPosition(), antObject.getCaste().SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
 			}			
