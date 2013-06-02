@@ -44,6 +44,7 @@ public class View {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
 		glBlendEquation(GL_FUNC_ADD);
+		glClearColor(0, 0, 0, 1);
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
