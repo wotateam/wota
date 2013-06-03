@@ -12,14 +12,22 @@ public class Parameters {
 	public final double SIZE_Y;
 	public final double HILL_RADIUS;
 	public final double ATTACK_RANGE;
+	// Ants carrying sugar take this many times the normal damage when under attack:
 	public final double VULNERABILITY_WHILE_CARRYING;
+	// Radius of a new sugar source:
 	public final double INITIAL_SUGAR_RADIUS;
+	// Amount of sugar in a new sugar source:
 	public final int INITIAL_SUGAR;
+	// Cost to produce an ant:
 	public final int ANT_COST;
+	// Amount of food available at each hill when the game starts:
 	public final int STARTING_FOOD;
+	// An ant's moving direction may differ this much from the intended direction:
 	public final double ANGLE_ERROR_PER_DISTANCE;
 	public final int TICKS_TO_LIVE;
+	// Number of ticks it takes to pick up sugar: 
 	public final int TICKS_SUGAR_PICKUP;
+	// Number of sugar sources:
 	public final int N_SUGAR_SOURCES;
 	
 	public Parameters(Properties p) {
