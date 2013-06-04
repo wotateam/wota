@@ -76,9 +76,10 @@ public class Simulation {
 			}
 	
 			view.setup();
+
+			createKeyboard();
 		}
 	
-		createKeyboard();
 		
 		running = false;
 		tickCount = 0;
@@ -88,6 +89,7 @@ public class Simulation {
 	 * Advance the game world by one tick and check for victory.
 	 */
 	private void tick() {
+		tickCount++;
 		gameWorld.tick();
 
 		// check for victory condition if more than 100 ticks have passed
@@ -123,41 +125,45 @@ public class Simulation {
 		
 		// events for graphics update and tick are created uniformly. Call them with priority on graphics
 		while (running) { 
-
-			// check for keyboard input, buffered
-			// 
-			Keyboard.poll();
-			
-			while (Keyboard.next()) {
-				// only consider KeyDown Events
-				if (Keyboard.getEventKeyState() == true) {
-					switch (Keyboard.getEventKey()) {
-					case Keyboard.KEY_ESCAPE:
-						running = false;
-						break;
-					case Keyboard.KEY_S:
-						view.drawSightRange = !view.drawSightRange;
-						break;
+			if (!isGraphical) {
+				tick();
+				measureTickCount++;
+			} else {
+				
+				// check for keyboard input, buffered
+				// 
+				Keyboard.poll();
+				
+				while (Keyboard.next()) {
+					// only consider KeyDown Events
+					if (Keyboard.getEventKeyState() == true) {
+						switch (Keyboard.getEventKey()) {
+						case Keyboard.KEY_ESCAPE:
+							running = false;
+							break;
+						case Keyboard.KEY_S:
+							view.drawSightRange = !view.drawSightRange;
+							break;
+						}
 					}
 				}
-			}
-			
-			// Update Graphics if event for graphic update is swept.
-			if (isGraphical && frameCount <= (System.nanoTime() - startTime) / 1.e9 * FRAMES_PER_SECOND) {
-				frameCount++;
-				measureFrameCount++;
-				view.render();
-				Display.update();
-				if (running) {
-					running = !Display.isCloseRequested();
+				
+				// Update Graphics if event for graphic update is swept.
+				if (isGraphical && frameCount <= (System.nanoTime() - startTime) / 1.e9 * FRAMES_PER_SECOND) {
+					frameCount++;
+					measureFrameCount++;
+					view.render();
+					Display.update();
+					if (running) {
+						running = !Display.isCloseRequested();
+					}
 				}
-			}
-			
-			// now update simulation if tick event 
-			if ((double)tickCount < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
-				tick();
-				tickCount++;
-				measureTickCount++;
+				
+				// now update simulation if tick event 
+				if ((double)tickCount < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
+					tick();
+					measureTickCount++;
+				}
 			}
 
 			// measurements of FPS / TPS 
