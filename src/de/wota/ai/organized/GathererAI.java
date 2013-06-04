@@ -45,7 +45,7 @@ public class GathererAI extends AntAI {
 			Sugar sugar = closest(visibleSugar);
 			if (vectorTo(sugar).length() < sugar.radius) {
 				pickUpSugar(sugar);
-				direction = 180 + getHomeDirection();
+				direction = 180 + vectorToHome().angle();
 				havePickedUpSugar = true;
 				wasToldSugarDirection = false; // next time, the sugar might not be around
 			} else {

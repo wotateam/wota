@@ -192,8 +192,8 @@ public abstract class AntAI {
 		uncheckedMoveToward(antObject.player.hillObject.getHill());
 	}
 	
-	protected double getHomeDirection() {
-		return parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition()).angle();
+	protected Vector vectorToHome() {
+		return parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition());
 	}
 	
 	/** returns true if target is in view range. */
