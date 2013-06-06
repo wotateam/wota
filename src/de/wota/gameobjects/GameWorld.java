@@ -28,6 +28,8 @@ public class GameWorld {
 	
 	private final Parameters parameters;
 	
+	private int tickCount = 0;
+	
 	public GameWorld(Parameters parameters) {
 		this.parameters = parameters;
 		spacePartitioning = new SpacePartitioning(maximumSight(), parameters);
@@ -113,6 +115,7 @@ public class GameWorld {
 	}
 	
 	public void tick() {		
+		tickCount++;
 		notifyLoggers(AbstractLogger.LogEventType.TICK);
 		
 		// can be removed as soon as SpacePartitioning is well tested!
@@ -337,9 +340,14 @@ public class GameWorld {
 		}
 	}
 	
+	/** check the victory condition after this amount of ticks */
+	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 100;
+	
 	/** tests if victory condition is fulfilled
 	 * @return is the victory condition fulfilled or can nobody win anymore? */
 	public boolean checkVictoryCondition() {	
+		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE)
+			return false;
 		int nPossibleWinners = players.size();
 		for (Player player : players) {
 			switch (LeftoverParameters.VICTORY_CONDITION) {
@@ -415,5 +423,12 @@ public class GameWorld {
 	
 	public List<Player> getPlayers() {
 		return Collections.unmodifiableList(players); 
+	}
+
+	/**
+	 * @return number of passed ticks
+	 */
+	public int tickCount() {
+		return tickCount;
 	}
 }

@@ -44,7 +44,6 @@ public class Simulation {
 	private long startTime; 
 	
 	private boolean running;
-	private int tickCount;
 	private int frameCount;
 
 	/*
@@ -82,26 +81,23 @@ public class Simulation {
 	
 		
 		running = false;
-		tickCount = 0;
 	}
 
 	/**
 	 * Advance the game world by one tick and check for victory.
 	 */
 	private void tick() {
-		tickCount++;
 		gameWorld.tick();
 
-		// check for victory condition if more than 100 ticks have passed
-		if (tickCount > 100 && gameWorld.checkVictoryCondition()) {
+		if (gameWorld.checkVictoryCondition()) {
 			GameWorld.Player winner = gameWorld.getWinner();
 			if (winner != null) {
 				System.out.println(winner.name + " has won the game in tick "
-						+ tickCount);
+						+ gameWorld.tickCount());
 				running = false;
 			}
 			else {
-				System.out.println("draw! nobody has won the game after " + tickCount + " ticks.");
+				System.out.println("draw! nobody has won the game after " + gameWorld.tickCount() + " ticks.");
 				running = false;
 			}
 		}
@@ -160,7 +156,7 @@ public class Simulation {
 				}
 				
 				// now update simulation if tick event 
-				if ((double)tickCount < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
+				if ((double)gameWorld.tickCount() < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
 					tick();
 					measureTickCount++;
 				}
