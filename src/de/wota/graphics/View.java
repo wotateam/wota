@@ -98,44 +98,55 @@ public class View {
 			
 			// Ants
 			for (AntObject antObject : player.antObjects) {
-				glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],1.0f/(SAMPLES*SAMPLES));
+				setColor(colorComponents[0], colorComponents[1], colorComponents[2], 1.0f);
 				fillCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
 				if (antObject.isCarrying()) {
-					glColor4f(1, 1, 1, 1.0f/(SAMPLES*SAMPLES));
+					setColor(1.0f, 1.0f, 1.0f, 1.0f);
 					fillCircle(antObject.getPosition(), CARRIED_SUGAR_RADIUS, ANT_CIRCLE_CORNERS);
 				}
 				if (drawSightRange) {
 					final float sightRangeAlpha = 0.3f;
-					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha/(SAMPLES*SAMPLES));
+					setColor(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha);
 					drawCircle(antObject.getPosition(), antObject.getCaste().SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
 				if (drawMessages)
 					if (antObject.getAction() != null && antObject.getAction().messageObject != null) {
 					final float messageAlpha = 1.0f;
-					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],messageAlpha/(SAMPLES*SAMPLES));
+					setColor(colorComponents[0], colorComponents[1], colorComponents[2],messageAlpha);
 					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 				}
 				if (DRAW_ATTACK) {
 					AntObject attackTarget = antObject.getAttackTarget();
 					if (attackTarget != null) {
 						final float attackAlpha = 1.0f;
-						glColor4f(colorComponents[0], colorComponents[1], colorComponents[2], attackAlpha/(SAMPLES*SAMPLES));
+						setColor(colorComponents[0], colorComponents[1], colorComponents[2], attackAlpha);
 						drawLine(antObject.getPosition(), attackTarget.getPosition());
 					}
 				}
 			}			
 
 			// Hill
-			glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],HILL_ALPHA * 1.0f/(SAMPLES*SAMPLES));
+			setColor(colorComponents[0], colorComponents[1], colorComponents[2],HILL_ALPHA * 1.0f);
 			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 		// Sugar Sources
-		glColor4f(1.f, 1.f, 1.f,1.0f/(SAMPLES*SAMPLES));
+		setColor(1.f, 1.f, 1.f,1.0f);
 		for (SugarObject sugarObject : world.getSugarObjects()) {
 			fillCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
 		}
 	}
 
+	/** 
+	 * Sets the Color. Sampling is considered inside this method. You don't need to care.
+	 * @param red between 0 and 1
+	 * @param green between 0 and 1
+	 * @param blue between 0 and 1
+	 * @param alpha between 0 and 1
+	 */
+	private static void setColor(float red, float green, float blue, float alpha) {
+		glColor4f(red, green, blue, alpha/(SAMPLES*SAMPLES));
+	}
+	
 	private static void translate(Vector p) {
 		glTranslated(p.x, p.y, 0);
 	}
