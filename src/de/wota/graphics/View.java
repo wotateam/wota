@@ -120,11 +120,11 @@ public class View {
 					if (attackTarget != null) {
 						final float attackAlpha = 1.0f;
 						setColor(colorComponents[0], colorComponents[1], colorComponents[2], attackAlpha);
-						drawLine(antObject.getPosition(), attackTarget.getPosition());
+						drawLineOnTorus(antObject.getPosition(), attackTarget.getPosition());
 					}
 				}
-			}			
-
+			}		
+			
 			// Hill
 			setColor(colorComponents[0], colorComponents[1], colorComponents[2],HILL_ALPHA * 1.0f);
 			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
@@ -150,12 +150,43 @@ public class View {
 	private static void translate(Vector p) {
 		glTranslated(p.x, p.y, 0);
 	}
-
+	
+	/** 
+	 * draws a straight line between start and end.
+	 * Caution! You might want to use drawLineOnTorus()
+	 */
 	private static void drawLine(Vector start, Vector end) {
 		glBegin(GL_LINES);
 		glVertex2d(start.x, start.y);
 		glVertex2d(end.x, end.y);
 		glEnd();
+	}
+	
+	/**
+	 * draws the shortest path between start and end on the torus.
+	 */
+	private void drawLineOnTorus(Vector start, Vector end) {
+		if (Math.abs(start.x - end.x) > parameters.SIZE_X/2.) {
+			if (start.x > end.x) {
+				drawLineOnTorus(end, start);
+			}
+			else {
+			drawLineOnTorus(new Vector(start.x + parameters.SIZE_X, start.y), end);
+			drawLineOnTorus(start, new Vector(end.x - parameters.SIZE_X, end.y));
+			}
+		}
+		else if (Math.abs(start.y - end.y) > parameters.SIZE_Y/2.) {
+			if (start.y > end.y) {
+				drawLineOnTorus(end, start);
+			}
+			else {
+			drawLineOnTorus(new Vector(start.x, start.y + parameters.SIZE_Y), end);
+			drawLineOnTorus(start, new Vector(end.x, end.y - parameters.SIZE_Y));
+			}
+		}
+		else {
+			drawLine(start, end);
+		}
 	}
 	
 	private static void drawCircle(Vector p, double radius, int numberOfCircleCorners) {
