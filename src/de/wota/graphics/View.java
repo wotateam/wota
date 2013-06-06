@@ -26,11 +26,14 @@ public class View {
 	private static final int HILL_CIRCLE_CORNERS = 50;
 	private static final int SUGAR_CIRCLE_CORNERS = 24;
 	private static final int ANT_CIRCLE_CORNERS = 6;
-	private static final int SIGHT_RANGE_CORNERS = 14;
+	private static final int SIGHT_RANGE_CORNERS = 20;
+	private static final int MESSAGE_CORNERS = 8;
 	
 	private static final int ANT_RADIUS = 5;
+	private static final int MESSAGE_RADIUS = 10;
 	private static final double CARRIED_SUGAR_RADIUS = 2;
 	public boolean drawSightRange = false;
+	public boolean drawMessages = false;
 	private static final boolean DRAW_ATTACK = true;
 	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
 	
@@ -105,6 +108,12 @@ public class View {
 					final float sightRangeAlpha = 0.3f;
 					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha/(SAMPLES*SAMPLES));
 					drawCircle(antObject.getPosition(), antObject.getCaste().SIGHT_RANGE, SIGHT_RANGE_CORNERS);
+				}
+				if (drawMessages)
+					if (antObject.getAction() != null && antObject.getAction().messageObject != null) {
+					final float messageAlpha = 1.0f;
+					glColor4f(colorComponents[0], colorComponents[1], colorComponents[2],messageAlpha/(SAMPLES*SAMPLES));
+					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 				}
 				if (DRAW_ATTACK) {
 					AntObject attackTarget = antObject.getAttackTarget();

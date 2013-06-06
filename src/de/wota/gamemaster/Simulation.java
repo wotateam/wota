@@ -140,8 +140,17 @@ public class Simulation {
 						case Keyboard.KEY_S:
 							view.drawSightRange = !view.drawSightRange;
 							break;
+						case Keyboard.KEY_M:
+							view.drawMessages = !view.drawMessages;
+							break;
 						}
 					}
+				}
+				
+				// now update simulation if tick event 
+				if ((double)gameWorld.tickCount() < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
+					tick();
+					measureTickCount++;
 				}
 				
 				// Update Graphics if event for graphic update is swept.
@@ -155,11 +164,6 @@ public class Simulation {
 					}
 				}
 				
-				// now update simulation if tick event 
-				if ((double)gameWorld.tickCount() < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
-					tick();
-					measureTickCount++;
-				}
 			}
 
 			// measurements of FPS / TPS 
