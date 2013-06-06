@@ -19,7 +19,9 @@ https://github.com/wotateam/wota/archive/release_0.1.zip
 6.  Copy src/de/wota/ai/template/TemplateAI.java, TemplateQueenAI.java to this folder and rename them
 7.  Write your ai in these files. Change the package name inside the files to de.wota.ai.FOLDER_NAME
 8.  Add your ais to the game by editing settings.txt
-9.  Have fun! If any questions/comments/suggestions come up, don't hesitate and contact us!
+9.  Further information can be found inside the template classes as well as in Tutorial.txt. 
+	Keyboard hotkeys are listed in https://github.com/wotateam/wota/wiki/Keyboard-Hotkeys
+10. Have fun! If any questions/comments/suggestions come up, don't hesitate and contact us!
 
 ## Information for Developers
 we are using lwjgl for our graphics:
