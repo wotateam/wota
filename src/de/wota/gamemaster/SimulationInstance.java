@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
-import de.wota.gameobjects.GameWorld;
-import de.wota.gameobjects.GameWorld.Player;
-import de.wota.gameobjects.Parameters;
-import de.wota.gameobjects.SugarObject;
+import de.wota.gameobjects.*;
 import de.wota.utility.SeededRandomizer;
 import de.wota.utility.Vector;
 
@@ -18,8 +15,9 @@ import de.wota.utility.Vector;
  * Contains all the information needed for one round of simulation.
  */
 public class SimulationInstance {
-	private final String[] aiArray;
+	private final String[] aiNames;
 	private final AILoader aiLoader;
+	private GameWorld gameWorld;
 	private final long seed;
 
 	private final Parameters parameters;
@@ -31,7 +29,7 @@ public class SimulationInstance {
 	 * Participating ais are read from the file "settings.txt"
 	 * 
 	 * Game parameters are read from "parameters.txt"
-	 * 
+
 	 * @param seed
 	 *            initial seed of the RNG
 	 */
@@ -40,38 +38,10 @@ public class SimulationInstance {
 
 		aiLoader = new AILoader("./");
 		
-		Properties propertiesForSettings = new Properties();
-		try {
-			propertiesForSettings.load(new FileReader("settings.txt"));
-		} catch (FileNotFoundException e) {
-			System.out.println("settings.txt not found.");
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		this.aiNames = readAIs("settings.txt");
+		parameters = readParameters("parameters.txt");
 		
-		String aiString = propertiesForSettings.getProperty("aiString");
-		String[] ais = aiString.split(",");
-		for (int i=0; i<ais.length; i++) {
-			ais[i] = ais[i].trim();
-			System.out.println("AI #" + (i+1) + " " + ais[i] );
-		}
-		this.aiArray = ais;
-		
-		Properties propertiesForParameters = new Properties();
-		try {
-			propertiesForParameters.load(new FileReader("parameters.txt"));
-		} catch (FileNotFoundException e) {
-			System.out.println("parameters.txt not found.");
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		parameters = new Parameters(propertiesForParameters);
+		constructGameWorld();
 	}
 	
 	/**
@@ -87,38 +57,126 @@ public class SimulationInstance {
 	}
 
 	/**
+	 * creates a Simulation Instance for testing purposes. the
+	 * QueenAI is a dummy queen doing nothing for both players and
+	 * all Ants are created from the specified AntAI.
+	 * 
+	 * @param positionFirstPlayer position of the first players hill
+	 * @param positionsFirstAI list of positions of the ants of the first ai
+	 * @param firstAntAI AntAI of all Ants of the first player
+	 */
+	public static SimulationInstance createTestSimulationInstance(Vector positionFirstPlayer,
+																  Vector positionSecondPlayer,
+																  List<Vector> positionsFirstAI, 
+																  List<Vector> positionsSecondAI,
+																  Class <? extends AntAI> firstAntAI,
+																  Class <? extends AntAI> secondAntAI) {
+		SimulationInstance simulationInstance = new SimulationInstance(new Random().nextLong());
+		
+		// overrides the first gameWorld 
+		simulationInstance.constructTestGameWorld(positionFirstPlayer, positionSecondPlayer,
+								  positionsFirstAI, positionsSecondAI, firstAntAI, secondAntAI);
+		return simulationInstance;
+	}
+
+	/**
+	 * Read AI names from file where ai names are specified after "aiString"
+	 * @param filename name of the file. Standard is: setting.txt
+	 * @return String array with ai names
+	 */
+	private static String[] readAIs(String filename) {
+		Properties propertiesForSettings = new Properties();
+		try {
+			propertiesForSettings.load(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println(" while trying to read ai names: " + filename + " not found.");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		String aiString = propertiesForSettings.getProperty("aiString");
+		String[] ais = aiString.split(",");
+		for (int i=0; i<ais.length; i++) {
+			ais[i] = ais[i].trim();
+			System.out.println("AI #" + (i+1) + " " + ais[i] );
+		}
+		return ais;
+	}
+	
+	/**
+	 * Read Parameters from file
+	 * @param filename name of the file, standard is parameters.txt
+	 * @return freshly generated Parameters instance
+	 */
+	private static Parameters readParameters(String filename) {
+		Properties propertiesForParameters = new Properties();
+		try {
+			propertiesForParameters.load(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println("While trying to read parameters: " + filename + " not found.");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return new Parameters(propertiesForParameters);
+	}
+
+	/**
 	 * Deterministically constructs and populates a GameWorld instance with
 	 * hills and resources from the given seed.
-	 * 
-	 * @return a GameWorld instance to start the simulation with
 	 */
-	public GameWorld constructGameWorld() {
-		GameWorld world = new GameWorld(parameters);
+	private void constructGameWorld() {
+		gameWorld = new GameWorld(parameters);
 
 		SeededRandomizer.resetSeed(seed);
 
-		for (String aiName : aiArray) {
-			GameWorld.Player player = world.new Player(new Vector(
+		for (String aiName : aiNames) {
+			GameWorld.Player player = gameWorld.new Player(new Vector(
 					SeededRandomizer.getInt(700),
 					SeededRandomizer.getInt(700)), aiLoader.loadQueen(aiName));
-			world.addPlayer(player);
+			gameWorld.addPlayer(player);
 		}
 
-		// add sugar for test usage
 		for (int i = 0; i < parameters.N_SUGAR_SOURCES; i++) {
-			world.createRandomSugarObject();
+			gameWorld.createRandomSugarObject();
 		}
 		/*
 		// add queens
 		for (Player player : world.getPlayers()) {
 			player.
 		}*/
-
-		return world;
+	}
+	
+	private void constructTestGameWorld(Vector posFirstPlayer,
+										Vector posSecondPlayer,
+										List<Vector> positionsFirstAI, 
+										List<Vector> positionsSecondAI,
+										Class <? extends AntAI> firstAntAI,
+										Class <? extends AntAI> secondAntAI) {
+		gameWorld = new GameWorld(parameters);
+		
+		SeededRandomizer.resetSeed(seed);
+		
+		GameWorld.Player firstPlayer = gameWorld.new Player(posFirstPlayer, aiLoader.loadQueen("dummy.DoNothingQueenAI"));
+		GameWorld.Player secondPlayer = gameWorld.new Player(posSecondPlayer, aiLoader.loadQueen("dummy.DoNothingQueenAI"));
+		gameWorld.addPlayer(firstPlayer);
+		gameWorld.addPlayer(secondPlayer);
+		
+		for (Vector position : positionsFirstAI) {
+			firstPlayer.addAntObject(new AntObject(position, Caste.Gatherer, firstAntAI, firstPlayer, parameters));
+		}
+		for (Vector position : positionsSecondAI) {
+			secondPlayer.addAntObject(new AntObject(position, Caste.Gatherer, secondAntAI, secondPlayer, parameters));
+		}
 	}
 
 	public int getNumPlayers() {
-		return aiArray.length;
+		return aiNames.length;
 	}
 
 	public Parameters getParameters() {
@@ -127,5 +185,9 @@ public class SimulationInstance {
 	
 	public long getSeed() {
 		return seed;
+	}
+
+	public GameWorld getGameWorld() {
+		return gameWorld;
 	}
 }

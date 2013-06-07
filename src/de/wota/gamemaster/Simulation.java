@@ -60,7 +60,7 @@ public class Simulation {
 		N_PLAYER = inst.getNumPlayers();
 		this.isGraphical = isGraphical;
 	
-		gameWorld = inst.constructGameWorld();
+		gameWorld = inst.getGameWorld();
 	
 		gameWorld.registerLogger(new TestLogger());
 			
