@@ -16,7 +16,10 @@ https://github.com/wotateam/wota/archive/release_0.1.zip
 4.  Run as java application. The main is located in src/de/wota/Wota.java
 
 5.  Write your own ai! Create a folder with the name of your ai in src/de/wota/ai/
-6.  Copy src/de/wota/ai/template/TemplateAI.java, TemplateQueenAI.java to this folder and rename them
+6.  Copy src/de/wota/ai/template/TemplateAI.java, QueenAI.java to this folder. 
+	
+	You must *not* rename QueenAI, you may rename TemplateAI and probably want to do so.
+
 7.  Write your ai in these files. Change the package name inside the files to de.wota.ai.FOLDER_NAME
 8.  Add your ais to the game by editing settings.txt
 9.  Further information can be found inside the template classes as well as in Tutorial.txt. 

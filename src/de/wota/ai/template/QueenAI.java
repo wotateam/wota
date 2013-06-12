@@ -4,12 +4,11 @@
 package de.wota.ai.template;
 
 import de.wota.gameobjects.Caste;
-import de.wota.gameobjects.QueenAI;
 
 /**
  *
  */
-public class TemplateQueenAI extends QueenAI {
+public class QueenAI extends de.wota.gameobjects.QueenAI {
 
 	/*
 	 * your Queen is not able to move but can

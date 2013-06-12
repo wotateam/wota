@@ -162,8 +162,8 @@ public class SimulationInstance {
 		
 		SeededRandomizer.resetSeed(seed);
 		
-		GameWorld.Player firstPlayer = gameWorld.new Player(posFirstPlayer, aiLoader.loadQueen("dummy.DoNothingQueenAI"));
-		GameWorld.Player secondPlayer = gameWorld.new Player(posSecondPlayer, aiLoader.loadQueen("dummy.DoNothingQueenAI"));
+		GameWorld.Player firstPlayer = gameWorld.new Player(posFirstPlayer, aiLoader.loadQueen("donothing"));
+		GameWorld.Player secondPlayer = gameWorld.new Player(posSecondPlayer, aiLoader.loadQueen("donothing"));
 		gameWorld.addPlayer(firstPlayer);
 		gameWorld.addPlayer(secondPlayer);
 		

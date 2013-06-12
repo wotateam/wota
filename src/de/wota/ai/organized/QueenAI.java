@@ -12,10 +12,9 @@ import de.wota.ai.solitary.SoldierAI;
 import de.wota.gameobjects.Ant;
 import de.wota.gameobjects.Caste;
 import de.wota.gameobjects.Message;
-import de.wota.gameobjects.QueenAI;
 import de.wota.utility.SeededRandomizer;
 
-public class OrganizedQueenAI extends QueenAI {
+public class QueenAI extends de.wota.gameobjects.QueenAI {
 	public static final int SUGAR_DIRECTION_START = 1000;
 	public static final int ENEMY_HILL_START = 2000;
 	

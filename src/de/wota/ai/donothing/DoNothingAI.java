@@ -1,4 +1,4 @@
-package de.wota.ai.dummy;
+package de.wota.ai.donothing;
 
 import de.wota.gameobjects.AntAI;
 

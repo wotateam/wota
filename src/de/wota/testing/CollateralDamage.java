@@ -33,7 +33,7 @@ public class CollateralDamage {
 															   hillPositionPlayer2,
 															   positions1,
 															   positions2,
-															   de.wota.ai.dummy.DoNothingAI.class,
+															   de.wota.ai.donothing.DoNothingAI.class,
 															   de.wota.testing.SitAndHitAI.class);
 		
 		Simulation sim = new Simulation(inst, true);

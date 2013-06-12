@@ -16,8 +16,9 @@ import de.wota.gameobjects.QueenAI;
 public class AILoader {
 	private String searchpath;
 
-	private final String AI_PACKAGE = "de.wota.ai.";
-
+	private final String AI_PACKAGE = "de.wota.ai";
+	private final String QUEEN_AI_CLASS_NAME = "QueenAI";
+	
 	/**
 	 * Creates a new AILoader using the directory of the executable as
 	 * searchpath.
@@ -43,23 +44,24 @@ public class AILoader {
 	// FIXME: This is ugly, but I don't know a way around it
 	/**
 	 * Dynamically loads the class object representing the given QueenAI
-	 * implementation. The class is assumed to be located in the "ai" package.
+	 * implementation. The class is assumed to be "QueenAI" located in the
+	 * in the specified subpackage of AI_PACKAGE.
 	 * 
-	 * @param className
+	 * @param aiName
 	 *            simple name of the class to be loaded (without package
 	 *            qualifier)
 	 * @return Class object representing an implementation of QueenAI
 	 */
 	@SuppressWarnings("unchecked")
-	public Class<? extends QueenAI> loadQueen(String className) {
-		File queenFile = new File(className + ".jar");
+	public Class<? extends QueenAI> loadQueen(String aiName) {
+		File queenFile = new File(aiName + ".jar");
 		File searchFile = new File(searchpath);
 		try {
 			ClassLoader queenLoader = URLClassLoader.newInstance(new URL[] {
 					queenFile.toURI().toURL(), searchFile.toURI().toURL() });
 
 			Class<?> queenAIClass = queenLoader.loadClass(AI_PACKAGE
-					+ className);
+					+ "." + aiName + "." + QUEEN_AI_CLASS_NAME);
 
 			// Check whether loaded class is a QueenAI
 			if (!QueenAI.class.isAssignableFrom(queenAIClass)) {

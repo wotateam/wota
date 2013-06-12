@@ -24,10 +24,10 @@ public class GathererAI extends AntAI {
 		if (audibleMessages.size() > 0) {
 			Message message = audibleMessages.get(0);
 			if (message.sender.caste == Caste.Queen && 
-					message.content >= OrganizedQueenAI.SUGAR_DIRECTION_START &&
-					message.content < OrganizedQueenAI.SUGAR_DIRECTION_START + 360 &&
+					message.content >= QueenAI.SUGAR_DIRECTION_START &&
+					message.content < QueenAI.SUGAR_DIRECTION_START + 360 &&
 					! wasToldSugarDirection) {
-				direction = message.content - OrganizedQueenAI.SUGAR_DIRECTION_START;
+				direction = message.content - QueenAI.SUGAR_DIRECTION_START;
 				wasToldSugarDirection = true;
 			} /*else if (message.sender.caste == Caste.Gatherer) {
 				direction = message.content;
