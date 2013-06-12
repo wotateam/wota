@@ -30,15 +30,24 @@ public class Simulation {
 
 	private GameWorld gameWorld;
 	private View view;
-	
-	public final int FRAMES_PER_SECOND = LeftoverParameters.FRAMES_PER_SECOND;
-	public final int TICKS_PER_SECOND = LeftoverParameters.TICKS_PER_SECOND;
 
 	private double measuredFramesPerSecond;
 	private double measuredTicksPerSecond;
 	
+	/** 
+	 * reference values for call of tick().
+	 * Should be independent of measering system. 
+	 * Otherwise some articfacts pop up.
+	 */
+	private long referenceTime = System.nanoTime();
+	private int referenceTickCount = 0;
+	private int referenceFrameCount = 0;
+	
 	/** time between two measurements of FPS / TPS in seconds */
-	private double measurementInterval = 1.0; 
+	private final double MEASUREMENT_INTERVAL = 2.0; 
+	
+	/** ticks are skipped if delayed by this number */
+	private final int SKIP_TICKS_THRESHOLD = 3;
 	
 	/** time of simulation start in nano seconds. */
 	private long startTime; 
@@ -115,60 +124,48 @@ public class Simulation {
 		running = true;
 		startTime = System.nanoTime();
 		
+		resetReferenceValues();
+		
 		long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
 		int measureFrameCount = 0; // Frame counter to determine TPS
 		int measureTickCount = 0; // Tick counter to determine FPS
 		
 		// events for graphics update and tick are created uniformly. Call them with priority on graphics
 		while (running) { 
+			
+			handleKeyboardInputs();
+			
 			if (!isGraphical) {
 				tick();
 				measureTickCount++;
 			} else {
 				
-				// check for keyboard input, buffered
-				// 
-				Keyboard.poll();
-				
-				while (Keyboard.next()) {
-					// only consider KeyDown Events
-					if (Keyboard.getEventKeyState() == true) {
-						switch (Keyboard.getEventKey()) {
-						case Keyboard.KEY_ESCAPE:
-							running = false;
-							break;
-						case Keyboard.KEY_S:
-							view.drawSightRange = !view.drawSightRange;
-							break;
-						case Keyboard.KEY_M:
-							view.drawMessages = !view.drawMessages;
-							break;
-						}
-					}
-				}
-				
 				// now update simulation if tick event 
-				if ((double)gameWorld.tickCount() < (System.nanoTime() - startTime) / 1.e9 * TICKS_PER_SECOND ) {
+				if (ticksToDo() > SKIP_TICKS_THRESHOLD) {
+					resetReferenceValues();
+				}
+				if (ticksToDo() > 0 ) {
 					tick();
 					measureTickCount++;
+					referenceTickCount++;
 				}
 				
 				// Update Graphics if event for graphic update is swept.
-				if (isGraphical && frameCount <= (System.nanoTime() - startTime) / 1.e9 * FRAMES_PER_SECOND) {
+				if (isGraphical && framesToDo() > 0) {
 					frameCount++;
 					measureFrameCount++;
+					referenceFrameCount++;
 					view.render();
 					Display.update();
-					if (running) {
-						running = !Display.isCloseRequested();
-					}
+					
+					running = !Display.isCloseRequested();
 				}
 				
 			}
 
 			// measurements of FPS / TPS 
 			long timeDiff = System.nanoTime() - lastMeasurementTime;
-			if (timeDiff > 1.e9*measurementInterval) {
+			if (timeDiff > 1.e9*MEASUREMENT_INTERVAL) {
 				measuredFramesPerSecond = measureFrameCount * 1.e9 / timeDiff;
 				measuredTicksPerSecond = measureTickCount * 1.e9 / timeDiff;
 				
@@ -198,4 +195,51 @@ public class Simulation {
 		}
 	}
 	
+	private void handleKeyboardInputs() {
+		
+		// Kedboard.poll() checks for keyboard input, buffered
+		Keyboard.poll();
+		
+		while (Keyboard.next()) {
+			// only consider KeyDown Events
+			if ( !Keyboard.getEventKeyState()) {
+				continue;
+			}
+			switch (Keyboard.getEventKey()) {
+			case Keyboard.KEY_ESCAPE:
+				running = false;
+				break;
+			case Keyboard.KEY_S:
+				view.drawSightRange = !view.drawSightRange;
+				break;
+			case Keyboard.KEY_M:
+				view.drawMessages = !view.drawMessages;
+				break;
+			case Keyboard.KEY_PERIOD:
+				LeftoverParameters.ticksPerSecond *= 1.3;
+				resetReferenceValues();
+				break;
+			case Keyboard.KEY_COMMA:
+				LeftoverParameters.ticksPerSecond /= 1.3;
+				resetReferenceValues();
+				break;
+			}
+		}
+	}
+	
+	private int framesToDo() {
+		return (int)((System.nanoTime() - referenceTime) / 1.e9 * LeftoverParameters.framesPerSecond) -
+		  referenceFrameCount + 1;
+	}
+	
+	private int ticksToDo() {
+		return (int)((System.nanoTime() - referenceTime) / 1.e9 * LeftoverParameters.ticksPerSecond) -
+		referenceTickCount + 1;
+	}
+	
+	private void resetReferenceValues() {
+		referenceTime = System.nanoTime();
+		referenceTickCount = 0;
+		referenceFrameCount = 0;
+	}
 }
