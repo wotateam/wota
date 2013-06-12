@@ -30,6 +30,8 @@ https://github.com/wotateam/wota/archive/release_0.1.zip
 we are using lwjgl for our graphics:
 http://lwjgl.org/
 
+It is BSD-licensed, see LWJGL_LICENSE.txt (taken from the project website).
+
 to use 'Issues & Milestones' (GitHub Bugtracker) in Eclipse (using Mylyn): 
 In Eclipse: Help -> Install New Software -> work with: http://download.eclipse.org/egit/github/updates -> install
 Then open view 'Task List' -> Add Repository
