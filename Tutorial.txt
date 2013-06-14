@@ -2,12 +2,12 @@
 ---- Tutorial for AI developers ------
 ======================================
 
-1. Create at least two classes. One should inherit de.wota.gameobjects.AntAI
-   and the other de.wota.gameobjects.QueenAI. These files will contain your AI.
-   It is important that your files are located in src/de/wota/ai/ or one of its 
-   subfolders. Correspondingly, your class should reside in de.wota.ai or one of 
+1. Create at least two classes. One should inherit wota.gameobjects.AntAI
+   and the other wota.gameobjects.QueenAI. These files will contain your AI.
+   It is important that your files are located in src/wota/ai/ or one of its 
+   subfolders. Correspondingly, your class should reside in wota.ai or one of 
    its subpackages, write 
-     package de.wota.ai.<my-subpackage>;
+     package wota.ai.<my-subpackage>;
    at the top of your files.
    
 2. Both classes have to override the method 
@@ -15,14 +15,14 @@
    this method gets called in every tick of the game and for every ant separately.
    
 3. You have one queen which is able to produce new ants if enough food is available.
-   Have a look at the sample AIs in de.wota.ai to see how you can create new Ants.   
+   Have a look at the sample AIs in wota.ai to see how you can create new Ants.   
    
 4. For the other ants use the methods and fields from AntAI to perceive the environment
-   of the ant and to interact. You can find sample AIs in de.wota.ai.
+   of the ant and to interact. You can find sample AIs in wota.ai.
    Game constants may be found in parameters, a member of AntAI, which is an instance of
-   de.wota.gameobjects.Parameters.
+   wota.gameobjects.Parameters.
 
-5. You can start the game by loading your AIs in de.wota.gamemaster.Wota and executing
+5. You can start the game by loading your AIs in wota.gamemaster.Wota and executing
    its main. Keep in mind that you have to specify the name of your QueenAI. Your QueenAI
    should then create the other ants using QueenAI.createAnt(...).
    
