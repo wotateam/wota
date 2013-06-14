@@ -7,7 +7,7 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 	int n=1;
 	@Override
 	public void tick() throws Exception {
-		
+		System.out.println(visibleHills.size());
 			for(int i=0;i<10;i++){
 				createAnt(Caste.Soldier,Mao.class);	
 			}
