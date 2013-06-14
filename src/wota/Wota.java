@@ -6,7 +6,10 @@ package wota;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import wota.gamemaster.*;
+import wota.graphics.StatisticsView;
 import wota.utility.Vector;
 
 /**
@@ -42,6 +45,9 @@ public class Wota {
 															   wota.ai.bvb.Mao.class,
 															   wota.ai.bvb.Mao.class);
 		*/
+        StatisticsView statisticsView = new StatisticsView();
+        // Schedules the application to be run at the correct time in the event queue.
+        SwingUtilities.invokeLater(statisticsView);
 		
 		Simulation sim = new Simulation(inst, true);
 		sim.runSimulation();
