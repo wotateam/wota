@@ -93,8 +93,9 @@ public class GameWorld {
 		// TODO make this private and change addPlayer
 		public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
 			hillObject = new HillObject(position, this, parameters);
-			queenObject = new QueenObject(position, queenAIClass, this, parameters);
+			spacePartitioning.addHillObject(hillObject);
 			
+			queenObject = new QueenObject(position, queenAIClass, this, parameters);
 			antObjects.add(queenObject);		
 		
 			name = AILoader.getAIName(queenAIClass);
