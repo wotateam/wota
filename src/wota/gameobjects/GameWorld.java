@@ -351,28 +351,15 @@ public class GameWorld {
 			return false;
 		int nPossibleWinners = players.size();
 		for (Player player : players) {
-			switch (LeftoverParameters.VICTORY_CONDITION) {
-			case KILL_QUEEN:
-				if (player.queenObject.isDead()) {
-					player.hasLost = true;
-					nPossibleWinners--;
-				}
-				else {
-					player.hasLost = false;
-				}
-				break;
-
-			case KILL_ANTS: // all dead or only queen is living
-				if ( (player.antObjects.size() == 1 && !player.queenObject.isDead() ) ||
-						player.antObjects.size() == 0) {
-					player.hasLost = true;
-					nPossibleWinners--;
-				}
-				else {
-					player.hasLost = false;
-				}
-				break;
+			if ( (player.antObjects.size() == 1 && !player.queenObject.isDead() ) ||
+					player.antObjects.size() == 0) {
+				player.hasLost = true;
+				nPossibleWinners--;
 			}
+			else {
+				player.hasLost = false;
+			}
+			break;
 		}
 		
 		return (nPossibleWinners <= 1);
