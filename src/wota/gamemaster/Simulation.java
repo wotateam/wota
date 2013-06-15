@@ -13,7 +13,7 @@ import org.lwjgl.opengl.PixelFormat;
 
 import wota.gameobjects.GameWorld;
 import wota.gameobjects.LeftoverParameters;
-import wota.graphics.View;
+import wota.graphics.GameView;
 
 
 /**
@@ -30,7 +30,7 @@ public class Simulation {
 	final int height = 700;
 
 	private GameWorld gameWorld;
-	private View view;
+	private GameView gameView;
 
 	private double measuredFramesPerSecond;
 	private double measuredTicksPerSecond;
@@ -75,7 +75,7 @@ public class Simulation {
 		gameWorld.registerLogger(new TestLogger());
 			
 		if (isGraphical) {
-			view = new View(gameWorld, width, height, inst.getParameters());
+			gameView = new GameView(gameWorld, width, height, inst.getParameters());
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create(new PixelFormat(8,0,0,0));
@@ -84,7 +84,7 @@ public class Simulation {
 				System.exit(0);
 			}
 	
-			view.setup();
+			gameView.setup();
 
 			createKeyboard();
 		}
@@ -156,7 +156,7 @@ public class Simulation {
 					frameCount++;
 					measureFrameCount++;
 					referenceFrameCount++;
-					view.render();
+					gameView.render();
 					Display.update();
 					
 					running = !Display.isCloseRequested();
@@ -211,10 +211,10 @@ public class Simulation {
 				running = false;
 				break;
 			case Keyboard.KEY_S:
-				view.drawSightRange = !view.drawSightRange;
+				gameView.drawSightRange = !gameView.drawSightRange;
 				break;
 			case Keyboard.KEY_M:
-				view.drawMessages = !view.drawMessages;
+				gameView.drawMessages = !gameView.drawMessages;
 				break;
 			case Keyboard.KEY_PERIOD:
 				LeftoverParameters.ticksPerSecond *= 1.3;

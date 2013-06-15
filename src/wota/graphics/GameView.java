@@ -22,7 +22,7 @@ import java.awt.Color;
  * 
  * @author Daniel, Pascal
  */
-public class View {
+public class GameView {
 
 	private static final int HILL_CIRCLE_CORNERS = 50;
 	private static final int SUGAR_CIRCLE_CORNERS = 24;
@@ -51,7 +51,7 @@ public class View {
 
 	private Parameters parameters;
 	
-	public View(GameWorld world, int width, int height, Parameters parameters) {
+	public GameView(GameWorld world, int width, int height, Parameters parameters) {
 		this.world = world;
 		this.width = width;
 		this.height = height;
