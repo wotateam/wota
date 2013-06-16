@@ -10,6 +10,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.Vector;
 
+import wota.gamemaster.StatisticsLogger;
 import wota.gameobjects.*;
 import wota.gameobjects.GameWorld.Player;
 
@@ -21,10 +22,12 @@ public class StatisticsView implements Runnable{
 	
 	public JFrame frame;
 	private GameWorld gameWorld;
+	private StatisticsLogger logger;
 	private StatisticsTableModel statisticsTableModel;
 	
-	public StatisticsView(GameWorld gameWorld) {
+	public StatisticsView(GameWorld gameWorld, StatisticsLogger logger) {
 		this.gameWorld = gameWorld;
+		this.logger    = logger;
 	}
 	
 	public void run() {
@@ -32,7 +35,7 @@ public class StatisticsView implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new FlowLayout());
 
-		statisticsTableModel = new StatisticsTableModel();
+		statisticsTableModel = new StatisticsTableModel(logger);
 		JTable table = new JTable(statisticsTableModel);
 		table.setDefaultRenderer(Color.class, new ColorRenderer());
 		
@@ -53,64 +56,63 @@ public class StatisticsView implements Runnable{
 	 */
 	public class StatisticsTableModel extends AbstractTableModel {
 
-		Vector<Vector<Object> >   rowdata;
-		Vector<String>            columnNames;
+		private StatisticsLogger  logger;
+		String[]                  columnNames;
+		Class<?>[]                columnClasses;
 
-		public StatisticsTableModel() {
-			rowdata = new Vector<Vector<Object> >();
-			columnNames = new Vector<String>();
-			columnNames.add("Player");
-			columnNames.add("");
-			columnNames.add("#Ants");
-			
-			refresh();
-		}
-		
-		public void refresh() {
-			rowdata.clear();
+		public StatisticsTableModel(StatisticsLogger logger) {
+			this.logger = logger;
+			columnNames = new String[] {
+							"Player", "", "Ants", "created Ants", "lost Ants"
+			};
 
-			for (int playerId=0; playerId<gameWorld.getPlayers().size(); playerId++) {
-				Vector<Object> playerData = new Vector<Object>();
-				Player player = gameWorld.getPlayers().get(playerId);
-				playerData.add(player.name);
-				playerData.add(GameView.playerColors[player.getId()]);
-				playerData.add(player.antObjects.size());
-				
-				rowdata.add(playerData);
-			}
 		}
 		
 		@Override
 		public int getRowCount() {
-			return rowdata.size();
+			return gameWorld.getPlayers().size();
 		}
 
 		@Override
 		public int getColumnCount() {
-			return columnNames.size();
+			return columnNames.length;
 		}
 
 		@Override
 		public String getColumnName(int column) {
-			return columnNames.get(column);
+			return columnNames[column];
 		}
 		
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			//return Color.black;
-			return rowdata.get(rowIndex).get(columnIndex);
+			System.out.println(rowIndex + " " + columnIndex);
+			Player player = gameWorld.getPlayers().get(rowIndex);
+			switch(columnIndex) {
+			case 0: 
+				return player.name;
+			case 1:
+				return GameView.playerColors[player.getId()];
+			case 2:
+				return player.antObjects.size();
+			case 3:
+				return logger.createdAnts()[rowIndex];
+			case 4:
+				return logger.diedAnts()[rowIndex];
+			default:
+				return null;
+			}
 		}
 		
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return rowdata.get(0).get(columnIndex).getClass();
+			return getValueAt(0, columnIndex).getClass();
 		}
+		
 		
 	}
 
 	/** call this when the table should grep the information */
 	public void refresh() {
-		statisticsTableModel.refresh();
 		statisticsTableModel.fireTableDataChanged(); // tells the JTable to update graphics 
 	}
 	

@@ -7,7 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import wota.gamemaster.AILoader;
-import wota.gamemaster.AbstractLogger;
+import wota.gamemaster.Logger;
+import wota.gamemaster.StatisticsLogger;
 import wota.gameobjects.LeftoverParameters;
 import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
@@ -23,7 +24,7 @@ public class GameWorld {
 	private final List<Player> players = new LinkedList<Player>();
 	private final LinkedList<SugarObject> sugarObjects = new LinkedList<SugarObject>();
 	
-	private List<AbstractLogger> registeredLoggers = new LinkedList<AbstractLogger>();
+	private Logger logger;
 
 	private SpacePartitioning spacePartitioning;
 	
@@ -68,8 +69,6 @@ public class GameWorld {
 	}
 		
 	public void addPlayer(Player player) {
-		notifyLoggers(AbstractLogger.LogEventType.PLAYER_REGISTERED);
-
 		players.add(player);
 	}
 
@@ -112,7 +111,6 @@ public class GameWorld {
 	
 	public void tick() {		
 		tickCount++;
-		notifyLoggers(AbstractLogger.LogEventType.TICK);
 		
 		// can be removed as soon as SpacePartitioning is well tested!
 		if (LeftoverParameters.DEBUG) {
@@ -203,7 +201,7 @@ public class GameWorld {
 				AntObject maybeDead = antObjectIter.next();
 				if (maybeDead.isDead()) {
 					antObjectIter.remove();
-					spacePartitioning.removeAntObject(maybeDead);
+					antDies(maybeDead);
 				}
 			}
 		}
@@ -215,6 +213,11 @@ public class GameWorld {
 		
 	}
 
+	public void antDies(AntObject almostDead) {
+		spacePartitioning.removeAntObject(almostDead);
+		logger.AntDied(almostDead);
+	}
+	
 	/**
 	 * iterates through sugarObjects and
 	 * 1) removes the empty ones
@@ -252,13 +255,22 @@ public class GameWorld {
 			if (parameters.ANT_COST <= player.hillObject.getStoredFood()) {
 				player.hillObject.changeStoredFoodBy(-parameters.ANT_COST);
 				
-				AntObject antObject = new AntObject(
+				AntObject newAntObject = new AntObject(
 						queenObject.player.hillObject.getPosition(),
 						antOrder.getCaste(), antOrder.getAntAIClass(),
 						queenObject.player, parameters);
-				queenObject.player.addAntObject(antObject);
+				createAntObject(queenObject, newAntObject);
 			}
 		}
+	}
+
+	/**
+	 * @param queenObject  Queen which created this AntObject
+	 * @param newAntObject freshly created AntObject
+	 */
+	private void createAntObject(QueenObject queenObject, AntObject newAntObject) {
+		queenObject.player.addAntObject(newAntObject);
+		logger.AntCreated(newAntObject);
 	}
 
 	/** Führt die Aktion für das AntObject aus. 
@@ -387,15 +399,6 @@ public class GameWorld {
 		}
 	}
 
-	public void registerLogger(AbstractLogger logger) {
-		registeredLoggers.add(logger);
-	}
-
-	private void notifyLoggers(AbstractLogger.LogEventType event) {
-		for (AbstractLogger logger : registeredLoggers)
-			logger.log(event);
-	}
-
 	public int totalNumberOfAntObjects() {
 		int n = 0;
 		for (Player player : players) {
@@ -413,5 +416,9 @@ public class GameWorld {
 	 */
 	public int tickCount() {
 		return tickCount;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 }
