@@ -60,6 +60,7 @@ public class Simulation {
 	private long startTime; 
 	
 	private boolean running;
+	private boolean paused = false;
 	private int frameCount;
 	
 	/** maximum number of ticks before the game ends regardless of victory condition **/
@@ -178,7 +179,7 @@ public class Simulation {
 				if (ticksToDo() > SKIP_TICKS_THRESHOLD) {
 					resetReferenceValues();
 				}
-				if (ticksToDo() > 0 ) {
+				if (ticksToDo() > 0 && !paused) {
 					tick();
 					measureTickCount++;
 					referenceTickCount++;
@@ -191,7 +192,6 @@ public class Simulation {
 					referenceFrameCount++;
 					gameView.render();
 					Display.update();
-					
 					statisticsView.refresh();
 					
 					if (Display.isCloseRequested()) {
@@ -262,6 +262,9 @@ public class Simulation {
 			case Keyboard.KEY_COMMA:
 				ticksPerSecond /= 1.3;
 				resetReferenceValues();
+				break;
+			case Keyboard.KEY_P:
+				paused = !paused;
 				break;
 			}
 		}
