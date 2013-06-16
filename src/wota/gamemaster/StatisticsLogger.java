@@ -21,14 +21,13 @@ public class StatisticsLogger implements Logger{
 		createdAnts 	= new int[players.size()];
 		diedAnts    	= new int[players.size()];
 		collectedFood 	= new int[players.size()];
+		
 		for (Player player : players) {
 			createdAnts[player.getId()] 	= 0;
 			diedAnts[player.getId()]    	= 0;
 			collectedFood[player.getId()]	= 0;
 		}
 	}
-	
-	//private Vector<int> diedAnts;
 	
 	@Override
 	public void antCreated(AntObject antObject) {

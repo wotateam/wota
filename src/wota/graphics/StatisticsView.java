@@ -19,7 +19,7 @@ import wota.gameobjects.GameWorld.Player;
 
 /**
  *  View class for the statistics.
- *  Draws an JTable and greps information from GameWorld
+ *  Draws an JTable and puts in StatisticsView.StatisticsTableModel.
  */
 public class StatisticsView implements Runnable{
 	
