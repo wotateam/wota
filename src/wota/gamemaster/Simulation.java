@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.jws.soap.SOAPBinding.ParameterStyle;
+import javax.swing.SwingUtilities;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -14,6 +15,7 @@ import org.lwjgl.opengl.PixelFormat;
 import wota.gameobjects.GameWorld;
 import wota.gameobjects.LeftoverParameters;
 import wota.graphics.GameView;
+import wota.graphics.StatisticsView;
 
 
 /**
@@ -31,6 +33,7 @@ public class Simulation {
 
 	private GameWorld gameWorld;
 	private GameView gameView;
+	private StatisticsView statisticsView;
 
 	private double measuredFramesPerSecond;
 	private double measuredTicksPerSecond;
@@ -74,6 +77,10 @@ public class Simulation {
 	
 		gameWorld.registerLogger(new TestLogger());
 			
+		statisticsView = new StatisticsView(gameWorld);
+        // Schedules the application to be run at the correct time in the event queue.
+        SwingUtilities.invokeLater(statisticsView);
+        
 		if (isGraphical) {
 			gameView = new GameView(gameWorld, width, height, inst.getParameters());
 			try {
@@ -86,7 +93,7 @@ public class Simulation {
 	
 			gameView.setup();
 
-			createKeyboard();
+			createKeyboard();	
 		}
 	
 		
@@ -159,6 +166,8 @@ public class Simulation {
 					gameView.render();
 					Display.update();
 					
+					statisticsView.refresh();
+					
 					running = !Display.isCloseRequested();
 				}
 				
@@ -185,6 +194,8 @@ public class Simulation {
 		if (isGraphical) {
 			Display.destroy();
 		}
+		statisticsView.frame.dispose();
+		
 	}
 	
 	private static void createKeyboard() {

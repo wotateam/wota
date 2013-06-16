@@ -14,6 +14,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL14.*;
 import java.awt.Color;
 
+import javax.swing.JFrame;
+
 
 /**
  * Renders everything.
@@ -41,7 +43,7 @@ public class GameView {
 	private static final float HILL_ALPHA = 0.65f;
 	
 	// hardcoded maximum number of players = 8
-	private static final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN,
+	public static final Color[] playerColors = { Color.RED, Color.BLUE, Color.GREEN,
 			Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.YELLOW };
 
 	private GameWorld world;
@@ -94,7 +96,7 @@ public class GameView {
 
 	private void renderImpl() {
 		for (GameWorld.Player player : world.getPlayers()) {
-			Color color = colors[player.getId()];
+			Color color = playerColors[player.getId()];
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ants
