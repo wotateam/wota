@@ -1,7 +1,7 @@
 #wota - War of the Ants
 
 ##Download release
-https://github.com/wotateam/wota/archive/release_0.1.zip
+https://github.com/wotateam/wota/archive/release_0.2.zip
 
 ##Installation guide
 
