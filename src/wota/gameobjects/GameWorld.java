@@ -106,6 +106,17 @@ public class GameWorld {
 			antObjects.add(antObject);
 			spacePartitioning.addAntObject(antObject);
 		}
+		
+		public int numAnts(Caste caste) {
+			int num = 0;
+			for (AntObject antObject : antObjects) {
+				if (antObject.getCaste() == caste) {
+					num++;
+				}
+			}
+			return num;
+		}
+		
 	}
 	
 	public void tick() {		

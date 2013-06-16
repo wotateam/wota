@@ -10,6 +10,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.Vector;
 
 import wota.gamemaster.StatisticsLogger;
@@ -57,12 +58,11 @@ public class StatisticsView implements Runnable{
 	 * are used by the JTable to obtain the cell values.
 	 */
 	public class StatisticsTableModel extends AbstractTableModel {
-
+		
 		private StatisticsLogger          logger;
 		private final Vector<String>      playerNames;
 		private final String[]			  rowNames;
-		private Class<?>[]                columnClasses;
-
+		
 		public StatisticsTableModel(StatisticsLogger logger) {
 			this.logger = logger;
 			playerNames = new Vector<String>();
@@ -70,7 +70,8 @@ public class StatisticsView implements Runnable{
 				playerNames.add(player.name);
 			}
 			rowNames = new String[] {
-					"", "# Ants", "# created ants", "# lost ants",
+					"", "# Ants", "# Gatherer", "# Soldiers", "# Scouts",
+					"# created ants", "# lost ants",
 					"collected food"
 			};
 		}
@@ -106,10 +107,16 @@ public class StatisticsView implements Runnable{
 			case 1:
 				return player.antObjects.size();
 			case 2:
-				return logger.createdAnts()[playerId];
+				return player.numAnts(Caste.Gatherer);
 			case 3:
-				return logger.diedAnts()[playerId];
+				return player.numAnts(Caste.Soldier);
 			case 4:
+				return player.numAnts(Caste.Scout);
+			case 5:
+				return logger.createdAnts()[playerId];
+			case 6:
+				return logger.diedAnts()[playerId];
+			case 7:
 				return logger.collectedFood()[playerId];
 			default:
 				return null;
@@ -146,5 +153,4 @@ public class StatisticsView implements Runnable{
 			}
 		}
 	}
-
 }
