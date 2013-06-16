@@ -62,6 +62,9 @@ public class Simulation {
 	private boolean running;
 	private int frameCount;
 	
+	/** maximum number of ticks before the game ends regardless of victory condition **/
+	private int maxTicksBeforeEnd;
+	
 	/*
 	 * TODO: Die Simulation bekommt eine Ausgangsstellung, keine GameWorld
 	 */
@@ -77,6 +80,7 @@ public class Simulation {
 		this.isGraphical = inst.getSimulationParameters().IS_GRAPHICAL; 
 		framesPerSecond = inst.getSimulationParameters().FRAMES_PER_SECOND;
 		ticksPerSecond = inst.getSimulationParameters().INITIAL_TICKS_PER_SECOND;
+		maxTicksBeforeEnd = inst.getSimulationParameters().MAX_TICKS_BEFORE_END;
 	
 		gameWorld = inst.getGameWorld();
 	
@@ -107,7 +111,7 @@ public class Simulation {
 	}
 
 	/**
-	 * Advance the game world by one tick and check for victory.
+	 * Advance the game world by one tick and check for victory / end after fixed number of ticks.
 	 */
 	private void tick() {
 		gameWorld.tick();
@@ -121,6 +125,22 @@ public class Simulation {
 			}
 			else {
 				System.out.println("draw! nobody has won the game after " + gameWorld.tickCount() + " ticks.");
+				running = false;
+			}
+		}
+		
+		// End the game after fixed numer of ticks - players with most ants win.
+		if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
+			List<GameWorld.Player> winners = gameWorld.getPlayersWithMostAnts();
+			if (winners.size() == gameWorld.getPlayers().size()) {
+				System.out.println("Draw! Game was stopped after " + gameWorld.tickCount() + " ticks. All players have the same number of ants.");
+				running = false;
+			}
+			else {
+				System.out.println("Game was stopped after " + gameWorld.tickCount() + " ticks. The following player(s) have won:");
+				for (GameWorld.Player winner : winners) {
+					System.out.println(winner.name);
+				}
 				running = false;
 			}
 		}

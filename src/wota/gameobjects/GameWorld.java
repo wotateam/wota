@@ -381,6 +381,31 @@ public class GameWorld {
 		}
 		return null;
 	}
+	
+	/**
+	 * Gets all players who currently have the most ants.
+	 * @return List of players who currently have the most ants of all players.
+	 */
+	public List<Player> getPlayersWithMostAnts() {
+		List<Player> playersWithMostAnts = new LinkedList<Player>();
+		for (Player player : players) {
+			if (playersWithMostAnts.isEmpty()) {
+				playersWithMostAnts.add(player);
+			}
+			else {
+				int antsPlayer = player.antObjects.size();
+				int antsNeeded = playersWithMostAnts.get(0).antObjects.size();
+				if (antsPlayer > antsNeeded) {
+					playersWithMostAnts.clear();
+					playersWithMostAnts.add(player);
+				}
+				else if (antsPlayer == antsNeeded) {
+					playersWithMostAnts.add(player);
+				}
+			}
+		}
+		return playersWithMostAnts;
+	}
 
 	private void handleMessages(AntObject actor, Action action) {
 		if (action.messageObject != null) {
