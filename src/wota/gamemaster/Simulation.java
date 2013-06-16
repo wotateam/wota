@@ -13,9 +13,9 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
 import wota.gameobjects.GameWorld;
-import wota.gameobjects.LeftoverParameters;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
+import wota.gameobjects.SimulationParameters;
 
 
 /**
@@ -26,7 +26,7 @@ import wota.graphics.StatisticsView;
 public class Simulation {
 	// FIXME: N_PLAYER durch Karte/Ausgangsstellung ersetzen
 	private final int N_PLAYER;
-	private boolean isGraphical;
+	private final boolean isGraphical; // only saves typing
 
 	final int width = 700;
 	final int height = 700;
@@ -35,13 +35,16 @@ public class Simulation {
 	private GameView gameView;
 	private StatisticsView statisticsView;
 
+	private double framesPerSecond;
+	private double ticksPerSecond;
+	
 	private double measuredFramesPerSecond;
 	private double measuredTicksPerSecond;
 	
 	/** 
 	 * reference values for call of tick().
-	 * Should be independent of measering system. 
-	 * Otherwise some articfacts pop up.
+	 * Should be independent of measuring system. 
+	 * Otherwise some artifacts pop up.
 	 */
 	private long referenceTime = System.nanoTime();
 	private int referenceTickCount = 0;
@@ -58,7 +61,7 @@ public class Simulation {
 	
 	private boolean running;
 	private int frameCount;
-
+	
 	/*
 	 * TODO: Die Simulation bekommt eine Ausgangsstellung, keine GameWorld
 	 */
@@ -69,9 +72,11 @@ public class Simulation {
 	 * @param inst the instance to be simulated
 	 * @param isGraphical true, if the simulation should be graphical
 	 */
-	public Simulation(SimulationInstance inst, boolean isGraphical) {
+	public Simulation(SimulationInstance inst) {
 		N_PLAYER = inst.getNumPlayers();
-		this.isGraphical = isGraphical;
+		this.isGraphical = inst.getSimulationParameters().IS_GRAPHICAL; 
+		framesPerSecond = inst.getSimulationParameters().FRAMES_PER_SECOND;
+		ticksPerSecond = inst.getSimulationParameters().INITIAL_TICKS_PER_SECOND;
 	
 		gameWorld = inst.getGameWorld();
 	
@@ -123,8 +128,8 @@ public class Simulation {
 
 	/**
 	 * Start the simulation and keep the view up to date.
-	 * 1. Update the Graphics at the rate FRAMES_PER_SECOND
-	 * 2. Update the Simulation with rate TICKS_PER_SECOND 
+	 * 1. Update the Graphics at the rate framesPerSecond
+	 * 2. Update the Simulation at the rate ticksPerSecond 
 	 * do nothing in the remaining time or if times get in conflict only update the graphics.
 	 * 
 	 * keyboard/mouse input should be fetched before graphics in every loop. 
@@ -229,11 +234,11 @@ public class Simulation {
 				gameView.drawMessages = !gameView.drawMessages;
 				break;
 			case Keyboard.KEY_PERIOD:
-				LeftoverParameters.ticksPerSecond *= 1.3;
+				ticksPerSecond *= 1.3;
 				resetReferenceValues();
 				break;
 			case Keyboard.KEY_COMMA:
-				LeftoverParameters.ticksPerSecond /= 1.3;
+				ticksPerSecond /= 1.3;
 				resetReferenceValues();
 				break;
 			}
@@ -241,12 +246,12 @@ public class Simulation {
 	}
 	
 	private int framesToDo() {
-		return (int)((System.nanoTime() - referenceTime) / 1.e9 * LeftoverParameters.framesPerSecond) -
+		return (int)((System.nanoTime() - referenceTime) / 1.e9 * framesPerSecond) -
 		  referenceFrameCount + 1;
 	}
 	
 	private int ticksToDo() {
-		return (int)((System.nanoTime() - referenceTime) / 1.e9 * LeftoverParameters.ticksPerSecond) -
+		return (int)((System.nanoTime() - referenceTime) / 1.e9 * ticksPerSecond) -
 		referenceTickCount + 1;
 	}
 	

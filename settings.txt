@@ -1,3 +1,8 @@
 # settings.txt
 
-aiString = bvb, organized
+AI_PACKAGE_NAMES = bvb, organized
+
+IS_GRAPHICAL = true
+
+FRAMES_PER_SECOND = 40 
+INITIAL_TICKS_PER_SECOND = 10

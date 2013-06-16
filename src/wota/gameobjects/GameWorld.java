@@ -9,7 +9,7 @@ import java.util.List;
 import wota.gamemaster.AILoader;
 import wota.gamemaster.Logger;
 import wota.gamemaster.StatisticsLogger;
-import wota.gameobjects.LeftoverParameters;
+import wota.gameobjects.SimulationParameters;
 import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
@@ -92,9 +92,8 @@ public class GameWorld {
 		// TODO make this private and change addPlayer
 		public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
 			hillObject = new HillObject(position, this, parameters);
-			spacePartitioning.addHillObject(hillObject);
-			
 			queenObject = new QueenObject(position, queenAIClass, this, parameters);
+			
 			antObjects.add(queenObject);		
 		
 			name = AILoader.getAIName(queenAIClass);
@@ -111,12 +110,6 @@ public class GameWorld {
 	
 	public void tick() {		
 		tickCount++;
-		
-		// can be removed as soon as SpacePartitioning is well tested!
-		if (LeftoverParameters.DEBUG) {
-			System.out.println("SpacePartitioning: " + spacePartitioning.totalNumberOfAntObjects());
-			System.out.println("Total number: " + totalNumberOfAntObjects());
-		}
 
 		// create Ants for all AntObjects and the QueenObject and sets them in
 		// the AntAI (the latter happens in AntObject.createAnt() )
@@ -394,9 +387,6 @@ public class GameWorld {
 		if (action.messageObject != null) {
 			spacePartitioning.addMessageObject(action.messageObject);
 			Message message = action.messageObject.getMessage();
-			if (LeftoverParameters.DEBUG)
-				System.out.println("\"" + message.content + "\" sagt "
-						+ message.sender + ".");
 		}
 	}
 

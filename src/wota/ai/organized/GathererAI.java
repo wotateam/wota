@@ -5,7 +5,7 @@ import java.util.Iterator;
 import wota.gameobjects.Ant;
 import wota.gameobjects.AntAI;
 import wota.gameobjects.Caste;
-import wota.gameobjects.LeftoverParameters;
+import wota.gameobjects.SimulationParameters;
 import wota.gameobjects.Message;
 import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;

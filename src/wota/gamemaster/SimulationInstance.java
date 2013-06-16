@@ -16,12 +16,12 @@ import wota.utility.Vector;
  * Contains all the information needed for one round of simulation.
  */
 public class SimulationInstance {
-	private final String[] aiNames;
 	private final AILoader aiLoader;
 	private GameWorld gameWorld;
 	private final long seed;
 
 	private final Parameters parameters;
+	private final SimulationParameters simulationParameters;
 	
 	/**
 	 * Create an instance from a seed used to
@@ -39,8 +39,8 @@ public class SimulationInstance {
 
 		aiLoader = new AILoader("./");
 		
-		this.aiNames = readAIs("settings.txt");
 		parameters = readParameters("parameters.txt");
+		simulationParameters = readSimulationParameters("settings.txt");
 		
 		constructGameWorld();
 	}
@@ -81,16 +81,17 @@ public class SimulationInstance {
 	}
 
 	/**
-	 * Read AI names from file where ai names are specified after "aiString"
-	 * @param filename name of the file. Standard is: setting.txt
+	 * Read settings including AI names from  a file.
+	 * The ai names are specified in "AI_PACKAGE_NAMES".
+	 * @param filename name of the file. Standard is: settings.txt
 	 * @return String array with ai names
 	 */
-	private static String[] readAIs(String filename) {
-		Properties propertiesForSettings = new Properties();
+	private static SimulationParameters readSimulationParameters(String filename) {
+		Properties propertiesForSimulationParameters = new Properties();
 		try {
-			propertiesForSettings.load(new FileReader(filename));
+			propertiesForSimulationParameters.load(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			System.out.println(" while trying to read ai names: " + filename + " not found.");
+			System.out.println(" while trying to read simulation parameters: " + filename + " not found.");
 			e.printStackTrace();
 			System.exit(-1);
 		} catch (IOException e) {
@@ -98,13 +99,7 @@ public class SimulationInstance {
 			System.exit(-1);
 		}
 		
-		String aiString = propertiesForSettings.getProperty("aiString");
-		String[] ais = aiString.split(",");
-		for (int i=0; i<ais.length; i++) {
-			ais[i] = ais[i].trim();
-			System.out.println("AI #" + (i+1) + " " + ais[i] );
-		}
-		return ais;
+		return new SimulationParameters(propertiesForSimulationParameters);
 	}
 	
 	/**
@@ -136,7 +131,7 @@ public class SimulationInstance {
 
 		SeededRandomizer.resetSeed(seed);
 
-		for (String aiName : aiNames) {
+		for (String aiName : simulationParameters.AI_PACKAGE_NAMES) {
 			GameWorld.Player player = gameWorld.new Player(new Vector(
 					SeededRandomizer.getInt(700),
 					SeededRandomizer.getInt(700)), aiLoader.loadQueen(aiName));
@@ -177,7 +172,7 @@ public class SimulationInstance {
 	}
 
 	public int getNumPlayers() {
-		return aiNames.length;
+		return simulationParameters.AI_PACKAGE_NAMES.length;
 	}
 
 	public Parameters getParameters() {
@@ -190,5 +185,9 @@ public class SimulationInstance {
 
 	public GameWorld getGameWorld() {
 		return gameWorld;
+	}
+
+	public SimulationParameters getSimulationParameters() {
+		return simulationParameters;
 	}
 }

@@ -37,7 +37,7 @@ public class CollateralDamage {
 															   wota.ai.donothing.DoNothingAI.class,
 															   wota.testing.SitAndHitAI.class);
 		
-		Simulation sim = new Simulation(inst, true);
+		Simulation sim = new Simulation(inst);
 		sim.runSimulation();
 		System.out.println("seed: " + inst.getSeed() + "l");
 	}

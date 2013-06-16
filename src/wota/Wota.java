@@ -46,7 +46,7 @@ public class Wota {
 															   wota.ai.bvb.Mao.class);
 		*/
 		
-		Simulation sim = new Simulation(inst, true);
+		Simulation sim = new Simulation(inst);
 		sim.runSimulation();
 		System.out.println("seed: " + inst.getSeed() + "l");
 	}

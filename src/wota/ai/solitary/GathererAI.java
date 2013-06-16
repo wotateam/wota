@@ -5,7 +5,7 @@ import java.util.Random;
 import wota.ai.*;
 import wota.gameobjects.AntAI;
 import wota.gameobjects.Hill;
-import wota.gameobjects.LeftoverParameters;
+import wota.gameobjects.SimulationParameters;
 import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;
 
