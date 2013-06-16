@@ -174,7 +174,9 @@ public class Simulation {
 					
 					statisticsView.refresh();
 					
-					running = !Display.isCloseRequested();
+					if (Display.isCloseRequested()) {
+						running = false;
+					}
 				}
 				
 			}

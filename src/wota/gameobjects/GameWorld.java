@@ -360,7 +360,6 @@ public class GameWorld {
 			else {
 				player.hasLost = false;
 			}
-			break;
 		}
 		
 		return (nPossibleWinners <= 1);
