@@ -13,6 +13,7 @@ import wota.gameobjects.GameWorld.Player;
 
 public interface Logger {
 	
-	public void AntCreated(AntObject antObject);
-	public void AntDied(AntObject antObject);
+	public void antCreated(AntObject antObject);
+	public void antDied(AntObject antObject);
+	public void antCollectedFood(Player player, int amount);
 }

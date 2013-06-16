@@ -63,7 +63,8 @@ public class StatisticsView implements Runnable{
 		public StatisticsTableModel(StatisticsLogger logger) {
 			this.logger = logger;
 			columnNames = new String[] {
-							"Player", "", "Ants", "created Ants", "lost Ants"
+							"Player", "", "Ants", "created ants", "lost ants",
+							"collected food"
 			};
 
 		}
@@ -98,6 +99,8 @@ public class StatisticsView implements Runnable{
 				return logger.createdAnts()[rowIndex];
 			case 4:
 				return logger.diedAnts()[rowIndex];
+			case 5:
+				return logger.collectedFood()[rowIndex];
 			default:
 				return null;
 			}

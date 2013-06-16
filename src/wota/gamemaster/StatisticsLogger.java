@@ -15,26 +15,34 @@ public class StatisticsLogger implements Logger{
 	
 	private int createdAnts[];
 	private int diedAnts[];
+	private int collectedFood[];
 	
 	public StatisticsLogger(List<Player> players) {
-		createdAnts = new int[players.size()];
-		diedAnts    = new int[players.size()];
+		createdAnts 	= new int[players.size()];
+		diedAnts    	= new int[players.size()];
+		collectedFood 	= new int[players.size()];
 		for (Player player : players) {
-			createdAnts[player.getId()] = 0;
-			diedAnts[player.getId()]    = 0;
+			createdAnts[player.getId()] 	= 0;
+			diedAnts[player.getId()]    	= 0;
+			collectedFood[player.getId()]	= 0;
 		}
 	}
 	
 	//private Vector<int> diedAnts;
 	
 	@Override
-	public void AntCreated(AntObject antObject) {
+	public void antCreated(AntObject antObject) {
 		createdAnts[antObject.player.getId()]++;
 	}
 
 	@Override
-	public void AntDied(AntObject antObject) {
+	public void antDied(AntObject antObject) {
 		diedAnts[antObject.player.getId()]++;
+	}
+	
+	@Override
+	public void antCollectedFood(Player player, int amount) {
+		collectedFood[player.getId()] += amount;
 	}
 	
 	public int[] createdAnts() {
@@ -43,5 +51,9 @@ public class StatisticsLogger implements Logger{
 	
 	public int[] diedAnts() {
 		return diedAnts;
+	}
+	
+	public int[] collectedFood() {
+		return collectedFood;
 	}
 }

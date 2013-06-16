@@ -215,7 +215,7 @@ public class GameWorld {
 
 	public void antDies(AntObject almostDead) {
 		spacePartitioning.removeAntObject(almostDead);
-		logger.AntDied(almostDead);
+		logger.antDied(almostDead);
 	}
 	
 	/**
@@ -270,7 +270,7 @@ public class GameWorld {
 	 */
 	private void createAntObject(QueenObject queenObject, AntObject newAntObject) {
 		queenObject.player.addAntObject(newAntObject);
-		logger.AntCreated(newAntObject);
+		logger.antCreated(newAntObject);
 	}
 
 	/** Führt die Aktion für das AntObject aus. 
@@ -308,6 +308,7 @@ public class GameWorld {
 		if (parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= parameters.HILL_RADIUS) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
+			logger.antCollectedFood(actor.player, actor.getSugarCarry());
 			actor.dropSugar();
 			
 			actor.resetTicksToLive();
