@@ -5,7 +5,9 @@ package wota.graphics;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import java.awt.*;
 import java.util.Vector;
@@ -37,9 +39,9 @@ public class StatisticsView implements Runnable{
 
 		statisticsTableModel = new StatisticsTableModel(logger);
 		JTable table = new JTable(statisticsTableModel);
-		table.setDefaultRenderer(Color.class, new ColorRenderer());
+		table.setDefaultRenderer(Object.class, new CellRenderer());
 		
-		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+	//	table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
 		
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -56,61 +58,63 @@ public class StatisticsView implements Runnable{
 	 */
 	public class StatisticsTableModel extends AbstractTableModel {
 
-		private StatisticsLogger  logger;
-		String[]                  columnNames;
-		Class<?>[]                columnClasses;
+		private StatisticsLogger          logger;
+		private final Vector<String>      playerNames;
+		private final String[]			  rowNames;
+		private Class<?>[]                columnClasses;
 
 		public StatisticsTableModel(StatisticsLogger logger) {
 			this.logger = logger;
-			columnNames = new String[] {
-							"Player", "", "Ants", "created ants", "lost ants",
-							"collected food"
+			playerNames = new Vector<String>();
+			for (Player player : gameWorld.getPlayers()) {
+				playerNames.add(player.name);
+			}
+			rowNames = new String[] {
+					"", "# Ants", "# created ants", "# lost ants",
+					"collected food"
 			};
-
 		}
 		
 		@Override
 		public int getRowCount() {
-			return gameWorld.getPlayers().size();
+			return rowNames.length;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return columnNames.length;
+			return playerNames.size() + 1;
 		}
 
 		@Override
 		public String getColumnName(int column) {
-			return columnNames[column];
+			if (column == 0) {
+				return "";
+			}
+			return playerNames.get(column - 1);
 		}
 		
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			System.out.println(rowIndex + " " + columnIndex);
-			Player player = gameWorld.getPlayers().get(rowIndex);
-			switch(columnIndex) {
-			case 0: 
-				return player.name;
-			case 1:
+			if (columnIndex == 0) {
+				return rowNames[rowIndex];
+			}
+			int playerId = columnIndex - 1;
+			Player player = gameWorld.getPlayers().get(playerId);
+			switch(rowIndex) {
+			case 0:
 				return GameView.playerColors[player.getId()];
-			case 2:
+			case 1:
 				return player.antObjects.size();
+			case 2:
+				return logger.createdAnts()[playerId];
 			case 3:
-				return logger.createdAnts()[rowIndex];
+				return logger.diedAnts()[playerId];
 			case 4:
-				return logger.diedAnts()[rowIndex];
-			case 5:
-				return logger.collectedFood()[rowIndex];
+				return logger.collectedFood()[playerId];
 			default:
 				return null;
 			}
 		}
-		
-		@Override
-		public Class<?> getColumnClass(int columnIndex) {
-			return getValueAt(0, columnIndex).getClass();
-		}
-		
 		
 	}
 
@@ -119,21 +123,28 @@ public class StatisticsView implements Runnable{
 		statisticsTableModel.fireTableDataChanged(); // tells the JTable to update graphics 
 	}
 	
-	public class ColorRenderer extends JLabel
+	public class CellRenderer extends JLabel
 							   implements TableCellRenderer {
+		DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
 
-		ColorRenderer() {
+		CellRenderer() {
 			setOpaque(true);
 		}
 
 		@Override
 		public Component getTableCellRendererComponent(
-								            JTable table, Object color,
+								            JTable table, Object object,
 										    boolean isSelected, boolean hasFocus,
 										    int row, int column) {
-			Color newColor = (Color)color;
-			setBackground(newColor);
-			return this;
+			if (object instanceof Color) {
+				setBackground((Color) object);
+				return this;
+			}
+			else {
+			return defaultTableCellRenderer.getTableCellRendererComponent(
+					table, object, isSelected,hasFocus, row, column);
+			}
 		}
 	}
+
 }
