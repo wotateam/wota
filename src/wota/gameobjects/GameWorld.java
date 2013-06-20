@@ -222,6 +222,7 @@ public class GameWorld {
 
 	public void antDies(AntObject almostDead) {
 		spacePartitioning.removeAntObject(almostDead);
+		almostDead.die();
 		logger.antDied(almostDead);
 	}
 	
@@ -243,6 +244,7 @@ public class GameWorld {
 			
 			// remove if empty 
 			if (sugarObject.getAmount() <= 0) {
+				sugarObject.getsRemoved();
 				sugarObjectIter.remove();
 				spacePartitioning.removeSugarObject(sugarObject);
 				nRemovedSugarObjects++;

@@ -26,8 +26,8 @@ public class AntObject extends GameObject{
 	/** amount of sugar carried now */
 	private int sugarCarry = 0;
 	
-	/** number of ticks Ant is unable to act (ai.tick doesn't get called */
-	private int freezeTime = 0;
+	/** SugarObject AntObject is waiting for */ 
+	private SugarObject sugarTarget = null;
 	
 	/** Angriffspunkte */
 	private Action action;
@@ -130,17 +130,8 @@ public class AntObject extends GameObject{
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
-		int oldAmountOfSugarCarried = sugarCarry;
-		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarObject.getAmount());
-		
-		// freeze if some sugar got picked up.
-		if (sugarCarry - oldAmountOfSugarCarried > 0) {
-			freezeTime = sugarObject.getTicksToWait();
-		}
-		
-		// be careful! calling reduceAmount increases sugarObject.ticksToWait
-		sugarObject.reduceAmount(sugarCarry - oldAmountOfSugarCarried);
-		
+		sugarObject.requestSugarPickup(this);
+		sugarTarget = sugarObject;
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -164,7 +155,7 @@ public class AntObject extends GameObject{
 		
 		ticksToLive--;
 		
-		if (freezeTime == 0) {
+		if ( !isWaitingForSugar() ) {
 			try {
 				ai.tick();
 			}
@@ -172,13 +163,23 @@ public class AntObject extends GameObject{
 				e.printStackTrace();
 			}
 		}
-		else {
-			freezeTime--;
+		else if (sugarTarget.canPickUpSugarNow(this)) {
+			int oldAmountOfSugarCarried = sugarCarry;
+			sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
+			sugarTarget.antPicksUpSugar(this, sugarCarry - oldAmountOfSugarCarried);
+			unsetSugarTarget();
 		}
 		
 		action = ai.popAction();
 	}
 	
+	/**
+	 * @return true if sugarTarget is not null
+	 */
+	private boolean isWaitingForSugar() {
+		return (sugarTarget != null) ;
+	}
+
 	public boolean isCarrying() {
 		return sugarCarry > 0;
 	}
@@ -203,6 +204,23 @@ public class AntObject extends GameObject{
 
 	public void resetTicksToLive() {
 		ticksToLive = parameters.TICKS_TO_LIVE;
+	}
+
+	/**
+	 * gets called when AntObject is dying
+	 */
+	public void die() {
+		if (sugarTarget != null) {
+			sugarTarget.removeFromQueue(this);
+			unsetSugarTarget();
+		}
+	}
+
+	/**
+	 * Call whenever AntObject should not wait for sugarTarget anymore.
+	 */
+	public void unsetSugarTarget() {
+		sugarTarget = null;
 	}
 
 }
