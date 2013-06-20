@@ -187,16 +187,18 @@ public class Simulation {
 				
 				// Update Graphics if event for graphic update is swept.
 				if (isGraphical && framesToDo() > 0) {
-					frameCount++;
-					measureFrameCount++;
-					referenceFrameCount++;
-					gameView.render();
-					Display.update();
-					statisticsView.refresh();
-					
-					if (Display.isCloseRequested()) {
-						running = false;
+					if (!paused) { // calculate new graphics output
+						frameCount++;
+						measureFrameCount++;
+						referenceFrameCount++;
+						gameView.render();
+						statisticsView.refresh();
+						
+						if (Display.isCloseRequested()) {
+							running = false;
+						}
 					}
+					Display.update(); // must be called in any case to catch keyboard input
 				}
 				
 			}
