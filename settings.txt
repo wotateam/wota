@@ -1,6 +1,6 @@
 # settings.txt
 
-AI_PACKAGE_NAMES = bvb, organized
+AI_PACKAGE_NAMES = bvb
 
 IS_GRAPHICAL = true
 

@@ -80,6 +80,7 @@ public class GameWorld {
 		public final QueenObject queenObject;
 
 		public final String name;
+		public final String creator;
 
 		private final int id;
 		
@@ -98,6 +99,7 @@ public class GameWorld {
 			antObjects.add(queenObject);		
 		
 			name = AILoader.getAIName(queenAIClass);
+			creator = AILoader.getAICreator(queenAIClass);
 
 			id = nextPlayerId;
 			nextPlayerId++;
