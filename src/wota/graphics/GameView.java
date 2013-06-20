@@ -120,6 +120,8 @@ public class GameView {
 				}
 				if (DRAW_ATTACK) {
 					AntObject attackTarget = antObject.getAttackTarget();
+					final float attackLineWidth = 3.0f;
+					glLineWidth(attackLineWidth);
 					if (attackTarget != null) {
 						final float attackAlpha = 1.0f;
 						setColor(colorComponents[0], colorComponents[1], colorComponents[2], attackAlpha);
