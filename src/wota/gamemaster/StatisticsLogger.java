@@ -23,25 +23,25 @@ public class StatisticsLogger implements Logger{
 		collectedFood 	= new int[players.size()];
 		
 		for (Player player : players) {
-			createdAnts[player.getId()] 	= 0;
-			diedAnts[player.getId()]    	= 0;
-			collectedFood[player.getId()]	= 0;
+			createdAnts[player.id()] 	= 0;
+			diedAnts[player.id()]    	= 0;
+			collectedFood[player.id()]	= 0;
 		}
 	}
 	
 	@Override
 	public void antCreated(AntObject antObject) {
-		createdAnts[antObject.player.getId()]++;
+		createdAnts[antObject.player.id()]++;
 	}
 
 	@Override
 	public void antDied(AntObject antObject) {
-		diedAnts[antObject.player.getId()]++;
+		diedAnts[antObject.player.id()]++;
 	}
 	
 	@Override
 	public void antCollectedFood(Player player, int amount) {
-		collectedFood[player.getId()] += amount;
+		collectedFood[player.id()] += amount;
 	}
 	
 	public int[] createdAnts() {

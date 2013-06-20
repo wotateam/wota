@@ -13,7 +13,7 @@ public class Hill extends Snapshot{
 	
 	public Hill(HillObject hillObject) {
 		this.hillObject = hillObject;
-		this.playerID = hillObject.getPlayer().getId();
+		this.playerID = hillObject.getPlayer().id();
 		this.food = hillObject.getStoredFood();
 	}
 

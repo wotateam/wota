@@ -39,7 +39,7 @@ public class Ant extends Snapshot {
 		speed = antObject.getSpeed();
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
-		playerID = antObject.player.getId();
+		playerID = antObject.player.id();
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
 		this.antObject = antObject;
 	}

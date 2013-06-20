@@ -103,7 +103,7 @@ public class StatisticsView implements Runnable{
 			Player player = gameWorld.getPlayers().get(playerId);
 			switch(rowIndex) {
 			case 0:
-				return GameView.playerColors[player.getId()];
+				return GameView.playerColors[player.id()];
 			case 1:
 				return player.antObjects.size();
 			case 2:

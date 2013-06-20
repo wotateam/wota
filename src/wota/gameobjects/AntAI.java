@@ -56,7 +56,7 @@ public abstract class AntAI {
 	protected List<Ant> visibleFriends() {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
-			if (ant.playerID == antObject.player.getId()) {
+			if (ant.playerID == antObject.player.id()) {
 				output.add(ant);
 			}
 		}
@@ -67,7 +67,7 @@ public abstract class AntAI {
 	protected List<Ant> visibleEnemies() {
 		LinkedList<Ant> output = new LinkedList<Ant>();
 		for (Ant ant : visibleAnts) {
-			if (ant.playerID != antObject.player.getId()) {
+			if (ant.playerID != antObject.player.id()) {
 				output.add(ant);
 			}
 		}

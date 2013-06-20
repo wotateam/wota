@@ -120,7 +120,7 @@ public class Simulation {
 		if (gameWorld.checkVictoryCondition()) {
 			GameWorld.Player winner = gameWorld.getWinner();
 			if (winner != null) {
-				System.out.println(winner.name + " written by " + winner.creator + " has won the game in tick "
+				System.out.println("#" + (winner.id() +1) + " " + winner.name + " written by " + winner.creator + " has won the game in tick "
 						+ gameWorld.tickCount());
 				running = false;
 			}

@@ -86,7 +86,7 @@ public class GameWorld {
 		
 		public boolean hasLost = false;
 
-		public int getId() {
+		public int id() {
 			return id;
 		}
 

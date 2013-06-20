@@ -96,7 +96,7 @@ public class GameView {
 
 	private void renderImpl() {
 		for (GameWorld.Player player : world.getPlayers()) {
-			Color color = playerColors[player.getId()];
+			Color color = playerColors[player.id()];
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ants
