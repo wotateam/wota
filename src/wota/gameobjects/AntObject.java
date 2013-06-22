@@ -35,6 +35,9 @@ public class AntObject extends GameObject{
 	public final GameWorld.Player player;
 	private boolean isAttacking = false;
 	private AntObject attackTarget = null;
+	// Only has a meaning while the ant is waiting at a sugar source. Has to be saved because the sugar
+	// source has to increase its amount of sugar by this much when this ant dies while waiting.
+	private int amountPickedUpLastTime; 
 	
 	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player, Parameters parameters) {
 		super(position, parameters);
@@ -130,8 +133,16 @@ public class AntObject extends GameObject{
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
-		sugarObject.requestSugarPickup(this);
 		sugarTarget = sugarObject;
+
+		int oldAmountOfSugarCarried = sugarCarry;
+		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
+		amountPickedUpLastTime = sugarCarry - oldAmountOfSugarCarried;
+		if (amountPickedUpLastTime > 0) { // this time
+			// May be zero, because other ants may already have picked up all the remaining sugar
+			// *during this tick*. In this case, do not wait at the sugar source. 
+			sugarTarget.requestSugarPickup(this, amountPickedUpLastTime);		
+		} 
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -163,12 +174,12 @@ public class AntObject extends GameObject{
 				e.printStackTrace();
 			}
 		}
-		else if (sugarTarget.canPickUpSugarNow(this)) {
+		/*else if (sugarTarget.canPickUpSugarNow(this)) {
 			int oldAmountOfSugarCarried = sugarCarry;
 			sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
 			sugarTarget.antPicksUpSugar(this, sugarCarry - oldAmountOfSugarCarried);
 			unsetSugarTarget();
-		}
+		}*/
 		
 		action = ai.popAction();
 	}
@@ -211,8 +222,8 @@ public class AntObject extends GameObject{
 	 */
 	public void die() {
 		if (sugarTarget != null) {
-			sugarTarget.removeFromQueue(this);
-			unsetSugarTarget();
+			sugarTarget.removeFromQueueEarly(this, amountPickedUpLastTime);
+			sugarCarry -= amountPickedUpLastTime; // doesn't matter now, would if one were able to resurrect ants
 		}
 	}
 

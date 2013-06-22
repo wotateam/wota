@@ -187,7 +187,7 @@ public class GameWorld {
 				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
 		}
-		// Only do this now that we used last ticks message objects.
+		// Only do this now that we used last tick's message objects.
 		spacePartitioning.discardMessageObjects();
 		
 		// execute all actions, ants get created

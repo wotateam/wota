@@ -56,38 +56,32 @@ public class SugarObject extends GameObject {
 		return (serviceQueue.getFirst() == antObject) && (ticksToNextService == 0);
 	}
 	
-	/**
-	 * reduce the amount of stored sugar and remove antObject from serviceQueue 
-	 */
-	public void antPicksUpSugar(AntObject antObject, int reduction) {
-		if (serviceQueue.isEmpty() || serviceQueue.getFirst() != antObject) {
-			System.err.println("unxepected behavior in SugarObject.antPicksUpSugar()");
-		}
-		serviceQueue.removeFirst();
-		amount = Math.max(amount - reduction, 0);
-		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-	}
-	
 	public void tick() {
 		if ( !serviceQueue.isEmpty() ) {
 			ticksToNextService--;
+			if (ticksToNextService == 0) {
+				serviceQueue.removeFirst().unsetSugarTarget();
+				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
+			}
 		}
 	}
 	
-	public void requestSugarPickup(AntObject antObject) {
+	public void requestSugarPickup(AntObject antObject, int amountToPickUp) {
 		serviceQueue.add(antObject);
+		amount -= amountToPickUp;
 	}
 	
 	/**
 	 * removes antObject from serviceQueue
 	 * @param antObject
-	 * @return was removal successful? 
 	 */
-	public boolean removeFromQueue(AntObject antObject) {
+	public void removeFromQueueEarly(AntObject antObject, int amountPickedUp) {
 		if (serviceQueue.getFirst() == antObject) {
 			ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
 		}
-		return serviceQueue.remove(antObject);
+		amount += amountPickedUp;
+		antObject.unsetSugarTarget();
+		serviceQueue.remove(antObject);
 	}
 	
 	public double getRadius() {
