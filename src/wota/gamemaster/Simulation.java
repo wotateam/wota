@@ -164,14 +164,12 @@ public class Simulation {
 		int measureTickCount = 0; // Tick counter to determine FPS
 		
 		// events for graphics update and tick are created uniformly. Call them with priority on graphics
-		while (running) { 
-			
-			handleKeyboardInputs();
-			
+		while (running) { 			
 			if (!isGraphical) {
 				tick();
 				measureTickCount++;
 			} else {
+				handleKeyboardInputs();
 				
 				// now update simulation if tick event 
 				if (ticksToDo() > SKIP_TICKS_THRESHOLD) {

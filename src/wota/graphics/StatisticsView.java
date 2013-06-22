@@ -21,7 +21,7 @@ import wota.gameobjects.GameWorld.Player;
  *  View class for the statistics.
  *  Draws an JTable and puts in StatisticsView.StatisticsTableModel.
  */
-public class StatisticsView implements Runnable{
+public class StatisticsView implements Runnable {
 	
 	public JFrame frame;
 	private GameWorld gameWorld;
