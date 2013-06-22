@@ -39,9 +39,9 @@ public class SimulationInstance {
 		this.seed = seed;
 
 		aiLoader = new AILoader("./");
-		
-		parameters = readParameters("parameters.txt");
+
 		simulationParameters = readSimulationParameters("settings.txt");
+		parameters = constructParameters("parameters.txt", simulationParameters.AI_PACKAGE_NAMES.length);
 		
 		constructGameWorld();
 	}
@@ -108,7 +108,7 @@ public class SimulationInstance {
 	 * @param filename name of the file, standard is parameters.txt
 	 * @return freshly generated Parameters instance
 	 */
-	private static Parameters readParameters(String filename) {
+	private static Parameters constructParameters(String filename, int numberOfPlayers) {
 		Properties propertiesForParameters = new Properties();
 		try {
 			propertiesForParameters.load(new FileReader(filename));
@@ -120,7 +120,7 @@ public class SimulationInstance {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		return new Parameters(propertiesForParameters);
+		return new Parameters(propertiesForParameters, numberOfPlayers);
 	}
 
 	/**

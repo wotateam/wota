@@ -5,10 +5,11 @@ import java.util.Properties;
 import wota.utility.Modulo;
 import wota.utility.Vector;
 
-
-// Please put comments in /parameters.txt, because this is where they are set.
 public class Parameters {
-
+	public final int NUMBER_OF_PLAYERS;
+	// This is the actual width of the game world. It differs from SIZE_X in parameters.txt, 
+	// because the area of the game world is proportional to the number of players. SIZE_X
+	// in parameters.txt is the width for two players.
 	public final double SIZE_X;
 	public final double SIZE_Y;
 	public final double HILL_RADIUS;
@@ -37,9 +38,12 @@ public class Parameters {
 	public final int SUGAR_SOURCES_PER_PLAYER;
 	public final double FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY;
 
-	public Parameters(Properties p) {
-		SIZE_X = Double.parseDouble(p.getProperty("SIZE_X"));
-		SIZE_Y = Double.parseDouble(p.getProperty("SIZE_Y"));
+	public Parameters(Properties p, int NUMBER_OF_PLAYERS) {
+		this.NUMBER_OF_PLAYERS = NUMBER_OF_PLAYERS;
+		// The area should be proportional to the number of players.
+		double sizeFactor = Math.sqrt(NUMBER_OF_PLAYERS/2.);
+		SIZE_X = sizeFactor * Double.parseDouble(p.getProperty("SIZE_X"));
+		SIZE_Y = sizeFactor * Double.parseDouble(p.getProperty("SIZE_Y"));
 		HILL_RADIUS = Double.parseDouble(p.getProperty("HILL_RADIUS"));
 		ATTACK_RANGE = Double.parseDouble(p.getProperty("ATTACK_RANGE"));
 		VULNERABILITY_WHILE_CARRYING = Double.parseDouble(p.getProperty("VULNERABILITY_WHILE_CARRYING"));
