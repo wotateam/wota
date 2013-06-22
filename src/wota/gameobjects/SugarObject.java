@@ -49,13 +49,6 @@ public class SugarObject extends GameObject {
 		return serviceQueue.size();
 	}
 	
-	/** 
-	 * returns if antObject is able to pick up sugar now
-	 */
-	public boolean canPickUpSugarNow(AntObject antObject) {
-		return (serviceQueue.getFirst() == antObject) && (ticksToNextService == 0);
-	}
-	
 	public void tick() {
 		if ( !serviceQueue.isEmpty() ) {
 			ticksToNextService--;

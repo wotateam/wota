@@ -256,7 +256,7 @@ public class GameWorld {
 			sugarObject.tick();
 			
 			// remove if empty 
-			if (sugarObject.getAmount() <= 0) {
+			if (sugarObject.getAmount() <= 0 && sugarObject.getQueueSize() == 0) {
 				sugarObject.getsRemoved();
 				sugarObjectIter.remove();
 				spacePartitioning.removeSugarObject(sugarObject);
