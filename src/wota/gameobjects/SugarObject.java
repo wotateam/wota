@@ -27,7 +27,7 @@ public class SugarObject extends GameObject {
 	public SugarObject(Vector position, Parameters parameters) {
 		super(position, parameters);
 		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-		this.amount = parameters.INITIAL_SUGAR;
+		this.amount = parameters.INITIAL_SUGAR_IN_SOURCE;
 	}
 	
 	public void createSugar() {
@@ -91,7 +91,7 @@ public class SugarObject extends GameObject {
 	}
 	
 	public double getRadius() {
-		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR);
+		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR_IN_SOURCE);
 	}
 
 	/**

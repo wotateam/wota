@@ -18,7 +18,7 @@ public class Parameters {
 	// Radius of a new sugar source:
 	public final double INITIAL_SUGAR_RADIUS;
 	// Amount of sugar in a new sugar source:
-	public final int INITIAL_SUGAR;
+	public final int INITIAL_SUGAR_IN_SOURCE;
 	// Cost to produce an ant:
 	public final int ANT_COST;
 	// Amount of food available at each hill when the game starts:
@@ -45,7 +45,7 @@ public class Parameters {
 		VULNERABILITY_WHILE_CARRYING = Double.parseDouble(p.getProperty("VULNERABILITY_WHILE_CARRYING"));
 		INITIAL_SUGAR_RADIUS = Double.parseDouble(p.getProperty("INITIAL_SUGAR_RADIUS"));
 	
-		INITIAL_SUGAR = Integer.parseInt(p.getProperty("INITIAL_SUGAR"));
+		INITIAL_SUGAR_IN_SOURCE = Integer.parseInt(p.getProperty("INITIAL_SUGAR_IN_SOURCE"));
 		ANT_COST = Integer.parseInt(p.getProperty("ANT_COST"));
 		STARTING_FOOD = Integer.parseInt(p.getProperty("STARTING_FOOD"));
 		
