@@ -3,6 +3,7 @@ package wota.gamemaster;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -127,25 +128,27 @@ public class SimulationInstance {
 	 * hills and resources from the given seed.
 	 */
 	private void constructGameWorld() {
-		gameWorld = new GameWorld(parameters);
-
+		RandomPosition randomPosition = new RandomPosition(parameters);
+		gameWorld = new GameWorld(parameters, randomPosition);
+		
 		SeededRandomizer.resetSeed(seed);
 
+		List<Vector> hillPositions = new LinkedList<Vector>();
 		for (String aiName : simulationParameters.AI_PACKAGE_NAMES) {
-			GameWorld.Player player = gameWorld.new Player(new Vector(
-					SeededRandomizer.getInt(700),
-					SeededRandomizer.getInt(700)), aiLoader.loadQueen(aiName));
+			Vector hillPosition = randomPosition.hillPosition(hillPositions);
+			hillPositions.add(hillPosition);
+			GameWorld.Player player = gameWorld.new Player(hillPosition, aiLoader.loadQueen(aiName));
 			gameWorld.addPlayer(player);
 		}
 
-		for (int i = 0; i < parameters.N_SUGAR_SOURCES; i++) {
-			gameWorld.createRandomSugarObject();
+		List<Vector> sugarPositions = new LinkedList<Vector>();
+		for (int i = 0; i < simulationParameters.AI_PACKAGE_NAMES.length; i++) {
+			for (int j = 0; j < parameters.SUGAR_SOURCES_PER_PLAYER ; j++) {
+				Vector sugarPosition = randomPosition.startingSugarPosition(hillPositions.get(i), sugarPositions, hillPositions);
+				sugarPositions.add(sugarPosition);
+				gameWorld.addSugarObject(new SugarObject(parameters.INITIAL_SUGAR, sugarPosition, parameters));
+			}
 		}
-		/*
-		// add queens
-		for (Player player : world.getPlayers()) {
-			player.
-		}*/
 	}
 	
 	private void constructTestGameWorld(Vector posFirstPlayer,
@@ -154,7 +157,7 @@ public class SimulationInstance {
 										List<Vector> positionsSecondAI,
 										Class <? extends AntAI> firstAntAI,
 										Class <? extends AntAI> secondAntAI) {
-		gameWorld = new GameWorld(parameters);
+		gameWorld = new GameWorld(parameters, new RandomPosition(parameters));
 		
 		SeededRandomizer.resetSeed(seed);
 		

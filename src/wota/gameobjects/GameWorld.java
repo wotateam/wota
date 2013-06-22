@@ -8,9 +8,9 @@ import java.util.List;
 
 import wota.gamemaster.AILoader;
 import wota.gamemaster.Logger;
+import wota.gamemaster.RandomPosition;
 import wota.gamemaster.StatisticsLogger;
 import wota.gameobjects.SimulationParameters;
-import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
 
@@ -31,9 +31,11 @@ public class GameWorld {
 	private final Parameters parameters;
 	
 	private int tickCount = 0;
+	private final RandomPosition randomPosition;
 	
-	public GameWorld(Parameters parameters) {
+	public GameWorld(Parameters parameters, RandomPosition randomPosition) {
 		this.parameters = parameters;
+		this.randomPosition = randomPosition;
 		spacePartitioning = new SpacePartitioning(maximumSight(), parameters);
 	}
 	
@@ -51,9 +53,18 @@ public class GameWorld {
 	}
 	
 	public void createRandomSugarObject() {
+		List<Vector> hillPositions = new LinkedList<Vector>();
+		for (Player player : players) {
+			hillPositions.add(player.hillObject.getPosition());
+		}
+		
+		List<Vector> sugarPositions = new LinkedList<Vector>();
+		for (SugarObject sugarObject : sugarObjects) {
+			sugarPositions.add(sugarObject.getPosition());
+		}
+		
 		SugarObject sugarObject = new SugarObject(parameters.INITIAL_SUGAR,
-												  new Vector(SeededRandomizer.getDouble()*parameters.SIZE_X,
-														  	 SeededRandomizer.getDouble()*parameters.SIZE_Y),
+												  randomPosition.sugarPosition(hillPositions, sugarPositions),
 												  parameters);
 		addSugarObject(sugarObject);
 	}

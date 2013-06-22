@@ -28,9 +28,15 @@ public class Parameters {
 	public final int TICKS_TO_LIVE;
 	// Number of ticks it takes to pick up sugar: 
 	public final int TICKS_SUGAR_PICKUP;
-	// Number of sugar sources:
-	public final int N_SUGAR_SOURCES;
-	
+	public final double MINIMUM_DISTANCE_BETWEEN_HILLS;
+	public final double MAXIMUM_STARTING_SUGAR_DISTANCE;
+	public final double MINIMUM_STARTING_SUGAR_DISTANCE;
+	public final double MINIMUM_STARTING_SUGAR_DISTANCE_TO_OTHER_HILLS;
+	public final double MINIMUM_SUGAR_DISTANCE;
+	public final double MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR;
+	// Number of sugar sources per player
+	public final int SUGAR_SOURCES_PER_PLAYER;
+
 	public Parameters(Properties p) {
 		SIZE_X = Double.parseDouble(p.getProperty("SIZE_X"));
 		SIZE_Y = Double.parseDouble(p.getProperty("SIZE_Y"));
@@ -47,7 +53,13 @@ public class Parameters {
 		
 		TICKS_TO_LIVE = Integer.parseInt(p.getProperty("TICKS_TO_LIVE"));
 		TICKS_SUGAR_PICKUP = Integer.parseInt(p.getProperty("TICKS_SUGAR_PICKUP"));
-		N_SUGAR_SOURCES = Integer.parseInt(p.getProperty("N_SUGAR_SOURCES"));
+		MINIMUM_DISTANCE_BETWEEN_HILLS = Double.parseDouble(p.getProperty("MINIMUM_DISTANCE_BETWEEN_HILLS"));
+		MAXIMUM_STARTING_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MAXIMUM_STARTING_SUGAR_DISTANCE"));
+		MINIMUM_STARTING_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MINIMUM_STARTING_SUGAR_DISTANCE"));
+		MINIMUM_STARTING_SUGAR_DISTANCE_TO_OTHER_HILLS = Double.parseDouble(p.getProperty("MINIMUM_STARTING_SUGAR_DISTANCE_TO_OTHER_HILLS"));
+		MINIMUM_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MINIMUM_SUGAR_DISTANCE"));
+		MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR = Double.parseDouble(p.getProperty("MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR"));
+		SUGAR_SOURCES_PER_PLAYER = Integer.parseInt(p.getProperty("SUGAR_SOURCES_PER_PLAYER"));
 	}
 	
 	public Vector normalize(Vector p) {
