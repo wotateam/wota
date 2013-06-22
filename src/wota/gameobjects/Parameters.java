@@ -35,6 +35,7 @@ public class Parameters {
 	public final double MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR;
 	// Number of sugar sources per player
 	public final int SUGAR_SOURCES_PER_PLAYER;
+	public final double FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY;
 
 	public Parameters(Properties p) {
 		SIZE_X = Double.parseDouble(p.getProperty("SIZE_X"));
@@ -58,6 +59,7 @@ public class Parameters {
 		MINIMUM_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MINIMUM_SUGAR_DISTANCE"));
 		MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR = Double.parseDouble(p.getProperty("MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR"));
 		SUGAR_SOURCES_PER_PLAYER = Integer.parseInt(p.getProperty("SUGAR_SOURCES_PER_PLAYER"));
+		FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY = Double.parseDouble(p.getProperty("FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY"));
 	}
 	
 	public Vector normalize(Vector p) {

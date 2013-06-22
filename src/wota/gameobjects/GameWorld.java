@@ -369,40 +369,37 @@ public class GameWorld {
 	/** check the victory condition after this amount of ticks */
 	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 100;
 	
-	/** tests if victory condition is fulfilled
-	 * @return is the victory condition fulfilled or can nobody win anymore? */
-	public boolean checkVictoryCondition() {	
-		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE)
+	public boolean allPlayersDead() {
+		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
 			return false;
-		int nPossibleWinners = players.size();
+		}
+		
+		int nPlayersAlive = players.size();
 		for (Player player : players) {
 			if ( (player.antObjects.size() == 1 && !player.queenObject.isDead() ) ||
 					player.antObjects.size() == 0) {
-				player.hasLost = true;
-				nPossibleWinners--;
-			}
-			else {
-				player.hasLost = false;
+				nPlayersAlive--;
 			}
 		}
-		
-		return (nPossibleWinners <= 1);
-
+		return nPlayersAlive == 0;
 	}
 	
-	/** 
-	 * Assumes that checkVictoryCondition returns true.
-	 * @return the player who won the game or null for draws. 
-	 */
 	public Player getWinner() {
-		if (!checkVictoryCondition()) {
-			System.err.println("getWinner() should only be called if checkVictoryCondition() return true!");
+		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
+			return null;
 		}
+		
+		double totalAnts = 0;
 		for (Player player : players) {
-			if (player.hasLost == false) {
+			totalAnts += player.antObjects.size();
+		}
+		
+		for (Player player : players) {
+			if (player.antObjects.size() / totalAnts >= parameters.FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY) {
 				return player;
 			}
 		}
+		
 		return null;
 	}
 	

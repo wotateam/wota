@@ -117,34 +117,32 @@ public class Simulation {
 	private void tick() {
 		gameWorld.tick();
 
-		if (gameWorld.checkVictoryCondition()) {
-			GameWorld.Player winner = gameWorld.getWinner();
-			if (winner != null) {
-				System.out.println("#" + (winner.id() +1) + " " + winner.name + " written by " + winner.creator + " has won the game in tick "
-						+ gameWorld.tickCount());
-				running = false;
-			}
-			else {
-				System.out.println("draw! nobody has won the game after " + gameWorld.tickCount() + " ticks.");
-				running = false;
-			}
+		GameWorld.Player winner = gameWorld.getWinner();
+		running = false; // set to true if none of the victory conditions actually apply
+		if (winner != null) {
+			System.out.println("#" + (winner.id() +1) + " " + winner.name + " written by " + winner.creator + " has won the game in tick "
+					+ gameWorld.tickCount());
+		} 
+		else if (gameWorld.allPlayersDead()) {
+			System.out.println("Draw! Nobody has won the game after " + gameWorld.tickCount() + " ticks.");
 		}
-		
-		// End the game after fixed numer of ticks - players with most ants win.
-		if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
+		// End the game after fixed number of ticks - players with most ants win.
+		else if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
 			List<GameWorld.Player> winners = gameWorld.getPlayersWithMostAnts();
 			if (winners.size() == gameWorld.getPlayers().size()) {
 				System.out.println("Draw! Game was stopped after " + gameWorld.tickCount() + " ticks. All players have the same number of ants.");
-				running = false;
 			}
 			else {
 				System.out.println("Game was stopped after " + gameWorld.tickCount() + " ticks. The following player(s) have won:");
-				for (GameWorld.Player winner : winners) {
-					System.out.println(winner.name);
+				for (GameWorld.Player aWinner : winners) {
+					System.out.println(aWinner.name);
 				}
-				running = false;
 			}
 		}
+		else {
+			running = true;
+		}
+		
 	}
 
 	/**
