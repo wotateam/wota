@@ -3,9 +3,9 @@ package wota.ai.solitary;
 import java.util.Random;
 
 import wota.ai.*;
+import wota.gamemaster.SimulationParameters;
 import wota.gameobjects.AntAI;
 import wota.gameobjects.Hill;
-import wota.gameobjects.SimulationParameters;
 import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;
 

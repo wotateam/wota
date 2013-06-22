@@ -15,7 +15,6 @@ import org.lwjgl.opengl.PixelFormat;
 import wota.gameobjects.GameWorld;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
-import wota.gameobjects.SimulationParameters;
 
 
 /**

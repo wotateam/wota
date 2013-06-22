@@ -9,8 +9,8 @@ import java.util.List;
 import wota.gamemaster.AILoader;
 import wota.gamemaster.Logger;
 import wota.gamemaster.RandomPosition;
+import wota.gamemaster.SimulationParameters;
 import wota.gamemaster.StatisticsLogger;
-import wota.gameobjects.SimulationParameters;
 import wota.utility.Vector;
 
 

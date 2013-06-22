@@ -1,4 +1,4 @@
-package wota.gameobjects;
+package wota.gamemaster;
 
 import java.util.Properties;
 
