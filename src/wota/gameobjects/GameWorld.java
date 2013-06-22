@@ -63,8 +63,7 @@ public class GameWorld {
 			sugarPositions.add(sugarObject.getPosition());
 		}
 		
-		SugarObject sugarObject = new SugarObject(parameters.INITIAL_SUGAR,
-												  randomPosition.sugarPosition(hillPositions, sugarPositions),
+		SugarObject sugarObject = new SugarObject(randomPosition.sugarPosition(hillPositions, sugarPositions),
 												  parameters);
 		addSugarObject(sugarObject);
 	}

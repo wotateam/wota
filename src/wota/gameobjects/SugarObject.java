@@ -24,10 +24,10 @@ public class SugarObject extends GameObject {
 	/** number of ticks an ant will freeze when picking up */
 	private int ticksToNextService;
 	
-	public SugarObject(int amount, Vector position, Parameters parameters) {
+	public SugarObject(Vector position, Parameters parameters) {
 		super(position, parameters);
 		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-		this.amount = amount;
+		this.amount = parameters.INITIAL_SUGAR;
 	}
 	
 	public void createSugar() {

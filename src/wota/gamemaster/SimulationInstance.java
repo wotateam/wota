@@ -146,7 +146,7 @@ public class SimulationInstance {
 			for (int j = 0; j < parameters.SUGAR_SOURCES_PER_PLAYER ; j++) {
 				Vector sugarPosition = randomPosition.startingSugarPosition(hillPositions.get(i), sugarPositions, hillPositions);
 				sugarPositions.add(sugarPosition);
-				gameWorld.addSugarObject(new SugarObject(parameters.INITIAL_SUGAR, sugarPosition, parameters));
+				gameWorld.addSugarObject(new SugarObject(sugarPosition, parameters));
 			}
 		}
 	}
