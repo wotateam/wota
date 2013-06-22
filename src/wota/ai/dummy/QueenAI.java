@@ -4,7 +4,7 @@ import wota.gamemaster.AIInformation;
 import wota.gameobjects.Caste;
 import wota.utility.SeededRandomizer;
 
-@AIInformation(creator = "WotA-Team", name = "Dummy")
+@AIInformation(creator = "Wota Team", name = "Dummy")
 public class QueenAI extends wota.gameobjects.QueenAI {
 	
 	@Override
