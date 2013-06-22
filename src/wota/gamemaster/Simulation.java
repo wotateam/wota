@@ -89,8 +89,7 @@ public class Simulation {
 		gameWorld.setLogger(logger);
 			
 		statisticsView = new StatisticsView(gameWorld, logger);
-        // Schedules the application to be run at the correct time in the event queue.
-        SwingUtilities.invokeLater(statisticsView);
+        statisticsView.run();
         
 		if (isGraphical) {
 			gameView = new GameView(gameWorld, width, height, inst.getParameters());
