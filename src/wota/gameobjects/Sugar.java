@@ -10,12 +10,14 @@ import wota.utility.Vector;
 public class Sugar extends Snapshot {
 	public final int amount;
 	public final double radius;
+	public final int waitingAnts;
 	final SugarObject sugarObject;
 	
 	public Sugar(SugarObject sugarObject) {
 		this.sugarObject = sugarObject;
 		amount = sugarObject.getAmount();
 		radius = sugarObject.getRadius();
+		waitingAnts = sugarObject.getQueueSize();
 	}
 
 	@Override
