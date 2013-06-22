@@ -118,7 +118,7 @@ public class Simulation {
 		GameWorld.Player winner = gameWorld.getWinner();
 		running = false; // set to true if none of the victory conditions actually apply
 		if (winner != null) {
-			System.out.println("#" + (winner.id() +1) + " " + winner.name + " written by " + winner.creator + " has won the game in tick "
+			System.out.println(winner + " has won the game in tick "
 					+ gameWorld.tickCount());
 		} 
 		else if (gameWorld.allPlayersDead()) {
@@ -133,7 +133,7 @@ public class Simulation {
 			else {
 				System.out.println("Game was stopped after " + gameWorld.tickCount() + " ticks. The following player(s) have won:");
 				for (GameWorld.Player aWinner : winners) {
-					System.out.println(aWinner.name);
+					System.out.println(aWinner);
 				}
 			}
 		}

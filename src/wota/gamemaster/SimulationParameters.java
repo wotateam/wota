@@ -20,7 +20,6 @@ public class SimulationParameters {
 		AI_PACKAGE_NAMES = p.getProperty("AI_PACKAGE_NAMES").split(",");
 		for (int i = 0; i < AI_PACKAGE_NAMES.length; i++) {
 			AI_PACKAGE_NAMES[i] = AI_PACKAGE_NAMES[i].trim();
-			System.out.println("AI #" + (i+1) + " " + AI_PACKAGE_NAMES[i]);
 		}
 	}
 }

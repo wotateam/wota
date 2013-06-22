@@ -93,8 +93,6 @@ public class GameWorld {
 		public final String creator;
 
 		private final int id;
-		
-		public boolean hasLost = false;
 
 		public int id() {
 			return id;
@@ -113,6 +111,11 @@ public class GameWorld {
 
 			id = nextPlayerId;
 			nextPlayerId++;
+		}
+		
+		@Override
+		public String toString() {
+			return "AI " + (id +1) + " " + name + " written by " + creator;
 		}
 		
 		public void addAntObject(AntObject antObject) {

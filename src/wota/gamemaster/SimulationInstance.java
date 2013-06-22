@@ -138,6 +138,7 @@ public class SimulationInstance {
 			Vector hillPosition = randomPosition.hillPosition(hillPositions);
 			hillPositions.add(hillPosition);
 			GameWorld.Player player = gameWorld.new Player(hillPosition, aiLoader.loadQueen(aiName));
+			System.out.println(player);
 			gameWorld.addPlayer(player);
 		}
 
