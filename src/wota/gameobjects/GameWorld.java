@@ -329,8 +329,6 @@ public class GameWorld {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
 			logger.antCollectedFood(actor.player, actor.getSugarCarry());
 			actor.dropSugar();
-			
-			actor.resetTicksToLive();
 		}
 		
 		// or drop sugar if desired

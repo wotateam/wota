@@ -20,7 +20,6 @@ public class AntObject extends GameObject{
 	public final int id;
 	protected double health;
 	private double speed;
-	private int ticksToLive;
 	private double lastMovementDirection = 0;
 	
 	/** amount of sugar carried now */
@@ -60,8 +59,6 @@ public class AntObject extends GameObject{
 		
 		this.ai = antAI;
 		this.ai.setAntObject(this);
-		
-		resetTicksToLive();
 	}
 
 	public AntAI getAI() {
@@ -153,7 +150,7 @@ public class AntObject extends GameObject{
 	/** Checks if AntObject has positive health and has been at its hill less than 
 	 *  than TICKS_TO_LIVE ticks ago. */
 	public boolean isDead() {
-		return (health <= 0) || (ticksToLive < 0);
+		return health <= 0;
 	}
 	
 	/** calls ai.tick(), handles exceptions and saves the action */
@@ -164,8 +161,6 @@ public class AntObject extends GameObject{
 		ai.visibleHills = visibleHills;
 		ai.audibleMessages = incomingMessages;
 		
-		ticksToLive--;
-		
 		if ( !isWaitingForSugar() ) {
 			try {
 				ai.tick();
@@ -174,12 +169,6 @@ public class AntObject extends GameObject{
 				e.printStackTrace();
 			}
 		}
-		/*else if (sugarTarget.canPickUpSugarNow(this)) {
-			int oldAmountOfSugarCarried = sugarCarry;
-			sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
-			sugarTarget.antPicksUpSugar(this, sugarCarry - oldAmountOfSugarCarried);
-			unsetSugarTarget();
-		}*/
 		
 		action = ai.popAction();
 	}
@@ -211,10 +200,6 @@ public class AntObject extends GameObject{
 	private static int getNewID() {
 		idCounter++;
 		return idCounter - 1;
-	}
-
-	public void resetTicksToLive() {
-		ticksToLive = parameters.TICKS_TO_LIVE;
 	}
 
 	/**
