@@ -2,6 +2,8 @@
 ---- Tutorial for AI developers ------
 ======================================
 
+0. Read README.md.
+
 1. Create at least two classes. One should inherit wota.gameobjects.AntAI
    and the other wota.gameobjects.QueenAI. These files will contain your AI.
    It is important that your files are located in src/wota/ai/ or one of its 
