@@ -69,12 +69,17 @@ public class SugarObject extends GameObject {
 	 * @param antObject
 	 */
 	public void removeFromQueueEarly(AntObject antObject, int amountPickedUp) {
-		if (serviceQueue.getFirst() == antObject) {
-			ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-		}
 		amount += amountPickedUp;
 		antObject.unsetSugarTarget();
-		serviceQueue.remove(antObject);
+		
+		// It is possible that the serviceQueue is empty, because the ant could be
+		// killed during the tick it is done waiting.
+		if (!serviceQueue.isEmpty()) { 
+			if (serviceQueue.getFirst() == antObject) {
+				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
+			}
+			serviceQueue.remove(antObject);
+		}
 	}
 	
 	public double getRadius() {
