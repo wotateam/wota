@@ -8,16 +8,13 @@ import wota.utility.Vector;
 /**
  * A hill of sugar. 
  * 
- * Sugar can be picked up by first come first serve principle:
- * SugarObject has a field ticksToWait which indicates the number of 
- * ticks an Ant freezes before the sugar is picked up. This number will
- * be increased by Parameters.TICKS_SUGAR_PICKUP when an Ant picks up some
- * sugar and decreased by one every tick.
+ * Sugar can be picked up by first come first serve principle.
  *
  */
 public class SugarObject extends GameObject {
 	
 	private int amount;
+	private int visibleAmount; // always at least as big as amount 
 	private Sugar sugar;
 	/** List of Ants which wait to receive sugar */
 	private LinkedList<AntObject> serviceQueue = new LinkedList<AntObject>();
@@ -27,7 +24,8 @@ public class SugarObject extends GameObject {
 	public SugarObject(Vector position, Parameters parameters) {
 		super(position, parameters);
 		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-		this.amount = parameters.INITIAL_SUGAR_IN_SOURCE;
+		amount = parameters.INITIAL_SUGAR_IN_SOURCE;
+		this.visibleAmount = amount;
 	}
 	
 	public void createSugar() {
@@ -53,7 +51,9 @@ public class SugarObject extends GameObject {
 		if ( !serviceQueue.isEmpty() ) {
 			ticksToNextService--;
 			if (ticksToNextService == 0) {
-				serviceQueue.removeFirst().unsetSugarTarget();
+				AntObject theServiced = serviceQueue.removeFirst();
+				visibleAmount -= theServiced.getAmountPickedUpLastTime();
+				theServiced.unsetSugarTarget();
 				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
 			}
 		}
@@ -78,7 +78,7 @@ public class SugarObject extends GameObject {
 	}
 	
 	public double getRadius() {
-		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR_IN_SOURCE);
+		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) visibleAmount / parameters.INITIAL_SUGAR_IN_SOURCE);
 	}
 
 	/**

@@ -220,4 +220,8 @@ public class AntObject extends GameObject{
 		sugarTarget = null;
 	}
 
+	public int getAmountPickedUpLastTime() {
+		return amountPickedUpLastTime;
+	}
+
 }
