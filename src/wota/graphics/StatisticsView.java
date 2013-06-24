@@ -57,33 +57,41 @@ public class StatisticsView implements Runnable {
 	 * It implements basic methods like getValueAt() which 
 	 * are used by the JTable to obtain the cell values.
 	 */
+	@SuppressWarnings("synthetic-access")
 	public class StatisticsTableModel extends AbstractTableModel {
 		
 		private StatisticsLogger          logger;
-		private final Vector<String>      playerNames;
-		private final String[]			  rowNames;
+		private final String[]			  playerNames;
+		/** representing the table data, 1st index = row, 2nd = column, 0 = row name, 1.. players */
+		private Object[][]				  data; 
 		
 		public StatisticsTableModel(StatisticsLogger logger) {
 			this.logger = logger;
-			playerNames = new Vector<String>();
-			for (Player player : gameWorld.getPlayers()) {
-				playerNames.add(player.name);
-			}
-			rowNames = new String[] {
+			String[] rowNames = new String[] {
 					"", "# Ants", "# Gatherer", "# Soldiers", "# Scouts",
 					"# created ants", "# lost ants",
 					"collected food"
 			};
+			data = new Object[rowNames.length][gameWorld.getPlayers().size() + 1];
+			for (int i=0; i<rowNames.length; i++) {
+				data[i][0] = rowNames[i]; 
+			}
+			
+			playerNames = new String[gameWorld.getPlayers().size()];
+			for (Player player : gameWorld.getPlayers()) {
+				playerNames[player.id()] = player.name;
+			}
+
 		}
 		
 		@Override
 		public int getRowCount() {
-			return rowNames.length;
+			return data.length;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return playerNames.size() + 1;
+			return data[0].length;
 		}
 
 		@Override
@@ -91,35 +99,28 @@ public class StatisticsView implements Runnable {
 			if (column == 0) {
 				return "";
 			}
-			return playerNames.get(column - 1);
+			return playerNames[column - 1];
 		}
 		
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			if (columnIndex == 0) {
-				return rowNames[rowIndex];
-			}
-			int playerId = columnIndex - 1;
-			Player player = gameWorld.getPlayers().get(playerId);
-			switch(rowIndex) {
-			case 0:
-				return GameView.playerColors[player.id()];
-			case 1:
-				return player.antObjects.size();
-			case 2:
-				return player.numAnts(Caste.Gatherer);
-			case 3:
-				return player.numAnts(Caste.Soldier);
-			case 4:
-				return player.numAnts(Caste.Scout);
-			case 5:
-				return logger.createdAnts()[playerId];
-			case 6:
-				return logger.diedAnts()[playerId];
-			case 7:
-				return logger.collectedFood()[playerId];
-			default:
-				return null;
+			return data[rowIndex][columnIndex];
+		}
+		
+		/** updates all of the data */
+		public void refresh() {
+			for (int column = 1; column < getColumnCount(); column++) {
+				int playerId = column - 1;
+				Player player = gameWorld.getPlayers().get(playerId);
+				
+				data[0][column] = GameView.playerColors[player.id()];
+				data[1][column] = player.antObjects.size();
+				data[2][column] = player.numAnts(Caste.Gatherer);
+				data[3][column] = player.numAnts(Caste.Soldier);
+				data[4][column] = player.numAnts(Caste.Scout);
+				data[5][column] = logger.createdAnts()[playerId];
+				data[6][column] = logger.diedAnts()[playerId];
+				data[7][column] = logger.collectedFood()[playerId];
 			}
 		}
 		
@@ -127,6 +128,7 @@ public class StatisticsView implements Runnable {
 
 	/** call this when the table should grep the information */
 	public void refresh() {
+		statisticsTableModel.refresh();		
 		statisticsTableModel.fireTableDataChanged(); // tells the JTable to update graphics 
 	}
 	
