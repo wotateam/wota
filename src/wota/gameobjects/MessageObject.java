@@ -10,7 +10,8 @@ import wota.utility.Vector;
 public class MessageObject extends GameObject {
 	
 	/** what is transfered in this message. Just an int for the moment. */
-	private final int content;
+	private final int 	content;
+	final Snapshot snapshot;
 	
 	/** Ant which sends the message */
 	private final Ant sender; 
@@ -18,10 +19,11 @@ public class MessageObject extends GameObject {
 	/** Message instance which contains the information visible to other ants */
 	private final Message message;
 	
-	public MessageObject(Vector position, Ant sender, int content, Parameters parameters) {
+	public MessageObject(Vector position, Ant sender, int content, Snapshot snapshot, Parameters parameters) {
 		super(position, parameters);
 		this.sender = sender;
 		this.content = content;
+		this.snapshot = snapshot;
 		
 		message = new Message(this);
 	}
