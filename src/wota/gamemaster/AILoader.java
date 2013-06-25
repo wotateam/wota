@@ -6,9 +6,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.Policy;
 
-import wota.gameobjects.Ant;
 import wota.gameobjects.QueenAI;
-
 
 /**
  * Handles dynamic loading of player AIs.
@@ -19,7 +17,7 @@ public class AILoader {
 
 	private final String AI_PACKAGE = "wota.ai";
 	private final String QUEEN_AI_CLASS_NAME = "QueenAI";
-	
+
 	/**
 	 * Creates a new AILoader using the directory of the executable as
 	 * searchpath.
@@ -45,8 +43,8 @@ public class AILoader {
 	// FIXME: This is ugly, but I don't know a way around it
 	/**
 	 * Dynamically loads the class object representing the given QueenAI
-	 * implementation. The class is assumed to be "QueenAI" located in the
-	 * in the specified subpackage of AI_PACKAGE.
+	 * implementation. The class is assumed to be "QueenAI" located in the in
+	 * the specified subpackage of AI_PACKAGE.
 	 * 
 	 * @param aiName
 	 *            simple name of the class to be loaded (without package
@@ -61,8 +59,8 @@ public class AILoader {
 			ClassLoader queenLoader = URLClassLoader.newInstance(new URL[] {
 					queenFile.toURI().toURL(), searchFile.toURI().toURL() });
 
-			Class<?> queenAIClass = queenLoader.loadClass(AI_PACKAGE
-					+ "." + aiName + "." + QUEEN_AI_CLASS_NAME);
+			Class<?> queenAIClass = queenLoader.loadClass(AI_PACKAGE + "."
+					+ aiName + "." + QUEEN_AI_CLASS_NAME);
 
 			// Check whether loaded class is a QueenAI
 			if (!QueenAI.class.isAssignableFrom(queenAIClass)) {
@@ -70,7 +68,11 @@ public class AILoader {
 						+ " does not extend QueenAI");
 				return null;
 			}
-			return (Class<? extends QueenAI>) queenAIClass;
+
+			if (AISecurity.checkAI((Class<? extends QueenAI>) queenAIClass))
+				return (Class<? extends QueenAI>) queenAIClass;
+			else
+				return null;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -84,7 +86,9 @@ public class AILoader {
 
 	/**
 	 * Get the human-readable name of the AI.
-	 * @param queenAIClass player AI
+	 * 
+	 * @param queenAIClass
+	 *            player AI
 	 * @return name of the player AI
 	 */
 	public static String getAIName(Class<? extends QueenAI> queenAIClass) {
@@ -98,8 +102,10 @@ public class AILoader {
 	}
 
 	/**
-	 * Get the human-readable name of the  AI's creator.
-	 * @param queenAIClass player AI
+	 * Get the human-readable name of the AI's creator.
+	 * 
+	 * @param queenAIClass
+	 *            player AI
 	 * @return name of the AI's creator
 	 */
 	public static String getAICreator(Class<? extends QueenAI> queenAIClass) {

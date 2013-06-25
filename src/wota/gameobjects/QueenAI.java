@@ -3,6 +3,8 @@ package wota.gameobjects;
 import java.util.LinkedList;
 import java.util.List;
 
+import wota.gamemaster.AISecurity;
+
 /**
  * QueenAI ist wie AntAI + hat die Möglichkeit Einheiten zu ordern
  * @author pascal
@@ -11,6 +13,9 @@ public abstract class QueenAI extends AntAI {
 	private List<AntOrder> antOrders;
 	
 	protected void createAnt(Caste caste, Class<? extends AntAI> antAIClass) {
+		if (!AISecurity.checkAI(antAIClass))
+			return;
+		
 		AntOrder antOrder = new AntOrder(caste, antAIClass);
 		antOrders.add(antOrder);
 	}
