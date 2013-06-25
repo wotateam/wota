@@ -3,11 +3,13 @@
  */
 package wota.ai.template;
 
+import wota.gamemaster.AIInformation;
 import wota.gameobjects.Caste;
 
 /**
  *
  */
+@AIInformation(creator = "Anonymous", name = "Anonymous's AI")
 public class QueenAI extends wota.gameobjects.QueenAI {
 
 	/*
