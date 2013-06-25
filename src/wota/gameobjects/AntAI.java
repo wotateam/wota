@@ -133,7 +133,12 @@ public abstract class AntAI {
 	
 	/** Send message of type int */
 	protected void talk(int content) {
-		MessageObject mo = new MessageObject(self.getPosition(), self, content, parameters);
+		talk(content, null);
+	}
+	
+	/** Send message of combined int with Snaphshot (Ant, Hill, Sugar, ...) */
+	protected void talk(int content, Snapshot snapshot) {
+		MessageObject mo = new MessageObject(self.getPosition(), self, content, snapshot, parameters);
 			
 		action.messageObject = mo;
 	}

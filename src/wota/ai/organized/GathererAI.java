@@ -2,10 +2,10 @@ package wota.ai.organized;
 
 import java.util.Iterator;
 
+import wota.gamemaster.SimulationParameters;
 import wota.gameobjects.Ant;
 import wota.gameobjects.AntAI;
 import wota.gameobjects.Caste;
-import wota.gameobjects.SimulationParameters;
 import wota.gameobjects.Message;
 import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;

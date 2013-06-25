@@ -1,18 +1,21 @@
 /**
  * 
  */
-package wota.ai.template; /* <-- change this to wota.ai.YOURNAME
- 							  * make sure your file is in the folder /de/wota/ai/YOURNAME
+package wota.ai.template; /* <-- change this to wota.ai.YOUR_AI_NAME
+ 							  * make sure your file is in the folder /de/wota/ai/YOUR_AI_NAME
  							  * and has the same name as the class (change TemplateAI to
  							  * the name of your choice) 
  							  */
 
-import wota.gameobjects.AntAI;
+import wota.gamemaster.AIInformation;
+import wota.gameobjects.*;
 import wota.utility.SeededRandomizer;
 
 /**
  * Put a describtion of you AI here.
  */
+// Here, you may use spaces, etc., unlike in the package path wota.ai.YOUR_AI_NAME:
+@AIInformation(creator = "Anonymous", name = "Anonymous's AI")
 public class TemplateAI extends AntAI {
 
 	/* 
@@ -63,7 +66,8 @@ public class TemplateAI extends AntAI {
 			moveInDirection(27); // move 27 degrees to the x-axis if no sugar is in sight
 		}
 		else {
-			moveToward(visibleSugar.get(0)); // otherwise move to the first element in the List of visible sugar
+			Sugar sugar = visibleSugar.get(0);
+			moveToward(sugar); // otherwise move to the first element in the List of visible sugar
 		}
 		
 	}

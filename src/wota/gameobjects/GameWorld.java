@@ -8,9 +8,9 @@ import java.util.List;
 
 import wota.gamemaster.AILoader;
 import wota.gamemaster.Logger;
+import wota.gamemaster.RandomPosition;
+import wota.gamemaster.SimulationParameters;
 import wota.gamemaster.StatisticsLogger;
-import wota.gameobjects.SimulationParameters;
-import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
 
@@ -31,9 +31,11 @@ public class GameWorld {
 	private final Parameters parameters;
 	
 	private int tickCount = 0;
+	private final RandomPosition randomPosition;
 	
-	public GameWorld(Parameters parameters) {
+	public GameWorld(Parameters parameters, RandomPosition randomPosition) {
 		this.parameters = parameters;
+		this.randomPosition = randomPosition;
 		spacePartitioning = new SpacePartitioning(maximumSight(), parameters);
 	}
 	
@@ -51,9 +53,17 @@ public class GameWorld {
 	}
 	
 	public void createRandomSugarObject() {
-		SugarObject sugarObject = new SugarObject(parameters.INITIAL_SUGAR,
-												  new Vector(SeededRandomizer.getDouble()*parameters.SIZE_X,
-														  	 SeededRandomizer.getDouble()*parameters.SIZE_Y),
+		List<Vector> hillPositions = new LinkedList<Vector>();
+		for (Player player : players) {
+			hillPositions.add(player.hillObject.getPosition());
+		}
+		
+		List<Vector> sugarPositions = new LinkedList<Vector>();
+		for (SugarObject sugarObject : sugarObjects) {
+			sugarPositions.add(sugarObject.getPosition());
+		}
+		
+		SugarObject sugarObject = new SugarObject(randomPosition.sugarPosition(hillPositions, sugarPositions),
 												  parameters);
 		addSugarObject(sugarObject);
 	}
@@ -83,8 +93,6 @@ public class GameWorld {
 		public final String creator;
 
 		private final int id;
-		
-		public boolean hasLost = false;
 
 		public int id() {
 			return id;
@@ -103,6 +111,11 @@ public class GameWorld {
 
 			id = nextPlayerId;
 			nextPlayerId++;
+		}
+		
+		@Override
+		public String toString() {
+			return "AI " + (id +1) + " " + name + " written by " + creator;
 		}
 		
 		public void addAntObject(AntObject antObject) {
@@ -177,7 +190,7 @@ public class GameWorld {
 				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
 			}
 		}
-		// Only do this now that we used last ticks message objects.
+		// Only do this now that we used last tick's message objects.
 		spacePartitioning.discardMessageObjects();
 		
 		// execute all actions, ants get created
@@ -243,7 +256,7 @@ public class GameWorld {
 			sugarObject.tick();
 			
 			// remove if empty 
-			if (sugarObject.getAmount() <= 0) {
+			if (sugarObject.getAmount() <= 0 && sugarObject.getQueueSize() == 0) {
 				sugarObject.getsRemoved();
 				sugarObjectIter.remove();
 				spacePartitioning.removeSugarObject(sugarObject);
@@ -319,8 +332,6 @@ public class GameWorld {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
 			logger.antCollectedFood(actor.player, actor.getSugarCarry());
 			actor.dropSugar();
-			
-			actor.resetTicksToLive();
 		}
 		
 		// or drop sugar if desired
@@ -361,40 +372,37 @@ public class GameWorld {
 	/** check the victory condition after this amount of ticks */
 	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 100;
 	
-	/** tests if victory condition is fulfilled
-	 * @return is the victory condition fulfilled or can nobody win anymore? */
-	public boolean checkVictoryCondition() {	
-		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE)
+	public boolean allPlayersDead() {
+		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
 			return false;
-		int nPossibleWinners = players.size();
+		}
+		
+		int nPlayersAlive = players.size();
 		for (Player player : players) {
 			if ( (player.antObjects.size() == 1 && !player.queenObject.isDead() ) ||
 					player.antObjects.size() == 0) {
-				player.hasLost = true;
-				nPossibleWinners--;
-			}
-			else {
-				player.hasLost = false;
+				nPlayersAlive--;
 			}
 		}
-		
-		return (nPossibleWinners <= 1);
-
+		return nPlayersAlive == 0;
 	}
 	
-	/** 
-	 * Assumes that checkVictoryCondition returns true.
-	 * @return the player who won the game or null for draws. 
-	 */
 	public Player getWinner() {
-		if (!checkVictoryCondition()) {
-			System.err.println("getWinner() should only be called if checkVictoryCondition() return true!");
+		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
+			return null;
 		}
+		
+		double totalAnts = 0;
 		for (Player player : players) {
-			if (player.hasLost == false) {
+			totalAnts += player.antObjects.size();
+		}
+		
+		for (Player player : players) {
+			if (player.antObjects.size() / totalAnts >= parameters.FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY) {
 				return player;
 			}
 		}
+		
 		return null;
 	}
 	

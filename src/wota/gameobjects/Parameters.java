@@ -5,10 +5,11 @@ import java.util.Properties;
 import wota.utility.Modulo;
 import wota.utility.Vector;
 
-
-// Please put comments in /parameters.txt, because this is where they are set.
 public class Parameters {
-
+	public final int NUMBER_OF_PLAYERS;
+	// This is the actual width of the game world. It differs from SIZE_X in parameters.txt, 
+	// because the area of the game world is proportional to the number of players. SIZE_X
+	// in parameters.txt is the width for two players.
 	public final double SIZE_X;
 	public final double SIZE_Y;
 	public final double HILL_RADIUS;
@@ -18,36 +19,51 @@ public class Parameters {
 	// Radius of a new sugar source:
 	public final double INITIAL_SUGAR_RADIUS;
 	// Amount of sugar in a new sugar source:
-	public final int INITIAL_SUGAR;
+	public final int INITIAL_SUGAR_IN_SOURCE;
 	// Cost to produce an ant:
 	public final int ANT_COST;
 	// Amount of food available at each hill when the game starts:
 	public final int STARTING_FOOD;
 	// An ant's moving direction may differ this much from the intended direction:
 	public final double ANGLE_ERROR_PER_DISTANCE;
-	public final int TICKS_TO_LIVE;
 	// Number of ticks it takes to pick up sugar: 
 	public final int TICKS_SUGAR_PICKUP;
-	// Number of sugar sources:
-	public final int N_SUGAR_SOURCES;
-	
-	public Parameters(Properties p) {
-		SIZE_X = Double.parseDouble(p.getProperty("SIZE_X"));
-		SIZE_Y = Double.parseDouble(p.getProperty("SIZE_Y"));
+	public final double MINIMUM_DISTANCE_BETWEEN_HILLS;
+	public final double MAXIMUM_STARTING_SUGAR_DISTANCE;
+	public final double MINIMUM_STARTING_SUGAR_DISTANCE;
+	public final double MINIMUM_STARTING_SUGAR_DISTANCE_TO_OTHER_HILLS;
+	public final double MINIMUM_SUGAR_DISTANCE;
+	public final double MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR;
+	// Number of sugar sources per player
+	public final int SUGAR_SOURCES_PER_PLAYER;
+	public final double FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY;
+
+	public Parameters(Properties p, int NUMBER_OF_PLAYERS) {
+		this.NUMBER_OF_PLAYERS = NUMBER_OF_PLAYERS;
+		// The area should be proportional to the number of players.
+		double sizeFactor = Math.sqrt(NUMBER_OF_PLAYERS/2.);
+		SIZE_X = sizeFactor * Double.parseDouble(p.getProperty("SIZE_X"));
+		SIZE_Y = sizeFactor * Double.parseDouble(p.getProperty("SIZE_Y"));
 		HILL_RADIUS = Double.parseDouble(p.getProperty("HILL_RADIUS"));
 		ATTACK_RANGE = Double.parseDouble(p.getProperty("ATTACK_RANGE"));
 		VULNERABILITY_WHILE_CARRYING = Double.parseDouble(p.getProperty("VULNERABILITY_WHILE_CARRYING"));
 		INITIAL_SUGAR_RADIUS = Double.parseDouble(p.getProperty("INITIAL_SUGAR_RADIUS"));
 	
-		INITIAL_SUGAR = Integer.parseInt(p.getProperty("INITIAL_SUGAR"));
+		INITIAL_SUGAR_IN_SOURCE = Integer.parseInt(p.getProperty("INITIAL_SUGAR_IN_SOURCE"));
 		ANT_COST = Integer.parseInt(p.getProperty("ANT_COST"));
 		STARTING_FOOD = Integer.parseInt(p.getProperty("STARTING_FOOD"));
 		
 		ANGLE_ERROR_PER_DISTANCE  = Double.parseDouble(p.getProperty("ANGLE_ERROR_PER_DISTANCE"));
-		
-		TICKS_TO_LIVE = Integer.parseInt(p.getProperty("TICKS_TO_LIVE"));
+
 		TICKS_SUGAR_PICKUP = Integer.parseInt(p.getProperty("TICKS_SUGAR_PICKUP"));
-		N_SUGAR_SOURCES = Integer.parseInt(p.getProperty("N_SUGAR_SOURCES"));
+		MINIMUM_DISTANCE_BETWEEN_HILLS = Double.parseDouble(p.getProperty("MINIMUM_DISTANCE_BETWEEN_HILLS"));
+		MAXIMUM_STARTING_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MAXIMUM_STARTING_SUGAR_DISTANCE"));
+		MINIMUM_STARTING_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MINIMUM_STARTING_SUGAR_DISTANCE"));
+		MINIMUM_STARTING_SUGAR_DISTANCE_TO_OTHER_HILLS = Double.parseDouble(p.getProperty("MINIMUM_STARTING_SUGAR_DISTANCE_TO_OTHER_HILLS"));
+		MINIMUM_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MINIMUM_SUGAR_DISTANCE"));
+		MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR = Double.parseDouble(p.getProperty("MINIMUM_SUGAR_DISTANCE_TO_OTHER_SUGAR"));
+		SUGAR_SOURCES_PER_PLAYER = Integer.parseInt(p.getProperty("SUGAR_SOURCES_PER_PLAYER"));
+		FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY = Double.parseDouble(p.getProperty("FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY"));
 	}
 	
 	public Vector normalize(Vector p) {

@@ -8,26 +8,24 @@ import wota.utility.Vector;
 /**
  * A hill of sugar. 
  * 
- * Sugar can be picked up by first come first serve principle:
- * SugarObject has a field ticksToWait which indicates the number of 
- * ticks an Ant freezes before the sugar is picked up. This number will
- * be increased by Parameters.TICKS_SUGAR_PICKUP when an Ant picks up some
- * sugar and decreased by one every tick.
+ * Sugar can be picked up by first come first serve principle.
  *
  */
 public class SugarObject extends GameObject {
 	
 	private int amount;
+	private int visibleAmount; // always at least as big as amount 
 	private Sugar sugar;
 	/** List of Ants which wait to receive sugar */
 	private LinkedList<AntObject> serviceQueue = new LinkedList<AntObject>();
 	/** number of ticks an ant will freeze when picking up */
 	private int ticksToNextService;
 	
-	public SugarObject(int amount, Vector position, Parameters parameters) {
+	public SugarObject(Vector position, Parameters parameters) {
 		super(position, parameters);
 		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-		this.amount = amount;
+		amount = parameters.INITIAL_SUGAR_IN_SOURCE;
+		this.visibleAmount = amount;
 	}
 	
 	public void createSugar() {
@@ -49,49 +47,43 @@ public class SugarObject extends GameObject {
 		return serviceQueue.size();
 	}
 	
-	/** 
-	 * returns if antObject is able to pick up sugar now
-	 */
-	public boolean canPickUpSugarNow(AntObject antObject) {
-		return (serviceQueue.getFirst() == antObject) && (ticksToNextService == 0);
-	}
-	
-	/**
-	 * reduce the amount of stored sugar and remove antObject from serviceQueue 
-	 */
-	public void antPicksUpSugar(AntObject antObject, int reduction) {
-		if (serviceQueue.isEmpty() || serviceQueue.getFirst() != antObject) {
-			System.err.println("unxepected behavior in SugarObject.antPicksUpSugar()");
-		}
-		serviceQueue.removeFirst();
-		amount = Math.max(amount - reduction, 0);
-		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-	}
-	
 	public void tick() {
 		if ( !serviceQueue.isEmpty() ) {
 			ticksToNextService--;
+			if (ticksToNextService == 0) {
+				AntObject theServiced = serviceQueue.removeFirst();
+				visibleAmount -= theServiced.getAmountPickedUpLastTime();
+				theServiced.unsetSugarTarget();
+				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
+			}
 		}
 	}
 	
-	public void requestSugarPickup(AntObject antObject) {
+	public void requestSugarPickup(AntObject antObject, int amountToPickUp) {
 		serviceQueue.add(antObject);
+		amount -= amountToPickUp;
 	}
 	
 	/**
 	 * removes antObject from serviceQueue
 	 * @param antObject
-	 * @return was removal successful? 
 	 */
-	public boolean removeFromQueue(AntObject antObject) {
-		if (serviceQueue.getFirst() == antObject) {
-			ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
+	public void removeFromQueueEarly(AntObject antObject, int amountPickedUp) {
+		amount += amountPickedUp;
+		antObject.unsetSugarTarget();
+		
+		// It is possible that the serviceQueue is empty, because the ant could be
+		// killed during the tick it is done waiting.
+		if (!serviceQueue.isEmpty()) { 
+			if (serviceQueue.getFirst() == antObject) {
+				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
+			}
+			serviceQueue.remove(antObject);
 		}
-		return serviceQueue.remove(antObject);
 	}
 	
 	public double getRadius() {
-		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR);
+		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) visibleAmount / parameters.INITIAL_SUGAR_IN_SOURCE);
 	}
 
 	/**

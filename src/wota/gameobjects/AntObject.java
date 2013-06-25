@@ -20,7 +20,6 @@ public class AntObject extends GameObject{
 	public final int id;
 	protected double health;
 	private double speed;
-	private int ticksToLive;
 	private double lastMovementDirection = 0;
 	
 	/** amount of sugar carried now */
@@ -35,6 +34,9 @@ public class AntObject extends GameObject{
 	public final GameWorld.Player player;
 	private boolean isAttacking = false;
 	private AntObject attackTarget = null;
+	// Only has a meaning while the ant is waiting at a sugar source. Has to be saved because the sugar
+	// source has to increase its amount of sugar by this much when this ant dies while waiting.
+	private int amountPickedUpLastTime; 
 	
 	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player, Parameters parameters) {
 		super(position, parameters);
@@ -57,8 +59,6 @@ public class AntObject extends GameObject{
 		
 		this.ai = antAI;
 		this.ai.setAntObject(this);
-		
-		resetTicksToLive();
 	}
 
 	public AntAI getAI() {
@@ -130,8 +130,17 @@ public class AntObject extends GameObject{
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
-		sugarObject.requestSugarPickup(this);
 		sugarTarget = sugarObject;
+
+		int oldAmountOfSugarCarried = sugarCarry;
+		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
+		amountPickedUpLastTime = sugarCarry - oldAmountOfSugarCarried;
+		// amountPickedUpLastTime is really about this time and may be zero, because other 
+		// ants may already have picked up all the remaining sugar *during this tick*. 
+		// In this case, do not wait at the sugar source. 
+		if (amountPickedUpLastTime > 0) { 
+			sugarTarget.requestSugarPickup(this, amountPickedUpLastTime);		
+		} 
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -142,7 +151,7 @@ public class AntObject extends GameObject{
 	/** Checks if AntObject has positive health and has been at its hill less than 
 	 *  than TICKS_TO_LIVE ticks ago. */
 	public boolean isDead() {
-		return (health <= 0) || (ticksToLive < 0);
+		return health <= 0;
 	}
 	
 	/** calls ai.tick(), handles exceptions and saves the action */
@@ -153,8 +162,6 @@ public class AntObject extends GameObject{
 		ai.visibleHills = visibleHills;
 		ai.audibleMessages = incomingMessages;
 		
-		ticksToLive--;
-		
 		if ( !isWaitingForSugar() ) {
 			try {
 				ai.tick();
@@ -162,12 +169,6 @@ public class AntObject extends GameObject{
 			catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		else if (sugarTarget.canPickUpSugarNow(this)) {
-			int oldAmountOfSugarCarried = sugarCarry;
-			sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
-			sugarTarget.antPicksUpSugar(this, sugarCarry - oldAmountOfSugarCarried);
-			unsetSugarTarget();
 		}
 		
 		action = ai.popAction();
@@ -202,17 +203,13 @@ public class AntObject extends GameObject{
 		return idCounter - 1;
 	}
 
-	public void resetTicksToLive() {
-		ticksToLive = parameters.TICKS_TO_LIVE;
-	}
-
 	/**
 	 * gets called when AntObject is dying
 	 */
 	public void die() {
 		if (sugarTarget != null) {
-			sugarTarget.removeFromQueue(this);
-			unsetSugarTarget();
+			sugarTarget.removeFromQueueEarly(this, amountPickedUpLastTime);
+			sugarCarry -= amountPickedUpLastTime; // doesn't matter now, would if one were able to resurrect ants
 		}
 	}
 
@@ -221,6 +218,10 @@ public class AntObject extends GameObject{
 	 */
 	public void unsetSugarTarget() {
 		sugarTarget = null;
+	}
+
+	public int getAmountPickedUpLastTime() {
+		return amountPickedUpLastTime;
 	}
 
 }

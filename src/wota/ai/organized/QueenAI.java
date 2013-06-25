@@ -15,7 +15,7 @@ import wota.gameobjects.Caste;
 import wota.gameobjects.Message;
 import wota.utility.SeededRandomizer;
 
-@AIInformation(creator = "WotA-Team", name = "Organized")
+@AIInformation(creator = "Wota Team", name = "Organized")
 public class QueenAI extends wota.gameobjects.QueenAI {
 	public static final int SUGAR_DIRECTION_START = 1000;
 	public static final int ENEMY_HILL_START = 2000;

@@ -15,7 +15,6 @@ import org.lwjgl.opengl.PixelFormat;
 import wota.gameobjects.GameWorld;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
-import wota.gameobjects.SimulationParameters;
 
 
 /**
@@ -89,8 +88,7 @@ public class Simulation {
 		gameWorld.setLogger(logger);
 			
 		statisticsView = new StatisticsView(gameWorld, logger);
-        // Schedules the application to be run at the correct time in the event queue.
-        SwingUtilities.invokeLater(statisticsView);
+        statisticsView.run();
         
 		if (isGraphical) {
 			gameView = new GameView(gameWorld, width, height, inst.getParameters());
@@ -117,34 +115,32 @@ public class Simulation {
 	private void tick() {
 		gameWorld.tick();
 
-		if (gameWorld.checkVictoryCondition()) {
-			GameWorld.Player winner = gameWorld.getWinner();
-			if (winner != null) {
-				System.out.println("#" + (winner.id() +1) + " " + winner.name + " written by " + winner.creator + " has won the game in tick "
-						+ gameWorld.tickCount());
-				running = false;
-			}
-			else {
-				System.out.println("draw! nobody has won the game after " + gameWorld.tickCount() + " ticks.");
-				running = false;
-			}
+		GameWorld.Player winner = gameWorld.getWinner();
+		running = false; // set to true if none of the victory conditions actually apply
+		if (winner != null) {
+			System.out.println(winner + " has won the game in tick "
+					+ gameWorld.tickCount());
+		} 
+		else if (gameWorld.allPlayersDead()) {
+			System.out.println("Draw! Nobody has won the game after " + gameWorld.tickCount() + " ticks.");
 		}
-		
-		// End the game after fixed numer of ticks - players with most ants win.
-		if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
+		// End the game after fixed number of ticks - players with most ants win.
+		else if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
 			List<GameWorld.Player> winners = gameWorld.getPlayersWithMostAnts();
 			if (winners.size() == gameWorld.getPlayers().size()) {
 				System.out.println("Draw! Game was stopped after " + gameWorld.tickCount() + " ticks. All players have the same number of ants.");
-				running = false;
 			}
 			else {
 				System.out.println("Game was stopped after " + gameWorld.tickCount() + " ticks. The following player(s) have won:");
-				for (GameWorld.Player winner : winners) {
-					System.out.println(winner.name);
+				for (GameWorld.Player aWinner : winners) {
+					System.out.println(aWinner);
 				}
-				running = false;
 			}
 		}
+		else {
+			running = true;
+		}
+		
 	}
 
 	/**
@@ -166,14 +162,12 @@ public class Simulation {
 		int measureTickCount = 0; // Tick counter to determine FPS
 		
 		// events for graphics update and tick are created uniformly. Call them with priority on graphics
-		while (running) { 
-			
-			handleKeyboardInputs();
-			
+		while (running) { 			
 			if (!isGraphical) {
 				tick();
 				measureTickCount++;
 			} else {
+				handleKeyboardInputs();
 				
 				// now update simulation if tick event 
 				if (ticksToDo() > SKIP_TICKS_THRESHOLD) {
