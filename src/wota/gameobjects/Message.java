@@ -44,4 +44,12 @@ public class Message {
 			contentHill = null;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return new String(sender + ": " + content +
+						  " Ant: " + contentAnt +
+						  " Sugar: " + contentSugar +
+						  " Hill: " + contentHill);
+	}
 }
