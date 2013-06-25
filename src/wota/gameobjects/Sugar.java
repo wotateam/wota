@@ -24,4 +24,17 @@ public class Sugar implements Snapshot {
 	public Vector getPosition() {
 		return sugarObject.getPosition();
 	}
+	
+	/* (non-Javadoc)
+	 * @see wota.gameobjects.Snapshot#hasSameOriginal(wota.gameobjects.Snapshot)
+	 */
+	@Override
+	public boolean hasSameOriginal(Snapshot other) {
+		if (other instanceof Sugar) {
+			return ((Sugar) other).sugarObject.equals(this.sugarObject);
+		}
+		else {
+			return false;
+		}
+	}
 }

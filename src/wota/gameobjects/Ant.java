@@ -55,4 +55,17 @@ public class Ant implements Snapshot {
 		return antObject.getPosition();
 	}
 	
+	/* (non-Javadoc)
+	 * @see wota.gameobjects.Snapshot#hasSameOriginal(wota.gameobjects.Snapshot)
+	 */
+	@Override
+	public boolean hasSameOriginal(Snapshot other) {
+		if (other instanceof Ant) {
+			return ((Ant) other).antObject.equals(this.antObject);
+		}
+		else {
+			return false;
+		}
+	}
+	
 }

@@ -22,4 +22,17 @@ public class Hill implements Snapshot{
 		return hillObject.getPosition();
 	}
 	
+	/* (non-Javadoc)
+	 * @see wota.gameobjects.Snapshot#hasSameOriginal(wota.gameobjects.Snapshot)
+	 */
+	@Override
+	public boolean hasSameOriginal(Snapshot other) {
+		if (other instanceof Hill) {
+			return ((Hill) other).hillObject.equals(this.hillObject);
+		}
+		else {
+			return false;
+		}
+	}
+	
 }

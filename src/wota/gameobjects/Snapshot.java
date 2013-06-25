@@ -8,4 +8,7 @@ import wota.utility.Vector;
  */
 public interface Snapshot {
 	public Vector getPosition();
+	
+	/** e.g. are the AntObjects identical for two Ants */
+	public boolean hasSameOriginal(Snapshot other);
 }
