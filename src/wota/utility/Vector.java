@@ -69,6 +69,10 @@ public class Vector {
 		return new Vector(p.x * scalingFactor, p.y * scalingFactor);
 	}
 
+	public boolean isSameVectorAs(Vector other) {
+		return (subtract(this, other).length() < 1.e-8);
+	}
+	
 	/** creates a vector from polar coordinates. 
 	 *  
 	 * @param amplitude length of the vector
