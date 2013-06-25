@@ -29,6 +29,10 @@ public class Ant implements Snapshot {
 	/** The name of this ant's AI class, not including the package name.*/
 	public final String antAIClassName;
 	
+	/** id of this ant */
+	public final int id;
+	
+	/** id of the player which this ant belongs to */
 	public final int playerID;
 	
 	/** corresponding physical element of this Ant */ 
@@ -39,8 +43,9 @@ public class Ant implements Snapshot {
 		speed = antObject.getSpeed();
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
-		playerID = antObject.player.id();
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
+		id = antObject.id;
+		playerID = antObject.player.id();
 		this.antObject = antObject;
 	}
 

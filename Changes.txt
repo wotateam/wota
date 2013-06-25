@@ -1,3 +1,4 @@
 Changes:
 
 release 0.3:
+- Ant.id gives id of this Ant
