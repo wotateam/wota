@@ -32,9 +32,14 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 				awaitsOrders.add(message.sender);
 				break;
 			case StupidWorker.SUGAR_IS_THERE:
-				knownSugar.add(message.contentSugar);
+				if ( !containsSameOriginal(knownSugar, message.contentSugar)) {
+					knownSugar.add(message.contentSugar);
+				}
 				break;
 			case StupidWorker.SUGAR_IS_NOT_THERE:
+				if ( containsSameOriginal(knownSugar, message.contentSugar)) {
+				knownSugar.remove(message.contentSugar);
+				}
 				break;
 			default:
 				System.out.println("unexpected message" + message);
@@ -55,4 +60,19 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 		
 	}
 
+	/** 
+	 * returns true if list contains an element with the same original
+	 * as snapshot
+	 * @param list
+	 * @param snapshot
+	 * @return
+	 */
+	private static boolean containsSameOriginal(Queue<? extends Snapshot> list, Snapshot snapshot) {
+		for (Snapshot snap : list) {
+			if (snap.hasSameOriginal(snapshot)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

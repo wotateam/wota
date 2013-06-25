@@ -19,13 +19,14 @@ import wota.utility.Vector;
 @AIInformation(creator = "Pascal", name = "StupidWorker")
 public class StupidWorker extends AntAI {
 	
-	enum State {WaitForMessage, LookForSugar, CollectSugar, BringSugarBack};
+	enum State {WaitForMessage, LookForSugar, CollectSugar,
+		        BringSugarBack, ReportNonExistantSugar, AskForOrders};
 	
 	public static final int SUGAR_IS_THERE = 0;
 	public static final int SUGAR_IS_NOT_THERE = 1;
 	public static final int AWAITING_ORDERS = 2;
 	
-	private State state = State.WaitForMessage;
+	private State state = State.AskForOrders;
 	private Sugar sugarTarget;
 	private int randomDirection;
 	
@@ -36,17 +37,25 @@ public class StupidWorker extends AntAI {
 		case LookForSugar: tickLookForSugar(); break;
 		case WaitForMessage: tickWaitForMessage(); break;
 		case BringSugarBack: tickBringSugarBack(); break;
+		case ReportNonExistantSugar: tickReportNonExistantSugar(); break;
+		case AskForOrders: tickAskForOrders(); break;
 		}
 	}
 
-	boolean hasAskedForOrders = false;
+	private void tickAskForOrders() {
+		talk(AWAITING_ORDERS);
+		state = State.WaitForMessage;
+	}
+
+	private void tickReportNonExistantSugar() {
+		moveHome();
+		if (isAtHome()) {
+			reportNonExistantSugar(sugarTarget);
+			state = State.AskForOrders;
+		}
+	}
 	
 	public void tickWaitForMessage() throws Exception {
-		if ( !hasAskedForOrders ) {
-			talk(AWAITING_ORDERS);
-			hasAskedForOrders = true;
-		}
-		
 		for (Message message : audibleMessages) {
 			if (message.sender.caste != Caste.Queen) {
 				continue;
@@ -85,21 +94,36 @@ public class StupidWorker extends AntAI {
 		talk(SUGAR_IS_NOT_THERE, sugar);
 	}
 	
-	private void tickCollectSugar() throws Exception {
+	/** goes to sugarTarget and picks it up. */
+	private void tickCollectSugar() {
 		if (self.sugarCarry != 0) {
 			state = State.BringSugarBack;
 		}
 		else {
-			pickUpSugar(sugarTarget);
-			moveToward(sugarTarget);
+			if (isAt(sugarTarget)) {
+				boolean found = false;
+				for (Sugar sugar : visibleSugar) {
+					if (sugar.hasSameOriginal(sugarTarget)) {
+						found = true;
+					}
+				}
+				if (!found) {
+					state = State.ReportNonExistantSugar;
+				}
+				else {
+					pickUpSugar(sugarTarget);
+				}
+			}
+			else {
+				moveToward(sugarTarget);
+			}
 		}
 	}
 	
 	private void tickBringSugarBack() {
 		moveHome();
 		if (self.sugarCarry == 0) {
-			state = State.WaitForMessage;
-			hasAskedForOrders = false;
+			state = State.AskForOrders;
 			Hill hill = getOwnHill();
 			if (hill != null) {
 				reportExistantSugar(sugarTarget);
@@ -120,4 +144,11 @@ public class StupidWorker extends AntAI {
 		return null; 
 	}
 	
+	private boolean isAt(Snapshot target) {
+		return vectorTo(target).length() < 1.e-6;
+	}
+	
+	private boolean isAtHome() {
+		return vectorToHome().length() < 1.e-6;
+	}
 }
