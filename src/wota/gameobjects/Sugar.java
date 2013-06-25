@@ -7,13 +7,13 @@ import wota.utility.Vector;
  * @author pascal
  *
  */
-public class Sugar extends Snapshot {
+public class Sugar implements Snapshot {
 	public final int amount;
 	public final double radius;
 	public final int waitingAnts;
 	final SugarObject sugarObject;
 	
-	public Sugar(SugarObject sugarObject) {
+	Sugar(SugarObject sugarObject) {
 		this.sugarObject = sugarObject;
 		amount = sugarObject.getAmount();
 		radius = sugarObject.getRadius();
@@ -21,7 +21,7 @@ public class Sugar extends Snapshot {
 	}
 
 	@Override
-	Vector getPosition() {
+	public Vector getPosition() {
 		return sugarObject.getPosition();
 	}
 }

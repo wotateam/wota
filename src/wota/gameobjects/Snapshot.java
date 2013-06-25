@@ -6,7 +6,6 @@ import wota.utility.Vector;
  *  used to pass Instances like Ant, Hill, Sugar
  *  as Target to e.g. moveTo(Snapshot target)
  */
-public abstract class Snapshot {
-	abstract Vector getPosition();
-
+public interface Snapshot {
+	public Vector getPosition();
 }

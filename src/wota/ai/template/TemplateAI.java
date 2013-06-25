@@ -8,7 +8,7 @@ package wota.ai.template; /* <-- change this to wota.ai.YOUR_AI_NAME
  							  */
 
 import wota.gamemaster.AIInformation;
-import wota.gameobjects.AntAI;
+import wota.gameobjects.*;
 import wota.utility.SeededRandomizer;
 
 /**
@@ -66,7 +66,8 @@ public class TemplateAI extends AntAI {
 			moveInDirection(27); // move 27 degrees to the x-axis if no sugar is in sight
 		}
 		else {
-			moveToward(visibleSugar.get(0)); // otherwise move to the first element in the List of visible sugar
+			Sugar sugar = visibleSugar.get(0);
+			moveToward(sugar); // otherwise move to the first element in the List of visible sugar
 		}
 		
 	}

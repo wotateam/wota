@@ -12,7 +12,7 @@ import wota.utility.Vector;
  * 
  * @author pascal
  */
-public class Ant extends Snapshot {
+public class Ant implements Snapshot {
 	
 	/** health is decreased by attacking enemies. Ant dies if health reaches 0. */
 	public final double health;
@@ -34,7 +34,7 @@ public class Ant extends Snapshot {
 	/** corresponding physical element of this Ant */ 
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
-	public Ant(AntObject antObject) {
+	Ant(AntObject antObject) {
 		health = antObject.getHealth();
 		speed = antObject.getSpeed();
 		sugarCarry = antObject.getSugarCarry();
@@ -46,7 +46,7 @@ public class Ant extends Snapshot {
 
 	/** returns the vector of this ant */
 	@Override
-	Vector getPosition() {
+	public Vector getPosition() {
 		return antObject.getPosition();
 	}
 	
