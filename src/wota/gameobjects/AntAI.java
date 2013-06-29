@@ -170,9 +170,7 @@ public abstract class AntAI {
 	 * @param target Target to move towards.
 	 */
 	protected void moveToward(Snapshot target, double distance) {
-		if (isInView(target)) {
-			uncheckedMoveToward(target, distance);
-		}
+		action.movement = parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
 	}
 	
 	/**
@@ -182,20 +180,12 @@ public abstract class AntAI {
 	protected void moveAhead() {
 		moveInDirection(antObject.getLastMovementDirection());
 	}
-
-	private void uncheckedMoveToward(Snapshot target) {
-		uncheckedMoveToward(target, parameters.SIZE_X);
-	}
-	
-	private void uncheckedMoveToward(Snapshot target, double distance) {
-		action.movement = parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition()).boundLengthBy(distance);
-	}
 	
 	/**
 	 * Move maximal distance in direction of the own hill, even if it is not visible. 
 	 */
 	protected void moveHome() {
-		uncheckedMoveToward(antObject.player.hillObject.getHill());
+		moveToward(antObject.player.hillObject.getHill());
 	}
 	
 	protected Vector vectorToHome() {
@@ -203,37 +193,26 @@ public abstract class AntAI {
 	}
 	
 	/** returns true if target is in view range. */
-	private boolean isInView(Snapshot target) {
+	public boolean isInView(Snapshot target) {
 		return (parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 	
 	/** 
 	 * returns the Vector between the Ant itself and target
-	 * Is null if the target is not in view.
 	 * @param target
 	 * @return vector between this ant and target
 	 */
 	protected Vector vectorTo(Snapshot target) {
-		if (isInView(target)) {
-			return parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition());
-		}
-		else
-			return null;
+		return parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition());
 	}
 	
 	/** 
-	 * Is null if the targets are not in view.
 	 * @param start
 	 * @param end
 	 * @return the Vector between start and end.
 	 */
 	protected Vector vectorBetween(Snapshot start, Snapshot end) {
-		if (isInView(start) && isInView(end)) {
-			return parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
-		}
-		else {
-			return null;
-		}
+		return parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
 	}
 	
 	/** 

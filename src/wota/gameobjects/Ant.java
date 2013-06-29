@@ -29,6 +29,10 @@ public class Ant implements Snapshot {
 	/** The name of this ant's AI class, not including the package name.*/
 	public final String antAIClassName;
 	
+	/** id of this ant */
+	public final int id;
+	
+	/** id of the player which this ant belongs to */
 	public final int playerID;
 	
 	/** corresponding physical element of this Ant */ 
@@ -39,14 +43,28 @@ public class Ant implements Snapshot {
 		speed = antObject.getSpeed();
 		sugarCarry = antObject.getSugarCarry();
 		caste = antObject.getCaste();
-		playerID = antObject.player.id();
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
+		id = antObject.id;
+		playerID = antObject.player.id();
 		this.antObject = antObject;
 	}
 
 	/** returns the vector of this ant */
 	public Vector getPosition() {
 		return antObject.getPosition();
+	}
+	
+	/* (non-Javadoc)
+	 * @see wota.gameobjects.Snapshot#hasSameOriginal(wota.gameobjects.Snapshot)
+	 */
+	@Override
+	public boolean hasSameOriginal(Snapshot other) {
+		if (other instanceof Ant) {
+			return ((Ant) other).antObject.equals(this.antObject);
+		}
+		else {
+			return false;
+		}
 	}
 	
 }
