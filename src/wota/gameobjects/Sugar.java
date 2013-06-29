@@ -20,7 +20,6 @@ public class Sugar implements Snapshot {
 		waitingAnts = sugarObject.getQueueSize();
 	}
 
-	@Override
 	public Vector getPosition() {
 		return sugarObject.getPosition();
 	}

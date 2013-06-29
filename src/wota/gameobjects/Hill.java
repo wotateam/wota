@@ -17,7 +17,6 @@ public class Hill implements Snapshot{
 		this.food = hillObject.getStoredFood();
 	}
 
-	@Override
 	public Vector getPosition() {
 		return hillObject.getPosition();
 	}

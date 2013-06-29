@@ -13,7 +13,7 @@ public class AISecurity {
 			if (Modifier.isStatic(field.getModifiers())
 					&& !Modifier.isFinal(field.getModifiers())) {
 				System.out.println("Class " + ai
-						+ " has non-final static members.");
+						+ " has non-final static members " + field.getName());
 				return false;
 			}
 		}

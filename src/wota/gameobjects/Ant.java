@@ -45,7 +45,6 @@ public class Ant implements Snapshot {
 	}
 
 	/** returns the vector of this ant */
-	@Override
 	public Vector getPosition() {
 		return antObject.getPosition();
 	}

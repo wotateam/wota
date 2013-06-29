@@ -29,17 +29,14 @@ public class StatisticsLogger implements Logger{
 		}
 	}
 	
-	@Override
 	public void antCreated(AntObject antObject) {
 		createdAnts[antObject.player.id()]++;
 	}
 
-	@Override
 	public void antDied(AntObject antObject) {
 		diedAnts[antObject.player.id()]++;
 	}
 	
-	@Override
 	public void antCollectedFood(Player player, int amount) {
 		collectedFood[player.id()] += amount;
 	}
