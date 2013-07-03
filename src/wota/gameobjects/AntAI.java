@@ -158,6 +158,14 @@ public abstract class AntAI {
 		action.movement = Vector.fromPolar(distance, direction);
 	}
 	
+	/** Move toward absolute position on the map.
+	 * Stops when position is reached.
+	 * @param target absolute coordinates, NOT relatve to Ant
+	 */
+	protected void moveToward(Vector target) {
+		action.movement = parameters.shortestDifferenceOnTorus(target, self.getPosition());
+	}
+	
 	/** Move in direction of an Object
 	 *  Stops when target is reached.
 	 * @param target can be anything like Ant, Sugar, ...

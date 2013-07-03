@@ -15,31 +15,48 @@ import wota.utility.SeededRandomizer;
 @AIInformation(creator = "Pascal", name = "Bürohengst")
 public class QueenAI extends wota.gameobjects.QueenAI {
 
+	public static final int SUGAR_IS_THERE = 0;
+	public static final int SUGAR_IS_NOT_THERE = 1;
+	public static final int AWAITING_ORDERS = 2;
+	public static final int ATTACK = 3;
+	public static final int FOUND_LEADER = 4;
+	
 	private Queue<Sugar> knownSugar = new LinkedList<Sugar>();
 	//private Map<Sugar, List<Ant> > antDivision;
 	private Queue<Ant> awaitsOrders = new LinkedList<Ant>();
-	
+		
 	@Override
 	public void tick() throws Exception {
-		createAnt(Caste.Gatherer, StupidWorker.class);
+		if (visibleHills.get(0).food >= 6*parameters.ANT_COST) {
+			createAnt(Caste.Soldier, SWAT_Leader.class);
+			createAnt(Caste.Soldier, SWAT_Member.class);
+			createAnt(Caste.Soldier, SWAT_Member.class);
+			createAnt(Caste.Soldier, SWAT_Member.class);
+			createAnt(Caste.Soldier, SWAT_Member.class);
+			createAnt(Caste.Soldier, SWAT_Member.class);
+		}
 		
 		for (Message message : audibleMessages) {
 			if (message.sender.id == self.id) {
 				continue;
 			}
 			switch (message.content) {
-			case StupidWorker.AWAITING_ORDERS: 
+			case AWAITING_ORDERS: 
 				awaitsOrders.add(message.sender);
 				break;
-			case StupidWorker.SUGAR_IS_THERE:
+			case SUGAR_IS_THERE:
 				if ( !containsSameOriginal(knownSugar, message.contentSugar)) {
 					knownSugar.add(message.contentSugar);
 				}
 				break;
-			case StupidWorker.SUGAR_IS_NOT_THERE:
+			case SUGAR_IS_NOT_THERE:
 				if ( containsSameOriginal(knownSugar, message.contentSugar)) {
 				knownSugar.remove(message.contentSugar);
 				}
+				break;
+			case FOUND_LEADER:
+				break;
+			case ATTACK:
 				break;
 			default:
 				System.out.println("unexpected message" + message);

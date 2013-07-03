@@ -13,8 +13,9 @@ public abstract class QueenAI extends AntAI {
 	private List<AntOrder> antOrders;
 	
 	protected void createAnt(Caste caste, Class<? extends AntAI> antAIClass) {
-		if (!AISecurity.checkAI(antAIClass))
-			return;
+		//if (!AISecurity.checkAI(antAIClass)) {
+		//	return;
+		//}
 		
 		AntOrder antOrder = new AntOrder(caste, antAIClass);
 		antOrders.add(antOrder);

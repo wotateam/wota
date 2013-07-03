@@ -22,10 +22,6 @@ public class StupidWorker extends AntAI {
 	enum State {WaitForMessage, LookForSugar, CollectSugar,
 		        BringSugarBack, ReportNonExistantSugar, AskForOrders};
 	
-	public static final int SUGAR_IS_THERE = 0;
-	public static final int SUGAR_IS_NOT_THERE = 1;
-	public static final int AWAITING_ORDERS = 2;
-	
 	private State state = State.AskForOrders;
 	private Sugar sugarTarget;
 	private int randomDirection;
@@ -43,7 +39,7 @@ public class StupidWorker extends AntAI {
 	}
 
 	private void tickAskForOrders() {
-		talk(AWAITING_ORDERS);
+		talk(QueenAI.AWAITING_ORDERS);
 		state = State.WaitForMessage;
 	}
 
@@ -87,11 +83,11 @@ public class StupidWorker extends AntAI {
 	}
 	
 	private void reportExistantSugar(Sugar sugar) {
-		talk(SUGAR_IS_THERE, sugar);
+		talk(QueenAI.SUGAR_IS_THERE, sugar);
 	}
 	
 	private void reportNonExistantSugar(Sugar sugar) {
-		talk(SUGAR_IS_NOT_THERE, sugar);
+		talk(QueenAI.SUGAR_IS_NOT_THERE, sugar);
 	}
 	
 	/** goes to sugarTarget and picks it up. */
