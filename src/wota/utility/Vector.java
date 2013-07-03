@@ -82,6 +82,16 @@ public class Vector {
 	public static Vector fromPolar(double amplitude, double direction) {
 		return new Vector(amplitude*Math.cos(direction/360.*2*Math.PI), amplitude*Math.sin(direction/360.*2*Math.PI));
 	}
+	
+	/**
+	 * Scalar product of the two vectors
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public static double scalarProduct(Vector v1, Vector v2) {
+		return v1.x * v2.x + v1.y * v2.y;
+	}
 
 	/**
 	 * returns the result of v1 - v2
