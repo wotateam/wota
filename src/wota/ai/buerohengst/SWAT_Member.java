@@ -21,14 +21,17 @@ public class SWAT_Member extends AntAI {
 			lookForLeader();
 			return;
 		}
+		squadLeader = getRecentAnt(visibleAnts, squadLeader);
 		
 		listenForAttackTarget();
-		getRecentAnt(visibleEnemies(), target);
+		target = getRecentAnt(visibleEnemies(), target);
 		
 		if (target == null || target.health <= 0) {
+			System.out.println("follow leader");
 			followLeader();
 		}
 		else {
+			System.out.println("attack target");
 			tacticallyAttackTarget();
 		}
 		
@@ -50,15 +53,17 @@ public class SWAT_Member extends AntAI {
 			attack(target);
 			if (visibleFriends().size() > 0) {
 				List<Ant> friends = antsWithinRadius(visibleFriends(), parameters.ATTACK_RANGE);
-				List<Vector> positions = getPositions(friends);
-				Vector cmsFriends = centorOfMass(positions);
-				Vector smallRandomVector = new Vector(SeededRandomizer.getDouble()*2-1,
-													  SeededRandomizer.getDouble()*2-1);
-				cmsFriends = Vector.add(cmsFriends, smallRandomVector);
-				if ( !cmsFriends.isSameVectorAs(self.getPosition())) {
-					Vector movementTarget = parameters.shortestDifferenceOnTorus(
-														self.getPosition(), cmsFriends);
-					moveInDirection(movementTarget.angle());
+				if ( !friends.isEmpty() ) {
+					List<Vector> positions = getPositions(friends);
+					Vector cmsFriends = centorOfMass(positions);
+					Vector smallRandomVector = new Vector(SeededRandomizer.getDouble()*2-1,
+														  SeededRandomizer.getDouble()*2-1);
+					cmsFriends = Vector.add(cmsFriends, smallRandomVector);
+					if ( !cmsFriends.isSameVectorAs(self.getPosition())) {
+						Vector movementTarget = parameters.shortestDifferenceOnTorus(
+															self.getPosition(), cmsFriends);
+						moveInDirection(movementTarget.angle());
+					}
 				}
 			}
 		}

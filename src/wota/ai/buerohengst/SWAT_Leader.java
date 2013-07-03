@@ -16,9 +16,7 @@ public class SWAT_Leader extends AntAI {
 	@Override
 	public void tick() throws Exception {
 		tick++;
-		
-		System.out.println(self.health);
-		
+				
 		listenForNewMember();
 		
 		// only act after team has total size 6
