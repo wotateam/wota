@@ -28,6 +28,9 @@ public class Hill implements Snapshot{
 	 */
 	@Override
 	public boolean hasSameOriginal(Snapshot other) {
+		if (other == null) {
+			return false;
+		}
 		if (other instanceof Hill) {
 			return ((Hill) other).hillObject.equals(this.hillObject);
 		}

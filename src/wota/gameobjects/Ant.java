@@ -63,6 +63,9 @@ public class Ant implements Snapshot {
 	 */
 	@Override
 	public boolean hasSameOriginal(Snapshot other) {
+		if (other == null) {
+			return false;
+		}
 		if (other instanceof Ant) {
 			return ((Ant) other).antObject.equals(this.antObject);
 		}

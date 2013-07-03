@@ -31,6 +31,9 @@ public class Sugar implements Snapshot {
 	 */
 	@Override
 	public boolean hasSameOriginal(Snapshot other) {
+		if (other == null) {
+			return false;
+		}
 		if (other instanceof Sugar) {
 			return ((Sugar) other).sugarObject.equals(this.sugarObject);
 		}
