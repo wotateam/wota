@@ -7,18 +7,20 @@ import wota.utility.Vector;
  */
 public class Hill implements Snapshot{
 	/** the amount of available food */
-	public double food;
+	public final double food;
 	public HillObject hillObject;
+	public final Vector position;
 	public final int playerID;
 	
 	Hill(HillObject hillObject) {
 		this.hillObject = hillObject;
 		this.playerID = hillObject.getPlayer().id();
 		this.food = hillObject.getStoredFood();
+		this.position = hillObject.getPosition();
 	}
 
 	public Vector getPosition() {
-		return hillObject.getPosition();
+		return position;
 	}
 	
 	/* (non-Javadoc)

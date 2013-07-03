@@ -11,6 +11,7 @@ public class Sugar implements Snapshot {
 	public final int amount;
 	public final double radius;
 	public final int waitingAnts;
+	public final Vector position;
 	final SugarObject sugarObject;
 	
 	Sugar(SugarObject sugarObject) {
@@ -18,10 +19,11 @@ public class Sugar implements Snapshot {
 		amount = sugarObject.getAmount();
 		radius = sugarObject.getRadius();
 		waitingAnts = sugarObject.getQueueSize();
+		position = sugarObject.getPosition();
 	}
 
 	public Vector getPosition() {
-		return sugarObject.getPosition();
+		return position;
 	}
 	
 	/* (non-Javadoc)

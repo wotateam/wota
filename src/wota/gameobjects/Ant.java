@@ -35,6 +35,9 @@ public class Ant implements Snapshot {
 	/** id of the player which this ant belongs to */
 	public final int playerID;
 	
+	/** position of the Ant in absolute coordinates */
+	private final Vector position;
+	
 	/** corresponding physical element of this Ant */ 
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
@@ -46,12 +49,13 @@ public class Ant implements Snapshot {
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
 		id = antObject.id;
 		playerID = antObject.player.id();
+		position = antObject.getPosition();
 		this.antObject = antObject;
 	}
 
 	/** returns the vector of this ant */
 	public Vector getPosition() {
-		return antObject.getPosition();
+		return position;
 	}
 	
 	/* (non-Javadoc)
