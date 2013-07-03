@@ -17,21 +17,21 @@ public class SWAT_Member extends AntAI {
 	@Override
 	public void tick() throws Exception {
 		tick++;
+		
+		squadLeader = getRecent(visibleAnts, squadLeader);
 		if (squadLeader == null) {
 			lookForLeader();
+			moveHome();
 			return;
 		}
-		squadLeader = getRecentAnt(visibleAnts, squadLeader);
 		
 		listenForAttackTarget();
-		target = getRecentAnt(visibleEnemies(), target);
+		target = getRecent(visibleEnemies(), target);
 		
 		if (target == null || target.health <= 0) {
-			System.out.println("follow leader");
 			followLeader();
 		}
 		else {
-			System.out.println("attack target");
 			tacticallyAttackTarget();
 		}
 		
@@ -113,10 +113,10 @@ public class SWAT_Member extends AntAI {
 		return list;
 	}
 	
-	public static Ant getRecentAnt(List<Ant> candidates, Ant oldAnt) {
-		for (Ant ant : candidates) {
-			if (ant.hasSameOriginal(oldAnt)) {
-				return ant;
+	public static <T extends Snapshot> T getRecent(List<T> candidates, T old) {
+		for (T candidate : candidates) {
+			if (candidate.hasSameOriginal(old)) {
+				return candidate;
 			}
 		}
 		return null;

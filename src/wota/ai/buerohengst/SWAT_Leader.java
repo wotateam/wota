@@ -7,33 +7,68 @@ import wota.gameobjects.*;
 import wota.utility.SeededRandomizer;
 
 public class SWAT_Leader extends AntAI {
-
-	Random random = new Random();
+	
+	public enum State {
+		WAIT_FOR_TEAM_TO_COMPLETE,
+		LOOK_FOR_SUGAR,
+		PROTECT_SUGAR
+	}
+	
+	private State state = State.WAIT_FOR_TEAM_TO_COMPLETE;
+	
+	/** sugar source to protect */
+	private Sugar sugar;
+	
 	int tick = 0;
 	int direction = SeededRandomizer.getInt(360);
 	LinkedList<Ant> team = new LinkedList<Ant>();
+	
+	public final int TEAM_SIZE = 5;
 	
 	@Override
 	public void tick() throws Exception {
 		tick++;
 				
-		listenForNewMember();
-		
-		// only act after team has total size 6
-		if (team.size() <= 4) {
-			return;
-		}
-		
-		if (tick % 20 == 0) {
-			direction = SeededRandomizer.getInt(360);
-			System.out.println("changedDirection: " + direction);
-		}
-		
-		if (visibleEnemies().size() != 0) {
-			attackWeakest();
-		}
-		else {
-			moveInDirection(direction);
+		switch (state) {
+		case WAIT_FOR_TEAM_TO_COMPLETE:
+			listenForNewMember();
+			
+			if (team.size() >= TEAM_SIZE) {
+				state = State.LOOK_FOR_SUGAR;
+			}
+			break;
+			
+		case LOOK_FOR_SUGAR:
+			if (tick % 40 == 0) {
+				direction = SeededRandomizer.getInt(360);
+			}
+			if ( !visibleSugar.isEmpty() ) {
+				sugar = visibleSugar.get(0);
+				state = State.PROTECT_SUGAR;
+			}
+			else {
+				moveInDirection(direction);
+			}
+			break;
+			
+		case PROTECT_SUGAR:
+			if (vectorTo(sugar).length() <= self.caste.SIGHT_RANGE) {
+				sugar = SWAT_Member.getRecent(visibleSugar, sugar);
+				if (sugar == null) {
+					state = State.LOOK_FOR_SUGAR;
+				}
+				if ( !visibleEnemies().isEmpty() ) {
+					attackWeakest();
+				}
+				else {
+					moveToward(sugar);
+				}
+			}
+			else {
+				moveToward(sugar);
+			}
+
+			break;
 		}
 		
 	}
