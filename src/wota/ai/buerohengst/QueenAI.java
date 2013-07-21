@@ -25,15 +25,26 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 	//private Map<Sugar, List<Ant> > antDivision;
 	private Queue<Ant> awaitsOrders = new LinkedList<Ant>();
 		
+	private Class<? extends AntAI> nextAnt = SWAT_Leader.class;
+	
 	@Override
 	public void tick() throws Exception {
-		if (visibleHills.get(0).food >= 6*parameters.ANT_COST) {
-			createAnt(Caste.Soldier, SWAT_Leader.class);
-			createAnt(Caste.Soldier, SWAT_Member.class);
-			createAnt(Caste.Soldier, SWAT_Member.class);
-			createAnt(Caste.Soldier, SWAT_Member.class);
-			createAnt(Caste.Soldier, SWAT_Member.class);
-			createAnt(Caste.Soldier, SWAT_Member.class);
+		if (nextAnt == SWAT_Leader.class) {
+			if (visibleHills.get(0).food >= (SWAT_Leader.TEAM_SIZE+1)*parameters.ANT_COST) {
+				createAnt(Caste.Soldier, SWAT_Leader.class);
+				for (int i=0; i<SWAT_Leader.TEAM_SIZE; i++) {
+					createAnt(Caste.Soldier, SWAT_Member.class);
+				}
+				nextAnt = StupidWorker.class;
+			}
+		} 
+		else if (nextAnt == StupidWorker.class) {
+			if (visibleHills.get(0).food >= 3*parameters.ANT_COST) {
+				createAnt(Caste.Gatherer, StupidWorker.class);
+				createAnt(Caste.Gatherer, StupidWorker.class);
+				createAnt(Caste.Gatherer, StupidWorker.class);
+			}
+			nextAnt = SWAT_Leader.class;
 		}
 		
 		for (Message message : audibleMessages) {

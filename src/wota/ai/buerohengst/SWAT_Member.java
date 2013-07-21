@@ -60,9 +60,14 @@ public class SWAT_Member extends AntAI {
 														  SeededRandomizer.getDouble()*2-1);
 					cmsFriends = Vector.add(cmsFriends, smallRandomVector);
 					if ( !cmsFriends.isSameVectorAs(self.getPosition())) {
-						Vector movementTarget = parameters.shortestDifferenceOnTorus(
-															self.getPosition(), cmsFriends);
-						moveInDirection(movementTarget.angle());
+						Vector movementVector = parameters.shortestDifferenceOnTorus(self.getPosition(), cmsFriends);
+						if (Vector.scalarProduct(movementVector, vectorTo(target)) < 0) {
+							double maxMovementDistance = self.caste.SIGHT_RANGE - vectorTo(target).length();
+							moveInDirection(movementVector.angle(), maxMovementDistance);
+						}
+						else {
+							moveInDirection(movementVector.angle());
+						}
 					}
 				}
 			}

@@ -23,7 +23,7 @@ public class SWAT_Leader extends AntAI {
 	int direction = SeededRandomizer.getInt(360);
 	LinkedList<Ant> team = new LinkedList<Ant>();
 	
-	public final int TEAM_SIZE = 5;
+	public final static int TEAM_SIZE = 5;
 	
 	@Override
 	public void tick() throws Exception {
