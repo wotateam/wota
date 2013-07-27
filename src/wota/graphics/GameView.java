@@ -38,7 +38,7 @@ public class GameView {
 	public boolean drawSightRange = false;
 	public boolean drawMessages = false;
 	private static final boolean DRAW_ATTACK = true;
-	private static final int SAMPLES = 2; // the scene is actually rendered SAMPLES^2 times 
+	private static final int SAMPLES = 1; // the scene is actually rendered SAMPLES^2 times 
 	
 	private static final float HILL_ALPHA = 0.65f;
 	
@@ -61,9 +61,10 @@ public class GameView {
 	}
 
 	public void setup() {
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
-		glBlendEquation(GL_FUNC_ADD);
+		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+		//glBlendEquation(GL_FUNC_ADD);
 		glClearColor(0, 0, 0, 1);
 		
 		glMatrixMode(GL_PROJECTION);
@@ -79,7 +80,7 @@ public class GameView {
 	}
 	
 	public void render() {
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
 		
@@ -135,10 +136,15 @@ public class GameView {
 			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 		// Sugar Sources
+		glDisable(GL_BLEND);
+		glPushMatrix();
+		glTranslated(0, 0, 0.5);
 		setColor(1.f, 1.f, 1.f,1.0f);
 		for (SugarObject sugarObject : world.getSugarObjects()) {
 			fillCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
 		}
+		glPopMatrix();
+		//glEnable(GL_BLEND);
 	}
 
 	/** 

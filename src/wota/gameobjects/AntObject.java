@@ -130,16 +130,15 @@ public class AntObject extends GameObject{
 	}
 	
 	public void pickUpSugar(SugarObject sugarObject) {
-		sugarTarget = sugarObject;
-
 		int oldAmountOfSugarCarried = sugarCarry;
-		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarTarget.getAmount());
+		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarObject.getAmount());
 		amountPickedUpLastTime = sugarCarry - oldAmountOfSugarCarried;
 		// amountPickedUpLastTime is really about this time and may be zero, because other 
 		// ants may already have picked up all the remaining sugar *during this tick*. 
 		// In this case, do not wait at the sugar source. 
-		if (amountPickedUpLastTime > 0) { 
-			sugarTarget.requestSugarPickup(this, amountPickedUpLastTime);		
+		if (amountPickedUpLastTime > 0) {
+			sugarObject.requestSugarPickup(this, amountPickedUpLastTime);		
+			sugarTarget = sugarObject;
 		} 
 	}
 	

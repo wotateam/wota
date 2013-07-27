@@ -6,26 +6,33 @@ import wota.utility.Vector;
 
 
 /**
- * A hill of sugar. 
+ * A sugar source. 
  * 
  * Sugar can be picked up by first come first serve principle.
  *
  */
 public class SugarObject extends GameObject {
 	
-	private int amount;
-	private int visibleAmount; // always at least as big as amount 
+	private int amount; 
 	private Sugar sugar;
 	/** List of Ants which wait to receive sugar */
 	private LinkedList<AntObject> serviceQueue = new LinkedList<AntObject>();
 	/** number of ticks an ant will freeze when picking up */
 	private int ticksToNextService;
+	private boolean isInSpacePartitioning = true; 
 	
 	public SugarObject(Vector position, Parameters parameters) {
 		super(position, parameters);
 		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
 		amount = parameters.INITIAL_SUGAR_IN_SOURCE;
-		this.visibleAmount = amount;
+	}
+	
+	public boolean isInSpacePartitioning() {
+		return isInSpacePartitioning;
+	}
+	
+	public void setIsInSpacePartitioning(boolean isInSpacePartitioning) {
+		this.isInSpacePartitioning = isInSpacePartitioning;
 	}
 	
 	public void createSugar() {
@@ -52,7 +59,6 @@ public class SugarObject extends GameObject {
 			ticksToNextService--;
 			if (ticksToNextService == 0) {
 				AntObject theServiced = serviceQueue.removeFirst();
-				visibleAmount -= theServiced.getAmountPickedUpLastTime();
 				theServiced.unsetSugarTarget();
 				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
 			}
@@ -83,7 +89,7 @@ public class SugarObject extends GameObject {
 	}
 	
 	public double getRadius() {
-		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) visibleAmount / parameters.INITIAL_SUGAR_IN_SOURCE);
+		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR_IN_SOURCE);
 	}
 
 	/**

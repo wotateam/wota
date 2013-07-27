@@ -226,7 +226,7 @@ public class GameWorld {
 			}
 		}
 		
-		int removedSugarObjects = removeSugarAndDecreaseTicksToWait();
+		int removedSugarObjects = removeSugarObjects();
 		for (int i=0; i<removedSugarObjects; i++) {
 			createRandomSugarObject();
 		}
@@ -247,7 +247,7 @@ public class GameWorld {
 	 * @return 
 	 * 			The number of removed SugarObjects
 	 */
-	private int removeSugarAndDecreaseTicksToWait() {
+	private int removeSugarObjects() {
 		int nRemovedSugarObjects = 0;
 		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
 				sugarObjectIter.hasNext();) {
@@ -255,11 +255,21 @@ public class GameWorld {
 			
 			sugarObject.tick();
 			
+			// make invisible as soon as there is no more sugar 
+			if (sugarObject.getAmount() <= 0 && sugarObject.isInSpacePartitioning()) {
+				spacePartitioning.removeSugarObject(sugarObject);
+				sugarObject.setIsInSpacePartitioning(false);
+			}
+			
+			if (sugarObject.getAmount() > 0 && !sugarObject.isInSpacePartitioning()) {
+				spacePartitioning.addSugarObject(sugarObject);
+				sugarObject.setIsInSpacePartitioning(true);
+			}
+			
 			// remove if empty 
 			if (sugarObject.getAmount() <= 0 && sugarObject.getQueueSize() == 0) {
 				sugarObject.getsRemoved();
 				sugarObjectIter.remove();
-				spacePartitioning.removeSugarObject(sugarObject);
 				nRemovedSugarObjects++;
 			}
 		}
