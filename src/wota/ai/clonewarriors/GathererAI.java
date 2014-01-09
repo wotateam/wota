@@ -11,7 +11,7 @@ import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;
 
 
-//@AIInformation(creator = "Pascal", name = "Clone Warriors")
+//@AIInformation(creator = "Elrond1337", name = "Clone Warriors")
 public class GathererAI extends AntAI {
 
 	private double lastDir = 0;

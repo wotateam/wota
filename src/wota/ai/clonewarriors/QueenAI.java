@@ -4,7 +4,12 @@ import wota.gamemaster.AIInformation;
 import wota.gameobjects.Caste;
 import wota.utility.SeededRandomizer;
 
-@AIInformation(creator = "Pascal", name = "Clone Warriors")
+/**
+ * Consists of gatherers and warriors. Gatherers randomly look for sugar and 
+ * don't communicate at all. Warriors randomly look for enemies and start an
+ * joint attack on the enemy hills at a certain tick, when order 66 is called ;-)
+ */
+@AIInformation(creator = "Elrond1337", name = "Clone Warriors")
 public class QueenAI extends wota.gameobjects.QueenAI {
 	
 	int num_tick = 0;
