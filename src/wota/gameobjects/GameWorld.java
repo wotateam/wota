@@ -16,9 +16,7 @@ import wota.utility.Vector;
 
 
 /**
- * Enthält alle Elemente der Spielwelt.
- * 
- * @author pascal
+ * Contains all elements of the game world.
  */
 public class GameWorld {
 	private final List<Player> players = new LinkedList<Player>();
@@ -380,7 +378,7 @@ public class GameWorld {
 	}
 	
 	/** check the victory condition after this amount of ticks */
-	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 100;
+	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 500;
 	
 	public boolean allPlayersDead() {
 		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
