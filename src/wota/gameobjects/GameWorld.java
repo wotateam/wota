@@ -377,11 +377,8 @@ public class GameWorld {
 		}
 	}
 	
-	/** check the victory condition after this amount of ticks */
-	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 500;
-	
 	public boolean allPlayersDead() {
-		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
+		if (tickCount < parameters.DONT_CHECK_VICTORY_CONDITION_BEFORE) {
 			return false;
 		}
 		
@@ -396,7 +393,7 @@ public class GameWorld {
 	}
 	
 	public Player getWinner() {
-		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
+		if (tickCount < parameters.DONT_CHECK_VICTORY_CONDITION_BEFORE) {
 			return null;
 		}
 		
