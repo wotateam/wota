@@ -16,7 +16,7 @@ import wota.utility.Vector;
  * Put a describtion of you AI here.
  */
 // Here, you may use spaces, etc., unlike in the package path wota.ai.YOUR_AI_NAME:
-@AIInformation(creator = "Pascal", name = "StupidWorker")
+@AIInformation(creator = "Elrond1337", name = "StupidWorker")
 public class StupidWorker extends AntAI {
 	
 	enum State {WaitForMessage, LookForSugar, CollectSugar,

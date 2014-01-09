@@ -2,8 +2,7 @@ package wota.gameobjects;
 
 
 /**
- * Auftrag für eine neue Ant
- * @author pascal
+ * Order for a new Ant
  *
  */
 public class AntOrder {

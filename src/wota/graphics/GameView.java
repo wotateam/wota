@@ -21,8 +21,6 @@ import javax.swing.JFrame;
  * Renders everything.
  * 
  * http://en.wikibooks.org/wiki/OpenGL_Programming/GLStart/Tut3
- * 
- * @author Daniel, Pascal
  */
 public class GameView {
 

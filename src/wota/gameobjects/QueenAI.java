@@ -7,7 +7,6 @@ import wota.gamemaster.AISecurity;
 
 /**
  * QueenAI ist wie AntAI + hat die Möglichkeit Einheiten zu ordern
- * @author pascal
  */
 public abstract class QueenAI extends AntAI {
 	private List<AntOrder> antOrders;

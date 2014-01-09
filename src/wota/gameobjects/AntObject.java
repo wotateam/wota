@@ -10,7 +10,6 @@ import wota.utility.Vector;
 /**
  * Interne Darstellung von Ants. Enthält alle Informationen.
  * Im Gegensatz dazu enthält Ant nur die Informationen, welche die KI sehen darf.
- * @author pascal
  */
 public class AntObject extends GameObject{
 	

@@ -12,7 +12,7 @@ import wota.utility.SeededRandomizer;
 /**
  *  Collects all information and organizes all Ants
  */
-@AIInformation(creator = "Pascal", name = "Bürohengst")
+@AIInformation(creator = "Elrond1337", name = "Bürohengst")
 public class QueenAI extends wota.gameobjects.QueenAI {
 
 	public static final int SUGAR_IS_THERE = 0;
