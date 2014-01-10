@@ -20,7 +20,7 @@ public class Action {
 	public Vector movement = new Vector (0,0);
 	
 	// See comment for setMessageObject.
-	public MessageObject messageObject = null;
+	public AntMessageObject antMessageObject = null;
 	
 	/** true if sugar/... should be dropped. */
 	public boolean dropItem = false;

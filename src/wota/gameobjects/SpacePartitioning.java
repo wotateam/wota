@@ -61,8 +61,12 @@ public class SpacePartitioning {
 		addT(sugarObject, Cell.sugarObjectsField);
 	}
 	
-	public void addMessageObject(MessageObject messageObject) {
-		addT(messageObject, Cell.messageObjectsField);
+	public void addAntMessageObject(AntMessageObject antMessageObject) {
+		addT(antMessageObject, Cell.antMessageObjectsField);
+	}	
+	
+	public void addHillMessageObject(HillMessageObject hillMessageObject) {
+		addT(hillMessageObject, Cell.hillMessageObjectsField);
 	}
 	
 	private <T extends GameObject> void addT(T t, GameObjectListField<T> field) {
@@ -97,11 +101,20 @@ public class SpacePartitioning {
 		}
 	}
 	
-	public void discardMessageObjects() {
+	public void discardAntMessageObjects() {
 		for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
 			for (int j = 1; j < numberOfVerticalCells + 1; j++) {
 				Cell cell = cells[i][j];
-				cell.messageObjects.clear();
+				cell.antMessageObjects.clear();
+			}
+		}
+	}
+	
+	public void discardHillMessageObjects() {
+		for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
+			for (int j = 1; j < numberOfVerticalCells + 1; j++) {
+				Cell cell = cells[i][j];
+				cell.hillMessageObjects.clear();
 			}
 		}
 	}
@@ -159,10 +172,13 @@ public class SpacePartitioning {
 		return TsInsideCircle(radius, center, Cell.sugarObjectsField);
 	}
 	
-	public List<MessageObject> messageObjectsInsideCircle(double radius, Vector center) {
-		return TsInsideCircle(radius, center, Cell.messageObjectsField);
+	public List<AntMessageObject> antMessageObjectsInsideCircle(double radius, Vector center) {
+		return TsInsideCircle(radius, center, Cell.antMessageObjectsField);
 	}
 	
+	public List<HillMessageObject> hillMessageObjectsInsideCircle(double radius, Vector center) {
+		return TsInsideCircle(radius, center, Cell.hillMessageObjectsField);
+	}
 
 	public final int coordinatesToCellXIndex(Vector p) {
 		return Modulo.mod((int) Math.round(Math.floor(p.x/cellWidth)), numberOfHorizontalCells) + 1;
@@ -210,11 +226,19 @@ public class SpacePartitioning {
 			}
 		};
 		
-		public final List<MessageObject> messageObjects = new LinkedList<MessageObject>();
-		private static final GameObjectListField<MessageObject> messageObjectsField = new GameObjectListField<MessageObject>() {
+		public final List<AntMessageObject> antMessageObjects = new LinkedList<AntMessageObject>();
+		private static final GameObjectListField<AntMessageObject> antMessageObjectsField = new GameObjectListField<AntMessageObject>() {
 			@Override
-			public List<MessageObject> get(Cell cell) {
-				return cell.messageObjects;
+			public List<AntMessageObject> get(Cell cell) {
+				return cell.antMessageObjects;
+			}
+		};
+		
+		public final List<HillMessageObject> hillMessageObjects = new LinkedList<HillMessageObject>();
+		private static final GameObjectListField<HillMessageObject> hillMessageObjectsField = new GameObjectListField<HillMessageObject>() {
+			@Override
+			public List<HillMessageObject> get(Cell cell) {
+				return cell.hillMessageObjects;
 			}
 		};
 	}

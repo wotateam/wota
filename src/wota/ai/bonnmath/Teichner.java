@@ -81,7 +81,7 @@ public class Teichner extends AntAI {
 			talk(10*value+7);
 		}
 		if(position==false){
-			for(Message message : audibleMessages){
+			for(AntMessage message : audibleAntMessages){
 				if(message.sender.caste == Caste.Soldier && mod(message.content,10)==7){
 					position=true;
 					if(message.content>value*10+7){
@@ -118,7 +118,7 @@ public class Teichner extends AntAI {
 		}
 		Ant bossy=self;
 		if(position && boss==false ){
-			for(Message message : audibleMessages){
+			for(AntMessage message : audibleAntMessages){
 				if((bossy==self || vectorTo(bossy).length()>vectorTo(message.sender).length())&&message.sender.caste == Caste.Soldier && mod(message.content,10)==7){
 					bossy=message.sender;
 				}

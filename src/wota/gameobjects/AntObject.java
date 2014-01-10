@@ -15,7 +15,7 @@ public class AntObject extends GameObject{
 	
 	private static int idCounter = 0;
 	private Ant ant;
-	protected final AntAI ai;
+	protected final AntAI antAi;
 	public final int id;
 	protected double health;
 	private double speed;
@@ -56,12 +56,12 @@ public class AntObject extends GameObject{
 		health = caste.INITIAL_HEALTH;
 		speed = caste.SPEED;
 		
-		this.ai = antAI;
-		this.ai.setAntObject(this);
+		this.antAi = antAI;
+		this.antAi.setAntObject(this);
 	}
 
 	public AntAI getAI() {
-		return ai;
+		return antAi;
 	}
 	
 	public Ant getAnt() {
@@ -113,7 +113,7 @@ public class AntObject extends GameObject{
 	
 	public void createAnt() {
 		ant = new Ant(this);
-		this.ai.setAnt(ant);
+		this.antAi.setAnt(ant);
 	}
 	
 	public void takesDamage(double attack) {
@@ -154,22 +154,24 @@ public class AntObject extends GameObject{
 	
 	/** calls ai.tick(), handles exceptions and saves the action */
 	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar, 
-			List<Hill> visibleHills, List<Message> incomingMessages) {
-		ai.visibleAnts = visibleAnts;
-		ai.visibleSugar = visibleSugar;
-		ai.visibleHills = visibleHills;
-		ai.audibleMessages = incomingMessages;
+			List<Hill> visibleHills, List<AntMessage> incomingAntMessages, HillMessage incomingHillMessage) {
+		antAi.visibleAnts = visibleAnts;
+		antAi.visibleSugar = visibleSugar;
+		antAi.visibleHills = visibleHills;
+		antAi.audibleAntMessages = incomingAntMessages;
+		antAi.audibleHillMessage = incomingHillMessage;
+		antAi.setPosition(getPosition());
 		
 		if ( !isWaitingForSugar() ) {
 			try {
-				ai.tick();
+				antAi.tick();
 			}
 			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
-		action = ai.popAction();
+		action = antAi.popAction();
 	}
 	
 	/**

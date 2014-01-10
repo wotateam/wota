@@ -11,7 +11,9 @@ import java.util.LinkedList;
 
 import wota.gameobjects.Ant;
 import wota.gameobjects.AntAI;
+import wota.gameobjects.AntMessage;
 import wota.gameobjects.Caste;
+import wota.gameobjects.HillMessage;
 import wota.gameobjects.Message;
 import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;
@@ -76,20 +78,19 @@ public class Rapoport extends MyAntAI {
 		// note: it won't leave the sugar source after it reached it.
 		
 		
-		
-		for(Message message : audibleMessages){
-			if(message.sender.caste == Caste.Queen){
-				if((mod(message.content,10)==1|| mod(message.content,10)==2) && hatzucker==false){
-					if(mod(message.content,10)==2){
-						siege=true;
-					}
-					position.x=message.content/((int)(Math.round(parameters.SIZE_Y))*10)-Math.round(parameters.SIZE_X)/2;
-					position.y=mod(message.content/10,(int) (Math.round(parameters.SIZE_Y)))-parameters.SIZE_Y/2;
-					hatzucker=true;
-					zuckerloss=false;
+		HillMessage message = audibleHillMessage;
+		if(message != null){
+			if((mod(message.content,10)==1|| mod(message.content,10)==2) && hatzucker==false){
+				if(mod(message.content,10)==2){
+					siege=true;
 				}
+				position.x=message.content/((int)(Math.round(parameters.SIZE_Y))*10)-Math.round(parameters.SIZE_X)/2;
+				position.y=mod(message.content/10,(int) (Math.round(parameters.SIZE_Y)))-parameters.SIZE_Y/2;
+				hatzucker=true;
+				zuckerloss=false;
 			}
 		}
+		
 		if(Vector.add(position, vectorToHome()).length()<15 && visibleSugar.size()==0 && (siege==false)){
 			hatzucker=false;
 			zuckerloss=true;

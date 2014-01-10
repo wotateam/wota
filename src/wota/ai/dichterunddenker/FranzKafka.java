@@ -61,8 +61,8 @@ public class FranzKafka extends AntAI {
 	public void tick() throws Exception {
 		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
 		// note: it won't leave the sugar source after it reached it.
-		if(dir==0 && audibleMessages.size()>0){
-			dir=2*audibleMessages.get(0).content;
+		if (dir==0 && audibleHillMessage != null) {
+			dir=2*audibleHillMessage.content;
 		}
 		if(SeededRandomizer.getDouble()<0.02){
 			dir=dir+20;

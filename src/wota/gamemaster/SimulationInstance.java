@@ -137,7 +137,7 @@ public class SimulationInstance {
 		for (String aiName : simulationParameters.AI_PACKAGE_NAMES) {
 			Vector hillPosition = randomPosition.hillPosition(hillPositions);
 			hillPositions.add(hillPosition);
-			GameWorld.Player player = gameWorld.new Player(hillPosition, aiLoader.loadQueen(aiName));
+			GameWorld.Player player = gameWorld.new Player(hillPosition, aiLoader.loadHill(aiName));
 			System.out.println(player);
 			gameWorld.addPlayer(player);
 		}
@@ -162,8 +162,8 @@ public class SimulationInstance {
 		
 		SeededRandomizer.resetSeed(seed);
 		
-		GameWorld.Player firstPlayer = gameWorld.new Player(posFirstPlayer, aiLoader.loadQueen("donothing"));
-		GameWorld.Player secondPlayer = gameWorld.new Player(posSecondPlayer, aiLoader.loadQueen("donothing"));
+		GameWorld.Player firstPlayer = gameWorld.new Player(posFirstPlayer, aiLoader.loadHill("donothing"));
+		GameWorld.Player secondPlayer = gameWorld.new Player(posSecondPlayer, aiLoader.loadHill("donothing"));
 		gameWorld.addPlayer(firstPlayer);
 		gameWorld.addPlayer(secondPlayer);
 		

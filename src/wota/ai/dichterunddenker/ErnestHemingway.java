@@ -60,8 +60,8 @@ public class ErnestHemingway extends AntAI {
 	public void tick() throws Exception {
 		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
 		// note: it won't leave the sugar source after it reached it.
-		if(dir==0 && audibleMessages.size()>0){
-			dir=audibleMessages.get(0).content;
+		if (dir==0 && audibleHillMessage != null) {
+			dir=audibleHillMessage.content;
 		}
 		dir=dir+5;
 		if(visibleEnemies().size()>0){

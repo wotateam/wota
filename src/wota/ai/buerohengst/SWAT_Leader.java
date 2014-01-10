@@ -80,8 +80,8 @@ public class SWAT_Leader extends AntAI {
 	}
 
 	private void listenForNewMember() {
-		for (Message message : audibleMessages) {
-			if (message.content == QueenAI.FOUND_LEADER) {
+		for (AntMessage message : audibleAntMessages) {
+			if (message.content == HillAI.FOUND_LEADER) {
 				if (message.contentAnt.hasSameOriginal(self)) {
 					team.add(message.sender);
 				}
@@ -96,6 +96,6 @@ public class SWAT_Leader extends AntAI {
 			// move away
 			moveInDirection(vectorTo(target).scale(-1).angle());
 		}
-		talk(QueenAI.ATTACK, target);
+		talk(HillAI.ATTACK, target);
 	}
 }

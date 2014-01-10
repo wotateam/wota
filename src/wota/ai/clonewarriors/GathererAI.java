@@ -22,7 +22,6 @@ public class GathererAI extends AntAI {
 	
 	@Override
 	public void tick() {
-		
 		update_health();
 		
 		if (lastDir == 0)

@@ -88,7 +88,7 @@ public class Mueller extends MyAntAI {
 				sugarlist.set(vorhandencheck(neuerhaufen,sugarlist),neuerhaufen);
 			}
 		}
-		if(vectorToHome().length()<Caste.Queen.HEARING_RANGE){
+		if(vectorToHome().length()<Caste.Hill.HEARING_RANGE){
 			if(zeiger>=sugarlist.size()){
 				zeiger=0;
 			}
@@ -101,15 +101,13 @@ public class Mueller extends MyAntAI {
 			}
 		}
 		
-		
-		for(Message message : audibleMessages){
-			if(message.sender.caste == Caste.Queen){
-				if(mod(message.content,10)==1 && hatzucker==false){
-					position.x=message.content/((int)(Math.round(parameters.SIZE_Y))*10)-Math.round(parameters.SIZE_X)/2;
-					position.y=mod(message.content/10,(int) (Math.round(parameters.SIZE_Y)))-parameters.SIZE_Y/2;
-					hatzucker=true;
-					zuckerloss=false;
-				}
+		HillMessage message = audibleHillMessage;
+		if(message != null){
+			if(mod(message.content,10)==1 && hatzucker==false){
+				position.x=message.content/((int)(Math.round(parameters.SIZE_Y))*10)-Math.round(parameters.SIZE_X)/2;
+				position.y=mod(message.content/10,(int) (Math.round(parameters.SIZE_Y)))-parameters.SIZE_Y/2;
+				hatzucker=true;
+				zuckerloss=false;
 			}
 		}
 		

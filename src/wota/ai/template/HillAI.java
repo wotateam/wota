@@ -10,10 +10,10 @@ import wota.gameobjects.Caste;
  *
  */
 @AIInformation(creator = "Anonymous", name = "Anonymous's AI")
-public class QueenAI extends wota.gameobjects.QueenAI {
+public class HillAI extends wota.gameobjects.HillAI {
 
 	/*
-	 * your Queen is not able to move but can
+	 * your Hill is not able to move but can
 	 * communicate and create new ants. 
 	 * 
 	 * You can create new ants with				createAnt(caste, antAIClass)		

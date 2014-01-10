@@ -14,8 +14,6 @@ import wota.utility.SeededRandomizer;
 /**
  * Put a describtion of you AI here.
  */
-// Here, you may use spaces, etc., unlike in the package path wota.ai.YOUR_AI_NAME:
-@AIInformation(creator = "Anonymous", name = "Anonymous's AI")
 public class TemplateAI extends AntAI {
 
 	/* 

@@ -13,7 +13,7 @@ import wota.utility.SeededRandomizer;
  *  Collects all information and organizes all Ants
  */
 @AIInformation(creator = "Elrond1337", name = "Bürohengst")
-public class QueenAI extends wota.gameobjects.QueenAI {
+public class HillAI extends wota.gameobjects.HillAI {
 
 	public static final int SUGAR_IS_THERE = 0;
 	public static final int SUGAR_IS_NOT_THERE = 1;
@@ -47,10 +47,7 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 			nextAnt = SWAT_Leader.class;
 		}
 		
-		for (Message message : audibleMessages) {
-			if (message.sender.id == self.id) {
-				continue;
-			}
+		for (AntMessage message : audibleAntMessages) {
 			switch (message.content) {
 			case AWAITING_ORDERS: 
 				awaitsOrders.add(message.sender);

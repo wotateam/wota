@@ -18,7 +18,7 @@ import wota.utility.Vector;
  *
  */
 @AIInformation(creator = "Simon", name = "Ballmann")
-public class QueenAI extends MyQueenAI {
+public class HillAI extends MyHillAI {
 
 	/*
 	 * your Queen is not able to move but can
@@ -55,7 +55,7 @@ public class QueenAI extends MyQueenAI {
 		scoutlost++;
 		int lostsouls=0;
 		int lostsoldiers=0;
-		for(Message message : audibleMessages){
+		for(AntMessage message : audibleAntMessages){
 			if(message.sender.caste == Caste.Scout){
 				scoutlost=0;
 			}
@@ -94,7 +94,7 @@ public class QueenAI extends MyQueenAI {
 				
 			}
 		}
-		if(scoutlost>parameters.SIZE_X*(2*4.14)/15 && closest(visibleHills).food>parameters.ANT_COST){
+		if(scoutlost>parameters.SIZE_X*(2*4.14)/15 && self.food>parameters.ANT_COST){
 			createAnt(Caste.Scout, Scholze.class);
 			scoutlost=0;
 		}
@@ -112,7 +112,7 @@ public class QueenAI extends MyQueenAI {
 		boolean check=true;
 		boolean sugarcheck=true;
 		if(saving){
-			if(closest(visibleHills).food>=parameters.ANT_COST*5){
+			if(self.food>=parameters.ANT_COST*5){
 				for(int i=0;i<5;i++){
 					createAnt(Caste.Soldier, Teichner.class);
 				}
@@ -125,8 +125,8 @@ public class QueenAI extends MyQueenAI {
 				if(gegnerlist.get(0).getsoldiers()<2){
 					check=false;
 					sugarcheck=false;
-				//	while(closest(visibleHills).food>parameters.ANT_COST*(1+numberofcreatedants)){
-					for(int i=0; i<2 && closest(visibleHills).food>parameters.ANT_COST*(1+numberofcreatedants);i++){
+				//	while(self.food>parameters.ANT_COST*(1+numberofcreatedants)){
+					for(int i=0; i<2 && self.food>parameters.ANT_COST*(1+numberofcreatedants);i++){
 						createAnt(Caste.Soldier, Rapoport.class);
 						numberofcreatedants++;
 						gegnerlist.get(0).setsoldiers(gegnerlist.get(0).getsoldiers()+1);
@@ -140,7 +140,7 @@ public class QueenAI extends MyQueenAI {
 							haufen.setsoldiers(haufen.getsoldiers()+lostsoldiers);
 							check=false;
 							position=haufen.getPosition();
-							while(haufen.getsoldiers()<2&& closest(visibleHills).food>parameters.ANT_COST*(1+numberofcreatedants)){
+							while(haufen.getsoldiers()<2&& self.food>parameters.ANT_COST*(1+numberofcreatedants)){
 								createAnt(Caste.Soldier, Rapoport.class);
 								numberofcreatedants++;
 								haufen.setsoldiers(haufen.getsoldiers()+1);
@@ -154,7 +154,7 @@ public class QueenAI extends MyQueenAI {
 								haufen.setants(haufen.getants()+lostsouls);
 								check=false;
 								position=haufen.getPosition();
-								while(haufen.getmaxants()>haufen.getants()&& closest(visibleHills).food>parameters.ANT_COST*(1+numberofcreatedants)){
+								while(haufen.getmaxants()>haufen.getants()&& self.food>parameters.ANT_COST*(1+numberofcreatedants)){
 									createAnt(Caste.Gatherer, Mueller.class);
 									numbergatherer++;
 									numberofcreatedants++;
@@ -165,7 +165,7 @@ public class QueenAI extends MyQueenAI {
 							haufen.setsoldiers(haufen.getsoldiers()+lostsoldiers);
 							check=false;
 							position=haufen.getPosition();
-							if(closest(visibleHills).food>parameters.ANT_COST){
+							if(self.food>parameters.ANT_COST){
 								createAnt(Caste.Soldier, Rapoport.class);
 								numberofcreatedants++;
 								haufen.setsoldiers(haufen.getsoldiers()+1);
@@ -180,8 +180,8 @@ public class QueenAI extends MyQueenAI {
 					position=gegnerlist.get(0).getPosition();
 					check=false;
 					sugarcheck=false;
-					//	while(closest(visibleHills).food>parameters.ANT_COST*(1+numberofcreatedants)){
-					if(closest(visibleHills).food>parameters.ANT_COST*1){
+					//	while(self.food>parameters.ANT_COST*(1+numberofcreatedants)){
+					if(self.food>parameters.ANT_COST*1){
 						createAnt(Caste.Soldier, Rapoport.class);
 						numberofcreatedants++;
 						gegnerlist.get(0).setsoldiers(gegnerlist.get(0).getsoldiers()+1);
@@ -194,7 +194,7 @@ public class QueenAI extends MyQueenAI {
 						haufen.setants(haufen.getsoldiers()+lostsoldiers);
 						check=false;
 						position=haufen.getPosition();
-						while(haufen.getsoldiers()<2&& closest(visibleHills).food>(1+numberofcreatedants)*parameters.ANT_COST){
+						while(haufen.getsoldiers()<2&& self.food>(1+numberofcreatedants)*parameters.ANT_COST){
 							createAnt(Caste.Soldier, Rapoport.class);
 							numberofcreatedants++;
 							haufen.setsoldiers(haufen.getsoldiers()+1);

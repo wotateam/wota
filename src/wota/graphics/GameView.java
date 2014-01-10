@@ -112,11 +112,11 @@ public class GameView {
 					drawCircle(antObject.getPosition(), antObject.getCaste().SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
 				if (drawMessages)
-					if (antObject.getAction() != null && antObject.getAction().messageObject != null) {
+					if (antObject.getAction() != null && antObject.getAction().antMessageObject != null) {
 					final float messageAlpha = 1.0f;
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2],messageAlpha);
 					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
-				}
+				}				
 				if (DRAW_ATTACK) {
 					AntObject attackTarget = antObject.getAttackTarget();
 					final float attackLineWidth = 3.0f;

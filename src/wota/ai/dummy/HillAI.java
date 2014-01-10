@@ -5,7 +5,7 @@ import wota.gameobjects.Caste;
 import wota.utility.SeededRandomizer;
 
 @AIInformation(creator = "Wota Team", name = "Dummy")
-public class QueenAI extends wota.gameobjects.QueenAI {
+public class HillAI extends wota.gameobjects.HillAI {
 	
 	@Override
 	public void tick() {

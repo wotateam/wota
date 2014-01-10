@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import wota.utility.Modulo;
 import wota.utility.Vector;
 
-public abstract class MyQueenAI extends wota.gameobjects.QueenAI {
+public abstract class MyHillAI extends wota.gameobjects.HillAI {
 	public int vecttoint(Vector position){
 		return (int)(Math.round(parameters.SIZE_Y)*Math.round(position.x+parameters.SIZE_X/2)+Math.round(position.y+parameters.SIZE_Y/2));
 	}

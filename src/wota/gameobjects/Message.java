@@ -1,9 +1,13 @@
+/**
+ * 
+ */
 package wota.gameobjects;
 
-/** like MessageObject, but only contains the information which can
- *  be visible to other ants. 
+/**
+ * Base class for messages. Used by HillMessage and AntMessage
  */
-public class Message {
+public abstract class Message {
+	
 	/** information carried by the message */
 	public final int content;
 	
@@ -16,12 +20,8 @@ public class Message {
 	/** Hill if one is tranfered as message content */
 	public final Hill contentHill;
 	
-	/** Ant which sends this message */
-	public final Ant sender;
-	
 	public Message(MessageObject messageObject) {
-		this.content = messageObject.getContent();
-		this.sender = messageObject.getSender();
+		this.content = messageObject.content;
 		
 		if (messageObject.snapshot instanceof Ant) {
 			contentAnt = (Ant) messageObject.snapshot;
@@ -45,11 +45,13 @@ public class Message {
 		}
 	}
 	
+	/** Prints the message but does not contain sender. You can use AntMessage/HillMessage instead. */
 	@Override
 	public String toString() {
-		return new String(sender + ": " + content +
-						  " Ant: " + contentAnt +
+		return new String(content +
+						  " Ant: " + this.contentAnt +
 						  " Sugar: " + contentSugar +
 						  " Hill: " + contentHill);
 	}
+	
 }

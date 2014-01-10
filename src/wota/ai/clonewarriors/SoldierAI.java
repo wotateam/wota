@@ -95,12 +95,12 @@ public class SoldierAI extends AntAI {
 	}
 	
 	private int get_num_tick() {
-		for (Message message : audibleMessages) {
-			if (message.sender.caste == Caste.Queen) {
-				return message.content;
-			}
+		if (audibleHillMessage != null) {
+			return audibleHillMessage.content;
 		}
-		return -1;
+		else {
+			return -1;
+		}
 	}
 	
 	private void detect_enemy_hills() {

@@ -44,7 +44,7 @@ public enum Caste {
 			100  // HEARING_RANGE TODO should hearing range == sight range?
 	),
 
-	Queen(
+	Hill(
 			Integer.MAX_VALUE, // INITIAL_HEALTH 
 			0, 	// SPEED
 			0, // SPEED_WHILE_ATTACKING

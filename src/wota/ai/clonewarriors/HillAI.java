@@ -10,7 +10,7 @@ import wota.utility.SeededRandomizer;
  * joint attack on the enemy hills at a certain tick, when order 66 is called ;-)
  */
 @AIInformation(creator = "Elrond1337", name = "Clone Warriors")
-public class QueenAI extends wota.gameobjects.QueenAI {
+public class HillAI extends wota.gameobjects.HillAI {
 	
 	int num_tick = 0;
 		

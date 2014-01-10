@@ -1,6 +1,6 @@
 # settings.txt
 
-AI_PACKAGE_NAMES = bvb, buerohengst
+AI_PACKAGE_NAMES = bonnmath, pwahs03
 
 IS_GRAPHICAL = true
 
