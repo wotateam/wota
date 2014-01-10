@@ -3,11 +3,8 @@
  */
 package wota.ai.pwahs03;
 
-import java.security.Policy.Parameters;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Parameter;
 
 import wota.gamemaster.AIInformation;
 import wota.gameobjects.Ant;

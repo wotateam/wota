@@ -12,7 +12,7 @@ import wota.gameobjects.*;
 import wota.utility.SeededRandomizer;
 
 /**
- * Put a describtion of you AI here.
+ * Put a description of you AI here.
  */
 public class TemplateAI extends AntAI {
 

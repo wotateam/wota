@@ -17,7 +17,7 @@ import java.util.LinkedList;
 
 
 /**
- * Put a describtion of you AI here.
+ * Put a description of you AI here.
  */
 // Here, you may use spaces, etc., unlike in the package path wota.ai.YOUR_AI_NAME:
 @AIInformation(creator = "Anonymous", name = "Anonymous's AI")
@@ -248,9 +248,9 @@ public class ScoutAI extends AntAI {
 		if (time == 1){		//was just born, figure out time and directions:
 			
 			//find time:
-			for(Message m: audibleAntMessages){
-				if (m.content < 0) {
-					initialTime = m.content - HillAI.initTime;
+			if (audibleHillMessage != null){
+				if (audibleHillMessage.content < 0) {
+					initialTime = audibleHillMessage.content - HillAI.initTime;
 				}
 			}
 			if (initialTime < 5) {
