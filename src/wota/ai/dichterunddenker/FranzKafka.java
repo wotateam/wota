@@ -1,21 +1,22 @@
 /**
  * 
  */
-package wota.ai.template; /* <-- change this to wota.ai.YOUR_AI_NAME
- 							  * make sure your file is in the folder /de/wota/ai/YOUR_AI_NAME
+package wota.ai.dichterunddenker; /* <-- change this to de.wota.ai.YOURNAME
+ 							  * make sure your file is in the folder /de/wota/ai/YOURNAME
  							  * and has the same name as the class (change TemplateAI to
  							  * the name of your choice) 
  							  */
 
-import wota.gamemaster.AIInformation;
-import wota.gameobjects.*;
+import wota.gameobjects.Ant;
+import wota.gameobjects.AntAI;
 import wota.utility.SeededRandomizer;
 
 /**
  * Put a describtion of you AI here.
  */
-public class TemplateAI extends AntAI {
+public class FranzKafka extends AntAI {
 
+	public int dir=0;
 	/* 
 	 * tick() gets called in every step of the game.
 	 * You have to call methods of AntAI to specify
@@ -60,13 +61,67 @@ public class TemplateAI extends AntAI {
 	public void tick() throws Exception {
 		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
 		// note: it won't leave the sugar source after it reached it.
-		if (visibleSugar.size() == 0) { 
-			moveInDirection(27); // move 27 degrees to the x-axis if no sugar is in sight
+		if (dir==0 && audibleHillMessage != null) {
+			dir=2*audibleHillMessage.content;
 		}
-		else {
-			Sugar sugar = visibleSugar.get(0);
-			moveToward(sugar); // otherwise move to the first element in the List of visible sugar
+		if(SeededRandomizer.getDouble()<0.02){
+			dir=dir+20;
 		}
+		
+		if(visibleEnemies().size()>0){
+			int counter=0;
+			for(Ant ant:visibleFriends()){
+				if(vectorTo(ant).length()<10){
+					counter++;
+				}
+			}
+			if(counter<4){
+				Ant bestant=visibleEnemies().get(0);
+				Ant worstant=visibleEnemies().get(0);
+				int enemies=0;
+				boolean angriff=false;
+				boolean sugar=false;
+				for(Ant ant:visibleEnemies()){
+					if(ant.sugarCarry>0){
+						sugar=true;
+						angriff=true;
+						if(vectorTo(ant).length()<vectorTo(bestant).length()){
+							bestant=ant;
+						}
+					}
+					if(ant.caste!=self.caste && sugar==false){
+						angriff=true;
+						if(vectorTo(ant).length()<vectorTo(bestant).length()){
+							bestant=ant;
+						}
+					}
+					if(ant.caste==self.caste){
+						if(vectorTo(ant).length()<30){
+							enemies++;
+						}
+						if(vectorTo(ant).length()<vectorTo(worstant).length()){
+							worstant=ant;
+						}
+					}
+					
+				}	
+				if(enemies>1){
+					angriff=false;
+				}
+				if(angriff){
+					moveToward(bestant);
+					attack(bestant);
+				}else{
+					moveInDirection(vectorTo(worstant).angle()-180);
+				}
+			}else{
+				moveInDirection(SeededRandomizer.getInt(360));
+			}
+		}else{
+			moveInDirection(dir/2);
+		}
+		
+		
 		
 	}
 

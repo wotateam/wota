@@ -7,30 +7,15 @@ import wota.utility.Modulo;
 import wota.utility.Vector;
 
 
-
 /** 
- * Basisclass for ais by the user.
+ * Basisclass for antais by the user.
  * Contains several lists describing the objects which are visible to the ant.
  */
-public abstract class AntAI {		
-	/** Ants which are seen by self */
-	public List<Ant> visibleAnts; 
-	
-	/** Sugar which is seen by self */
-	public List<Sugar> visibleSugar;
-	
-	/** Hills which are seen by self */
-	public List<Hill> visibleHills;
-	
-	/** Messages which are heard in this tick */
-	public List<Message> audibleMessages;
+public abstract class AntAI extends AI{		
 	
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.
-	
-	/** Reference to the parameters of the game. e.g. cost of a new ant. */
-	protected Parameters parameters;
-	
+		
 	/** Action object contains the things the ant wants to do */
 	private Action action = new Action();
 	
@@ -38,72 +23,21 @@ public abstract class AntAI {
 	private AntObject antObject;
 			
 	
+	/** 
+	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
+	 * 
+	 * sets self to ant.
+	 */
+	public void setAnt(Ant ant) {
+		self = ant;
+	}
+
+	/** 
+	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
+	 */
 	void setAntObject(AntObject antObject) {
 		this.antObject = antObject;
-	}
-	
-	void setParameters(Parameters parameters) {
-		this.parameters = parameters;
-	}
-	
-	/** tick() gets called in every step of the game. 
-	 *  The ai has to call methods of AntAI to specify the desired action.
-	 * @throws Exception Any Exception generated in tick() gets thrown!
-	 */
-	public abstract void tick() throws Exception;
-	
-	/** get a List of visible Ants of the own tribe */
-	protected List<Ant> visibleFriends() {
-		LinkedList<Ant> output = new LinkedList<Ant>();
-		for (Ant ant : visibleAnts) {
-			if (ant.playerID == antObject.player.id()) {
-				output.add(ant);
-			}
-		}
-		return output;
-	}
-	
-	/** get a List of visible Ants of all enemy tribes */
-	protected List<Ant> visibleEnemies() {
-		LinkedList<Ant> output = new LinkedList<Ant>();
-		for (Ant ant : visibleAnts) {
-			if (ant.playerID != antObject.player.id()) {
-				output.add(ant);
-			}
-		}
-		return output;
-	}
-	
-	/** 
-	 * get a List of visible Ants of a specific player
-	 * 
-	 * @param playerId id of the specific player
-	 */
-	protected List<Ant> visibleAntsOfPlayer(int playerId) {
-		LinkedList<Ant> output = new LinkedList<Ant>();
-		for (Ant ant : visibleAnts) {
-			if (ant.playerID == playerId) {
-				output.add(ant);
-			}
-		}
-		return output;
-	}
-	
-	/**
-	 * Determines the object of a list of candidates which is closest to the player. 
-	 * @param toConsider list of Snapshots (e.g. Ants, Sugars, Hills) from which the closest gets chosen
-	 * @return null if toConsider is empty, otherwise the closest in toConsider
-	 */
-	protected <T extends Snapshot> T closest(List<T> toConsider) {
-		T closest = null;
-		double distance = Double.MAX_VALUE;
-		for (T current : toConsider) {
-			if (vectorTo(current).length() < distance) {
-				closest = current;
-				distance = vectorTo(current).length();
-			}
-		}
-		return closest;
+		setPosition(antObject.getPosition());
 	}
 	
 	/**
@@ -138,9 +72,9 @@ public abstract class AntAI {
 	
 	/** Send message of combined int with Snaphshot (Ant, Hill, Sugar, ...) */
 	protected void talk(int content, Snapshot snapshot) {
-		MessageObject mo = new MessageObject(self.getPosition(), self, content, snapshot, parameters);
+		AntMessageObject mo = new AntMessageObject(self.getPosition(), self, content, snapshot, parameters);
 			
-		action.messageObject = mo;
+		action.antMessageObject = mo;
 	}
 	
 	/** Move in certain direction with maximum distance
@@ -195,7 +129,7 @@ public abstract class AntAI {
 	protected void moveHome() {
 		moveToward(antObject.player.hillObject.getHill());
 	}
-	
+
 	protected Vector vectorToHome() {
 		return parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition());
 	}
@@ -205,31 +139,26 @@ public abstract class AntAI {
 		return (parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 	
-	/** 
-	 * returns the Vector between the Ant itself and target
-	 * @param target
-	 * @return vector between this ant and target
-	 */
-	protected Vector vectorTo(Snapshot target) {
-		return parameters.shortestDifferenceOnTorus(target.getPosition(), antObject.getPosition());
+	/** get a List of visible Ants of the own tribe */
+	protected List<Ant> visibleFriends() {
+		LinkedList<Ant> output = new LinkedList<Ant>();
+		for (Ant ant : visibleAnts) {
+			if (ant.playerID == antObject.player.id()) {
+				output.add(ant);
+			}
+		}
+		return output;
 	}
 	
-	/** 
-	 * @param start
-	 * @param end
-	 * @return the Vector between start and end.
-	 */
-	protected Vector vectorBetween(Snapshot start, Snapshot end) {
-		return parameters.shortestDifferenceOnTorus(end.getPosition(), start.getPosition());
-	}
-	
-	/** 
-	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
-	 * 
-	 * sets self to ant.
-	 */
-	public void setAnt(Ant ant) {
-		self = ant;
+	/** get a List of visible Ants of all enemy tribes */
+	protected List<Ant> visibleEnemies() {
+		LinkedList<Ant> output = new LinkedList<Ant>();
+		for (Ant ant : visibleAnts) {
+			if (ant.playerID != antObject.player.id()) {
+				output.add(ant);
+			}
+		}
+		return output;
 	}
 	
 	/** CAUTION! THIS METHOD DELETES THE ACTION */
@@ -237,22 +166,5 @@ public abstract class AntAI {
 		Action returnAction = action;
 		action = new Action();
 		return returnAction;
-	}
-	
-	/**
-	 * Modulo operation returning only non-negative numbers.
-	 * @return x mod m
-	 */
-	public static int mod(int x, int m) {
-		return Modulo.mod(x, m);
-	}
-	
-
-	/**
-	 * Modulo operation returning only non-negative numbers.
-	 * @return x mod m
-	 */
-	public static double mod(double x, double m) {
-		return Modulo.mod(x, m);
 	}
 }

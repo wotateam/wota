@@ -1,21 +1,21 @@
 /**
  * 
  */
-package wota.ai.template; /* <-- change this to wota.ai.YOUR_AI_NAME
- 							  * make sure your file is in the folder /de/wota/ai/YOUR_AI_NAME
+package wota.ai.dichterunddenker; /* <-- change this to de.wota.ai.YOURNAME
+ 							  * make sure your file is in the folder /de/wota/ai/YOURNAME
  							  * and has the same name as the class (change TemplateAI to
  							  * the name of your choice) 
  							  */
 
-import wota.gamemaster.AIInformation;
-import wota.gameobjects.*;
+import wota.gameobjects.AntAI;
 import wota.utility.SeededRandomizer;
 
 /**
  * Put a describtion of you AI here.
  */
-public class TemplateAI extends AntAI {
+public class ErnestHemingway extends AntAI {
 
+	public int dir=0;
 	/* 
 	 * tick() gets called in every step of the game.
 	 * You have to call methods of AntAI to specify
@@ -29,7 +29,7 @@ public class TemplateAI extends AntAI {
 	 * you can move using one of the methods starting
 	 * with move. For example to move ahead (in the
 	 * direction of the last tick) call					moveAhead()
-	 * 
+	 * ErnestHemingway
 	 * to attack other ants use methods starting with	attack(otherAnt)
 	 * attack, e.g.		
 	 * 
@@ -60,13 +60,16 @@ public class TemplateAI extends AntAI {
 	public void tick() throws Exception {
 		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
 		// note: it won't leave the sugar source after it reached it.
-		if (visibleSugar.size() == 0) { 
-			moveInDirection(27); // move 27 degrees to the x-axis if no sugar is in sight
+		if (dir==0 && audibleHillMessage != null) {
+			dir=audibleHillMessage.content;
 		}
-		else {
-			Sugar sugar = visibleSugar.get(0);
-			moveToward(sugar); // otherwise move to the first element in the List of visible sugar
+		dir=dir+5;
+		if(visibleEnemies().size()>0){
+			moveToward(closest(visibleEnemies()));	
+		}else{
+			moveInDirection(dir);
 		}
+		attack(closest(visibleEnemies()));
 		
 	}
 

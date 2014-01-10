@@ -38,7 +38,7 @@ public class SWAT_Member extends AntAI {
 	}
 
 	private void listenForAttackTarget() {
-		for (Message message : audibleMessages) {
+		for (AntMessage message : audibleAntMessages) {
 			if (message.sender.hasSameOriginal(squadLeader)) {
 				target = message.contentAnt;
 			}
@@ -82,7 +82,7 @@ public class SWAT_Member extends AntAI {
 		for (Ant ant : visibleAnts) {
 			if (ant.antAIClassName.contains("SWAT_Leader")) {
 				squadLeader = ant;
-				talk(QueenAI.FOUND_LEADER, squadLeader);
+				talk(HillAI.FOUND_LEADER, squadLeader);
 				break;
 			}
 		}

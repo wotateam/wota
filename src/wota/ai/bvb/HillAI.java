@@ -4,7 +4,7 @@ import wota.gamemaster.AIInformation;
 import wota.gameobjects.Caste;
 
 @AIInformation(creator = "David und Simon", name = "BVB")
-public class QueenAI extends wota.gameobjects.QueenAI {
+public class HillAI extends wota.gameobjects.HillAI {
 	int j=0;
 	int n=1;
 	@Override

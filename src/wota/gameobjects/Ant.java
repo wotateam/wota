@@ -9,8 +9,6 @@ import wota.utility.Vector;
  * 
  * This is what an AI gets when it sees any ants. 
  * Created once per round for all the ants.
- * 
- * @author pascal
  */
 public class Ant implements Snapshot {
 	

@@ -37,10 +37,10 @@ import wota.gameobjects.Snapshot;
  * they either start patrolling the known sugar hills, or attacking the enemy hills.
  */
 @AIInformation(creator = "Philipp", name = "pwahs03")
-public class QueenAI extends wota.gameobjects.QueenAI {
+public class HillAI extends wota.gameobjects.HillAI {
 
 	/*
-	 * your Queen is not able to move but can
+	 * your Hill is not able to move but can
 	 * communicate and create new ants. 
 	 * 
 	 * You can create new ants with				createAnt(caste, antAIClass)		
@@ -97,18 +97,18 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 		time++;
 		
 		boolean fight = false;
-		for(Message m: audibleMessages){
-			if (m.content==QueenAI.FIGHT){
+		for(Message m: audibleAntMessages){
+			if (m.content==HillAI.FIGHT){
 				fight = true;
 			}
 		}
 		
-		double myfood = visibleHills.get(0).food;
+		double myfood = self.food;
 		
 		while(myfood >= parameters.ANT_COST){
 			if (antCount%10==3 && antCount>20){
-				if (myfood >= QueenAI.SWAT_TEAM_SIZE*parameters.ANT_COST){
-					for(int i=0; i < QueenAI.SWAT_TEAM_SIZE;i++){
+				if (myfood >= HillAI.SWAT_TEAM_SIZE*parameters.ANT_COST){
+					for(int i=0; i < HillAI.SWAT_TEAM_SIZE;i++){
 						myfood-=parameters.ANT_COST;
 						createAnt(Caste.Soldier, SoldierAI.class);
 						antCount++;
@@ -127,7 +127,7 @@ public class QueenAI extends wota.gameobjects.QueenAI {
 		}
 
 		
-		talk(time + QueenAI.initTime);
+		talk(time + HillAI.initTime);
 		
 	}
 	

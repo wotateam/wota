@@ -16,7 +16,7 @@ import wota.utility.Vector;
  * Put a describtion of you AI here.
  */
 // Here, you may use spaces, etc., unlike in the package path wota.ai.YOUR_AI_NAME:
-@AIInformation(creator = "Pascal", name = "StupidWorker")
+@AIInformation(creator = "Elrond1337", name = "StupidWorker")
 public class StupidWorker extends AntAI {
 	
 	enum State {WaitForMessage, LookForSugar, CollectSugar,
@@ -39,7 +39,7 @@ public class StupidWorker extends AntAI {
 	}
 
 	private void tickAskForOrders() {
-		talk(QueenAI.AWAITING_ORDERS);
+		talk(HillAI.AWAITING_ORDERS);
 		state = State.WaitForMessage;
 	}
 
@@ -52,23 +52,20 @@ public class StupidWorker extends AntAI {
 	}
 	
 	public void tickWaitForMessage() throws Exception {
-		for (Message message : audibleMessages) {
-			if (message.sender.caste != Caste.Queen) {
-				continue;
-			}
-			if (message.content != self.id) {
-				continue;
-			}
-			// message is determined for this ant
-			sugarTarget = message.contentSugar;
-			if (sugarTarget == null) {
-				state = State.LookForSugar;
-				randomDirection = SeededRandomizer.getInt(360);
-				moveInDirection(randomDirection);
-			}
-			else {
-				state = State.CollectSugar;
-			}
+		HillMessage message = audibleHillMessage;
+
+		if (message.content != self.id) {
+			return;
+		}
+		// message is determined for this ant
+		sugarTarget = message.contentSugar;
+		if (sugarTarget == null) {
+			state = State.LookForSugar;
+			randomDirection = SeededRandomizer.getInt(360);
+			moveInDirection(randomDirection);
+		}
+		else {
+			state = State.CollectSugar;
 		}
 	}
 	
@@ -83,11 +80,11 @@ public class StupidWorker extends AntAI {
 	}
 	
 	private void reportExistantSugar(Sugar sugar) {
-		talk(QueenAI.SUGAR_IS_THERE, sugar);
+		talk(HillAI.SUGAR_IS_THERE, sugar);
 	}
 	
 	private void reportNonExistantSugar(Sugar sugar) {
-		talk(QueenAI.SUGAR_IS_NOT_THERE, sugar);
+		talk(HillAI.SUGAR_IS_NOT_THERE, sugar);
 	}
 	
 	/** goes to sugarTarget and picks it up. */

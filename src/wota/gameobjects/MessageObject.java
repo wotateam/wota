@@ -1,45 +1,23 @@
+/**
+ * 
+ */
 package wota.gameobjects;
 
 import wota.utility.Vector;
 
-/** Physical interpretation of messages send by Ants.
- *  User AIs should only see Message not MessageObject 
- *  
- *  contains position, sender and content of messages. 
+/**
+ * Base class for MessageObjects. 
+ * Does not contain a sender. 
  */
-public class MessageObject extends GameObject {
-	
-	/** what is transfered in this message. Just an int for the moment. */
-	private final int 	content;
-	final Snapshot snapshot;
-	
-	/** Ant which sends the message */
-	private final Ant sender; 
+public abstract class MessageObject extends GameObject {
 
-	/** Message instance which contains the information visible to other ants */
-	private final Message message;
+	/** what is transfered in this message. Just an int for the moment. */
+	public final int content;
+	public final Snapshot snapshot;
 	
-	public MessageObject(Vector position, Ant sender, int content, Snapshot snapshot, Parameters parameters) {
+	public MessageObject(Vector position, int content, Snapshot snapshot, Parameters parameters) {
 		super(position, parameters);
-		this.sender = sender;
 		this.content = content;
 		this.snapshot = snapshot;
-		
-		message = new Message(this);
-	}
-	
-	/** returns Message instance which contains the information visible to other ants */
-	public Message getMessage() {
-		return message;
-	}
-
-	/** returns information carried by the message */
-	public int getContent() {
-		return content;
-	}
-
-	/** returns sender of this message. */
-	public Ant getSender() {
-		return sender;
 	}
 }

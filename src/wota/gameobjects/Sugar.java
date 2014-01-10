@@ -4,7 +4,6 @@ import wota.utility.Vector;
 
 /**
  * Large amount of sugar which wants to be collected
- * @author pascal
  *
  */
 public class Sugar implements Snapshot {

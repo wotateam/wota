@@ -6,6 +6,7 @@ import wota.gamemaster.SimulationParameters;
 import wota.gameobjects.Ant;
 import wota.gameobjects.AntAI;
 import wota.gameobjects.Caste;
+import wota.gameobjects.Hill;
 import wota.gameobjects.Message;
 import wota.gameobjects.Sugar;
 import wota.utility.SeededRandomizer;
@@ -22,19 +23,15 @@ public class GathererAI extends AntAI {
 	
 	@Override
 	public void tick() throws Exception {
-		if (audibleMessages.size() > 0) {
-			Message message = audibleMessages.get(0);
-			if (message.sender.caste == Caste.Queen && 
-					message.content >= QueenAI.SUGAR_DIRECTION_START &&
-					message.content < QueenAI.SUGAR_DIRECTION_START + 360 &&
-					! wasToldSugarDirection) {
-				direction = message.content - QueenAI.SUGAR_DIRECTION_START;
-				wasToldSugarDirection = true;
-			} /*else if (message.sender.caste == Caste.Gatherer) {
-				direction = message.content;
-				wasToldSugarDirection = true;
-			}*/
-		}
+		if (audibleHillMessage.content >= HillAI.SUGAR_DIRECTION_START &&
+				audibleHillMessage.content < HillAI.SUGAR_DIRECTION_START + 360 &&
+				! wasToldSugarDirection) {
+			direction = audibleHillMessage.content - HillAI.SUGAR_DIRECTION_START;
+			wasToldSugarDirection = true;
+		} /*else if (message.sender.caste == Caste.Gatherer) {
+			direction = message.content;
+			wasToldSugarDirection = true;
+		}*/
 		
 		if (self.sugarCarry > 0 || havePickedUpSugar) { 
 			// sugar is dropped automatically if inside hill 
@@ -62,10 +59,9 @@ public class GathererAI extends AntAI {
 			}
 		}
 		
-		Iterator<Ant> antIter = visibleAnts.iterator();
-		while (antIter.hasNext()) {
-			Ant ant = antIter.next(); 
-			if (ant.caste == Caste.Queen && ant.playerID == self.playerID) {
+		
+		for (Hill hill : visibleHills) {
+			if (hill.playerID == self.playerID) {
 				// by now, we should have talked about the sugar source we picked up sugar from
 				// don't keep talking about it, it might be gone now.
 				havePickedUpSugar = false;

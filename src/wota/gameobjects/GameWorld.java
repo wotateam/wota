@@ -16,9 +16,7 @@ import wota.utility.Vector;
 
 
 /**
- * Enthält alle Elemente der Spielwelt.
- * 
- * @author pascal
+ * Contains all elements of the game world.
  */
 public class GameWorld {
 	private final List<Player> players = new LinkedList<Player>();
@@ -87,7 +85,6 @@ public class GameWorld {
 	public class Player {
 		public final List<AntObject> antObjects = new LinkedList<AntObject>();
 		public final HillObject hillObject;
-		public final QueenObject queenObject;
 
 		public final String name;
 		public final String creator;
@@ -99,15 +96,12 @@ public class GameWorld {
 		}
 
 		// TODO make this private and change addPlayer
-		public Player(Vector position, Class<? extends QueenAI> queenAIClass) {
-			hillObject = new HillObject(position, this, parameters);
+		public Player(Vector position, Class<? extends HillAI> hillAIClass) {
+			hillObject = new HillObject(position, this, hillAIClass, parameters);
 			spacePartitioning.addHillObject(hillObject);
-			queenObject = new QueenObject(position, queenAIClass, this, parameters);
-			
-			antObjects.add(queenObject);		
-		
-			name = AILoader.getAIName(queenAIClass);
-			creator = AILoader.getAICreator(queenAIClass);
+					
+			name = AILoader.getAIName(hillAIClass);
+			creator = AILoader.getAICreator(hillAIClass);
 
 			id = nextPlayerId;
 			nextPlayerId++;
@@ -162,36 +156,97 @@ public class GameWorld {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
 				List<Sugar> visibleSugar = new LinkedList<Sugar>();
 				List<Hill> visibleHills = new LinkedList<Hill>();
-				List<Message> audibleMessages = new LinkedList<Message>();
+				List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
+				HillMessage audibleHillMessage = null;
 
+				double sightRange = antObject.getCaste().SIGHT_RANGE;
+				double hearingRange = antObject.getCaste().HEARING_RANGE;
+				Vector position = antObject.getPosition();
+				
 				for (AntObject visibleAntObject : 
-					spacePartitioning.antObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+						spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
 					if (visibleAntObject != antObject) {
 						visibleAnts.add(visibleAntObject.getAnt());
 					}
 				}
 
 				for (SugarObject visibleSugarObject : 
-					spacePartitioning.sugarObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+						spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
 					visibleSugar.add(visibleSugarObject.getSugar());
 				}
 				
 				for (HillObject visibleHillObject :
-					spacePartitioning.hillObjectsInsideCircle(antObject.getCaste().SIGHT_RANGE, antObject.getPosition())) {
+						spacePartitioning.hillObjectsInsideCircle(sightRange, position)) {
 					visibleHills.add(visibleHillObject.getHill());
 				}				
 				
-				for (MessageObject audibleMessageObject : 
-					spacePartitioning.messageObjectsInsideCircle(antObject.getCaste().HEARING_RANGE, antObject.getPosition())) {
-					if (audibleMessageObject.getSender().playerID == antObject.player.id) {
-						audibleMessages.add(audibleMessageObject.getMessage());
+				for (AntMessageObject audibleAntMessageObject : 
+						spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
+					if (audibleAntMessageObject.sender.playerID == player.id()) {
+						audibleAntMessages.add(audibleAntMessageObject.getMessage());
 					}
 				}
-				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleMessages);
+				
+				for (HillMessageObject audibleHillMessageObject :
+						spacePartitioning.hillMessageObjectsInsideCircle(hearingRange, position)) {
+					if (audibleHillMessageObject.sender.playerID == player.id()) {
+						audibleHillMessage = audibleHillMessageObject.getMessage();
+					}
+				}
+				
+				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
 			}
+			
+			// and now for the hill. Sorry for the awful duplication of code but I couldn't see a way without 
+			// lots of work
+			
+			List<Ant> visibleAnts = new LinkedList<Ant>();
+			List<Sugar> visibleSugar = new LinkedList<Sugar>();
+			List<Hill> visibleHills = new LinkedList<Hill>();
+			List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
+			HillMessage audibleHillMessage = null;
+
+			double sightRange = player.hillObject.caste.SIGHT_RANGE;
+			double hearingRange = player.hillObject.caste.HEARING_RANGE;
+			Vector position = player.hillObject.getPosition();
+			
+			for (AntObject visibleAntObject : 
+					spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
+				visibleAnts.add(visibleAntObject.getAnt());
+			}
+
+			for (SugarObject visibleSugarObject : 
+					spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
+				visibleSugar.add(visibleSugarObject.getSugar());
+			}
+			
+			for (HillObject visibleHillObject :
+					spacePartitioning.hillObjectsInsideCircle(sightRange, position)) {
+				if (visibleHillObject != player.hillObject) {
+					visibleHills.add(visibleHillObject.getHill());
+				}
+			}				
+			
+			for (AntMessageObject audibleAntMessageObject : 
+					spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
+				if (audibleAntMessageObject.sender.playerID == player.id()) {
+					audibleAntMessages.add(audibleAntMessageObject.getMessage());
+				}
+			}
+			
+			for (HillMessageObject audibleHillMessageObject :
+					spacePartitioning.hillMessageObjectsInsideCircle(hearingRange, position)) {
+				if (audibleHillMessageObject.sender.playerID == player.id()) {
+					audibleHillMessage = audibleHillMessageObject.getMessage();
+				}
+			}
+			
+			player.hillObject.tick(visibleAnts, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
+
 		}
 		// Only do this now that we used last tick's message objects.
-		spacePartitioning.discardMessageObjects();
+		spacePartitioning.discardAntMessageObjects();
+		spacePartitioning.discardHillMessageObjects();
 		
 		// execute all actions, ants get created
 		for (Player player : players) {
@@ -205,8 +260,9 @@ public class GameWorld {
 				executeMovement(antObject);
 			}
 
-			// order does matter since the queen creates new ants!
-			executeAntOrders(player.queenObject);
+			// order does matter since the hill creates new ants!
+			handleHillMessage(player.hillObject, player.hillObject.hillAI.popMessage());
+			executeAntOrders(player.hillObject);
 		}
 		
 		// Needs to go before removing dead ants, because they need to be in 
@@ -276,11 +332,11 @@ public class GameWorld {
 		return nRemovedSugarObjects;
 	}
 
-	private void executeAntOrders(QueenObject queenObject) {
-		List<AntOrder> antOrders = queenObject.getAntOrders();
+	private void executeAntOrders(HillObject hillObject) {
+		List<AntOrder> antOrders = hillObject.getAntOrders();
 		Iterator<AntOrder> iterator = antOrders.iterator();
-		final Player player = queenObject.player;
-		
+		final Player player = hillObject.getPlayer();
+
 		while (iterator.hasNext()) {
 			AntOrder antOrder = iterator.next();
 		
@@ -288,20 +344,20 @@ public class GameWorld {
 				player.hillObject.changeStoredFoodBy(-parameters.ANT_COST);
 				
 				AntObject newAntObject = new AntObject(
-						queenObject.player.hillObject.getPosition(),
+						hillObject.getPlayer().hillObject.getPosition(),
 						antOrder.getCaste(), antOrder.getAntAIClass(),
-						queenObject.player, parameters);
-				createAntObject(queenObject, newAntObject);
+						hillObject.getPlayer(), parameters);
+				createAntObject(hillObject, newAntObject);
 			}
 		}
 	}
 
 	/**
-	 * @param queenObject  Queen which created this AntObject
+	 * @param hillObject  Hill which created this AntObject
 	 * @param newAntObject freshly created AntObject
 	 */
-	private void createAntObject(QueenObject queenObject, AntObject newAntObject) {
-		queenObject.player.addAntObject(newAntObject);
+	private void createAntObject(HillObject hillObject, AntObject newAntObject) {
+		hillObject.getPlayer().addAntObject(newAntObject);
 		logger.antCreated(newAntObject);
 	}
 
@@ -359,7 +415,7 @@ public class GameWorld {
 		}
 		
 		// Messages
-		handleMessages(actor, action);
+		handleAntMessages(actor, action);
 	}
 	
 	private double fractionOfDamageInDistance(double distance) {
@@ -367,6 +423,18 @@ public class GameWorld {
 		return Math.max(fraction, 0); 
 	}
 	
+	private void handleHillMessage(HillObject actor, HillMessageObject message) {
+		if (message != null) {
+			spacePartitioning.addHillMessageObject(message);
+		}
+	}
+
+	private void handleAntMessages(AntObject actor, Action action) {
+		if (action.antMessageObject != null) {
+			spacePartitioning.addAntMessageObject(action.antMessageObject);
+		}
+	}
+
 	private static void executeMovement(AntObject actor) {
 		Action action = actor.getAction();
 
@@ -379,18 +447,14 @@ public class GameWorld {
 		}
 	}
 	
-	/** check the victory condition after this amount of ticks */
-	private static int DONT_CHECK_VICTORY_CONDITION_BEFORE = 100;
-	
 	public boolean allPlayersDead() {
-		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
+		if (tickCount < parameters.DONT_CHECK_VICTORY_CONDITION_BEFORE) {
 			return false;
 		}
 		
 		int nPlayersAlive = players.size();
 		for (Player player : players) {
-			if ( (player.antObjects.size() == 1 && !player.queenObject.isDead() ) ||
-					player.antObjects.size() == 0) {
+			if ( player.antObjects.size() == 0 ) {
 				nPlayersAlive--;
 			}
 		}
@@ -398,7 +462,7 @@ public class GameWorld {
 	}
 	
 	public Player getWinner() {
-		if (tickCount < DONT_CHECK_VICTORY_CONDITION_BEFORE) {
+		if (tickCount < parameters.DONT_CHECK_VICTORY_CONDITION_BEFORE) {
 			return null;
 		}
 		
@@ -439,13 +503,6 @@ public class GameWorld {
 			}
 		}
 		return playersWithMostAnts;
-	}
-
-	private void handleMessages(AntObject actor, Action action) {
-		if (action.messageObject != null) {
-			spacePartitioning.addMessageObject(action.messageObject);
-			Message message = action.messageObject.getMessage();
-		}
 	}
 
 	public int totalNumberOfAntObjects() {

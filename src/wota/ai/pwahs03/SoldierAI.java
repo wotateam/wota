@@ -10,7 +10,7 @@ package wota.ai.pwahs03; /* <-- change this to wota.ai.YOUR_AI_NAME
  							  * the name of your choice) 
  							  */
 
-import wota.ai.pwahs03.QueenAI.SwatStatus;
+import wota.ai.pwahs03.HillAI.SwatStatus;
 import wota.gamemaster.AIInformation;
 import wota.gameobjects.*;
 import wota.utility.SeededRandomizer;
@@ -72,7 +72,7 @@ public class SoldierAI extends AntAI {
 	double dir = -1;
 	
 	List<LinkedList<Snapshot>> hills = new LinkedList<LinkedList<Snapshot>>();
-	int []indices = new int[QueenAI.NR_HILLS];
+	int []indices = new int[HillAI.NR_HILLS];
 	int nr_hill = 0;
 	
 	Snapshot target = null;
@@ -132,7 +132,7 @@ public class SoldierAI extends AntAI {
 		Vector pos = target.getPosition();
 		if (!leading){
 			
-			double factor = QueenAI.COMBAT_RADIUS;
+			double factor = HillAI.COMBAT_RADIUS;
 //			if (assignment == SwatStatus.ATTACKING){
 //				factor *= self.caste.SIGHT_RANGE;
 //			}else{
@@ -166,8 +166,8 @@ public class SoldierAI extends AntAI {
 		if (!see_leader){
 			if (shouted){
 				int count = 0;
-				for(Message m: audibleMessages){
-					if (m.content == QueenAI.NEED_NEW_LEADER && m.sender.id < self.id) count++;
+				for(AntMessage m: audibleAntMessages){
+					if (m.content == HillAI.NEED_NEW_LEADER && m.sender.id < self.id) count++;
 				}
 				/*for(Ant ant: visibleFriends()){
 					if (ant.id < self.id && ant.caste == Caste.Soldier) count++; 
@@ -177,36 +177,36 @@ public class SoldierAI extends AntAI {
 			}
 			else{
 				shouted = true;
-				talk(QueenAI.NEED_NEW_LEADER);
+				talk(HillAI.NEED_NEW_LEADER);
 			}
 		}
 	}
 	
 	public void promote(){
-		talk(QueenAI.NEW_LEADER, leader);
+		talk(HillAI.NEW_LEADER, leader);
 		leader = null;
 		leading = true;
 	}
 	
 	public void get_orders(){
-		for(Message m: audibleMessages){
+		for(AntMessage m: audibleAntMessages){
 			
 			switch(m.content){
-			case QueenAI.NEW_LEADER:
+			case HillAI.NEW_LEADER:
 				if (leader == null){
 					if(m.contentAnt == null) leader = m.sender;
 				} else if (leader.hasSameOriginal(m.contentAnt)){
 					leader = m.sender;
 				}
 				break;
-			case QueenAI.NEW_TARGET:
+			case HillAI.NEW_TARGET:
 				if (leader != null){
 					if (leader.hasSameOriginal(m.sender)){
 						target = m.contentAnt;
 						if (target == null) {
 							target = m.contentHill;
 							if (target != null){
-								if (target.hasSameOriginal(hills.get(QueenAI.HILL_IND).get(0))){
+								if (target.hasSameOriginal(hills.get(HillAI.HILL_IND).get(0))){
 									assignment = SwatStatus.GUARDING;
 								}else{
 									assignment = SwatStatus.ATTACKING;
@@ -227,9 +227,9 @@ public class SoldierAI extends AntAI {
 	public void give_orders(){
 		switch(assignment){
 		case PATROLLING:
-			if (!QueenAI.contained(hills.get(QueenAI.SUGAR_IND), target)
-				&& !QueenAI.contained(hills.get(QueenAI.FULLSUGAR_IND), target)){
-				if (!target.hasSameOriginal(hills.get(QueenAI.HILL_IND).get(0))){
+			if (!HillAI.contained(hills.get(HillAI.SUGAR_IND), target)
+				&& !HillAI.contained(hills.get(HillAI.FULLSUGAR_IND), target)){
+				if (!target.hasSameOriginal(hills.get(HillAI.HILL_IND).get(0))){
 					target_sugar();
 				}else{
 					if (vectorBetween(self, target).length() < self.caste.SIGHT_RANGE
@@ -247,15 +247,15 @@ public class SoldierAI extends AntAI {
 		case GUARDING: //check if we should switch:
 			boolean hear_leader = false;
 			if (time > 50){
-				for(Message m: audibleMessages){
-					if ((m.content == QueenAI.NEW_LEADER /*|| m.content == QueenAI.NEW_TARGET*/)
+				for(AntMessage m: audibleAntMessages){
+					if ((m.content == HillAI.NEW_LEADER /*|| m.content == QueenAI.NEW_TARGET*/)
 							&& m.sender.id!=self.id) {
 						hear_leader = true;
 						break;
 					}
 				}
 				if (hear_leader){
-					if (SeededRandomizer.getDouble()<QueenAI.SUGAR_PROB){
+					if (SeededRandomizer.getDouble()<HillAI.SUGAR_PROB){
 						assignment = SwatStatus.PATROLLING;
 						target_sugar();
 					}else{
@@ -268,7 +268,7 @@ public class SoldierAI extends AntAI {
 			}
 			break;
 		case ATTACKING:
-			if (!QueenAI.contained(hills.get(QueenAI.HILL_IND),target)){
+			if (!HillAI.contained(hills.get(HillAI.HILL_IND),target)){
 				target_hill();
 			}
 			break;
@@ -276,33 +276,33 @@ public class SoldierAI extends AntAI {
 		
 		if (gatherer_nearby()) target_enemy();
 		
-		talk(QueenAI.NEW_TARGET, target);
+		talk(HillAI.NEW_TARGET, target);
 		
 		//return;
 	}
 	
 	public void target_sugar(){
-		int num_sugar = hills.get(QueenAI.SUGAR_IND).size();
+		int num_sugar = hills.get(HillAI.SUGAR_IND).size();
 		if (num_sugar==0) {
 			target_home();
 		}else{
-			target = hills.get(QueenAI.SUGAR_IND).get(
+			target = hills.get(HillAI.SUGAR_IND).get(
 					SeededRandomizer.getInt(num_sugar));
 		}
 	}
 	
 	public void target_hill(){
-		int num_hills = hills.get(QueenAI.HILL_IND).size();
+		int num_hills = hills.get(HillAI.HILL_IND).size();
 		if (num_hills==1) {
 			target_home();
 		}else{
-			target = hills.get(QueenAI.HILL_IND).get(
+			target = hills.get(HillAI.HILL_IND).get(
 					SeededRandomizer.getInt(num_hills-1)+1);
 		}
 	}
 	
 	public void target_home(){
-		target = hills.get(QueenAI.HILL_IND).get(0);
+		target = hills.get(HillAI.HILL_IND).get(0);
 	}
 	
 	public void target_enemy(){
@@ -322,28 +322,28 @@ public class SoldierAI extends AntAI {
 	}
 	
 	public void listen(){
-		for(Message m: audibleMessages){
+		for(AntMessage m: audibleAntMessages){
 			switch(m.content){
-			case QueenAI.SUGAR:
-				if (!QueenAI.contained(hills.get(QueenAI.NOSUGAR_IND),m.contentSugar)){
-					QueenAI.add_if_not_contained(hills.get(QueenAI.SUGAR_IND),m.contentSugar);
+			case HillAI.SUGAR:
+				if (!HillAI.contained(hills.get(HillAI.NOSUGAR_IND),m.contentSugar)){
+					HillAI.add_if_not_contained(hills.get(HillAI.SUGAR_IND),m.contentSugar);
 				}
 				break;
-			case QueenAI.FULLSUGAR:
-				if (!QueenAI.contained(hills.get(QueenAI.NOSUGAR_IND),m.contentSugar)){
-					if (QueenAI.add_if_not_contained(hills.get(QueenAI.FULLSUGAR_IND),m.contentSugar)){
-						QueenAI.delete(hills.get(QueenAI.SUGAR_IND),m.contentSugar);
+			case HillAI.FULLSUGAR:
+				if (!HillAI.contained(hills.get(HillAI.NOSUGAR_IND),m.contentSugar)){
+					if (HillAI.add_if_not_contained(hills.get(HillAI.FULLSUGAR_IND),m.contentSugar)){
+						HillAI.delete(hills.get(HillAI.SUGAR_IND),m.contentSugar);
 					}
 				}
 				break;
-			case QueenAI.NOSUGAR:
-				if (QueenAI.add_if_not_contained(hills.get(QueenAI.NOSUGAR_IND),m.contentSugar)){
-					QueenAI.delete(hills.get(QueenAI.SUGAR_IND),m.contentSugar);
-					QueenAI.delete(hills.get(QueenAI.FULLSUGAR_IND),m.contentSugar);
+			case HillAI.NOSUGAR:
+				if (HillAI.add_if_not_contained(hills.get(HillAI.NOSUGAR_IND),m.contentSugar)){
+					HillAI.delete(hills.get(HillAI.SUGAR_IND),m.contentSugar);
+					HillAI.delete(hills.get(HillAI.FULLSUGAR_IND),m.contentSugar);
 				}
 				break;
-			case QueenAI.HILL:
-				QueenAI.add_if_not_contained(hills.get(QueenAI.HILL_IND),m.contentHill);
+			case HillAI.HILL:
+				HillAI.add_if_not_contained(hills.get(HillAI.HILL_IND),m.contentHill);
 				break;
 			}
 			//System.out.printf("%d: %d\n", self.id, m.content);
@@ -354,9 +354,9 @@ public class SoldierAI extends AntAI {
 		if (time == 1){		//was just born, figure out time and directions:
 			
 			//find time:
-			for(Message m: audibleMessages){
-				if (m.content < 0) {
-					initialTime = m.content - QueenAI.initTime;
+			if (audibleHillMessage != null) {
+				if (audibleHillMessage.content < 0) {
+					initialTime = audibleHillMessage.content - HillAI.initTime;
 				}
 			}
 			if (initialTime < 5) {
@@ -377,7 +377,7 @@ public class SoldierAI extends AntAI {
 			}
 			
 			//initialize hills:
-			for(int i = 0 ; i < QueenAI.NR_HILLS ; ++i) {
+			for(int i = 0 ; i < HillAI.NR_HILLS ; ++i) {
 				hills.add(new LinkedList<Snapshot>());
 				indices[i] = 0;
 			}
@@ -385,7 +385,7 @@ public class SoldierAI extends AntAI {
 			//add my hill:
 			for(Hill h: visibleHills){
 				if (h.playerID == self.playerID){
-					hills.get(QueenAI.HILL_IND).add(visibleHills.get(0));					
+					hills.get(HillAI.HILL_IND).add(visibleHills.get(0));					
 				}
 			}
 			

@@ -73,7 +73,7 @@ public class SugarAI extends AntAI {
 	double rundir = 0;
 	
 	List<LinkedList<Snapshot>> hills = new LinkedList<LinkedList<Snapshot>>();
-	int []indices = new int[QueenAI.NR_HILLS];
+	int []indices = new int[HillAI.NR_HILLS];
 	int nr_hill = 0;
 	
 	double last_health = -1;
@@ -109,28 +109,28 @@ public class SugarAI extends AntAI {
 	}
 	
 	public void listen(){
-		for(Message m: audibleMessages){
+		for(AntMessage m: audibleAntMessages){
 			switch(m.content){
-			case QueenAI.SUGAR:
-				if (!QueenAI.contained(hills.get(QueenAI.NOSUGAR_IND),m.contentSugar)){
-					QueenAI.add_if_not_contained(hills.get(QueenAI.SUGAR_IND),m.contentSugar);
+			case HillAI.SUGAR:
+				if (!HillAI.contained(hills.get(HillAI.NOSUGAR_IND),m.contentSugar)){
+					HillAI.add_if_not_contained(hills.get(HillAI.SUGAR_IND),m.contentSugar);
 				}
 				break;
-			case QueenAI.FULLSUGAR:
-				if (!QueenAI.contained(hills.get(QueenAI.NOSUGAR_IND),m.contentSugar)){
-					if (QueenAI.add_if_not_contained(hills.get(QueenAI.FULLSUGAR_IND),m.contentSugar)){
-						QueenAI.delete(hills.get(QueenAI.SUGAR_IND),m.contentSugar);
+			case HillAI.FULLSUGAR:
+				if (!HillAI.contained(hills.get(HillAI.NOSUGAR_IND),m.contentSugar)){
+					if (HillAI.add_if_not_contained(hills.get(HillAI.FULLSUGAR_IND),m.contentSugar)){
+						HillAI.delete(hills.get(HillAI.SUGAR_IND),m.contentSugar);
 					}
 				}
 				break;
-			case QueenAI.NOSUGAR:
-				if (QueenAI.add_if_not_contained(hills.get(QueenAI.NOSUGAR_IND),m.contentSugar)){
-					QueenAI.delete(hills.get(QueenAI.SUGAR_IND),m.contentSugar);
-					QueenAI.delete(hills.get(QueenAI.FULLSUGAR_IND),m.contentSugar);
+			case HillAI.NOSUGAR:
+				if (HillAI.add_if_not_contained(hills.get(HillAI.NOSUGAR_IND),m.contentSugar)){
+					HillAI.delete(hills.get(HillAI.SUGAR_IND),m.contentSugar);
+					HillAI.delete(hills.get(HillAI.FULLSUGAR_IND),m.contentSugar);
 				}
 				break;
-			case QueenAI.HILL:
-				QueenAI.add_if_not_contained(hills.get(QueenAI.HILL_IND),m.contentHill);
+			case HillAI.HILL:
+				HillAI.add_if_not_contained(hills.get(HillAI.HILL_IND),m.contentHill);
 				break;
 			}
 			//System.out.printf("%d: %d\n", self.id, m.content);
@@ -139,7 +139,7 @@ public class SugarAI extends AntAI {
 
 	public void have_a_look_around(){
 		for(Hill hill: visibleHills){
-			QueenAI.add_if_not_contained(hills.get(QueenAI.HILL_IND),hill);
+			HillAI.add_if_not_contained(hills.get(HillAI.HILL_IND),hill);
 		}
 	}
 	
@@ -153,14 +153,14 @@ public class SugarAI extends AntAI {
 				moveInDirection(dir);
 				//if you know about sugar:
 				//if (hills.get(0) == null) System.out.print("null\n");
-				if (hills.get(QueenAI.SUGAR_IND).size()>0 && time + initialTime > QueenAI.STOP_LOOKING){
+				if (hills.get(HillAI.SUGAR_IND).size()>0 && time + initialTime > HillAI.STOP_LOOKING){
 					Snapshot target = find_optimal_sugar_hill();
 					if (target != null){
 						moveToward(target);
 						if (vectorBetween(self, target).length() < self.caste.SIGHT_RANGE) {
-							QueenAI.add_if_not_contained(hills.get(QueenAI.NOSUGAR_IND), target);
-							QueenAI.delete(hills.get(QueenAI.SUGAR_IND), target);
-							QueenAI.delete(hills.get(QueenAI.FULLSUGAR_IND), target);
+							HillAI.add_if_not_contained(hills.get(HillAI.NOSUGAR_IND), target);
+							HillAI.delete(hills.get(HillAI.SUGAR_IND), target);
+							HillAI.delete(hills.get(HillAI.FULLSUGAR_IND), target);
 						}
 					}
 				}
@@ -169,8 +169,8 @@ public class SugarAI extends AntAI {
 				Sugar sugar = closest(visibleSugar);
 				moveToward(sugar); // otherwise move to the first element in the List of visible sugar
 				think_about_picking_up(sugar);
-				if (!QueenAI.contained(hills.get(QueenAI.FULLSUGAR_IND), sugar)){
-					QueenAI.add_if_not_contained(hills.get(QueenAI.SUGAR_IND), sugar);
+				if (!HillAI.contained(hills.get(HillAI.FULLSUGAR_IND), sugar)){
+					HillAI.add_if_not_contained(hills.get(HillAI.SUGAR_IND), sugar);
 				}
 			}
 		}
@@ -183,7 +183,7 @@ public class SugarAI extends AntAI {
 				if (a.id < self.id) count++;
 			}
 		}
-		if (count < QueenAI.QUEUELENGTH) {
+		if (count < HillAI.QUEUELENGTH) {
 			pickUpSugar(sugar);
 		}
 		else{
@@ -191,14 +191,14 @@ public class SugarAI extends AntAI {
 				Vector pos = sugar.position;
 				pos = Vector.add(pos, 
 								(new Vector(Math.sin(dir),Math.cos(dir)).scale(
-										parameters.ATTACK_RANGE* QueenAI.COMBAT_RADIUS)));
+										parameters.ATTACK_RANGE* HillAI.COMBAT_RADIUS)));
 				moveToward(pos);
 				if (visibleEnemies().size()>0) {	
 					attack(closest(visibleEnemies()));
 				}
 			}else{
-				if (QueenAI.add_if_not_contained(hills.get(QueenAI.FULLSUGAR_IND), sugar)){
-					QueenAI.delete(hills.get(QueenAI.SUGAR_IND), sugar);
+				if (HillAI.add_if_not_contained(hills.get(HillAI.FULLSUGAR_IND), sugar)){
+					HillAI.delete(hills.get(HillAI.SUGAR_IND), sugar);
 				}
 				Snapshot target = find_optimal_sugar_hill();
 				if (target != null) {
@@ -210,27 +210,27 @@ public class SugarAI extends AntAI {
 	
 	public void shout(){
 		do{
-			nr_hill = (nr_hill + 1) % QueenAI.NR_HILLS;
+			nr_hill = (nr_hill + 1) % HillAI.NR_HILLS;
 		}
 		while (hills.get(nr_hill).size() == 0);
 		indices[nr_hill]++;
 		if (indices[nr_hill]>=hills.get(nr_hill).size()) indices[nr_hill] = 0;
 		
-		if (nr_hill==QueenAI.NOSUGAR_IND
-				&& indices[nr_hill] < hills.get(nr_hill).size() - QueenAI.SHOUT_LAST_NOSUGAR){
-			indices[nr_hill] = hills.get(nr_hill).size() - QueenAI.SHOUT_LAST_NOSUGAR;
+		if (nr_hill==HillAI.NOSUGAR_IND
+				&& indices[nr_hill] < hills.get(nr_hill).size() - HillAI.SHOUT_LAST_NOSUGAR){
+			indices[nr_hill] = hills.get(nr_hill).size() - HillAI.SHOUT_LAST_NOSUGAR;
 		}
 		
-		talk(nr_hill+QueenAI.HILL_OFFSET,
+		talk(nr_hill+HillAI.HILL_OFFSET,
 				hills.get(nr_hill).get(indices[nr_hill]));
 	}
 	
 	public Snapshot find_optimal_sugar_hill(){
-		if (hills.get(QueenAI.SUGAR_IND).size()==0) return null;
+		if (hills.get(HillAI.SUGAR_IND).size()==0) return null;
 		
 		if (self.id % 2 == 0){
-			return hills.get(QueenAI.SUGAR_IND).get(
-					(self.id/2)%hills.get(QueenAI.SUGAR_IND).size());
+			return hills.get(HillAI.SUGAR_IND).get(
+					(self.id/2)%hills.get(HillAI.SUGAR_IND).size());
 					
 		}
 		//if (hills.get(QueenAI.SUGAR_IND).size()==1) return hills.get(QueenAI.SUGAR_IND).get(0);
@@ -242,10 +242,10 @@ public class SugarAI extends AntAI {
 			}
 		}
 		
-		if (count<QueenAI.WAITLENGTH){
-			Snapshot best_sugar = hills.get(QueenAI.SUGAR_IND).get(0);
+		if (count<HillAI.WAITLENGTH){
+			Snapshot best_sugar = hills.get(HillAI.SUGAR_IND).get(0);
 			
-			for(Snapshot sugar: hills.get(QueenAI.SUGAR_IND)){
+			for(Snapshot sugar: hills.get(HillAI.SUGAR_IND)){
 				if (walking_distance(best_sugar) > walking_distance(sugar)){
 					//second_sugar = best_sugar;
 					best_sugar = sugar;
@@ -260,7 +260,7 @@ public class SugarAI extends AntAI {
 	
 	public double walking_distance(Snapshot sugarhill){
 		double d = vectorBetween(self, sugarhill).length() * self.caste.SPEED;
-		d += vectorBetween(sugarhill, hills.get(QueenAI.HILL_IND).getFirst()).length()
+		d += vectorBetween(sugarhill, hills.get(HillAI.HILL_IND).getFirst()).length()
 				* self.caste.SPEED_WHILE_CARRYING_SUGAR;
 		return d;
 	}
@@ -269,9 +269,9 @@ public class SugarAI extends AntAI {
 		if (time == 1){		//was just born, figure out time and directions:
 			
 			//find time:
-			for(Message m: audibleMessages){
-				if (m.content < 0) {
-					initialTime = m.content - QueenAI.initTime;
+			if (audibleHillMessage != null) {
+				if (audibleHillMessage.content < 0) {
+					initialTime = audibleHillMessage.content - HillAI.initTime;
 				}
 			}
 			if (initialTime < 5) {
@@ -292,7 +292,7 @@ public class SugarAI extends AntAI {
 			}
 			
 			//initialize hills:
-			for(int i = 0 ; i < QueenAI.NR_HILLS ; ++i) {
+			for(int i = 0 ; i < HillAI.NR_HILLS ; ++i) {
 				hills.add(new LinkedList<Snapshot>());
 				indices[i] = 0;
 			}
@@ -300,7 +300,7 @@ public class SugarAI extends AntAI {
 			//add my hill:
 			for(Hill h: visibleHills){
 				if (h.playerID == self.playerID){
-					hills.get(QueenAI.HILL_IND).add(visibleHills.get(0));					
+					hills.get(HillAI.HILL_IND).add(visibleHills.get(0));					
 				}
 			}
 			
@@ -333,8 +333,8 @@ public class SugarAI extends AntAI {
 		if (run){
 			if (visibleEnemies().size()==0) run = false;
 			else {
-				if (hills.get(QueenAI.HILL_IND).size() > 1){
-					double newdir = vectorBetween(self, hills.get(QueenAI.HILL_IND).get(1)).angle();
+				if (hills.get(HillAI.HILL_IND).size() > 1){
+					double newdir = vectorBetween(self, hills.get(HillAI.HILL_IND).get(1)).angle();
 					rundir = adjust_in_direction(rundir, newdir);
 				}
 				moveInDirection(rundir);
@@ -369,7 +369,7 @@ public class SugarAI extends AntAI {
 			if (run){
 				moveInDirection((-1) * vectorBetween(self,enemy).angle());
 				dropSugar();
-			}else if (last_health > self.health + QueenAI.EPS){
+			}else if (last_health > self.health + HillAI.EPS){
 				if (self.sugarCarry > 0
 					&& self.health/(last_health-self.health) > vectorToHome().length() / self.speed){
 					//keep going
@@ -388,13 +388,13 @@ public class SugarAI extends AntAI {
 	public void decide_fighting(){
 		int count_fighter = 0;
 		
-		for(Message m: audibleMessages){
-			if (m.content == QueenAI.FIGHT) {
+		for(AntMessage m: audibleAntMessages){
+			if (m.content == HillAI.FIGHT) {
 				count_fighter++;
 			}
 		}
 		
-		if (count_fighter >= QueenAI.number_fighters) fight = true;
+		if (count_fighter >= HillAI.number_fighters) fight = true;
 	}
 	
 	public void ATTACK1111111111111111111111(){
@@ -403,7 +403,7 @@ public class SugarAI extends AntAI {
 			Ant enemy = getWeakest(visibleEnemies());
 			moveToward(enemy);
 			attack(enemy);
-			talk(QueenAI.FIGHT);
+			talk(HillAI.FIGHT);
 		}
 	}
 	
