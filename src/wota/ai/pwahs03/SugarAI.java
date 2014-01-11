@@ -17,7 +17,7 @@ import java.util.LinkedList;
 
 
 /**
- * Put a describtion of you AI here.
+ * Put a description of you AI here.
  */
 // Here, you may use spaces, etc., unlike in the package path wota.ai.YOUR_AI_NAME:
 @AIInformation(creator = "Anonymous", name = "Anonymous's AI")
