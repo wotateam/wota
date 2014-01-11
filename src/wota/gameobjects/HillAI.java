@@ -10,26 +10,14 @@ import java.util.List;
  * Basisclass for hillAis by the user.
  */
 public abstract class HillAI extends AI {
-	/** List of Ants which should be born next tick */
-	private List<AntOrder> antOrders;
-	private HillMessageObject message;
+	// see Note [Visibility] in AntAI
 	
 	/** Reference to Hill itself */
 	protected Hill self; // user AI may have changed this value! Use antObject instead.
 	
-	/** HillObject includes all information of this Hill */
-	private HillObject hillObject;
-
 	protected void createAnt(Caste caste, Class<? extends AntAI> antAIClass) {
 		AntOrder antOrder = new AntOrder(caste, antAIClass);
 		antOrders.add(antOrder);
-	}
-	
-	/** CAUTION! THIS METHOD DELETES THE AntOrders */
-	public List<AntOrder> popAntOrders() {
-		List<AntOrder> returnAntOrders = antOrders;
-		antOrders = new LinkedList<AntOrder>();
-		return returnAntOrders;
 	}
 	
 	/*
@@ -38,11 +26,6 @@ public abstract class HillAI extends AI {
 	 */
 	public HillAI() { 
 		antOrders = new LinkedList<AntOrder>();
-	}
-	
-	void setHillObject(HillObject hillObject) {
-		this.hillObject = hillObject;
-		setPosition ( hillObject.getPosition() );
 	}
 	
 	/** Send message of type int */
@@ -55,6 +38,18 @@ public abstract class HillAI extends AI {
 		message = new HillMessageObject(self.getPosition(), self, content, snapshot, parameters);
 	}
 
+	// ------------------------------------------------------------------------
+	// End of methods and fields relevant to AI writers.
+	// ------------------------------------------------------------------------
+		
+
+	/** List of Ants which should be born next tick */
+	private List<AntOrder> antOrders;
+	private HillMessageObject message;
+
+	/** HillObject includes all information of this Hill */
+	private HillObject hillObject;
+
 	/** CAUTION! This will delete the message object in HillAI */
 	HillMessageObject popMessage() {
 		HillMessageObject returnMessage = message;
@@ -65,8 +60,19 @@ public abstract class HillAI extends AI {
 	/** 
 	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
 	 */
-	public void setHill(Hill hill) {
+	void setHill(Hill hill) {
 		self = hill;
 	}
 	
+	/** CAUTION! THIS METHOD DELETES THE AntOrders */
+	List<AntOrder> popAntOrders() {
+		List<AntOrder> returnAntOrders = antOrders;
+		antOrders = new LinkedList<AntOrder>();
+		return returnAntOrders;
+	}
+
+	void setHillObject(HillObject hillObject) {
+		this.hillObject = hillObject;
+		setPosition ( hillObject.getPosition() );
+	}
 }

@@ -12,40 +12,24 @@ import wota.utility.Vector;
  * Contains several lists describing the objects which are visible to the ant.
  */
 public abstract class AntAI extends AI{		
+	// Note [Visibility]
+	/*
+	 * Everything which is intended to be used by the AI writer should be protected
+	 * and come first in this file, to aid someone reading through this file to learn 
+	 * how the game works.
+	 * Everything else should not be protected, and not public if possible.
+	 * Hopefully, this will make generating documentation for AI writers easier.
+	 */
 	
 	/** Reference to Ant itself */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.
-		
-	/** Action object contains the things the ant wants to do */
-	private Action action = new Action();
-	
-	/** AntObject includes all information of this Ant */
-	private AntObject antObject;
-			
-	
-	/** 
-	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
-	 * 
-	 * sets self to ant.
-	 */
-	public void setAnt(Ant ant) {
-		self = ant;
-	}
-
-	/** 
-	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
-	 */
-	void setAntObject(AntObject antObject) {
-		this.antObject = antObject;
-		setPosition(antObject.getPosition());
-	}
 	
 	/**
 	 * get the direction of the last movement.
 	 * @return
 	 * 			direction of last movement. 0 if this is the first tick.
 	 */
-	public double getLastMovementDirection() {
+	protected double getLastMovementDirection() {
 		return antObject.getLastMovementDirection();
 	}
 	
@@ -135,7 +119,7 @@ public abstract class AntAI extends AI{
 	}
 	
 	/** returns true if target is in view range. */
-	public boolean isInView(Snapshot target) {
+	protected boolean isInView(Snapshot target) {
 		return (parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
 	}
 	
@@ -161,10 +145,39 @@ public abstract class AntAI extends AI{
 		return output;
 	}
 	
+	// ------------------------------------------------------------------------
+	// End of methods and fields relevant to AI writers.
+	// ------------------------------------------------------------------------
+	
 	/** CAUTION! THIS METHOD DELETES THE ACTION */
 	Action popAction() {
 		Action returnAction = action;
 		action = new Action();
 		return returnAction;
 	}
+	
+	/** Action object contains the things the ant wants to do */
+	private Action action = new Action();
+	
+	/** AntObject includes all information of this Ant */
+	private AntObject antObject;
+			
+	
+	/** 
+	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
+	 * 
+	 * sets self to ant.
+	 */
+	void setAnt(Ant ant) {
+		self = ant;
+	}
+
+	/** 
+	 * DON'T USE THIS METHOD IF YOU ARE PROGRAMMING THE AI !
+	 */
+	void setAntObject(AntObject antObject) {
+		this.antObject = antObject;
+		setPosition(antObject.getPosition());
+	}
+	
 }
