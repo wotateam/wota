@@ -7,7 +7,7 @@ import wota.gamemaster.AIInformation;
 import wota.gameobjects.Caste;
 
 /**
- *
+ *  Give your information about this HillAI here.
  */
 @AIInformation(creator = "Anonymous", name = "Anonymous's AI")
 public class HillAI extends wota.gameobjects.HillAI {

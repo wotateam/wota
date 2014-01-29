@@ -54,7 +54,7 @@ public class TemplateAI extends AntAI {
 	 * 													}
 	 * 
 	 * A full list of possible actions and how to get information is available at 
-	 * doc/de/wota/gameobjects/AntAI.html
+	 * doc/wota/gameobjects/AntAI.html
 	 */
 	@Override
 	public void tick() throws Exception {
