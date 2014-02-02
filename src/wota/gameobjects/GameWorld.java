@@ -80,7 +80,7 @@ public class GameWorld {
 		players.add(player);
 	}
 
-	private static int nextPlayerId = 0;
+	private int nextPlayerId = 0;
 	
 	public class Player {
 		public final List<AntObject> antObjects = new LinkedList<AntObject>();
