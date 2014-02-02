@@ -171,4 +171,10 @@ public class StatisticsView implements Runnable {
 		}
 	}
 	
+	
+	@Override
+	public String toString() {
+		return statisticsTableModel.toString();
+	}
+	
 }
