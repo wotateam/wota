@@ -163,38 +163,35 @@ public class Simulation {
 		
 		// events for graphics update and tick are created uniformly. Call them with priority on graphics
 		while (running) { 			
-			if (!isGraphical) {
+			if (isGraphical) {
+				handleKeyboardInputs();
+			}
+			
+			if (ticksToDo() > SKIP_TICKS_THRESHOLD && isGraphical) {
+				resetReferenceValues();
+			}
+			
+			// now update simulation if tick event 
+			if (ticksToDo() > 0 && !paused) {
 				tick();
 				measureTickCount++;
-			} else {
-				handleKeyboardInputs();
+				referenceTickCount++;
+			}
 				
-				// now update simulation if tick event 
-				if (ticksToDo() > SKIP_TICKS_THRESHOLD) {
-					resetReferenceValues();
-				}
-				if (ticksToDo() > 0 && !paused) {
-					tick();
-					measureTickCount++;
-					referenceTickCount++;
-				}
-				
-				// Update Graphics if event for graphic update is swept.
-				if (isGraphical && framesToDo() > 0) {
-					if (!paused) { // calculate new graphics output
-						frameCount++;
-						measureFrameCount++;
-						referenceFrameCount++;
-						gameView.render();
-						statisticsView.refresh();
-						
-						if (Display.isCloseRequested()) {
-							running = false;
-						}
+			// Update Graphics if event for graphic update is swept.
+			if (framesToDo() > 0) {
+				statisticsView.refresh();
+				frameCount++;
+				measureFrameCount++;
+				referenceFrameCount++;
+
+				if (isGraphical && !paused) { // calc graphics
+					gameView.render();						
+					if (Display.isCloseRequested()) {
+						running = false;
 					}
 					Display.update(); // must be called in any case to catch keyboard input
 				}
-				
 			}
 
 			// measurements of FPS / TPS 
@@ -281,4 +278,5 @@ public class Simulation {
 		referenceTickCount = 0;
 		referenceFrameCount = 0;
 	}
+	
 }
