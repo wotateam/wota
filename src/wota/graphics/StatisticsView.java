@@ -10,6 +10,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import java.awt.*;
+import java.awt.print.PrinterException;
 import java.util.Map;
 import java.util.Vector;
 
@@ -121,14 +122,33 @@ public class StatisticsView implements Runnable {
 				data[7][column] = logger.collectedFood()[playerId];
 			}
 		}
+		
+		@Override
+		public String toString() {
+			String out = new String(), format = new String();
+			String columnFormat = "%15s";
+			String firstColumnFormat = "%15s";
+			for (int i=1; i<getColumnCount(); i++) {
+				format = format + columnFormat;
+			}
+			format = format + "\n";
+			
+			out = out + String.format(firstColumnFormat, new Object[] {""});
+			out = out + String.format(format, (Object[]) playerNames);
+			for (int row = 1; row < getRowCount(); row++) {
+				out = out + String.format(firstColumnFormat + format, data[row]);
+			}
+			return out;
+		}
 
 	}
 
 	/** call this when the table should grab the information */
 	public void refresh() {
 		statisticsTableModel.refresh();
-		statisticsTableModel.fireTableDataChanged(); // tells the JTable to
-														// update graphics
+		
+		// tell the JTable to update graphics
+		statisticsTableModel.fireTableDataChanged();		
 	}
 
 	public class CellRenderer extends JLabel implements TableCellRenderer {
@@ -150,4 +170,5 @@ public class StatisticsView implements Runnable {
 			}
 		}
 	}
+	
 }
