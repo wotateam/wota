@@ -78,7 +78,6 @@ public class GathererAI extends AntAI {
 		}
 		if (lostHealth) {
 			dropSugar();
-			System.out.println("drop!");
 		}
 	}
 
