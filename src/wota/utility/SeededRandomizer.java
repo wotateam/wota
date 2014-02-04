@@ -25,6 +25,10 @@ public class SeededRandomizer {
 		return random.nextInt(n);
 	}
 	
+	public static long nextLong() {
+		return random.nextLong();
+	}
+	
 	/**
 	 * @return Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0
 	 */
