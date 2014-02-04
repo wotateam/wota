@@ -13,6 +13,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
 import wota.gameobjects.GameWorld;
+import wota.gameobjects.GameWorld.Player;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
 import wota.gameobjects.Parameters;
@@ -34,6 +35,8 @@ public class Simulation {
 	//private GameWorld gameWorld;
 	private GameView gameView;
 	private StatisticsView statisticsView;
+	
+	private ResultCollection resultCollection;
 
 	private double framesPerSecond;
 	private double ticksPerSecond;
@@ -95,6 +98,8 @@ public class Simulation {
 
 			createKeyboard();	
 		}
+		
+		resultCollection = new ResultCollection();
 	}
 	
 	/**
@@ -107,8 +112,8 @@ public class Simulation {
 	 */
 	public void runSimulation() {
 
-		for (int i=0; i<gameWorlds.size() && !abortRequested; i++) {
-			GameWorld gameWorld = gameWorlds.get(i);
+		for (int iGW=0; iGW<gameWorlds.size() && !abortRequested; iGW++) {
+			GameWorld gameWorld = gameWorlds.get(iGW);
 			
 			SeededRandomizer.resetSeed(gameWorld.seed);
 			System.out.println("seed next game: " + gameWorld.seed);			
@@ -181,12 +186,25 @@ public class Simulation {
 							measuredTicksPerSecond);
 				}
 			}
+			
+			// game done. Add to stats.
+			Player winner = gameWorld.getWinner();
+			if (winner == null) {
+				resultCollection.addGame(null, getNames(gameWorld.getPlayers()), null);
+			}
+			else {
+				List<Player> active = gameWorld.getPlayers();
+				active.remove(winner);
+				resultCollection.addGame(new String[] {winner.name}, null, getNames(active));
+			}
+			
 			System.out.println("seed last game: " + gameWorld.seed);
 			
 		} // last gameWorld done
+		System.out.println(resultCollection);
 
+		statisticsView.frame.dispose();
 		if (isGraphical) {
-			statisticsView.frame.dispose();
 			Display.destroy();
 		}
 		
@@ -289,5 +307,13 @@ public class Simulation {
 		referenceTime = System.nanoTime();
 		referenceTickCount = 0;
 		referenceFrameCount = 0;
+	}
+	
+	private static String[] getNames(List<Player> player) {
+		String[] playerNames = new String[player.size()];
+		for (int iActive=0; iActive<player.size(); iActive++) {
+			playerNames[iActive] = player.get(iActive).name;
+		}
+		return playerNames;
 	}
 }
