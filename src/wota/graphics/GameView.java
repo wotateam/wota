@@ -44,18 +44,18 @@ public class GameView {
 	public static final Color[] playerColors = { Color.RED, Color.BLUE, Color.GREEN,
 			Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.YELLOW };
 
-	private GameWorld world;
+	private GameWorld gameWorld;
 
 	private int width;
 	private int height;
 
 	private Parameters parameters;
 	
-	public GameView(GameWorld world, int width, int height, Parameters parameters) {
-		this.world = world;
+	public GameView(GameWorld gameWorld, int width, int height) {
+		this.gameWorld = gameWorld;
 		this.width = width;
 		this.height = height;
-		this.parameters = parameters;
+		parameters = gameWorld.parameters;
 	}
 
 	public void setup() {
@@ -94,7 +94,7 @@ public class GameView {
 	}
 
 	private void renderImpl() {
-		for (GameWorld.Player player : world.getPlayers()) {
+		for (GameWorld.Player player : gameWorld.getPlayers()) {
 			Color color = playerColors[player.id()];
 			float[] colorComponents = color.getColorComponents(null);
 			
@@ -138,7 +138,7 @@ public class GameView {
 		glPushMatrix();
 		glTranslated(0, 0, 0.5);
 		setColor(1.f, 1.f, 1.f,1.0f);
-		for (SugarObject sugarObject : world.getSugarObjects()) {
+		for (SugarObject sugarObject : gameWorld.getSugarObjects()) {
 			fillCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
 		}
 		glPopMatrix();

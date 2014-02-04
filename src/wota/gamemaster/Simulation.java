@@ -15,22 +15,23 @@ import org.lwjgl.opengl.PixelFormat;
 import wota.gameobjects.GameWorld;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
+import wota.gameobjects.Parameters;
+import wota.utility.SeededRandomizer;
 
 
 /**
- * Contains the main loop that calls tick() and updates both the view and the
+ * Contains the main loop that calls tick() and updates view and
  * statistics. Also handels keyboard.
  * 
  */
 public class Simulation {
-	// FIXME: N_PLAYER durch Karte/Ausgangsstellung ersetzen
-	private final int N_PLAYER;
 	private final boolean isGraphical; // only saves typing
 
 	final int width = 700;
 	final int height = 700;
 
-	private GameWorld gameWorld;
+	private final List<GameWorld> gameWorlds; // list of all gameworlds that should be simulated
+	//private GameWorld gameWorld;
 	private GameView gameView;
 	private StatisticsView statisticsView;
 
@@ -58,16 +59,15 @@ public class Simulation {
 	/** time of simulation start in nano seconds. */
 	private long startTime; 
 	
-	private boolean running;
+	private boolean running = false;
 	private boolean paused = false;
+	private boolean abortRequested = false;
+	
 	private int frameCount;
 	
 	/** maximum number of ticks before the game ends regardless of victory condition **/
-	private int maxTicksBeforeEnd;
+	private final int maxTicksBeforeEnd;
 	
-	/*
-	 * TODO: Die Simulation bekommt eine Ausgangsstellung, keine GameWorld
-	 */
 	/**
 	 * Creates a runnable simulation from a SimulationInstance with the option
 	 * for visualization.
@@ -75,23 +75,16 @@ public class Simulation {
 	 * @param inst the instance to be simulated
 	 * @param isGraphical true, if the simulation should be graphical
 	 */
-	public Simulation(SimulationInstance inst) {
-		N_PLAYER = inst.getNumPlayers();
-		this.isGraphical = inst.getSimulationParameters().IS_GRAPHICAL; 
-		framesPerSecond = inst.getSimulationParameters().FRAMES_PER_SECOND;
-		ticksPerSecond = inst.getSimulationParameters().INITIAL_TICKS_PER_SECOND;
-		maxTicksBeforeEnd = inst.getSimulationParameters().MAX_TICKS_BEFORE_END;
-	
-		gameWorld = inst.getGameWorld();
-	
-		StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
-		gameWorld.setLogger(logger);
-			
-		statisticsView = new StatisticsView(gameWorld, logger);
-        statisticsView.run();
-        
+	public Simulation(SimulationParameters simParameters, 
+					  List<GameWorld> gameWorlds) {
+		isGraphical = simParameters.IS_GRAPHICAL; 
+		framesPerSecond = simParameters.FRAMES_PER_SECOND;
+		ticksPerSecond = simParameters.INITIAL_TICKS_PER_SECOND;
+		maxTicksBeforeEnd = simParameters.MAX_TICKS_BEFORE_END;
+		
+		this.gameWorlds = gameWorlds;
+		
 		if (isGraphical) {
-			gameView = new GameView(gameWorld, width, height, inst.getParameters());
 			try {
 				Display.setDisplayMode(new DisplayMode(width, height));
 				Display.create(new PixelFormat(8,0,0,0));
@@ -99,20 +92,110 @@ public class Simulation {
 				e.printStackTrace();
 				System.exit(0);
 			}
-	
-			gameView.setup();
 
 			createKeyboard();	
 		}
-	
-		
-		running = false;
 	}
+	
+	/**
+	 * Start the simulation and keep the view up to date.
+	 * 1. Update the Graphics at the rate framesPerSecond
+	 * 2. Update the Simulation at the rate ticksPerSecond 
+	 * do nothing in the remaining time or if times get in conflict only update the graphics.
+	 * 
+	 * keyboard/mouse input should be fetched before graphics in every loop. 
+	 */
+	public void runSimulation() {
 
+		for (int i=0; i<gameWorlds.size() && !abortRequested; i++) {
+			GameWorld gameWorld = gameWorlds.get(i);
+			
+			SeededRandomizer.resetSeed(gameWorld.seed);
+			System.out.println("seed next game: " + gameWorld.seed);			
+			
+			StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
+			gameWorld.setLogger(logger);
+			
+			statisticsView = new StatisticsView(gameWorld, logger);
+	        statisticsView.run();
+	        
+	        if (isGraphical) {
+	        	createKeyboard();
+				gameView = new GameView(gameWorld, width, height);
+				gameView.setup();
+	        }
+
+			running = true;
+			startTime = System.nanoTime();
+	        
+			resetReferenceValues();
+			long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
+			int measureFrameCount = 0; // Frame counter to determine TPS
+			int measureTickCount = 0; // Tick counter to determine FPS
+			
+			// events for graphics update and tick are created uniformly. Call them with priority on graphics
+			while (running && !abortRequested) { 			
+				if (isGraphical) {
+					handleKeyboardInputs();
+				}
+				
+				if (ticksToDo() > SKIP_TICKS_THRESHOLD && isGraphical) {
+					resetReferenceValues();
+				}
+				
+				// now update simulation if tick event 
+				if (ticksToDo() > 0 && !paused) {
+					tick(gameWorld);
+					measureTickCount++;
+					referenceTickCount++;
+				}
+					
+				// Update Graphics if event for graphic update is swept.
+				if (framesToDo() > 0) {
+					statisticsView.refresh();
+					frameCount++;
+					measureFrameCount++;
+					referenceFrameCount++;
+
+					if (isGraphical && !paused) { // calc graphics
+						gameView.render();						
+						abortRequested = Display.isCloseRequested();
+						Display.update(); // must be called in any case to catch keyboard input
+					}
+				}
+
+				// measurements of FPS / TPS 
+				long timeDiff = System.nanoTime() - lastMeasurementTime;
+				if (timeDiff > 1.e9*MEASUREMENT_INTERVAL) {
+					measuredFramesPerSecond = measureFrameCount * 1.e9 / timeDiff;
+					measuredTicksPerSecond = measureTickCount * 1.e9 / timeDiff;
+					
+					measureFrameCount = 0;
+					measureTickCount = 0;
+					
+					lastMeasurementTime = System.nanoTime();
+					
+					System.out.format("Frames per second: %.1f\n",
+						measuredFramesPerSecond);
+					System.out.format("Ticks per second: %.1f\n",
+							measuredTicksPerSecond);
+				}
+			}
+			System.out.println("seed last game: " + gameWorld.seed);
+			
+		} // last gameWorld done
+
+		if (isGraphical) {
+			statisticsView.frame.dispose();
+			Display.destroy();
+		}
+		
+	}
+	
 	/**
 	 * Advance the game world by one tick and check for victory / end after fixed number of ticks.
 	 */
-	private void tick() {
+	private void tick(GameWorld gameWorld) {
 		gameWorld.tick();
 
 		GameWorld.Player winner = gameWorld.getWinner();
@@ -145,82 +228,6 @@ public class Simulation {
 			System.out.println(statisticsView);
 			System.out.println(gameOverMessage);
 		}
-		
-	}
-
-	/**
-	 * Start the simulation and keep the view up to date.
-	 * 1. Update the Graphics at the rate framesPerSecond
-	 * 2. Update the Simulation at the rate ticksPerSecond 
-	 * do nothing in the remaining time or if times get in conflict only update the graphics.
-	 * 
-	 * keyboard/mouse input should be fetched before graphics in every loop. 
-	 */
-	public void runSimulation() {
-		running = true;
-		startTime = System.nanoTime();
-		
-		resetReferenceValues();
-		
-		long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
-		int measureFrameCount = 0; // Frame counter to determine TPS
-		int measureTickCount = 0; // Tick counter to determine FPS
-		
-		// events for graphics update and tick are created uniformly. Call them with priority on graphics
-		while (running) { 			
-			if (isGraphical) {
-				handleKeyboardInputs();
-			}
-			
-			if (ticksToDo() > SKIP_TICKS_THRESHOLD && isGraphical) {
-				resetReferenceValues();
-			}
-			
-			// now update simulation if tick event 
-			if (ticksToDo() > 0 && !paused) {
-				tick();
-				measureTickCount++;
-				referenceTickCount++;
-			}
-				
-			// Update Graphics if event for graphic update is swept.
-			if (framesToDo() > 0) {
-				statisticsView.refresh();
-				frameCount++;
-				measureFrameCount++;
-				referenceFrameCount++;
-
-				if (isGraphical && !paused) { // calc graphics
-					gameView.render();						
-					if (Display.isCloseRequested()) {
-						running = false;
-					}
-					Display.update(); // must be called in any case to catch keyboard input
-				}
-			}
-
-			// measurements of FPS / TPS 
-			long timeDiff = System.nanoTime() - lastMeasurementTime;
-			if (timeDiff > 1.e9*MEASUREMENT_INTERVAL) {
-				measuredFramesPerSecond = measureFrameCount * 1.e9 / timeDiff;
-				measuredTicksPerSecond = measureTickCount * 1.e9 / timeDiff;
-				
-				measureFrameCount = 0;
-				measureTickCount = 0;
-				
-				lastMeasurementTime = System.nanoTime();
-				
-				System.out.format("Frames per second: %.1f\n",
-					measuredFramesPerSecond);
-				System.out.format("Ticks per second: %.1f\n",
-						measuredTicksPerSecond);
-			}
-		}
-
-		if (isGraphical) {
-			Display.destroy();
-		}
-		statisticsView.frame.dispose();
 		
 	}
 	

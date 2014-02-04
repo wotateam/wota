@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 
 import wota.gamemaster.*;
 import wota.graphics.StatisticsView;
+import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
 /**
@@ -21,10 +22,11 @@ public class Wota {
 		
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
-//		SimulationInstance inst = new SimulationInstance(specialSeed);
-		
+//		SimulationFactory factory = new SimulationFactory(specialSeed);
+
+
 //		use this constructor to obtain different games each run.
-		SimulationInstance inst = new SimulationInstance();
+		SimulationFactory factory = new SimulationFactory();
 		
 //		use this for debugging
 		/*
@@ -46,9 +48,7 @@ public class Wota {
 															   wota.ai.bvb.Mao.class);
 		*/
 		
-		Simulation sim = new Simulation(inst);
-		System.out.println("seed: " + inst.getSeed() + "l");
+		Simulation sim = factory.createSimulation();
 		sim.runSimulation();
-		System.out.println("seed: " + inst.getSeed() + "l");
 	}
 }

@@ -30,8 +30,7 @@ public class StatisticsView implements Runnable {
 	private StatisticsTableModel statisticsTableModel;
 
 	public StatisticsView(GameWorld gameWorld, StatisticsLogger logger) {
-		this.gameWorld = gameWorld;
-		this.logger = logger;
+		setGameWorld(gameWorld, logger);
 	}
 
 	public void run() {
@@ -169,6 +168,11 @@ public class StatisticsView implements Runnable {
 						table, object, isSelected, hasFocus, row, column);
 			}
 		}
+	}
+	
+	public void setGameWorld(GameWorld gameWorld, StatisticsLogger logger) {
+		this.gameWorld = gameWorld;
+		this.logger = logger;
 	}
 	
 	

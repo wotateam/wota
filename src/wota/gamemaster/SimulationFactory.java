@@ -3,6 +3,7 @@ package wota.gamemaster;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -14,12 +15,10 @@ import wota.utility.Vector;
 
 
 /**
- * Contains all the information needed for one round of simulation.
+ * Reads Parameters and creates a bunch of Simulation Objects
  */
-public class SimulationInstance {
+public class SimulationFactory {
 	private final AILoader aiLoader;
-	private GameWorld gameWorld;
-	private final long seed;
 
 	private final Parameters parameters;
 	private final SimulationParameters simulationParameters;
@@ -35,15 +34,13 @@ public class SimulationInstance {
 	 * @param seed
 	 *            initial seed of the RNG
 	 */
-	public SimulationInstance(long seed) {
-		this.seed = seed;
+	public SimulationFactory(long seed) {
+		SeededRandomizer.resetSeed(seed);
 
 		aiLoader = new AILoader("./");
 
 		simulationParameters = readSimulationParameters("settings.txt");
 		parameters = constructParameters("parameters.txt", simulationParameters.AI_PACKAGE_NAMES.length);
-		
-		constructGameWorld();
 	}
 	
 	/**
@@ -54,8 +51,34 @@ public class SimulationInstance {
 	 * 
 	 * Game parameters are read from "parameters.txt"
 	 */
-	public SimulationInstance() {
+	public SimulationFactory() {
 		this((new Random()).nextLong());
+	}
+	
+	/**
+	 * creates a Simulation according to the mode specified in the parameters. 
+	 * The Simulation itself can have multiple GameWorlds.
+	 */
+	public Simulation createSimulation() {
+		List<GameWorld> gameWorlds = new ArrayList<GameWorld>();
+		long seed = SeededRandomizer.getSeed();
+
+		if (!simulationParameters.TOURNAMENT) {
+			
+			for (int i=0; i<simulationParameters.NUMBER_OF_GAMES; i++) {
+				
+				boolean swapPlayers = false;
+				gameWorlds.add(constructGameWorld(swapPlayers, seed));
+				
+				if (simulationParameters.HOME_AND_AWAY) {
+					swapPlayers = true;
+					gameWorlds.add(constructGameWorld(swapPlayers, seed));
+				}
+				seed = SeededRandomizer.nextLong();
+			}
+		}
+		Simulation simulation = new Simulation(simulationParameters, gameWorlds);
+		return simulation;
 	}
 
 	/**
@@ -67,19 +90,22 @@ public class SimulationInstance {
 	 * @param positionsFirstAI list of positions of the ants of the first ai
 	 * @param firstAntAI AntAI of all Ants of the first player
 	 */
-	public static SimulationInstance createTestSimulationInstance(Vector positionFirstPlayer,
-																  Vector positionSecondPlayer,
-																  List<Vector> positionsFirstAI, 
-																  List<Vector> positionsSecondAI,
-																  Class <? extends AntAI> firstAntAI,
-																  Class <? extends AntAI> secondAntAI) {
-		SimulationInstance simulationInstance = new SimulationInstance(new Random().nextLong());
+	/*
+	public static Simulation createTestSimulation(Vector positionFirstPlayer,
+												  Vector positionSecondPlayer,
+												  List<Vector> positionsFirstAI, 
+												  List<Vector> positionsSecondAI,
+												  Class <? extends AntAI> firstAntAI,
+												  Class <? extends AntAI> secondAntAI) {
+		SimulationFactory simulationFactory = new SimulationFactory(new Random().nextLong());
 		
 		// overrides the first gameWorld 
-		simulationInstance.constructTestGameWorld(positionFirstPlayer, positionSecondPlayer,
+		GameWorld gw = simulationFactory.constructTestGameWorld(positionFirstPlayer, positionSecondPlayer,
 								  positionsFirstAI, positionsSecondAI, firstAntAI, secondAntAI);
-		return simulationInstance;
+		Simulation simulation = new Simulation();
+		return simulation;
 	}
+	*/
 
 	/**
 	 * Read settings including AI names from  a file.
@@ -126,19 +152,30 @@ public class SimulationInstance {
 	/**
 	 * Deterministically constructs and populates a GameWorld instance with
 	 * hills and resources from the given seed.
+	 * 
+	 * @param swapPlayers: reverse the positions of the players = swap for two players
 	 */
-	private void constructGameWorld() {
-		RandomPosition randomPosition = new RandomPosition(parameters);
-		gameWorld = new GameWorld(parameters, randomPosition);
-		
+	private GameWorld constructGameWorld(boolean swapPlayers, long seed) {
 		SeededRandomizer.resetSeed(seed);
-
+		
+		RandomPosition randomPosition = new RandomPosition(parameters);
+		GameWorld gameWorld = new GameWorld(parameters, randomPosition, seed);
+		
 		List<Vector> hillPositions = new LinkedList<Vector>();
-		for (String aiName : simulationParameters.AI_PACKAGE_NAMES) {
+		String aiName;
+		for (int i=0; i<simulationParameters.AI_PACKAGE_NAMES.length; i++) {
+			
+			// choose player name in normal order or reversed for swapPlayers == true
+			if (!swapPlayers) {
+				aiName = simulationParameters.AI_PACKAGE_NAMES[i];
+			}
+			else {
+				aiName = simulationParameters.AI_PACKAGE_NAMES[simulationParameters.AI_PACKAGE_NAMES.length - i - 1];
+			}
+			
 			Vector hillPosition = randomPosition.hillPosition(hillPositions);
 			hillPositions.add(hillPosition);
 			GameWorld.Player player = gameWorld.new Player(hillPosition, aiLoader.loadHill(aiName));
-			System.out.println(player);
 			gameWorld.addPlayer(player);
 		}
 
@@ -150,18 +187,18 @@ public class SimulationInstance {
 				gameWorld.addSugarObject(new SugarObject(sugarPosition, parameters));
 			}
 		}
+		return gameWorld;
 	}
 	
-	private void constructTestGameWorld(Vector posFirstPlayer,
+	/*
+	private GameWorld constructTestGameWorld(Vector posFirstPlayer,
 										Vector posSecondPlayer,
 										List<Vector> positionsFirstAI, 
 										List<Vector> positionsSecondAI,
 										Class <? extends AntAI> firstAntAI,
 										Class <? extends AntAI> secondAntAI) {
-		gameWorld = new GameWorld(parameters, new RandomPosition(parameters));
-		
-		SeededRandomizer.resetSeed(seed);
-		
+		GameWorld gameWorld = new GameWorld(parameters, new RandomPosition(parameters));
+				
 		GameWorld.Player firstPlayer = gameWorld.new Player(posFirstPlayer, aiLoader.loadHill("donothing"));
 		GameWorld.Player secondPlayer = gameWorld.new Player(posSecondPlayer, aiLoader.loadHill("donothing"));
 		gameWorld.addPlayer(firstPlayer);
@@ -173,22 +210,12 @@ public class SimulationInstance {
 		for (Vector position : positionsSecondAI) {
 			secondPlayer.addAntObject(new AntObject(position, Caste.Gatherer, secondAntAI, secondPlayer, parameters));
 		}
+		return gameWorld;
 	}
-
-	public int getNumPlayers() {
-		return simulationParameters.AI_PACKAGE_NAMES.length;
-	}
-
+	*/
+	
 	public Parameters getParameters() {
 		return parameters;
-	}
-	
-	public long getSeed() {
-		return seed;
-	}
-
-	public GameWorld getGameWorld() {
-		return gameWorld;
 	}
 
 	public SimulationParameters getSimulationParameters() {

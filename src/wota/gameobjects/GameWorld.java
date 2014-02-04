@@ -26,12 +26,15 @@ public class GameWorld {
 
 	private SpacePartitioning spacePartitioning;
 	
-	private final Parameters parameters;
+	public final Parameters parameters;
+	
+	public final long seed;
 	
 	private int tickCount = 0;
 	private final RandomPosition randomPosition;
 	
-	public GameWorld(Parameters parameters, RandomPosition randomPosition) {
+	public GameWorld(Parameters parameters, RandomPosition randomPosition, long seed) {
+		this.seed = seed;
 		this.parameters = parameters;
 		this.randomPosition = randomPosition;
 		spacePartitioning = new SpacePartitioning(maximumSight(), parameters);

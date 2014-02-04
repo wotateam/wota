@@ -1,9 +1,19 @@
 # settings.txt
 
-AI_PACKAGE_NAMES = bonnmath, pwahs03
+AI_PACKAGE_NAMES = clonewarriors, bvb
 
-IS_GRAPHICAL = true
+IS_GRAPHICAL = false
+
+# batch mode (each with one or two games depending on HOME_AND_AWAY)
+NUMBER_OF_GAMES = 2
+
+# two matches with swapped positions?
+HOME_AND_AWAY = true
+
+# Tournement mode means that a series one-on-ones will be played 
+TOURNAMENT = false
+
 
 FRAMES_PER_SECOND = 40
-INITIAL_TICKS_PER_SECOND = 10
-MAX_TICKS_BEFORE_END = 5000
+INITIAL_TICKS_PER_SECOND = 400
+MAX_TICKS_BEFORE_END = 1000

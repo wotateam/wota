@@ -8,14 +8,20 @@ public class SimulationParameters {
 	public final double FRAMES_PER_SECOND;
 	public final double INITIAL_TICKS_PER_SECOND;
 	public final int MAX_TICKS_BEFORE_END;
+	public final int NUMBER_OF_GAMES;
+	public final boolean HOME_AND_AWAY;
+	public final boolean TOURNAMENT;
 	
 	public final String[] AI_PACKAGE_NAMES; // do not modify
 	
 	public SimulationParameters(Properties p) {
 		IS_GRAPHICAL = Boolean.parseBoolean(p.getProperty("IS_GRAPHICAL"));
+		NUMBER_OF_GAMES = Integer.parseInt(p.getProperty("NUMBER_OF_GAMES"));
 		FRAMES_PER_SECOND = Double.parseDouble(p.getProperty("FRAMES_PER_SECOND"));
 		INITIAL_TICKS_PER_SECOND = Double.parseDouble(p.getProperty("INITIAL_TICKS_PER_SECOND"));
 		MAX_TICKS_BEFORE_END = Integer.parseInt(p.getProperty("MAX_TICKS_BEFORE_END"));
+		TOURNAMENT = Boolean.parseBoolean(p.getProperty("TOURNAMENT"));
+		HOME_AND_AWAY = Boolean.parseBoolean(p.getProperty("HOME_AND_AWAY"));
 		
 		AI_PACKAGE_NAMES = p.getProperty("AI_PACKAGE_NAMES").split(",");
 		for (int i = 0; i < AI_PACKAGE_NAMES.length; i++) {

@@ -3,7 +3,7 @@ package wota.testing;
 import java.util.LinkedList;
 
 import wota.gamemaster.Simulation;
-import wota.gamemaster.SimulationInstance;
+import wota.gamemaster.SimulationFactory;
 import wota.utility.Vector;
 
 
@@ -17,6 +17,7 @@ public class CollateralDamage {
 	/**
 	 * @param args
 	 */
+	/*
 	public static void main(String[] args) {
 		Vector hillPositionPlayer1 = new Vector(0,0);
 		Vector hillPositionPlayer2 = new Vector(0,0);
@@ -30,7 +31,7 @@ public class CollateralDamage {
 		LinkedList<Vector> positions2 = new LinkedList<Vector>();
 		Vector attackerPosition = new Vector(100,115);
 		positions2.add(attackerPosition);
-		SimulationInstance inst = SimulationInstance.createTestSimulationInstance(hillPositionPlayer1,
+		SimulationFactory inst = SimulationFactory.createTestSimulation(hillPositionPlayer1,
 															   hillPositionPlayer2,
 															   positions1,
 															   positions2,
@@ -41,5 +42,6 @@ public class CollateralDamage {
 		sim.runSimulation();
 		System.out.println("seed: " + inst.getSeed() + "l");
 	}
+	*/
 
 }
