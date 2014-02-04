@@ -26,8 +26,8 @@ public class Parameters {
 	public final int STARTING_FOOD;
 	// An ant's moving direction may differ this much from the intended direction:
 	public final double ANGLE_ERROR_PER_DISTANCE;
-	// Number of ticks it takes to pick up sugar: 
-	public final int TICKS_SUGAR_PICKUP;
+	// Number of ticks between sugar pickups: 
+	public final int TICKS_BETWEEN_PICK_UPS_AT_SOURCE;
 	public final double MINIMUM_DISTANCE_BETWEEN_HILLS;
 	public final double MAXIMUM_STARTING_SUGAR_DISTANCE;
 	public final double MINIMUM_STARTING_SUGAR_DISTANCE;
@@ -57,7 +57,7 @@ public class Parameters {
 		
 		ANGLE_ERROR_PER_DISTANCE  = Double.parseDouble(p.getProperty("ANGLE_ERROR_PER_DISTANCE"));
 
-		TICKS_SUGAR_PICKUP = Integer.parseInt(p.getProperty("TICKS_SUGAR_PICKUP"));
+		TICKS_BETWEEN_PICK_UPS_AT_SOURCE = Integer.parseInt(p.getProperty("TICKS_BETWEEN_PICK_UPS_AT_SOURCE"));
 		MINIMUM_DISTANCE_BETWEEN_HILLS = Double.parseDouble(p.getProperty("MINIMUM_DISTANCE_BETWEEN_HILLS"));
 		MAXIMUM_STARTING_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MAXIMUM_STARTING_SUGAR_DISTANCE"));
 		MINIMUM_STARTING_SUGAR_DISTANCE = Double.parseDouble(p.getProperty("MINIMUM_STARTING_SUGAR_DISTANCE"));

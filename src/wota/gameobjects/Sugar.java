@@ -9,7 +9,6 @@ import wota.utility.Vector;
 public class Sugar implements Snapshot {
 	public final int amount;
 	public final double radius;
-	public final int waitingAnts;
 	public final Vector position;
 	final SugarObject sugarObject;
 	
@@ -17,7 +16,6 @@ public class Sugar implements Snapshot {
 		this.sugarObject = sugarObject;
 		amount = sugarObject.getAmount();
 		radius = sugarObject.getRadius();
-		waitingAnts = sugarObject.getQueueSize();
 		position = sugarObject.getPosition();
 	}
 

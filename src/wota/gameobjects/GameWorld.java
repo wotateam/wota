@@ -265,6 +265,12 @@ public class GameWorld {
 			executeAntOrders(player.hillObject);
 		}
 		
+		// The sugar objects needs to go after the ant actions, because now
+		// the ants which receive sugar are chosen.
+		for (SugarObject sugarObject : sugarObjects) {
+			sugarObject.tick();
+		}
+		
 		// Needs to go before removing dead ants, because they need to be in 
 		// the correct cell to be removed.
 		spacePartitioning.update(); 
@@ -296,9 +302,7 @@ public class GameWorld {
 	}
 	
 	/**
-	 * iterates through sugarObjects and
-	 * 1) removes the empty ones
-	 * 2) decreases their ticksToWait by calling tick()
+	 * iterates through sugarObjects and removes the empty ones
 	 * 
 	 * @return 
 	 * 			The number of removed SugarObjects
@@ -308,23 +312,10 @@ public class GameWorld {
 		for (Iterator<SugarObject> sugarObjectIter = sugarObjects.iterator();
 				sugarObjectIter.hasNext();) {
 			SugarObject sugarObject = sugarObjectIter.next();
-			
-			sugarObject.tick();
-			
-			// make invisible as soon as there is no more sugar 
-			if (sugarObject.getAmount() <= 0 && sugarObject.isInSpacePartitioning()) {
-				spacePartitioning.removeSugarObject(sugarObject);
-				sugarObject.setIsInSpacePartitioning(false);
-			}
-			
-			if (sugarObject.getAmount() > 0 && !sugarObject.isInSpacePartitioning()) {
-				spacePartitioning.addSugarObject(sugarObject);
-				sugarObject.setIsInSpacePartitioning(true);
-			}
-			
+
 			// remove if empty 
-			if (sugarObject.getAmount() <= 0 && sugarObject.getQueueSize() == 0) {
-				sugarObject.getsRemoved();
+			if (sugarObject.getAmount() <= 0) {
+				spacePartitioning.removeSugarObject(sugarObject);
 				sugarObjectIter.remove();
 				nRemovedSugarObjects++;
 			}
@@ -405,12 +396,12 @@ public class GameWorld {
 			actor.dropSugar();
 		}
 		
-		// Pick up sugar
+		// Try picking up sugar
 		Sugar sugar = action.sugarTarget;
 		if (sugar != null) {
 			if (parameters.distance(actor.getPosition(),sugar.sugarObject.getPosition())
 					<= sugar.sugarObject.getRadius()) {
-				actor.pickUpSugar(sugar.sugarObject);
+				sugar.sugarObject.addSugarCandidate(actor);
 			}
 		}
 		

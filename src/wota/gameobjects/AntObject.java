@@ -24,18 +24,12 @@ public class AntObject extends GameObject{
 	/** amount of sugar carried now */
 	private int sugarCarry = 0;
 	
-	/** SugarObject AntObject is waiting for */ 
-	private SugarObject sugarTarget = null;
-	
 	/** Angriffspunkte */
 	private Action action;
 	private final Caste caste;
 	public final GameWorld.Player player;
 	private boolean isAttacking = false;
 	private AntObject attackTarget = null;
-	// Only has a meaning while the ant is waiting at a sugar source. Has to be saved because the sugar
-	// source has to increase its amount of sugar by this much when this ant dies while waiting.
-	private int amountPickedUpLastTime; 
 	
 	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player, Parameters parameters) {
 		super(position, parameters);
@@ -131,14 +125,7 @@ public class AntObject extends GameObject{
 	public void pickUpSugar(SugarObject sugarObject) {
 		int oldAmountOfSugarCarried = sugarCarry;
 		sugarCarry = Math.min(caste.MAX_SUGAR_CARRY, sugarCarry + sugarObject.getAmount());
-		amountPickedUpLastTime = sugarCarry - oldAmountOfSugarCarried;
-		// amountPickedUpLastTime is really about this time and may be zero, because other 
-		// ants may already have picked up all the remaining sugar *during this tick*. 
-		// In this case, do not wait at the sugar source. 
-		if (amountPickedUpLastTime > 0) {
-			sugarObject.requestSugarPickup(this, amountPickedUpLastTime);		
-			sugarTarget = sugarObject;
-		} 
+		sugarObject.decreaseSugar(sugarCarry - oldAmountOfSugarCarried);		 
 	}
 	
 	/** sets amount of carried sugar to 0 */
@@ -162,23 +149,14 @@ public class AntObject extends GameObject{
 		antAi.audibleHillMessage = incomingHillMessage;
 		antAi.setPosition(getPosition());
 		
-		if ( !isWaitingForSugar() ) {
-			try {
-				antAi.tick();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			antAi.tick();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		action = antAi.popAction();
-	}
-	
-	/**
-	 * @return true if sugarTarget is not null
-	 */
-	private boolean isWaitingForSugar() {
-		return (sugarTarget != null) ;
 	}
 
 	public boolean isCarrying() {
@@ -207,21 +185,6 @@ public class AntObject extends GameObject{
 	 * gets called when AntObject is dying
 	 */
 	public void die() {
-		if (sugarTarget != null) {
-			sugarTarget.removeFromQueueEarly(this, amountPickedUpLastTime);
-			sugarCarry -= amountPickedUpLastTime; // doesn't matter now, would if one were able to resurrect ants
-		}
-	}
-
-	/**
-	 * Call whenever AntObject should not wait for sugarTarget anymore.
-	 */
-	public void unsetSugarTarget() {
-		sugarTarget = null;
-	}
-
-	public int getAmountPickedUpLastTime() {
-		return amountPickedUpLastTime;
 	}
 
 }

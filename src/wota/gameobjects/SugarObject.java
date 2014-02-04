@@ -1,7 +1,9 @@
 package wota.gameobjects;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
 
@@ -15,24 +17,12 @@ public class SugarObject extends GameObject {
 	
 	private int amount; 
 	private Sugar sugar;
-	/** List of Ants which wait to receive sugar */
-	private LinkedList<AntObject> serviceQueue = new LinkedList<AntObject>();
-	/** number of ticks an ant will freeze when picking up */
-	private int ticksToNextService;
-	private boolean isInSpacePartitioning = true; 
+	private List<AntObject> pickUpCandidates = new LinkedList<AntObject>();
+	private int ticksUntilNextPickUp = 0;
 	
 	public SugarObject(Vector position, Parameters parameters) {
 		super(position, parameters);
-		ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
 		amount = parameters.INITIAL_SUGAR_IN_SOURCE;
-	}
-	
-	public boolean isInSpacePartitioning() {
-		return isInSpacePartitioning;
-	}
-	
-	public void setIsInSpacePartitioning(boolean isInSpacePartitioning) {
-		this.isInSpacePartitioning = isInSpacePartitioning;
 	}
 	
 	public void createSugar() {
@@ -47,57 +37,29 @@ public class SugarObject extends GameObject {
 		return amount;
 	}
 	
-	/** 
-	 * @return the number of AntObjects waiting in the serviceQueue
-	 */
-	public int getQueueSize() {
-		return serviceQueue.size();
-	}
-	
 	public void tick() {
-		if ( !serviceQueue.isEmpty() ) {
-			ticksToNextService--;
-			if (ticksToNextService == 0) {
-				AntObject theServiced = serviceQueue.removeFirst();
-				theServiced.unsetSugarTarget();
-				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
+		if (ticksUntilNextPickUp == 0) {
+			if (!pickUpCandidates.isEmpty()) {
+				final int winningIndex = SeededRandomizer.getInt(pickUpCandidates.size());
+				AntObject receivingAntObject = pickUpCandidates.get(winningIndex);
+				receivingAntObject.pickUpSugar(this);
+				ticksUntilNextPickUp = parameters.TICKS_BETWEEN_PICK_UPS_AT_SOURCE;
 			}
+		} else if (ticksUntilNextPickUp > 0) {
+			ticksUntilNextPickUp -= 1;
 		}
-	}
-	
-	public void requestSugarPickup(AntObject antObject, int amountToPickUp) {
-		serviceQueue.add(antObject);
-		amount -= amountToPickUp;
-	}
-	
-	/**
-	 * removes antObject from serviceQueue
-	 * @param antObject
-	 */
-	public void removeFromQueueEarly(AntObject antObject, int amountPickedUp) {
-		amount += amountPickedUp;
-		antObject.unsetSugarTarget();
-		
-		// It is possible that the serviceQueue is empty, because the ant could be
-		// killed during the tick it is done waiting.
-		if (!serviceQueue.isEmpty()) { 
-			if (serviceQueue.getFirst() == antObject) {
-				ticksToNextService = parameters.TICKS_SUGAR_PICKUP;
-			}
-			serviceQueue.remove(antObject);
-		}
+		pickUpCandidates.clear();
 	}
 	
 	public double getRadius() {
 		return parameters.INITIAL_SUGAR_RADIUS * Math.sqrt((double) amount / parameters.INITIAL_SUGAR_IN_SOURCE);
 	}
 
-	/**
-	 * Gets called by GameWorld when this SugarObject getsRemoved
-	 */
-	public void getsRemoved() {
-		for (AntObject antObject : serviceQueue) {
-			antObject.unsetSugarTarget();
-		}
+	public void addSugarCandidate(AntObject antObject) {
+		pickUpCandidates.add(antObject);
+	}
+
+	public void decreaseSugar(int amountToPickUp) {
+		amount -= amountToPickUp;
 	}
 }
