@@ -193,7 +193,7 @@ public class Simulation {
 				resultCollection.addGame(null, getNames(gameWorld.getPlayers()), null);
 			}
 			else {
-				List<Player> active = gameWorld.getPlayers();
+				List<Player> active = new java.util.ArrayList<Player>(gameWorld.getPlayers());
 				active.remove(winner);
 				resultCollection.addGame(new String[] {winner.name}, null, getNames(active));
 			}
