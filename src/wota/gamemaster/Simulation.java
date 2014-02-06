@@ -199,15 +199,13 @@ public class Simulation {
 			}
 			
 			System.out.println("seed last game: " + gameWorld.seed);
-			
+
+			statisticsView.frame.dispose();
+			if (isGraphical) {
+				Display.destroy();
+			}
 		} // last gameWorld done
 		System.out.println(resultCollection);
-
-		statisticsView.frame.dispose();
-		if (isGraphical) {
-			Display.destroy();
-		}
-		
 	}
 	
 	/**
