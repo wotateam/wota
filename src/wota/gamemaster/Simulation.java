@@ -28,8 +28,8 @@ import wota.utility.SeededRandomizer;
 public class Simulation {
 	private final boolean isGraphical; // only saves typing
 
-	final int width = 700;
-	final int height = 700;
+	private final int width;
+	private final int height;
 
 	private final List<GameWorld> gameWorlds; // list of all gameworlds that should be simulated
 	//private GameWorld gameWorld;
@@ -84,6 +84,9 @@ public class Simulation {
 		framesPerSecond = simParameters.FRAMES_PER_SECOND;
 		ticksPerSecond = simParameters.INITIAL_TICKS_PER_SECOND;
 		maxTicksBeforeEnd = simParameters.MAX_TICKS_BEFORE_END;
+		
+		width = simParameters.DISPLAY_WIDTH;
+		height = simParameters.DISPLAY_HEIGHT;
 		
 		this.gameWorlds = gameWorlds;
 		

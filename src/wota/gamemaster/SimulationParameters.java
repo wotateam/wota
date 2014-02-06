@@ -11,6 +11,8 @@ public class SimulationParameters {
 	public final int NUMBER_OF_GAMES;
 	public final boolean HOME_AND_AWAY;
 	public final boolean TOURNAMENT;
+	public final int DISPLAY_WIDTH;
+	public final int DISPLAY_HEIGHT;
 	
 	public final String[] AI_PACKAGE_NAMES; // do not modify
 	
@@ -22,6 +24,9 @@ public class SimulationParameters {
 		MAX_TICKS_BEFORE_END = Integer.parseInt(p.getProperty("MAX_TICKS_BEFORE_END"));
 		TOURNAMENT = Boolean.parseBoolean(p.getProperty("TOURNAMENT"));
 		HOME_AND_AWAY = Boolean.parseBoolean(p.getProperty("HOME_AND_AWAY"));
+		
+		DISPLAY_WIDTH = Integer.parseInt(p.getProperty("DISPLAY_WIDTH"));
+		DISPLAY_HEIGHT = Integer.parseInt(p.getProperty("DISPLAY_HEIGHT"));
 		
 		AI_PACKAGE_NAMES = p.getProperty("AI_PACKAGE_NAMES").split(",");
 		for (int i = 0; i < AI_PACKAGE_NAMES.length; i++) {

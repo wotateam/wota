@@ -2,7 +2,7 @@
 
 AI_PACKAGE_NAMES = clonewarriors, bvb
 
-IS_GRAPHICAL = false
+IS_GRAPHICAL = true
 
 # batch mode (each with one or two games depending on HOME_AND_AWAY)
 NUMBER_OF_GAMES = 2
@@ -17,3 +17,6 @@ TOURNAMENT = false
 FRAMES_PER_SECOND = 40
 INITIAL_TICKS_PER_SECOND = 400
 MAX_TICKS_BEFORE_END = 1000
+
+DISPLAY_WIDTH = 700
+DISPLAY_HEIGHT = 700
