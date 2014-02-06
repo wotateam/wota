@@ -90,18 +90,6 @@ public class Simulation {
 		
 		this.gameWorlds = gameWorlds;
 		
-		if (isGraphical) {
-			try {
-				Display.setDisplayMode(new DisplayMode(width, height));
-				Display.create(new PixelFormat(8,0,0,0));
-			} catch (LWJGLException e) {
-				e.printStackTrace();
-				System.exit(0);
-			}
-
-			createKeyboard();	
-		}
-		
 		resultCollection = new ResultCollection();
 	}
 	
@@ -128,6 +116,14 @@ public class Simulation {
 	        statisticsView.run();
 	        
 	        if (isGraphical) {
+	        	try {
+					Display.setDisplayMode(new DisplayMode(width, height));
+					Display.create(new PixelFormat(8,0,0,0));
+				} catch (LWJGLException e) {
+					e.printStackTrace();
+					System.exit(0);
+				}
+	        	
 	        	createKeyboard();
 				gameView = new GameView(gameWorld, width, height);
 				gameView.setup();
