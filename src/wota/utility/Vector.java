@@ -59,12 +59,6 @@ public class Vector {
 		}
 	}
 
-	/** changes instance this is applied to! */
-	public void add(final Vector p2) {
-		x += p2.x;
-		y += p2.y;
-	}
-	
 	/** returns the sum of p1 and p2 */
 	public static Vector add(final Vector p1, final Vector p2) {
 		return new Vector(p1.x + p2.x, p1.y + p2.y);
