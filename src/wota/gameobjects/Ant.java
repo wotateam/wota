@@ -33,6 +33,9 @@ public class Ant implements Snapshot {
 	/** id of the player which this ant belongs to */
 	public final int playerID;
 	
+	/** Ants are dead if there health is 0 or less. Their corpses decay after CORPSE_DECAY_TIME */
+	public final boolean isDead;
+	
 	/** position of the Ant in absolute coordinates */
 	private final Vector position;
 	
@@ -47,6 +50,7 @@ public class Ant implements Snapshot {
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
 		id = antObject.id;
 		playerID = antObject.player.id();
+		isDead = antObject.isDead();
 		position = antObject.getPosition();
 		this.antObject = antObject;
 	}

@@ -27,7 +27,7 @@ public class GameObject {
 	
 
 	public void move(Vector moveVector) {
-		setPosition(Vector.add(position,moveVector));
+		position.add(moveVector);
 	}
 
 }

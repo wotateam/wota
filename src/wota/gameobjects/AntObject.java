@@ -30,6 +30,7 @@ public class AntObject extends GameObject{
 	public final GameWorld.Player player;
 	private boolean isAttacking = false;
 	private AntObject attackTarget = null;
+	private int ticksUntilDecay = Integer.MAX_VALUE; // counts down the ticks after Ant has died until its corpse will be removed
 	
 	public AntObject(Vector position, Caste caste, Class<? extends AntAI> antAIClass, GameWorld.Player player, Parameters parameters) {
 		super(position, parameters);
@@ -133,32 +134,43 @@ public class AntObject extends GameObject{
 		sugarCarry = 0;
 	}
 	
-	/** Checks if AntObject has positive health and has been at its hill less than 
-	 *  than TICKS_TO_LIVE ticks ago. */
+	/** Checks if AntObject is already dead. In this case it will decay after CORPSE_DECAY_TIME */
 	public boolean isDead() {
 		return health <= 0;
 	}
 	
 	/** calls ai.tick(), handles exceptions and saves the action */
-	public void tick(List<Ant> visibleAnts, List<Sugar> visibleSugar, 
+	public void tick(List<Ant> visibleAnts, List<Ant> visibleCorpses, List<Sugar> visibleSugar, 
 			List<Hill> visibleHills, List<AntMessage> incomingAntMessages, HillMessage incomingHillMessage) {
-		antAi.visibleAnts = visibleAnts;
-		antAi.visibleSugar = visibleSugar;
-		antAi.visibleHills = visibleHills;
-		antAi.audibleAntMessages = incomingAntMessages;
-		antAi.audibleHillMessage = incomingHillMessage;
-		antAi.setPosition(getPosition());
-		
-		try {
-			antAi.tick();
+		if (!isDead()) {
+			antAi.visibleAnts = visibleAnts;
+			antAi.visibleCorpses = visibleCorpses;
+			antAi.visibleSugar = visibleSugar;
+			antAi.visibleHills = visibleHills;
+			antAi.audibleAntMessages = incomingAntMessages;
+			antAi.audibleHillMessage = incomingHillMessage;
+			antAi.setPosition(getPosition());
+			
+			try {
+				antAi.tick();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			action = antAi.popAction();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		else { // is dead
+			ticksUntilDecay--;
 		}
-		
-		action = antAi.popAction();
+	}
+	
+	/** if true, AntObject can be entirely removed */
+	public boolean isDecayed() {
+		return ticksUntilDecay <= 0;
 	}
 
+	/** true if AntObject is carrying sugar */
 	public boolean isCarrying() {
 		return sugarCarry > 0;
 	}
@@ -180,11 +192,16 @@ public class AntObject extends GameObject{
 		idCounter++;
 		return idCounter - 1;
 	}
-
-	/**
-	 * gets called when AntObject is dying
-	 */
+	
+	/** gets called when AntObject is dying */
 	public void die() {
+		ticksUntilDecay = parameters.CORPSE_DECAY_TIME;
+		action = new Action();
+	}
+
+	/** returns true iff ant is dead and did not start to decay  */
+	public boolean diedLastTick() {
+		return isDead() && ticksUntilDecay == Integer.MAX_VALUE;
 	}
 
 }

@@ -157,6 +157,7 @@ public class GameWorld {
 		for (Player player : players) {			
 			for (AntObject antObject : player.antObjects) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
+				List<Ant> visibleCorpses = new LinkedList<Ant>();
 				List<Sugar> visibleSugar = new LinkedList<Sugar>();
 				List<Hill> visibleHills = new LinkedList<Hill>();
 				List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
@@ -166,10 +167,16 @@ public class GameWorld {
 				double hearingRange = antObject.getCaste().HEARING_RANGE;
 				Vector position = antObject.getPosition();
 				
+				// DONT FORGET THAT EVERY CHANGE HAS TO HAPPEN FOR HILL AS WELL
 				for (AntObject visibleAntObject : 
 						spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
 					if (visibleAntObject != antObject) {
-						visibleAnts.add(visibleAntObject.getAnt());
+						if (visibleAntObject.isDead()) {
+							visibleCorpses.add(visibleAntObject.getAnt());
+						}
+						else {
+							visibleAnts.add(visibleAntObject.getAnt());
+						}
 					}
 				}
 
@@ -197,13 +204,14 @@ public class GameWorld {
 					}
 				}
 				
-				antObject.tick(visibleAnts, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
+				antObject.tick(visibleAnts, visibleCorpses, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
 			}
 			
 			// and now for the hill. Sorry for the awful duplication of code but I couldn't see a way without 
 			// lots of work
 			
 			List<Ant> visibleAnts = new LinkedList<Ant>();
+			List<Ant> visibleCorpses = new LinkedList<Ant>();
 			List<Sugar> visibleSugar = new LinkedList<Sugar>();
 			List<Hill> visibleHills = new LinkedList<Hill>();
 			List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
@@ -215,8 +223,12 @@ public class GameWorld {
 			
 			for (AntObject visibleAntObject : 
 					spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
-				visibleAnts.add(visibleAntObject.getAnt());
-			}
+					if (visibleAntObject.isDead()) {
+						visibleCorpses.add(visibleAntObject.getAnt());
+					}
+					else {
+						visibleAnts.add(visibleAntObject.getAnt());
+					}			}
 
 			for (SugarObject visibleSugarObject : 
 					spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
@@ -244,7 +256,7 @@ public class GameWorld {
 				}
 			}
 			
-			player.hillObject.tick(visibleAnts, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
+			player.hillObject.tick(visibleAnts, visibleCorpses, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
 
 		}
 		// Only do this now that we used last tick's message objects.
@@ -279,14 +291,17 @@ public class GameWorld {
 		spacePartitioning.update(); 
 				
 
-		// Let ants die!
+		// Let ants die! (i.e. turn them into corpses) and let corpses disappear
 		for (Player player : players) {
 			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator();
 					antObjectIter.hasNext();) {
-				AntObject maybeDead = antObjectIter.next();
-				if (maybeDead.isDead()) {
+				AntObject antObject = antObjectIter.next();
+				if (antObject.diedLastTick()) {
+					antDies(antObject);
+				}
+				else if(antObject.isDecayed()) {
 					antObjectIter.remove();
-					antDies(maybeDead);
+					antCorpseDisappears(antObject);
 				}
 			}
 		}
@@ -299,9 +314,12 @@ public class GameWorld {
 	}
 
 	public void antDies(AntObject almostDead) {
-		spacePartitioning.removeAntObject(almostDead);
 		almostDead.die();
 		logger.antDied(almostDead);
+	}
+	
+	public void antCorpseDisappears(AntObject almostDecayed) {
+		spacePartitioning.removeAntObject(almostDecayed);
 	}
 	
 	/**
