@@ -87,6 +87,7 @@ public class GameWorld {
 	
 	public class Player {
 		public final List<AntObject> antObjects = new LinkedList<AntObject>();
+		public final List<AntCorpseObject> antCorpses = new LinkedList<AntCorpseObject>();
 		public final HillObject hillObject;
 
 		public final String name;
@@ -119,11 +120,11 @@ public class GameWorld {
 			antObjects.add(antObject);
 			spacePartitioning.addAntObject(antObject);
 		}
-		
+				
 		public int numAnts(Caste caste) {
 			int num = 0;
 			for (AntObject antObject : antObjects) {
-				if (antObject.getCaste() == caste) {
+				if (antObject.caste == caste) {
 					num++;
 				}
 			}
@@ -142,6 +143,9 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				antObject.createAnt();
 			}
+			for (AntCorpseObject antCorpseObject : player.antCorpses) {
+				antCorpseObject.createAntCorpse();
+			}
 			player.hillObject.createHill();
 		}
 
@@ -157,29 +161,29 @@ public class GameWorld {
 		for (Player player : players) {			
 			for (AntObject antObject : player.antObjects) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
-				List<Ant> visibleCorpses = new LinkedList<Ant>();
+				List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
 				List<Sugar> visibleSugar = new LinkedList<Sugar>();
 				List<Hill> visibleHills = new LinkedList<Hill>();
 				List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
 				HillMessage audibleHillMessage = null;
 
-				double sightRange = antObject.getCaste().SIGHT_RANGE;
-				double hearingRange = antObject.getCaste().HEARING_RANGE;
+				double sightRange = antObject.caste.SIGHT_RANGE;
+				double hearingRange = antObject.caste.HEARING_RANGE;
 				Vector position = antObject.getPosition();
 				
 				// DONT FORGET THAT EVERY CHANGE HAS TO HAPPEN FOR HILL AS WELL
 				for (AntObject visibleAntObject : 
 						spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
 					if (visibleAntObject != antObject) {
-						if (visibleAntObject.isDead()) {
-							visibleCorpses.add(visibleAntObject.getAnt());
-						}
-						else {
-							visibleAnts.add(visibleAntObject.getAnt());
-						}
+						visibleAnts.add(visibleAntObject.getAnt());
 					}
 				}
 
+				for (AntCorpseObject visibleAntCorpseObject : 
+					spacePartitioning.antCorpseObjectsInsideCircle(sightRange, position)) {
+					visibleCorpses.add(visibleAntCorpseObject.getAntCorpse());
+				}
+				
 				for (SugarObject visibleSugarObject : 
 						spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
 					visibleSugar.add(visibleSugarObject.getSugar());
@@ -207,11 +211,16 @@ public class GameWorld {
 				antObject.tick(visibleAnts, visibleCorpses, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
 			}
 			
+			// call tick for all corpses
+			for (AntCorpseObject antCorpseObject : player.antCorpses) {			
+				antCorpseObject.tick();
+			}
+			
 			// and now for the hill. Sorry for the awful duplication of code but I couldn't see a way without 
 			// lots of work
 			
 			List<Ant> visibleAnts = new LinkedList<Ant>();
-			List<Ant> visibleCorpses = new LinkedList<Ant>();
+			List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
 			List<Sugar> visibleSugar = new LinkedList<Sugar>();
 			List<Hill> visibleHills = new LinkedList<Hill>();
 			List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
@@ -223,13 +232,14 @@ public class GameWorld {
 			
 			for (AntObject visibleAntObject : 
 					spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
-					if (visibleAntObject.isDead()) {
-						visibleCorpses.add(visibleAntObject.getAnt());
-					}
-					else {
-						visibleAnts.add(visibleAntObject.getAnt());
-					}			}
+					visibleAnts.add(visibleAntObject.getAnt());
+			}
 
+			for (AntCorpseObject visibleAntCorpseObject : 
+				spacePartitioning.antCorpseObjectsInsideCircle(sightRange, position)) {
+				visibleCorpses.add(visibleAntCorpseObject.getAntCorpse());
+			}
+			
 			for (SugarObject visibleSugarObject : 
 					spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
 				visibleSugar.add(visibleSugarObject.getSugar());
@@ -296,12 +306,18 @@ public class GameWorld {
 			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator();
 					antObjectIter.hasNext();) {
 				AntObject antObject = antObjectIter.next();
-				if (antObject.diedLastTick()) {
+				if (antObject.isDead()) {
 					antDies(antObject);
-				}
-				else if(antObject.isDecayed()) {
 					antObjectIter.remove();
-					antCorpseDisappears(antObject);
+				}
+			}
+			
+			for (Iterator<AntCorpseObject> antCorpseObjectIter = player.antCorpses.iterator();
+					antCorpseObjectIter.hasNext();) {
+				AntCorpseObject antCorpseObject = antCorpseObjectIter.next();
+				if (antCorpseObject.isDecayed()) {
+					antCorpseObjectIter.remove();
+					antCorpseDisappears(antCorpseObject);
 				}
 			}
 		}
@@ -314,12 +330,16 @@ public class GameWorld {
 	}
 
 	public void antDies(AntObject almostDead) {
-		almostDead.die();
+		//almostDead.die();
 		logger.antDied(almostDead);
+		
+		AntCorpseObject freshCorpse = new AntCorpseObject(almostDead);
+		almostDead.player.antCorpses.add(freshCorpse);
+		spacePartitioning.addAntCorpseObject(freshCorpse);
 	}
 	
-	public void antCorpseDisappears(AntObject almostDecayed) {
-		spacePartitioning.removeAntObject(almostDecayed);
+	public void antCorpseDisappears(AntCorpseObject almostDecayed) {
+		spacePartitioning.removeAntCorpseObject(almostDecayed);
 	}
 	
 	/**
@@ -393,7 +413,7 @@ public class GameWorld {
 			// the radius of the area of effect equals ATTACK_RANGE
 			for (AntObject closeAntObject : spacePartitioning.antObjectsInsideCircle(parameters.ATTACK_RANGE, target.getPosition())) {
 				if (closeAntObject.player != actor.player) {
-					closeAntObject.takesDamage(actor.getCaste().ATTACK*
+					closeAntObject.takesDamage(actor.caste.ATTACK*
 							fractionOfDamageInDistance(parameters.distance(closeAntObject.getPosition(),target.getPosition())));
 				}
 			}
@@ -451,11 +471,11 @@ public class GameWorld {
 		Action action = actor.getAction();
 
 		if (actor.getAttackTarget() != null) {
-			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_ATTACKING));
+			actor.move(action.movement.boundLengthBy(actor.caste.SPEED_WHILE_ATTACKING));
 		} else if (actor.getSugarCarry() > 0) {
-			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED_WHILE_CARRYING_SUGAR));
+			actor.move(action.movement.boundLengthBy(actor.caste.SPEED_WHILE_CARRYING_SUGAR));
 		} else {
-			actor.move(action.movement.boundLengthBy(actor.getCaste().SPEED));
+			actor.move(action.movement.boundLengthBy(actor.caste.SPEED));
 		}
 	}
 	

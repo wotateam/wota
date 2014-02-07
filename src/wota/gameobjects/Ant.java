@@ -10,7 +10,7 @@ import wota.utility.Vector;
  * This is what an AI gets when it sees any ants. 
  * Created once per round for all the ants.
  */
-public class Ant implements Snapshot {
+public class Ant extends BaseAnt {
 	
 	/** health is decreased by attacking enemies. Ant dies if health reaches 0. */
 	public final double health;
@@ -21,43 +21,19 @@ public class Ant implements Snapshot {
 	/** amount of sugar which is carried */
 	public final int sugarCarry;
 	
-	/** Caste which this ant belongs to */
-	public final Caste caste;
-	
 	/** The name of this ant's AI class, not including the package name.*/
 	public final String antAIClassName;
-	
-	/** id of this ant */
-	public final int id;
-	
-	/** id of the player which this ant belongs to */
-	public final int playerID;
-	
-	/** Ants are dead if there health is 0 or less. Their corpses decay after CORPSE_DECAY_TIME */
-	public final boolean isDead;
-	
-	/** position of the Ant in absolute coordinates */
-	private final Vector position;
 	
 	/** corresponding physical element of this Ant */ 
 	final AntObject antObject; // should only be accessible for objects in the same package
 	
 	Ant(AntObject antObject) {
+		super(antObject);
 		health = antObject.getHealth();
 		speed = antObject.getSpeed();
 		sugarCarry = antObject.getSugarCarry();
-		caste = antObject.getCaste();
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
-		id = antObject.id;
-		playerID = antObject.player.id();
-		isDead = antObject.isDead();
-		position = antObject.getPosition();
 		this.antObject = antObject;
-	}
-
-	/** returns the vector of this ant */
-	public Vector getPosition() {
-		return position;
 	}
 	
 	/* (non-Javadoc)
@@ -68,7 +44,7 @@ public class Ant implements Snapshot {
 		if (other == null) {
 			return false;
 		}
-		if (other instanceof Ant) {
+		if (other instanceof AntCorpse) {
 			return ((Ant) other).antObject.equals(this.antObject);
 		}
 		else {

@@ -19,7 +19,7 @@ public abstract class AI {
 	public List<Ant> visibleAnts; 
 	
 	/** Dead Ants = Corpses which are seen by self */
-	public List<Ant> visibleCorpses;
+	public List<AntCorpse> visibleCorpses;
 	
 	/** Sugar which is seen by self */
 	public List<Sugar> visibleSugar;

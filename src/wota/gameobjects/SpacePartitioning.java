@@ -53,6 +53,10 @@ public class SpacePartitioning {
 		addT(antObject, Cell.antObjectsField);
 	}
 	
+	public void addAntCorpseObject(AntCorpseObject antCorpseObject) {
+		addT(antCorpseObject, Cell.antCorpseObjectsField);
+	}
+	
 	public void addHillObject(HillObject hillObject) {
 		addT(hillObject, Cell.hillObjectsField);
 	}
@@ -76,6 +80,10 @@ public class SpacePartitioning {
 	// WARNING: The methods for removing objects depend on the object being in the correct cell.
 	public void removeAntObject(AntObject antObject) {
 		removeT(antObject, Cell.antObjectsField);
+	}
+	
+	public void removeAntCorpseObject(AntCorpseObject antCorpseObject) {
+		removeT(antCorpseObject, Cell.antCorpseObjectsField);
 	}
 	
 	public void removeHillObject(HillObject hillObject) {
@@ -164,6 +172,10 @@ public class SpacePartitioning {
 		return TsInsideCircle(radius, center, Cell.antObjectsField);
 	}
 	
+	public List<AntCorpseObject> antCorpseObjectsInsideCircle(double radius, Vector center) {
+		return TsInsideCircle(radius, center, Cell.antCorpseObjectsField);
+	}
+	
 	public List<HillObject> hillObjectsInsideCircle(double radius, Vector center) {
 		return TsInsideCircle(radius, center, Cell.hillObjectsField);
 	}
@@ -207,6 +219,14 @@ public class SpacePartitioning {
 			@Override
 			public List<AntObject> get(Cell cell) {
 				return cell.antObjects;
+			}
+		};
+		
+		public final List<AntCorpseObject> antCorpseObjects = new LinkedList<AntCorpseObject>();
+		private static final GameObjectListField<AntCorpseObject> antCorpseObjectsField = new GameObjectListField<AntCorpseObject>() {
+			@Override
+			public List<AntCorpseObject> get(Cell cell) {
+				return cell.antCorpseObjects;
 			}
 		};
 		

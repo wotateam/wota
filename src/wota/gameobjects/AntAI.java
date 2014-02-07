@@ -132,7 +132,7 @@ public abstract class AntAI extends AI{
 	
 	/** returns true if target is in view range. */
 	protected boolean isInView(Snapshot target) {
-		return (parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.getCaste().SIGHT_RANGE);
+		return (parameters.distance(target.getPosition(), antObject.getPosition()) <= antObject.caste.SIGHT_RANGE);
 	}
 	
 	/** get a List of visible Ants of the own tribe */
