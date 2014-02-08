@@ -30,7 +30,7 @@ public class HillAI extends wota.gameobjects.HillAI {
 	@Override
 	public void tick() throws Exception {
 		if (nextAnt == SWAT_Leader.class) {
-			if (visibleHills.get(0).food >= (SWAT_Leader.TEAM_SIZE+1)*parameters.ANT_COST) {
+			if (self.food >= (SWAT_Leader.TEAM_SIZE+1)*parameters.ANT_COST) {
 				createAnt(Caste.Soldier, SWAT_Leader.class);
 				for (int i=0; i<SWAT_Leader.TEAM_SIZE; i++) {
 					createAnt(Caste.Soldier, SWAT_Member.class);
@@ -39,7 +39,7 @@ public class HillAI extends wota.gameobjects.HillAI {
 			}
 		} 
 		else if (nextAnt == StupidWorker.class) {
-			if (visibleHills.get(0).food >= 3*parameters.ANT_COST) {
+			if (self.food >= 3*parameters.ANT_COST) {
 				createAnt(Caste.Gatherer, StupidWorker.class);
 				createAnt(Caste.Gatherer, StupidWorker.class);
 				createAnt(Caste.Gatherer, StupidWorker.class);

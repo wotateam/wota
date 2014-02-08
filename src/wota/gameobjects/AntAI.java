@@ -20,6 +20,12 @@ public abstract class AntAI extends AI{
 	 * Everything else should not be protected, and not public if possible.
 	 * Hopefully, this will make generating documentation for AI writers easier.
 	 */
+
+	/** Sugar which is seen by self */
+	public List<Sugar> visibleSugar;
+	
+	/** Hills which are seen by self */
+	public List<Hill> visibleHills;
 	
 	/** Reference to Ant itself. Use to acces information like health: self.health */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.

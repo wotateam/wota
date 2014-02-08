@@ -21,12 +21,6 @@ public abstract class AI {
 	/** Dead Ants = Corpses which are seen by self */
 	public List<AntCorpse> visibleCorpses;
 	
-	/** Sugar which is seen by self */
-	public List<Sugar> visibleSugar;
-	
-	/** Hills which are seen by self */
-	public List<Hill> visibleHills;
-	
 	/** AntMessages which are heard in this tick */
 	public List<AntMessage> audibleAntMessages;
 	

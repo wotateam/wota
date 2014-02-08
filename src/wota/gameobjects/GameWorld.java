@@ -162,8 +162,6 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
 				List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
-				List<Sugar> visibleSugar = new LinkedList<Sugar>();
-				List<Hill> visibleHills = new LinkedList<Hill>();
 				List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
 				HillMessage audibleHillMessage = null;
 
@@ -184,16 +182,6 @@ public class GameWorld {
 					visibleCorpses.add(visibleAntCorpseObject.getAntCorpse());
 				}
 				
-				for (SugarObject visibleSugarObject : 
-						spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
-					visibleSugar.add(visibleSugarObject.getSugar());
-				}
-				
-				for (HillObject visibleHillObject :
-						spacePartitioning.hillObjectsInsideCircle(sightRange, position)) {
-					visibleHills.add(visibleHillObject.getHill());
-				}				
-				
 				for (AntMessageObject audibleAntMessageObject : 
 						spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
 					if (audibleAntMessageObject.sender.playerID == player.id()) {
@@ -207,6 +195,20 @@ public class GameWorld {
 						audibleHillMessage = audibleHillMessageObject.getMessage();
 					}
 				}
+
+				// Sugar sources and hills are not seen by hills.
+				List<Sugar> visibleSugar = new LinkedList<Sugar>();
+				List<Hill> visibleHills = new LinkedList<Hill>();
+				
+				for (SugarObject visibleSugarObject : 
+						spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
+					visibleSugar.add(visibleSugarObject.getSugar());
+				}
+				
+				for (HillObject visibleHillObject :
+						spacePartitioning.hillObjectsInsideCircle(sightRange, position)) {
+					visibleHills.add(visibleHillObject.getHill());
+				}				
 				
 				antObject.tick(visibleAnts, visibleCorpses, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
 			}
@@ -238,19 +240,7 @@ public class GameWorld {
 			for (AntCorpseObject visibleAntCorpseObject : 
 				spacePartitioning.antCorpseObjectsInsideCircle(sightRange, position)) {
 				visibleCorpses.add(visibleAntCorpseObject.getAntCorpse());
-			}
-			
-			for (SugarObject visibleSugarObject : 
-					spacePartitioning.sugarObjectsInsideCircle(sightRange, position)) {
-				visibleSugar.add(visibleSugarObject.getSugar());
-			}
-			
-			for (HillObject visibleHillObject :
-					spacePartitioning.hillObjectsInsideCircle(sightRange, position)) {
-				if (visibleHillObject != player.hillObject) {
-					visibleHills.add(visibleHillObject.getHill());
-				}
-			}				
+			}		
 			
 			for (AntMessageObject audibleAntMessageObject : 
 					spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
@@ -266,7 +256,7 @@ public class GameWorld {
 				}
 			}
 			
-			player.hillObject.tick(visibleAnts, visibleCorpses, visibleSugar, visibleHills, audibleAntMessages, audibleHillMessage);
+			player.hillObject.tick(visibleAnts, visibleCorpses, audibleAntMessages, audibleHillMessage);
 
 		}
 		// Only do this now that we used last tick's message objects.
