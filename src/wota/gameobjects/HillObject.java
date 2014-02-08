@@ -1,5 +1,6 @@
 package wota.gameobjects;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import wota.gameobjects.Hill;
@@ -11,6 +12,8 @@ public class HillObject extends GameObject {
 	private GameWorld.Player player;
 	private double storedFood;
 	final Caste caste;
+	private List<AntOrder> antOrders = new LinkedList<AntOrder>();
+	private HillMessageObject message;
 	
 	public HillObject(Vector position, GameWorld.Player player, Class<? extends HillAI> hillAIClass,
 						Parameters parameters) {
@@ -54,10 +57,14 @@ public class HillObject extends GameObject {
 	}
 	
 	public List<AntOrder> getAntOrders() {
-		return hillAI.popAntOrders();
+		return antOrders;
 	}
 	
-	/** calls hillAI.tick() and handles exceptions */
+	public HillMessageObject getMessage() {
+		return message;
+	}
+	
+	/** calls hillAI.tick(), saves the message and the ant orders and handles exceptions  */
 	public void tick(List<Ant> visibleAnts, List<AntCorpse> visibleCorpses, List<Sugar> visibleSugar, 
 			List<Hill> visibleHills, List<AntMessage> incomingAntMessages, HillMessage incomingHillMessage) {
 		hillAI.visibleAnts = visibleAnts;
@@ -74,6 +81,9 @@ public class HillObject extends GameObject {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		antOrders = hillAI.popAntOrders();
+		message = hillAI.popMessage();
 	}
 	
 }

@@ -286,7 +286,7 @@ public class GameWorld {
 			}
 
 			// order does matter since the hill creates new ants!
-			handleHillMessage(player.hillObject, player.hillObject.hillAI.popMessage());
+			handleHillMessage(player.hillObject, player.hillObject.getMessage());
 			executeAntOrders(player.hillObject);
 		}
 		
