@@ -15,9 +15,6 @@ public class Ant extends BaseAnt {
 	/** health is decreased by attacking enemies. Ant dies if health reaches 0. */
 	public final double health;
 	
-	/** distance with which Ants can move each tick */
-	public final double speed;
-		
 	/** amount of sugar which is carried */
 	public final int sugarCarry;
 	
@@ -30,7 +27,6 @@ public class Ant extends BaseAnt {
 	Ant(AntObject antObject) {
 		super(antObject);
 		health = antObject.getHealth();
-		speed = antObject.getSpeed();
 		sugarCarry = antObject.getSugarCarry();
 		antAIClassName = antObject.getAI().getClass().getSimpleName();
 		this.antObject = antObject;

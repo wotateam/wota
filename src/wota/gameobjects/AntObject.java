@@ -17,7 +17,6 @@ public class AntObject extends BaseAntObject{
 	private Ant ant;
 	protected final AntAI antAi;
 	protected double health;
-	private double speed;
 	private double lastMovementDirection = 0;
 	
 	/** amount of sugar carried now */
@@ -41,7 +40,6 @@ public class AntObject extends BaseAntObject{
 		antAI.setParameters(parameters);
 		// set parameters
 		health = caste.INITIAL_HEALTH;
-		speed = caste.SPEED;
 		
 		this.antAi = antAI;
 		this.antAi.setAntObject(this);
@@ -78,10 +76,6 @@ public class AntObject extends BaseAntObject{
 		}
 	}
 
-	public double getSpeed() {
-		return speed;
-	}
-	
 	public Action getAction() {
 		return action;
 	}

@@ -126,7 +126,7 @@ public class Mueller extends MyAntAI {
 				worstant=ant;
 				kampf=true;
 			}
-			if(ant.caste!= Caste.Scout && vectorTo(ant).length()<parameters.ATTACK_RANGE+ant.speed-self.speed && ant.sugarCarry==0){
+			if(ant.caste!= Caste.Scout && vectorTo(ant).length()<parameters.ATTACK_RANGE+ant.caste.SPEED-self.caste.SPEED && ant.sugarCarry==0){
 				dropSugar();
 				nearbyenemy++;
 			}
@@ -147,7 +147,7 @@ public class Mueller extends MyAntAI {
 					targetdirection=vectorToHome().angle();
 				}
 				double lambda=0.98;
-				if(vectorTo(worstant).length()>parameters.ATTACK_RANGE+worstant.speed){
+				if(vectorTo(worstant).length()>parameters.ATTACK_RANGE+worstant.caste.SPEED){
 					lambda=0.8;
 				}
 				if(vectorTo(worstant).length()>self.caste.SIGHT_RANGE/2){
