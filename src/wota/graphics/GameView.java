@@ -39,6 +39,7 @@ public class GameView {
 	private static final int SAMPLES = 1; // the scene is actually rendered SAMPLES^2 times 
 	
 	private static final float HILL_COLOR_PERCENTAGE = 0.65f;
+	private static final float MESSAGE_ALPHA = 1.0f;
 	
 	// hardcoded maximum number of players = 8
 	public static final Color[] playerColors = { Color.RED, Color.BLUE, Color.GREEN,
@@ -118,12 +119,14 @@ public class GameView {
 			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 
+		// Foreground objects are blended
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ONE);
-		// Ants
+
 		for (GameWorld.Player player : gameWorld.getPlayers()) {
 			Color color = playerColors[player.id()];
 			float[] colorComponents = color.getColorComponents(null);
 			
+			// Ants			
 			for (AntObject antObject : player.antObjects) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], 1.0f);
 				fillCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
@@ -136,10 +139,8 @@ public class GameView {
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha);
 					drawCircle(antObject.getPosition(), antObject.caste.SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
-				if (drawMessages)
-					if (antObject.getAction() != null && antObject.getAction().antMessageObject != null) {
-					final float messageAlpha = 1.0f;
-					setColor(colorComponents[0], colorComponents[1], colorComponents[2],messageAlpha);
+				if (drawMessages && antObject.getAction() != null && antObject.getAction().antMessageObject != null) {
+					setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
 					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 				}				
 				if (DRAW_ATTACK) {
@@ -152,7 +153,12 @@ public class GameView {
 						drawLineOnTorus(antObject.getPosition(), attackTarget.getPosition());
 					}
 				}
-			}		
+			}
+			// Hill messages
+			if (drawMessages && player.hillObject.getMessage() != null) {
+				setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
+				drawCircle(player.hillObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
+			}
 		}
 	}
 
