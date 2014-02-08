@@ -60,9 +60,9 @@ public class GameView {
 
 	public void setup() {
 		glEnable(GL_DEPTH_TEST);
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
-		//glBlendEquation(GL_FUNC_ADD);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+		glBlendEquation(GL_FUNC_ADD);
 		glClearColor(0, 0, 0, 1);
 		
 		glMatrixMode(GL_PROJECTION);
@@ -142,7 +142,7 @@ public class GameView {
 			fillCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
 		}
 		glPopMatrix();
-		//glEnable(GL_BLEND);
+		glEnable(GL_BLEND);
 	}
 
 	/** 
