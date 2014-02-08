@@ -38,7 +38,7 @@ public class GameView {
 	private static final boolean DRAW_ATTACK = true;
 	private static final int SAMPLES = 1; // the scene is actually rendered SAMPLES^2 times 
 	
-	private static final float HILL_ALPHA = 0.65f;
+	private static final float HILL_COLOR_PERCENTAGE = 0.65f;
 	
 	// hardcoded maximum number of players = 8
 	public static final Color[] playerColors = { Color.RED, Color.BLUE, Color.GREEN,
@@ -61,9 +61,9 @@ public class GameView {
 	public void setup() {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
 		glBlendEquation(GL_FUNC_ADD);
-		glClearColor(0, 0, 0, 1);
+
+		glClearColor(0, 0, 0, 0);
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -94,11 +94,36 @@ public class GameView {
 	}
 
 	private void renderImpl() {
+		// No blending for background objects.
+		glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
+		
+		// Sugar Sources
+		glPushMatrix();
+		glTranslated(0, 0, 0.5);
+		setColor(1.f, 1.f, 1.f, 0.0f);
+		for (SugarObject sugarObject : gameWorld.getSugarObjects()) {
+			fillCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
+		}
+		glPopMatrix();
+		
+		// Hills
 		for (GameWorld.Player player : gameWorld.getPlayers()) {
 			Color color = playerColors[player.id()];
 			float[] colorComponents = color.getColorComponents(null);
 			
-			// Ants
+			setColor(HILL_COLOR_PERCENTAGE*colorComponents[0],
+					 HILL_COLOR_PERCENTAGE*colorComponents[1],
+					 HILL_COLOR_PERCENTAGE*colorComponents[2], 
+					 0);
+			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
+		}
+
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ONE);
+		// Ants
+		for (GameWorld.Player player : gameWorld.getPlayers()) {
+			Color color = playerColors[player.id()];
+			float[] colorComponents = color.getColorComponents(null);
+			
 			for (AntObject antObject : player.antObjects) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], 1.0f);
 				fillCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
@@ -128,21 +153,7 @@ public class GameView {
 					}
 				}
 			}		
-			
-			// Hill
-			setColor(colorComponents[0], colorComponents[1], colorComponents[2],HILL_ALPHA * 1.0f);
-			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
-		// Sugar Sources
-		glDisable(GL_BLEND);
-		glPushMatrix();
-		glTranslated(0, 0, 0.5);
-		setColor(1.f, 1.f, 1.f,1.0f);
-		for (SugarObject sugarObject : gameWorld.getSugarObjects()) {
-			fillCircle(sugarObject.getPosition(), sugarObject.getRadius(), SUGAR_CIRCLE_CORNERS);
-		}
-		glPopMatrix();
-		glEnable(GL_BLEND);
 	}
 
 	/** 
