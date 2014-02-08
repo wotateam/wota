@@ -103,8 +103,6 @@ public class SpacePartitioning {
 			for (int j = 1; j < numberOfVerticalCells + 1; j++) {
 				Cell cell = cells[i][j];
 				update(cell, i, j, Cell.antObjectsField);
-				update(cell, i, j, Cell.hillObjectsField);
-				update(cell, i, j, Cell.sugarObjectsField);
 			}
 		}
 	}
