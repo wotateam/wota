@@ -182,6 +182,7 @@ public class GameWorld {
 					visibleCorpses.add(visibleAntCorpseObject.getAntCorpse());
 				}
 				
+				// add messages, also the ones which were send by this ant.
 				for (AntMessageObject audibleAntMessageObject : 
 						spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
 					if (audibleAntMessageObject.sender.playerID == player.id()) {
@@ -196,7 +197,6 @@ public class GameWorld {
 					}
 				}
 
-				// Sugar sources and hills are not seen by hills.
 				List<Sugar> visibleSugar = new LinkedList<Sugar>();
 				List<Hill> visibleHills = new LinkedList<Hill>();
 				
@@ -221,10 +221,10 @@ public class GameWorld {
 			// and now for the hill. Sorry for the awful duplication of code but I couldn't see a way without 
 			// lots of work
 			
+			// Sugar sources and hills are not seen by hills.
+
 			List<Ant> visibleAnts = new LinkedList<Ant>();
 			List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
-			List<Sugar> visibleSugar = new LinkedList<Sugar>();
-			List<Hill> visibleHills = new LinkedList<Hill>();
 			List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
 			HillMessage audibleHillMessage = null;
 
