@@ -11,12 +11,14 @@ public class Sugar implements Snapshot {
 	public final double radius;
 	public final Vector position;
 	final SugarObject sugarObject;
+	public final int ticksUntilNextPickUp;
 	
 	Sugar(SugarObject sugarObject) {
 		this.sugarObject = sugarObject;
 		amount = sugarObject.getAmount();
 		radius = sugarObject.getRadius();
 		position = sugarObject.getPosition();
+		ticksUntilNextPickUp = sugarObject.getTicksUntilNextPickUp();
 	}
 
 	public Vector getPosition() {

@@ -62,4 +62,8 @@ public class SugarObject extends GameObject {
 	public void decreaseSugar(int amountToPickUp) {
 		amount -= amountToPickUp;
 	}
+
+	public int getTicksUntilNextPickUp() {
+		return ticksUntilNextPickUp;
+	}
 }
