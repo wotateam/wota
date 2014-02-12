@@ -371,7 +371,7 @@ public class SugarAI extends AntAI {
 				dropSugar();
 			}else if (last_health > self.health + HillAI.EPS){
 				if (self.sugarCarry > 0
-					&& self.health/(last_health-self.health) > vectorToHome().length() / self.speed){
+					&& self.health/(last_health-self.health) > vectorToHome().length() / self.caste.SPEED){
 					//keep going
 					run = false;
 				}else{
