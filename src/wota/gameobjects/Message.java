@@ -3,13 +3,23 @@
  */
 package wota.gameobjects;
 
+import wota.utility.Vector;
+
 /**
- * Base class for messages. Used by HillMessage and AntMessage
+ * Base class for Messages. 
+ * Does not contain a sender since this is specified in 
+ * derived classes AntMessage or HillMessage. 
  */
-public abstract class Message {
+public abstract class Message extends GameObject {
 	
 	/** information carried by the message */
 	public final int content;
+	
+	/** Snapshot is one is transfered as message content 
+	 *  If this is an Ant/Sugar/Hill the corresponding field
+	 *  contentAnt/Sugar/Hill will be set so you don't have to
+	 *  typecast. */
+	public final Snapshot contentSnapshot; 
 	
 	/** Ant if one is tranfered as message content */
 	public final Ant contentAnt;
@@ -20,23 +30,25 @@ public abstract class Message {
 	/** Hill if one is tranfered as message content */
 	public final Hill contentHill;
 	
-	public Message(MessageObject messageObject) {
-		this.content = messageObject.content;
+	public Message(Vector position, int content, Snapshot snapshot, Parameters parameters) {
+		super(position, parameters);
+		this.content = content;
+		this.contentSnapshot = snapshot;
 		
-		if (messageObject.snapshot instanceof Ant) {
-			contentAnt = (Ant) messageObject.snapshot;
+		if (contentSnapshot instanceof Ant) {
+			contentAnt = (Ant) contentSnapshot;
 			contentSugar = null;
 			contentHill = null;
 		}
-		else if (messageObject.snapshot instanceof Sugar) {
+		else if (contentSnapshot instanceof Sugar) {
 			contentAnt = null;
-			contentSugar = (Sugar) messageObject.snapshot;
+			contentSugar = (Sugar) contentSnapshot;
 			contentHill = null;
 		}
-		else if (messageObject.snapshot instanceof Hill) {
+		else if (contentSnapshot instanceof Hill) {
 			contentAnt = null;
 			contentSugar = null;
-			contentHill = (Hill) messageObject.snapshot;
+			contentHill = (Hill) contentSnapshot;
 		}
 		else {
 			contentAnt = null;

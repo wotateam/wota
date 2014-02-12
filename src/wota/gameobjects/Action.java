@@ -19,8 +19,7 @@ public class Action {
 	/** Vector in which Ant wants to move */
 	public Vector movement = new Vector (0,0);
 	
-	// See comment for setMessageObject.
-	public AntMessageObject antMessageObject = null;
+	public AntMessage antMessage = null;
 	
 	/** true if sugar/... should be dropped. */
 	public boolean dropItem = false;

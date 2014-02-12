@@ -114,9 +114,9 @@ public abstract class AntAI extends AI{
 	
 	/** Send message of both int and Snaphshot (Ant, Hill, Sugar, ...) */
 	protected void talk(int content, Snapshot snapshot) {
-		AntMessageObject mo = new AntMessageObject(self.getPosition(), self, content, snapshot, parameters);
+		AntMessage mo = new AntMessage(self.getPosition(), self, content, snapshot, parameters);
 			
-		action.antMessageObject = mo;
+		action.antMessage = mo;
 	}
 	
 	//--------------------------------------------------------------------

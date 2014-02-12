@@ -152,10 +152,6 @@ public class GameWorld {
 		for (SugarObject sugarObject : sugarObjects) {
 			sugarObject.createSugar();
 		}
-		
-		// The MessageObjects don't need a "createMessage", because one can
-		// construct the Message instance when the
-		// MessageObject instance is constructed.
 
 		// call tick for all AntObjects
 		for (Player player : players) {			
@@ -183,17 +179,17 @@ public class GameWorld {
 				}
 				
 				// add messages, also the ones which were send by this ant.
-				for (AntMessageObject audibleAntMessageObject : 
-						spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
-					if (audibleAntMessageObject.sender.playerID == player.id()) {
-						audibleAntMessages.add(audibleAntMessageObject.getMessage());
+				for (AntMessage audibleAntMessage : 
+						spacePartitioning.antMessagesInsideCircle(hearingRange, position)) {
+					if (audibleAntMessage.sender.playerID == player.id()) {
+						audibleAntMessages.add(audibleAntMessage);
 					}
 				}
 				
-				for (HillMessageObject audibleHillMessageObject :
-						spacePartitioning.hillMessageObjectsInsideCircle(hearingRange, position)) {
-					if (audibleHillMessageObject.sender.playerID == player.id()) {
-						audibleHillMessage = audibleHillMessageObject.getMessage();
+				for (HillMessage audibleHillMessageCandidate :
+						spacePartitioning.hillMessagesInsideCircle(hearingRange, position)) {
+					if (audibleHillMessageCandidate.sender.playerID == player.id()) {
+						audibleHillMessage = audibleHillMessageCandidate;
 					}
 				}
 
@@ -242,17 +238,17 @@ public class GameWorld {
 				visibleCorpses.add(visibleAntCorpseObject.getAntCorpse());
 			}		
 			
-			for (AntMessageObject audibleAntMessageObject : 
-					spacePartitioning.antMessageObjectsInsideCircle(hearingRange, position)) {
-				if (audibleAntMessageObject.sender.playerID == player.id()) {
-					audibleAntMessages.add(audibleAntMessageObject.getMessage());
+			for (AntMessage audibleAntMessage : 
+					spacePartitioning.antMessagesInsideCircle(hearingRange, position)) {
+				if (audibleAntMessage.sender.playerID == player.id()) {
+					audibleAntMessages.add(audibleAntMessage);
 				}
 			}
 			
-			for (HillMessageObject audibleHillMessageObject :
-					spacePartitioning.hillMessageObjectsInsideCircle(hearingRange, position)) {
-				if (audibleHillMessageObject.sender.playerID == player.id()) {
-					audibleHillMessage = audibleHillMessageObject.getMessage();
+			for (HillMessage audibleHillMessageCandidate :
+					spacePartitioning.hillMessagesInsideCircle(hearingRange, position)) {
+				if (audibleHillMessageCandidate.sender.playerID == player.id()) {
+					audibleHillMessage = audibleHillMessageCandidate;
 				}
 			}
 			
@@ -260,8 +256,8 @@ public class GameWorld {
 
 		}
 		// Only do this now that we used last tick's message objects.
-		spacePartitioning.discardAntMessageObjects();
-		spacePartitioning.discardHillMessageObjects();
+		spacePartitioning.discardAntMessages();
+		spacePartitioning.discardHillMessages();
 		
 		// execute all actions, ants get created
 		for (Player player : players) {
@@ -445,15 +441,15 @@ public class GameWorld {
 		return Math.max(fraction, 0); 
 	}
 	
-	private void handleHillMessage(HillObject actor, HillMessageObject message) {
+	private void handleHillMessage(HillObject actor, HillMessage message) {
 		if (message != null) {
-			spacePartitioning.addHillMessageObject(message);
+			spacePartitioning.addHillMessage(message);
 		}
 	}
 
 	private void handleAntMessages(AntObject actor, Action action) {
-		if (action.antMessageObject != null) {
-			spacePartitioning.addAntMessageObject(action.antMessageObject);
+		if (action.antMessage != null) {
+			spacePartitioning.addAntMessage(action.antMessage);
 		}
 	}
 

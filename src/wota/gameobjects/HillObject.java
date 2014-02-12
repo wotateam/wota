@@ -13,7 +13,7 @@ public class HillObject extends GameObject {
 	private double storedFood;
 	final Caste caste;
 	private List<AntOrder> antOrders = new LinkedList<AntOrder>();
-	private HillMessageObject message;
+	private HillMessage message;
 	
 	public HillObject(Vector position, GameWorld.Player player, Class<? extends HillAI> hillAIClass,
 						Parameters parameters) {
@@ -60,7 +60,7 @@ public class HillObject extends GameObject {
 		return antOrders;
 	}
 	
-	public HillMessageObject getMessage() {
+	public HillMessage getMessage() {
 		return message;
 	}
 	

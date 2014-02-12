@@ -65,12 +65,12 @@ public class SpacePartitioning {
 		addT(sugarObject, Cell.sugarObjectsField);
 	}
 	
-	public void addAntMessageObject(AntMessageObject antMessageObject) {
-		addT(antMessageObject, Cell.antMessageObjectsField);
+	public void addAntMessage(AntMessage antMessage) {
+		addT(antMessage, Cell.antMessagesField);
 	}	
 	
-	public void addHillMessageObject(HillMessageObject hillMessageObject) {
-		addT(hillMessageObject, Cell.hillMessageObjectsField);
+	public void addHillMessage(HillMessage hillMessage) {
+		addT(hillMessage, Cell.hillMessagesField);
 	}
 	
 	private <T extends GameObject> void addT(T t, GameObjectListField<T> field) {
@@ -107,20 +107,20 @@ public class SpacePartitioning {
 		}
 	}
 	
-	public void discardAntMessageObjects() {
+	public void discardAntMessages() {
 		for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
 			for (int j = 1; j < numberOfVerticalCells + 1; j++) {
 				Cell cell = cells[i][j];
-				cell.antMessageObjects.clear();
+				cell.antMessages.clear();
 			}
 		}
 	}
 	
-	public void discardHillMessageObjects() {
+	public void discardHillMessages() {
 		for (int i = 1; i < numberOfHorizontalCells + 1; i++) {
 			for (int j = 1; j < numberOfVerticalCells + 1; j++) {
 				Cell cell = cells[i][j];
-				cell.hillMessageObjects.clear();
+				cell.hillMessages.clear();
 			}
 		}
 	}
@@ -182,12 +182,12 @@ public class SpacePartitioning {
 		return TsInsideCircle(radius, center, Cell.sugarObjectsField);
 	}
 	
-	public List<AntMessageObject> antMessageObjectsInsideCircle(double radius, Vector center) {
-		return TsInsideCircle(radius, center, Cell.antMessageObjectsField);
+	public List<AntMessage> antMessagesInsideCircle(double radius, Vector center) {
+		return TsInsideCircle(radius, center, Cell.antMessagesField);
 	}
 	
-	public List<HillMessageObject> hillMessageObjectsInsideCircle(double radius, Vector center) {
-		return TsInsideCircle(radius, center, Cell.hillMessageObjectsField);
+	public List<HillMessage> hillMessagesInsideCircle(double radius, Vector center) {
+		return TsInsideCircle(radius, center, Cell.hillMessagesField);
 	}
 
 	public final int coordinatesToCellXIndex(Vector p) {
@@ -244,19 +244,19 @@ public class SpacePartitioning {
 			}
 		};
 		
-		public final List<AntMessageObject> antMessageObjects = new LinkedList<AntMessageObject>();
-		private static final GameObjectListField<AntMessageObject> antMessageObjectsField = new GameObjectListField<AntMessageObject>() {
+		public final List<AntMessage> antMessages = new LinkedList<AntMessage>();
+		private static final GameObjectListField<AntMessage> antMessagesField = new GameObjectListField<AntMessage>() {
 			@Override
-			public List<AntMessageObject> get(Cell cell) {
-				return cell.antMessageObjects;
+			public List<AntMessage> get(Cell cell) {
+				return cell.antMessages;
 			}
 		};
 		
-		public final List<HillMessageObject> hillMessageObjects = new LinkedList<HillMessageObject>();
-		private static final GameObjectListField<HillMessageObject> hillMessageObjectsField = new GameObjectListField<HillMessageObject>() {
+		public final List<HillMessage> hillMessages = new LinkedList<HillMessage>();
+		private static final GameObjectListField<HillMessage> hillMessagesField = new GameObjectListField<HillMessage>() {
 			@Override
-			public List<HillMessageObject> get(Cell cell) {
-				return cell.hillMessageObjects;
+			public List<HillMessage> get(Cell cell) {
+				return cell.hillMessages;
 			}
 		};
 	}

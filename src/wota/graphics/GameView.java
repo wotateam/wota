@@ -139,7 +139,7 @@ public class GameView {
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha);
 					drawCircle(antObject.getPosition(), antObject.caste.SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
-				if (drawMessages && antObject.getAction() != null && antObject.getAction().antMessageObject != null) {
+				if (drawMessages && antObject.getAction() != null && antObject.getAction().antMessage != null) {
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
 					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 				}				

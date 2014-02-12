@@ -35,7 +35,7 @@ public abstract class HillAI extends AI {
 	
 	/** Send message of combined int with Snaphshot (Ant, Hill, Sugar, ...) */
 	protected void talk(int content, Snapshot snapshot) {
-		message = new HillMessageObject(self.getPosition(), self, content, snapshot, parameters);
+		message = new HillMessage(self.getPosition(), self, content, snapshot, parameters);
 	}
 
 	// ------------------------------------------------------------------------
@@ -45,14 +45,14 @@ public abstract class HillAI extends AI {
 
 	/** List of Ants which should be born next tick */
 	private List<AntOrder> antOrders;
-	private HillMessageObject message;
+	private HillMessage message;
 
 	/** HillObject includes all information of this Hill */
 	private HillObject hillObject;
 
 	/** CAUTION! This will delete the message object in HillAI */
-	HillMessageObject popMessage() {
-		HillMessageObject returnMessage = message;
+	HillMessage popMessage() {
+		HillMessage returnMessage = message;
 		message = null;
 		return returnMessage;
 	}
