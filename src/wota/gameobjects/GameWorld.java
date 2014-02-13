@@ -87,7 +87,7 @@ public class GameWorld {
 	
 	public class Player {
 		public final List<AntObject> antObjects = new LinkedList<AntObject>();
-		public final List<AntCorpseObject> antCorpses = new LinkedList<AntCorpseObject>();
+		public final List<AntCorpseObject> antCorpseObjects = new LinkedList<AntCorpseObject>();
 		public final HillObject hillObject;
 
 		public final String name;
@@ -143,7 +143,7 @@ public class GameWorld {
 			for (AntObject antObject : player.antObjects) {
 				antObject.createAnt();
 			}
-			for (AntCorpseObject antCorpseObject : player.antCorpses) {
+			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {
 				antCorpseObject.createAntCorpse();
 			}
 			player.hillObject.createHill();
@@ -210,7 +210,7 @@ public class GameWorld {
 			}
 			
 			// call tick for all corpses
-			for (AntCorpseObject antCorpseObject : player.antCorpses) {			
+			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {			
 				antCorpseObject.tick();
 			}
 			
@@ -298,7 +298,7 @@ public class GameWorld {
 				}
 			}
 			
-			for (Iterator<AntCorpseObject> antCorpseObjectIter = player.antCorpses.iterator();
+			for (Iterator<AntCorpseObject> antCorpseObjectIter = player.antCorpseObjects.iterator();
 					antCorpseObjectIter.hasNext();) {
 				AntCorpseObject antCorpseObject = antCorpseObjectIter.next();
 				if (antCorpseObject.isDecayed()) {
@@ -320,7 +320,7 @@ public class GameWorld {
 		logger.antDied(almostDead);
 		
 		AntCorpseObject freshCorpse = new AntCorpseObject(almostDead);
-		almostDead.player.antCorpses.add(freshCorpse);
+		almostDead.player.antCorpseObjects.add(freshCorpse);
 		spacePartitioning.addAntCorpseObject(freshCorpse);
 	}
 	
