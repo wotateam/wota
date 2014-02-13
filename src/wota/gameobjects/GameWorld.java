@@ -318,6 +318,7 @@ public class GameWorld {
 	public void antDies(AntObject almostDead) {
 		//almostDead.die();
 		logger.antDied(almostDead);
+		spacePartitioning.removeAntObject(almostDead);
 		
 		AntCorpseObject freshCorpse = new AntCorpseObject(almostDead);
 		almostDead.player.antCorpseObjects.add(freshCorpse);
