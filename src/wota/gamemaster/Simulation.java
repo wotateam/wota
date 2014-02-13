@@ -140,12 +140,14 @@ public class Simulation {
 					handleKeyboardInputs();
 				}
 				
+				// only check if is not graphical since we want the
+				// maximal number of updates possible
 				if (ticksToDo() > SKIP_TICKS_THRESHOLD && isGraphical) {
 					resetReferenceValues();
 				}
 				
 				// now update simulation if tick event 
-				if (ticksToDo() > 0 && !paused) {
+				if ((!isGraphical || ticksToDo() > 0) && !paused) {
 					tick(gameWorld);
 					measureTickCount++;
 					referenceTickCount++;
@@ -310,4 +312,5 @@ public class Simulation {
 		}
 		return playerNames;
 	}
+
 }
