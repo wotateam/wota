@@ -10,7 +10,7 @@ NUMBER_OF_GAMES = 2
 # two matches with swapped positions?
 HOME_AND_AWAY = true
 
-# Tournement mode means that a series one-on-ones will be played 
+# Tournament mode means that a series one-on-ones will be played 
 TOURNAMENT = false
 
 

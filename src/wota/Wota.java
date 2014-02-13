@@ -30,11 +30,11 @@ public class Wota {
 		
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
-//		SimulationFactory factory = new SimulationFactory(specialSeed);
+//		GameWorldFactory factory = new GameWorldFactory(specialSeed);
 
 
 //		use this constructor to obtain different games each run.
-		SimulationFactory factory = new SimulationFactory((new Random()).nextLong(), parameters, simulationParameters);
+		GameWorldFactory gameWorldFactory = new GameWorldFactory((new Random()).nextLong(), parameters, simulationParameters);
 		
 //		use this for debugging
 		/*
@@ -56,8 +56,8 @@ public class Wota {
 															   wota.ai.bvb.Mao.class);
 		*/
 		
-		Simulation sim = factory.createSimulation();
-		sim.runSimulation();
+		Simulation simulation = new Simulation(simulationParameters, gameWorldFactory);
+		simulation.runSimulation();
 	}
 	
 

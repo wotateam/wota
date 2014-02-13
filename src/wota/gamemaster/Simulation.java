@@ -31,7 +31,7 @@ public class Simulation {
 	private final int width;
 	private final int height;
 
-	private final List<GameWorld> gameWorlds; // list of all gameworlds that should be simulated
+	private final GameWorldFactory gameWorldFactory;
 	//private GameWorld gameWorld;
 	private GameView gameView;
 	private StatisticsView statisticsView;
@@ -71,24 +71,17 @@ public class Simulation {
 	/** maximum number of ticks before the game ends regardless of victory condition **/
 	private final int maxTicksBeforeEnd;
 	
-	/**
-	 * Creates a runnable simulation from a SimulationInstance with the option
-	 * for visualization.
-	 * 
-	 * @param inst the instance to be simulated
-	 * @param isGraphical true, if the simulation should be graphical
-	 */
-	public Simulation(SimulationParameters simParameters, 
-					  List<GameWorld> gameWorlds) {
-		isGraphical = simParameters.IS_GRAPHICAL; 
-		framesPerSecond = simParameters.FRAMES_PER_SECOND;
-		ticksPerSecond = simParameters.INITIAL_TICKS_PER_SECOND;
-		maxTicksBeforeEnd = simParameters.MAX_TICKS_BEFORE_END;
+	public Simulation(SimulationParameters simulationParameters, 
+					  GameWorldFactory gameWorldFactory) {
+		isGraphical = simulationParameters.IS_GRAPHICAL; 
+		framesPerSecond = simulationParameters.FRAMES_PER_SECOND;
+		ticksPerSecond = simulationParameters.INITIAL_TICKS_PER_SECOND;
+		maxTicksBeforeEnd = simulationParameters.MAX_TICKS_BEFORE_END;
 		
-		width = simParameters.DISPLAY_WIDTH;
-		height = simParameters.DISPLAY_HEIGHT;
+		width = simulationParameters.DISPLAY_WIDTH;
+		height = simulationParameters.DISPLAY_HEIGHT;
 		
-		this.gameWorlds = gameWorlds;
+		this.gameWorldFactory = gameWorldFactory;
 		
 		resultCollection = new ResultCollection();
 	}
@@ -102,9 +95,13 @@ public class Simulation {
 	 * keyboard/mouse input should be fetched before graphics in every loop. 
 	 */
 	public void runSimulation() {
-
-		for (int iGW=0; iGW<gameWorlds.size() && !abortRequested; iGW++) {
-			GameWorld gameWorld = gameWorlds.get(iGW);
+		GameWorld gameWorld;
+		
+		while (!abortRequested) {
+			gameWorld = gameWorldFactory.nextGameWorld();
+			if (gameWorld == null) {
+				break;
+			}
 			
 			SeededRandomizer.resetSeed(gameWorld.seed);
 			System.out.println("seed next game: " + gameWorld.seed);			

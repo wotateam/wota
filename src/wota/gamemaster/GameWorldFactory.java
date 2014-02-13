@@ -17,7 +17,7 @@ import wota.utility.Vector;
 /**
  * Reads Parameters and creates a bunch of Simulation Objects
  */
-public class SimulationFactory {
+public class GameWorldFactory {
 	private final AILoader aiLoader;
 
 	private final Parameters parameters;
@@ -34,7 +34,7 @@ public class SimulationFactory {
 	 * @param seed
 	 *            initial seed of the RNG
 	 */
-	public SimulationFactory(long seed, Parameters parameters, SimulationParameters simulationParameters) {
+	public GameWorldFactory(long seed, Parameters parameters, SimulationParameters simulationParameters) {
 		this.parameters = parameters;
 		this.simulationParameters = simulationParameters;
 		SeededRandomizer.resetSeed(seed);
@@ -42,30 +42,37 @@ public class SimulationFactory {
 		aiLoader = new AILoader("./");
 	}
 	
+	private int numberOfGames = 0; // not counting reversed positions if HOME_AND_AWAY 
+	private boolean swapPlayers = false;
+	private	long seed;
 	/**
-	 * creates a Simulation according to the mode specified in the parameters. 
-	 * The Simulation itself can have multiple GameWorlds.
+	 * Depending on settings, create the next game world.
+	 * 
+	 * See the comments in settings.txt for the meaning of the settings.
+	 * @return The next game to be played and null if all games have been played. 
 	 */
-	public Simulation createSimulation() {
-		List<GameWorld> gameWorlds = new ArrayList<GameWorld>();
-		long seed = SeededRandomizer.getSeed();
-
+	public GameWorld nextGameWorld() {
 		if (!simulationParameters.TOURNAMENT) {
-			
-			for (int i=0; i<simulationParameters.NUMBER_OF_GAMES; i++) {
-				
-				boolean swapPlayers = false;
-				gameWorlds.add(constructGameWorld(swapPlayers, seed));
-				
-				if (simulationParameters.HOME_AND_AWAY) {
+			if (numberOfGames < simulationParameters.NUMBER_OF_GAMES) {
+				if (!swapPlayers) {
+					seed = SeededRandomizer.getSeed();
 					swapPlayers = true;
-					gameWorlds.add(constructGameWorld(swapPlayers, seed));
+					return constructGameWorld(false, seed);
+				} else { // swapPlayers
+					swapPlayers = false;
+					numberOfGames++;						
+					long oldSeed = seed;
+					seed = SeededRandomizer.nextLong();
+					
+					if (simulationParameters.HOME_AND_AWAY) {	
+						return constructGameWorld(true, oldSeed);
+					}
 				}
-				seed = SeededRandomizer.nextLong();
+			} else {
+				return null;
 			}
-		}
-		Simulation simulation = new Simulation(simulationParameters, gameWorlds);
-		return simulation;
+		} 
+		return null;
 	}
 
 	/**
@@ -84,7 +91,7 @@ public class SimulationFactory {
 												  List<Vector> positionsSecondAI,
 												  Class <? extends AntAI> firstAntAI,
 												  Class <? extends AntAI> secondAntAI) {
-		SimulationFactory simulationFactory = new SimulationFactory(new Random().nextLong());
+		GameWorldFactory simulationFactory = new GameWorldFactory(new Random().nextLong());
 		
 		// overrides the first gameWorld 
 		GameWorld gw = simulationFactory.constructTestGameWorld(positionFirstPlayer, positionSecondPlayer,

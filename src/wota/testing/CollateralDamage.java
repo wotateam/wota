@@ -3,7 +3,7 @@ package wota.testing;
 import java.util.LinkedList;
 
 import wota.gamemaster.Simulation;
-import wota.gamemaster.SimulationFactory;
+import wota.gamemaster.GameWorldFactory;
 import wota.utility.Vector;
 
 
@@ -31,7 +31,7 @@ public class CollateralDamage {
 		LinkedList<Vector> positions2 = new LinkedList<Vector>();
 		Vector attackerPosition = new Vector(100,115);
 		positions2.add(attackerPosition);
-		SimulationFactory inst = SimulationFactory.createTestSimulation(hillPositionPlayer1,
+		GameWorldFactory inst = GameWorldFactory.createTestSimulation(hillPositionPlayer1,
 															   hillPositionPlayer2,
 															   positions1,
 															   positions2,
