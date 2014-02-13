@@ -3,6 +3,7 @@ package wota.graphics;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 
+import wota.gameobjects.AntCorpseObject;
 import wota.gameobjects.AntObject;
 import wota.gameobjects.GameWorld;
 import wota.gameobjects.Parameters;
@@ -31,6 +32,7 @@ public class GameView {
 	private static final int MESSAGE_CORNERS = 8;
 	
 	private static final int ANT_RADIUS = 5;
+	private static final int ANT_CORPSE_RADIUS = 3;
 	private static final int MESSAGE_RADIUS = 10;
 	private static final double CARRIED_SUGAR_RADIUS = 2;
 	public boolean drawSightRange = false;
@@ -39,6 +41,7 @@ public class GameView {
 	private static final int SAMPLES = 1; // the scene is actually rendered SAMPLES^2 times 
 	
 	private static final float HILL_COLOR_PERCENTAGE = 0.65f;
+	private static final float ANT_CORPSE_COLOR_PERCENTAGE = 0.5f;
 	private static final float MESSAGE_ALPHA = 1.0f;
 	
 	// hardcoded maximum number of players = 8
@@ -96,7 +99,7 @@ public class GameView {
 
 	private void renderImpl() {
 		// No blending for background objects.
-		glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
+		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ZERO);
 		
 		// Sugar Sources
 		glPushMatrix();
@@ -119,6 +122,21 @@ public class GameView {
 			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 
+		// Ant corpses are in the background, too.
+		for (GameWorld.Player player : gameWorld.getPlayers()) {
+			Color color = playerColors[player.id()];
+			float[] colorComponents = color.getColorComponents(null);
+			
+			// Ant corpses			
+			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {
+				setColor(ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[0],
+						 ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[1],
+						 ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[2],
+						 0);
+				fillCircle(antCorpseObject.getPosition(), ANT_CORPSE_RADIUS, ANT_CIRCLE_CORNERS);
+			}
+		}
+		
 		// Foreground objects are blended
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ONE);
 
