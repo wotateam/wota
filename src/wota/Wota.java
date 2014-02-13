@@ -3,12 +3,18 @@
  */
 package wota;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
+import java.util.Random;
 
 import javax.swing.SwingUtilities;
 
 import wota.gamemaster.*;
+import wota.gameobjects.Parameters;
 import wota.graphics.StatisticsView;
 import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
@@ -19,6 +25,8 @@ import wota.utility.Vector;
 public class Wota {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+		SimulationParameters simulationParameters = readSimulationParameters("settings.txt");
+		Parameters parameters = constructParameters("parameters.txt", simulationParameters.AI_PACKAGE_NAMES.length);
 		
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
@@ -26,7 +34,7 @@ public class Wota {
 
 
 //		use this constructor to obtain different games each run.
-		SimulationFactory factory = new SimulationFactory();
+		SimulationFactory factory = new SimulationFactory((new Random()).nextLong(), parameters, simulationParameters);
 		
 //		use this for debugging
 		/*
@@ -50,5 +58,48 @@ public class Wota {
 		
 		Simulation sim = factory.createSimulation();
 		sim.runSimulation();
+	}
+	
+
+	/**
+	 * Read settings including AI names from  a file.
+	 * The ai names are specified in "AI_PACKAGE_NAMES".
+	 * @param filename name of the file. Standard is: settings.txt
+	 * @return String array with ai names
+	 */
+	private static SimulationParameters readSimulationParameters(String filename) {
+		Properties propertiesForSimulationParameters = new Properties();
+		try {
+			propertiesForSimulationParameters.load(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println(" while trying to read simulation parameters: " + filename + " not found.");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		return new SimulationParameters(propertiesForSimulationParameters);
+	}
+	
+	/**
+	 * Read Parameters from file
+	 * @param filename name of the file, standard is parameters.txt
+	 * @return freshly generated Parameters instance
+	 */
+	private static Parameters constructParameters(String filename, int numberOfPlayers) {
+		Properties propertiesForParameters = new Properties();
+		try {
+			propertiesForParameters.load(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println("While trying to read parameters: " + filename + " not found.");
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return new Parameters(propertiesForParameters, numberOfPlayers);
 	}
 }

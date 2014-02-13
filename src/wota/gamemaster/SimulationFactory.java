@@ -34,25 +34,12 @@ public class SimulationFactory {
 	 * @param seed
 	 *            initial seed of the RNG
 	 */
-	public SimulationFactory(long seed) {
+	public SimulationFactory(long seed, Parameters parameters, SimulationParameters simulationParameters) {
+		this.parameters = parameters;
+		this.simulationParameters = simulationParameters;
 		SeededRandomizer.resetSeed(seed);
 
 		aiLoader = new AILoader("./");
-
-		simulationParameters = readSimulationParameters("settings.txt");
-		parameters = constructParameters("parameters.txt", simulationParameters.AI_PACKAGE_NAMES.length);
-	}
-	
-	/**
-	 * Create an instance from a randomly choosen seed
-	 * used to generate a map and initialize the RNGs.
-	 * 
-	 * Participating ais are read from the file "settings.txt"
-	 * 
-	 * Game parameters are read from "parameters.txt"
-	 */
-	public SimulationFactory() {
-		this((new Random()).nextLong());
 	}
 	
 	/**
@@ -106,48 +93,6 @@ public class SimulationFactory {
 		return simulation;
 	}
 	*/
-
-	/**
-	 * Read settings including AI names from  a file.
-	 * The ai names are specified in "AI_PACKAGE_NAMES".
-	 * @param filename name of the file. Standard is: settings.txt
-	 * @return String array with ai names
-	 */
-	private static SimulationParameters readSimulationParameters(String filename) {
-		Properties propertiesForSimulationParameters = new Properties();
-		try {
-			propertiesForSimulationParameters.load(new FileReader(filename));
-		} catch (FileNotFoundException e) {
-			System.out.println(" while trying to read simulation parameters: " + filename + " not found.");
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		
-		return new SimulationParameters(propertiesForSimulationParameters);
-	}
-	
-	/**
-	 * Read Parameters from file
-	 * @param filename name of the file, standard is parameters.txt
-	 * @return freshly generated Parameters instance
-	 */
-	private static Parameters constructParameters(String filename, int numberOfPlayers) {
-		Properties propertiesForParameters = new Properties();
-		try {
-			propertiesForParameters.load(new FileReader(filename));
-		} catch (FileNotFoundException e) {
-			System.out.println("While trying to read parameters: " + filename + " not found.");
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		return new Parameters(propertiesForParameters, numberOfPlayers);
-	}
 
 	/**
 	 * Deterministically constructs and populates a GameWorld instance with
@@ -213,12 +158,4 @@ public class SimulationFactory {
 		return gameWorld;
 	}
 	*/
-	
-	public Parameters getParameters() {
-		return parameters;
-	}
-
-	public SimulationParameters getSimulationParameters() {
-		return simulationParameters;
-	}
 }

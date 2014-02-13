@@ -1,6 +1,6 @@
 # settings.txt
 
-AI_PACKAGE_NAMES = clonewarriors, bvb
+AI_PACKAGE_NAMES = clonewarriors, clonewarriors
 
 IS_GRAPHICAL = true
 
