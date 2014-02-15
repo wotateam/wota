@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -42,7 +43,7 @@ public class GameWorldFactory {
 		aiLoader = new AILoader("./");
 	}
 	
-	private int numberOfGames = 0; // not counting reversed positions if HOME_AND_AWAY 
+	private int numberOfFinishedGames = 0; // not counting reversed positions if HOME_AND_AWAY 
 	private boolean swapPlayers = false;
 	private	long seed;
 	/**
@@ -53,14 +54,14 @@ public class GameWorldFactory {
 	 */
 	public GameWorld nextGameWorld() {
 		if (!simulationParameters.TOURNAMENT) {
-			if (numberOfGames < simulationParameters.NUMBER_OF_GAMES) {
+			if (numberOfFinishedGames < simulationParameters.NUMBER_OF_GAMES) {
 				if (!swapPlayers) {
 					seed = SeededRandomizer.getSeed();
 					swapPlayers = true;
 					return constructGameWorld(false, seed);
 				} else { // swapPlayers
 					swapPlayers = false;
-					numberOfGames++;						
+					numberOfFinishedGames++;						
 					long oldSeed = seed;
 					seed = SeededRandomizer.nextLong();
 					
@@ -115,19 +116,18 @@ public class GameWorldFactory {
 		
 		List<Vector> hillPositions = new LinkedList<Vector>();
 		String aiName;
+		
 		for (int i=0; i<simulationParameters.AI_PACKAGE_NAMES.length; i++) {
-			
-			// choose player name in normal order or reversed for swapPlayers == true
-			if (!swapPlayers) {
-				aiName = simulationParameters.AI_PACKAGE_NAMES[i];
-			}
-			else {
-				aiName = simulationParameters.AI_PACKAGE_NAMES[simulationParameters.AI_PACKAGE_NAMES.length - i - 1];
-			}
-			
 			Vector hillPosition = randomPosition.hillPosition(hillPositions);
 			hillPositions.add(hillPosition);
-			GameWorld.Player player = gameWorld.new Player(hillPosition, aiLoader.loadHill(aiName));
+		}
+		if (swapPlayers) {
+			Collections.reverse(hillPositions);
+		}
+		
+		for (int i=0; i<simulationParameters.AI_PACKAGE_NAMES.length; i++) {
+			aiName = simulationParameters.AI_PACKAGE_NAMES[i];
+			GameWorld.Player player = gameWorld.new Player(hillPositions.get(i), aiLoader.loadHill(aiName));
 			gameWorld.addPlayer(player);
 		}
 
