@@ -24,6 +24,8 @@ public class GameWorldFactory {
 	private final Parameters parameters;
 	private final SimulationParameters simulationParameters;
 	
+	private final List<int[]> matchings;
+	
 	/**
 	 * Create an instance from a seed used to
 	 * generate a map and initialize the RNGs.
@@ -38,13 +40,26 @@ public class GameWorldFactory {
 	public GameWorldFactory(long seed, Parameters parameters, SimulationParameters simulationParameters) {
 		this.parameters = parameters;
 		this.simulationParameters = simulationParameters;
+		this.seed = seed;
 		SeededRandomizer.resetSeed(seed);
 
 		aiLoader = new AILoader("./");
+		
+		int n = simulationParameters.AI_PACKAGE_NAMES.length;
+		if (simulationParameters.TOURNAMENT) {
+			matchings = generateSubsets(2, n);
+		}
+		else {
+			matchings = generateSubsets(n, n);
+		}
 	}
 	
-	private int numberOfFinishedGames = 0; // not counting reversed positions if HOME_AND_AWAY 
-	private boolean swapPlayers = false;
+	/** index of current match. Starts at 0 in every round. */
+	private int iMatch = 0;
+	/** not counting reversed positions if HOME_AND_AWAY */
+	private int numberOfFinishedRounds = 0; 
+	/** indicates if the home game has been played already */
+	private boolean playedHome = false;
 	private	long seed;
 	/**
 	 * Depending on settings, create the next game world.
@@ -53,27 +68,34 @@ public class GameWorldFactory {
 	 * @return The next game to be played and null if all games have been played. 
 	 */
 	public GameWorld nextGameWorld() {
-		if (!simulationParameters.TOURNAMENT) {
-			if (numberOfFinishedGames < simulationParameters.NUMBER_OF_GAMES) {
-				if (!swapPlayers) {
-					seed = SeededRandomizer.getSeed();
-					swapPlayers = true;
-					return constructGameWorld(false, seed);
-				} else { // swapPlayers
-					swapPlayers = false;
-					numberOfFinishedGames++;						
-					long oldSeed = seed;
-					seed = SeededRandomizer.nextLong();
-					
-					if (simulationParameters.HOME_AND_AWAY) {	
-						return constructGameWorld(true, oldSeed);
-					}
+		GameWorld gw = null;
+		if (iMatch == matchings.size()) {
+			iMatch = 0; // start over again
+			numberOfFinishedRounds++;
+		}
+		if (numberOfFinishedRounds < simulationParameters.NUMBER_OF_ROUNDS) {
+			if (!playedHome) {
+				//seed = SeededRandomizer.getSeed();
+				playedHome = true;
+				gw =  constructGameWorld(matchings.get(iMatch),false, seed);
+			} else { // swapPlayers
+				playedHome = false;
+				long oldSeed = seed;
+				seed = SeededRandomizer.nextLong();
+				
+				if (simulationParameters.HOME_AND_AWAY) {	
+					gw = constructGameWorld(matchings.get(iMatch),true, oldSeed);
+					iMatch++;
 				}
-			} else {
-				return null;
+				else {
+					iMatch++;
+					return nextGameWorld(); 
+				}
 			}
-		} 
-		return null;
+		} else { // no more games to play
+			return null;
+		}
+		return gw;
 	}
 
 	/**
@@ -101,14 +123,15 @@ public class GameWorldFactory {
 		return simulation;
 	}
 	*/
-
+	
 	/**
 	 * Deterministically constructs and populates a GameWorld instance with
 	 * hills and resources from the given seed.
 	 * 
+	 * @param iActivePlayers: indices of active players in AI_PACKAGE_NAMES
 	 * @param swapPlayers: reverse the positions of the players = swap for two players
 	 */
-	private GameWorld constructGameWorld(boolean swapPlayers, long seed) {
+	private GameWorld constructGameWorld(int[] iActivePlayers, boolean swapPlayers, long seed) {
 		SeededRandomizer.resetSeed(seed);
 		
 		RandomPosition randomPosition = new RandomPosition(parameters);
@@ -117,7 +140,7 @@ public class GameWorldFactory {
 		List<Vector> hillPositions = new LinkedList<Vector>();
 		String aiName;
 		
-		for (int i=0; i<simulationParameters.AI_PACKAGE_NAMES.length; i++) {
+		for (int i=0; i<iActivePlayers.length; i++) {
 			Vector hillPosition = randomPosition.hillPosition(hillPositions);
 			hillPositions.add(hillPosition);
 		}
@@ -125,14 +148,19 @@ public class GameWorldFactory {
 			Collections.reverse(hillPositions);
 		}
 		
-		for (int i=0; i<simulationParameters.AI_PACKAGE_NAMES.length; i++) {
-			aiName = simulationParameters.AI_PACKAGE_NAMES[i];
+		for (int i=0; i<iActivePlayers.length; i++) {
+			aiName = simulationParameters.AI_PACKAGE_NAMES[iActivePlayers[i]];
 			GameWorld.Player player = gameWorld.new Player(hillPositions.get(i), aiLoader.loadHill(aiName));
 			gameWorld.addPlayer(player);
 		}
 
+		if (swapPlayers) {
+			Collections.reverse(hillPositions); // need to reverse again for sugar positions. 
+			// we can't just swap players because of their colors.
+		}
+		
 		List<Vector> sugarPositions = new LinkedList<Vector>();
-		for (int i = 0; i < simulationParameters.AI_PACKAGE_NAMES.length; i++) {
+		for (int i = 0; i < hillPositions.size(); i++) {
 			for (int j = 0; j < parameters.SUGAR_SOURCES_PER_PLAYER ; j++) {
 				Vector sugarPosition = randomPosition.startingSugarPosition(hillPositions.get(i), sugarPositions, hillPositions);
 				sugarPositions.add(sugarPosition);
@@ -140,6 +168,39 @@ public class GameWorldFactory {
 			}
 		}
 		return gameWorld;
+	}
+	
+	/**
+	 * returns a List with all k element subsets of {0, 1, ..., n}. 
+	 * e.g. n = 3, k = 2 a possible output is (up to permutation):
+	 * {{0, 1}, {0, 2}, {1, 2}}.
+	 * 
+	 * Only implemented for k = n and k = 2 !
+	 */
+	private static List<int[]> generateSubsets(int k, int n) {
+		if (k != n && k != 2) {
+			System.err.println("generateSubsets is only implemented for k = 2 or k = n.");
+			return null;	
+		}
+		ArrayList<int[]> list = new ArrayList<int[]>();
+		if (k == n) {
+			int[] all = new int[n];
+			for (int i=0; i<n; i++) {
+				all[i] = i;
+			}
+			list.add(all);
+		}
+		if (k == 2 && k != n) {
+			int[] sub = new int[k];
+			for (int i=0; i<n; i++) {
+				sub[0] = i;
+				for (int j=i+1; j<n; j++) {
+					sub[1] = j;
+					list.add(sub.clone());
+				}
+			}
+		}
+		return list;
 	}
 	
 	/*

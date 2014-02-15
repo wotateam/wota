@@ -1,22 +1,22 @@
 # settings.txt
 
-AI_PACKAGE_NAMES = clonewarriors, clonewarriors
+AI_PACKAGE_NAMES = solitary, clonewarriors, bvb, pwahs03
 
 IS_GRAPHICAL = true
 
 # batch mode (each with one or two games depending on HOME_AND_AWAY)
-NUMBER_OF_GAMES = 2
+NUMBER_OF_ROUNDS = 1
 
 # two matches with swapped positions?
 HOME_AND_AWAY = true
 
 # Tournament mode means that a series one-on-ones will be played 
-TOURNAMENT = false
+TOURNAMENT = true
 
 
 FRAMES_PER_SECOND = 40
 INITIAL_TICKS_PER_SECOND = 400
-MAX_TICKS_BEFORE_END = 1000
+MAX_TICKS_BEFORE_END = 100000
 
 DISPLAY_WIDTH = 700
 DISPLAY_HEIGHT = 700
