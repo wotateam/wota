@@ -1,5 +1,5 @@
 #wota - War of the Ants
-Wota, the War of the Ants, is a multiplayer game played by writing an AI controlling an ant colony. That said, watching games while developing your AI or together with other AI authors is a big part of the fun! 
+Wota, the War of the Ants, is a multiplayer game played by writing an artificial intelligence (AI) controlling an ant colony. That said, watching games while developing your AI or together with other AI authors is a big part of the fun! 
 
 ##Download release
 https://github.com/wotateam/wota/releases/tag/v0.3
