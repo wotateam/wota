@@ -45,7 +45,7 @@ public enum Caste {
 	),
 
 	Hill(
-			Integer.MAX_VALUE, // INITIAL_HEALTH 
+			0, // INITIAL_HEALTH 
 			0, 	// SPEED
 			0, // SPEED_WHILE_ATTACKING
 			0, // SPEED_WHILE_CARRYING_SUGAR
