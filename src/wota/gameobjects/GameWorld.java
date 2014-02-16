@@ -410,7 +410,7 @@ public class GameWorld {
 			actor.setAttackTarget(null);
 		}
 
-		// Drop sugar at the hill and reset ticksToLive if inside the hill.
+		// Drop sugar at the hill.
 		// Optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
 		if (parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
 				<= parameters.HILL_RADIUS) {
