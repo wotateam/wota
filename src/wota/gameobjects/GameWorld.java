@@ -245,14 +245,7 @@ public class GameWorld {
 				}
 			}
 			
-			for (HillMessage audibleHillMessageCandidate :
-					spacePartitioning.hillMessagesInsideCircle(hearingRange, position)) {
-				if (audibleHillMessageCandidate.sender.playerID == player.id()) {
-					audibleHillMessage = audibleHillMessageCandidate;
-				}
-			}
-			
-			player.hillObject.tick(visibleAnts, visibleCorpses, audibleAntMessages, audibleHillMessage);
+			player.hillObject.tick(visibleAnts, visibleCorpses, audibleAntMessages);
 
 		}
 		// Only do this now that we used last tick's message objects.

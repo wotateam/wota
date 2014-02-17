@@ -65,12 +65,12 @@ public class HillObject extends GameObject {
 	}
 	
 	/** calls hillAI.tick(), saves the message and the ant orders and handles exceptions  */
-	public void tick(List<Ant> visibleAnts, List<AntCorpse> visibleCorpses, List<AntMessage> incomingAntMessages,
-			HillMessage incomingHillMessage) {
+	public void tick(List<Ant> visibleAnts, 
+			         List<AntCorpse> visibleCorpses, 
+			         List<AntMessage> incomingAntMessages) {
 		hillAI.visibleAnts = visibleAnts;
 		hillAI.visibleCorpses = visibleCorpses;
 		hillAI.audibleAntMessages = incomingAntMessages;
-		hillAI.audibleHillMessage = incomingHillMessage;
 		hillAI.setPosition(getPosition());
 		
 		try {

@@ -27,6 +27,9 @@ public abstract class AntAI extends AI{
 	/** Hills which are seen by self */
 	public List<Hill> visibleHills;
 	
+	/** HillMessage which is heard in this tick (null if non existant) */
+	public HillMessage audibleHillMessage;
+	
 	/** Reference to Ant itself. Use to acces information like health: self.health */
 	protected Ant self; // user AI may have changed this value! Use antObject instead.
 	

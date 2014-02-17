@@ -23,9 +23,6 @@ public abstract class AI {
 	
 	/** AntMessages which are heard in this tick */
 	public List<AntMessage> audibleAntMessages;
-	
-	/** HillMessage which is heard in this tick (null if non existant) */
-	public HillMessage audibleHillMessage;
 
 	/** Reference to the parameters of the game. e.g. cost of a new ant. */
 	protected Parameters parameters;
