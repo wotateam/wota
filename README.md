@@ -1,30 +1,41 @@
 #wota - War of the Ants
+Wota, the War of the Ants, is a multiplayer game played by writing an artificial intelligence (AI) controlling an ant colony. That said, watching games while developing your AI or together with other AI authors is a big part of the fun! 
 
 ##Download release
-https://github.com/wotateam/wota/archive/release_0.2.zip
+https://github.com/wotateam/wota/releases/tag/v0.3
+
+or press the right-hand side button on the repository's front page to download HEAD if you are feeling adventurous.
 
 ##Installation guide
 
-1.  extract .zip into your eclipse workspace
+1.  Extract the .zip into your eclipse workspace.
 
-2.  rename folder into wota
+2.  Rename the folder into "wota".
 
-3.  in eclipse: File -> New -> Java project.  
-    project name = wota  
-    click on 'finish' (eclipse should denote that it will import the project settings)
+3.  In eclipse: File -> New -> Java project.  
+    Set the project name to "wota".  
+    Click on 'finish' (eclipse should say that it will import the project settings)
 
-4.  Run as java application. The main is located in src/wota/Wota.java
+4.  Run as a Java application. The main method is located in src/wota/Wota.java
 
-5.  Write your own ai! Create a folder with the name of your ai in src/wota/ai/
+5.  To start writing your AI, create a folder with the name of your AI in src/wota/ai/ .
+
 6.  Copy src/wota/ai/template/TemplateAI.java, HillAI.java to this folder. 
-	
-	You must *not* rename QueenAI, you may rename TemplateAI and probably want to do so.
 
-7.  Write your ai in these files. Change the package name inside the files to wota.ai.FOLDER_NAME
-8.  Add your ais to the game by editing settings.txt
-9.  Further information can be found inside the template classes as well as in Tutorial.txt. 
+	You must *not* rename HillAI, you may rename TemplateAI and probably want to do so.
+
+7.  Write your AI in these files. Change the package name inside the files to wota.ai.FOLDER_NAME
+
+8.  Add your AIs to the game by editing settings.txt. The AIs are referenced by their package name.
+
+9.  Further information can be found inside the template classes you copied in step 6 as well as in Tutorial.txt. 
+	The rules of the game are explained in detail at the wiki 
+	
+		https://github.com/wotateam/wota/wiki/
+	
 	Keyboard hotkeys are listed in https://github.com/wotateam/wota/wiki/Keyboard-Hotkeys
-10. Have fun! If any questions/comments/suggestions come up, don't hesitate and contact us!
+
+10. Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
 
 ## Information for Developers
 we are using lwjgl for our graphics:
