@@ -223,7 +223,6 @@ public class GameWorld {
 			List<Ant> visibleAnts = new LinkedList<Ant>();
 			List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
 			List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
-			HillMessage audibleHillMessage = null;
 
 			double sightRange = player.hillObject.caste.SIGHT_RANGE;
 			double hearingRange = player.hillObject.caste.HEARING_RANGE;
