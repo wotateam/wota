@@ -31,8 +31,6 @@ or press the right-hand side button on the repository's front page to download H
 9.  Further information can be found inside the template classes you copied in step 6 as well as in Tutorial.txt. 
 	The rules of the game are explained in detail at the wiki 
 	
-		https://github.com/wotateam/wota/wiki/
+	https://github.com/wotateam/wota/wiki/
 	
-	Keyboard hotkeys are listed in https://github.com/wotateam/wota/wiki/Keyboard-Hotkeys
-
 10. Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
