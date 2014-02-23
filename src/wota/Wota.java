@@ -26,7 +26,8 @@ public class Wota {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		SimulationParameters simulationParameters = readSimulationParameters("settings.txt");
-		Parameters parameters = constructParameters("parameters.txt", simulationParameters.AI_PACKAGE_NAMES.length);
+		Parameters parameters = constructParameters("parameters.txt",
+				 simulationParameters.TOURNAMENT ? 2 : simulationParameters.AI_PACKAGE_NAMES.length);
 		
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
