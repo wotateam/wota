@@ -181,7 +181,8 @@ public class GameWorld {
 				// add messages, also the ones which were send by this ant.
 				for (AntMessage audibleAntMessage : 
 						spacePartitioning.antMessagesInsideCircle(hearingRange, position)) {
-					if (audibleAntMessage.sender.playerID == player.id()) {
+					if (audibleAntMessage.sender.playerID == player.id() &&
+						audibleAntMessage.sender.id != antObject.id ) {	// cannot hear own messages
 						audibleAntMessages.add(audibleAntMessage);
 					}
 				}
