@@ -36,13 +36,3 @@ or press the right-hand side button on the repository's front page to download H
 	Keyboard hotkeys are listed in https://github.com/wotateam/wota/wiki/Keyboard-Hotkeys
 
 10. Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
-
-## Information for Developers
-we are using lwjgl for our graphics:
-http://lwjgl.org/
-
-It is BSD-licensed, see LWJGL_LICENSE.txt (taken from the project website).
-
-to use 'Issues & Milestones' (GitHub Bugtracker) in Eclipse (using Mylyn): 
-In Eclipse: Help -> Install New Software -> work with: http://download.eclipse.org/egit/github/updates -> install
-Then open view 'Task List' -> Add Repository
