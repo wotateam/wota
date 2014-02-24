@@ -28,21 +28,11 @@ or press the right-hand side button on the repository's front page to download H
 
 8.  Add your AIs to the game by editing settings.txt. The AIs are referenced by their package name.
 
-9.  Further information can be found inside the template classes you copied in step 6 as well as in Tutorial.txt. 
-	The rules of the game are explained in detail at the wiki 
+9.  Some information can be found inside the template classes you copied in step 6.
+
+##Further Information
+A brief tutorial as well as the rules of the game can be found in the wiki.
 	
-		https://github.com/wotateam/wota/wiki/
+https://github.com/wotateam/wota/wiki/
 	
-	Keyboard hotkeys are listed in https://github.com/wotateam/wota/wiki/Keyboard-Hotkeys
-
-10. Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
-
-## Information for Developers
-we are using lwjgl for our graphics:
-http://lwjgl.org/
-
-It is BSD-licensed, see LWJGL_LICENSE.txt (taken from the project website).
-
-to use 'Issues & Milestones' (GitHub Bugtracker) in Eclipse (using Mylyn): 
-In Eclipse: Help -> Install New Software -> work with: http://download.eclipse.org/egit/github/updates -> install
-Then open view 'Task List' -> Add Repository
+Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
