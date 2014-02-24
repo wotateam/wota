@@ -25,8 +25,24 @@ import wota.utility.Vector;
 public class Wota {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
-		SimulationParameters simulationParameters = readSimulationParameters("settings.txt");
-		Parameters parameters = constructParameters("parameters.txt",
+		
+		String settingsFile = "settings.txt";
+		if (args.length >= 1) {
+			settingsFile = args[0];
+		}
+		
+		String parametersFile = "parameters.txt";
+		if (args.length >= 2) {
+			parametersFile = args[1];
+		}
+		
+		if (args.length >= 3) {
+			System.err.println("too many inputs.\n expected input: [settings file] [parameters file]");
+			return;
+		}
+		
+		SimulationParameters simulationParameters = readSimulationParameters(settingsFile);
+		Parameters parameters = constructParameters(parametersFile,
 				 simulationParameters.TOURNAMENT ? 2 : simulationParameters.AI_PACKAGE_NAMES.length);
 		
 //		use this constructor to obtain exactly the same game run.
