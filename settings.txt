@@ -1,21 +1,26 @@
 # settings.txt
 
-AI_PACKAGE_NAMES = solitary, clonewarriors, bvb, pwahs03
+# AIs which should play against each other. Put in as many as you want.
+AI_PACKAGE_NAMES = pwahs03, solitary, clonewarriors
 
 IS_GRAPHICAL = true
 
-# batch mode (each with one or two games depending on HOME_AND_AWAY)
+# batch mode (each with one or two games depending on HOME_AND_AWAY or even more for tournament)
 NUMBER_OF_ROUNDS = 1
 
 # two matches with swapped positions?
-HOME_AND_AWAY = true
+HOME_AND_AWAY = false
 
 # Tournament mode means that a series one-on-ones will be played 
-TOURNAMENT = true
+TOURNAMENT = false
 
-
+# Rate of graphics update
 FRAMES_PER_SECOND = 40
-INITIAL_TICKS_PER_SECOND = 400
+
+# Rate of game update
+INITIAL_TICKS_PER_SECOND = 40
+
+# leads to draw if nobody has won until then
 MAX_TICKS_BEFORE_END = 100000
 
 DISPLAY_WIDTH = 700
