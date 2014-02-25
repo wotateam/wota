@@ -125,8 +125,8 @@ public class StatisticsView implements Runnable {
 		@Override
 		public String toString() {
 			String out = new String(), format = new String();
-			String columnFormat = "%15s";
-			String firstColumnFormat = "%15s";
+			String columnFormat = "%18s";
+			String firstColumnFormat = "%18s";
 			for (int i=1; i<getColumnCount(); i++) {
 				format = format + columnFormat;
 			}
