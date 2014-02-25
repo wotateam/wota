@@ -47,7 +47,7 @@ public class Wota {
 		
 //		use this constructor to obtain exactly the same game run.
 //		long specialSeed = 42;
-//		GameWorldFactory factory = new GameWorldFactory(specialSeed);
+//		GameWorldFactory gameWorldFactory = new GameWorldFactory(specialSeed, parameters, simulationParameters);
 
 
 //		use this constructor to obtain different games each run.
