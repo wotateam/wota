@@ -54,18 +54,23 @@ public class StupidWorker extends AntAI {
 	public void tickWaitForMessage() throws Exception {
 		HillMessage message = audibleHillMessage;
 
-		if (message.content != self.id) {
-			return;
-		}
-		// message is determined for this ant
-		sugarTarget = message.contentSugar;
-		if (sugarTarget == null) {
-			state = State.LookForSugar;
-			randomDirection = SeededRandomizer.getInt(360);
-			moveInDirection(randomDirection);
+		if (message != null) {
+			if (message.content != self.id) {
+				return;
+			}
+			// message is determined for this ant
+			sugarTarget = message.contentSugar;
+			if (sugarTarget == null) {
+				state = State.LookForSugar;
+				randomDirection = SeededRandomizer.getInt(360);
+				moveInDirection(randomDirection);
+			}
+			else {
+				state = State.CollectSugar;
+			}
 		}
 		else {
-			state = State.CollectSugar;
+			return;
 		}
 	}
 	
