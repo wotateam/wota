@@ -10,7 +10,7 @@ import wota.utility.SeededRandomizer;
  *
  */
 @AIInformation(creator = "Simon", name = "JohannWolfgangvonGoethe")
-public class QueenAI extends wota.gameobjects.HillAI {
+public class HillAI extends wota.gameobjects.HillAI {
 	public int counter=0;
 	public boolean endgame=false;
 	/*
