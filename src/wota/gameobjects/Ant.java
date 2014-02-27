@@ -4,11 +4,15 @@ import wota.utility.Vector;
 
 
 /**
- * Describes an ant.
+ * Ant as seen by AIs. (In contrast to AntObject which contains all information)
  * After creation it is read-only
  * 
  * This is what an AI gets when it sees any ants. 
  * Created once per round for all the ants.
+ * 
+ * The purpose of this split up between Ant and AntObject is to provide this Object to 
+ * AIs without giving them a reference to the actual AntObject which would change its
+ * properties in every tick. 
  */
 public class Ant extends BaseAnt {
 	

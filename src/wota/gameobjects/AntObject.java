@@ -8,8 +8,8 @@ import wota.utility.Vector;
 
 
 /**
- * Interne Darstellung von Ants. Enthält alle Informationen.
- * Im Gegensatz dazu enthält Ant nur die Informationen, welche die KI sehen darf.
+ * Internal Reprensantion of Ants.
+ * In contrast to Ant it contains all information and is always up to date. 
  */
 public class AntObject extends BaseAntObject{
 	private static int idCounter = 0;
