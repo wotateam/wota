@@ -44,7 +44,7 @@ public class Ant extends BaseAnt {
 		if (other == null) {
 			return false;
 		}
-		if (other instanceof AntCorpse) {
+		if (other instanceof Ant) {
 			return ((Ant) other).antObject.equals(this.antObject);
 		}
 		else {
