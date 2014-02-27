@@ -406,7 +406,7 @@ public class GameWorld {
 		// Drop sugar at the hill.
 		// Optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
 		if (parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
-				<= parameters.HILL_RADIUS) {
+				<= parameters.HILL_RADIUS && actor.getSugarCarry() > 0) {
 			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
 			logger.antCollectedFood(actor.player, actor.getSugarCarry());
 			actor.dropSugar();
