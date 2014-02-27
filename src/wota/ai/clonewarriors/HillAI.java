@@ -17,14 +17,15 @@ public class HillAI extends wota.gameobjects.HillAI {
 	@Override
 	public void tick() {
 		num_tick++;
-		//createAnt(Caste.Gatherer, MoveAI.class);
-		if (SeededRandomizer.getInt(5) <= 3) {
-			createAnt(Caste.Gatherer, GathererAI.class);
+		int antsToProduce = (int) (self.food / parameters.ANT_COST);
+		for (int i=0; i<antsToProduce; i++) {
+			if (SeededRandomizer.getInt(5) <= 3) {
+				createAnt(Caste.Gatherer, GathererAI.class);
+			}
+			else {
+				createAnt(Caste.Soldier, SoldierAI.class);
+			}
 		}
-		else {
-			createAnt(Caste.Soldier, SoldierAI.class);
-		}
-		
 		talk(num_tick);
 	}
 }

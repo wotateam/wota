@@ -13,7 +13,9 @@ import wota.gameobjects.Caste;
 public class HillAI extends wota.gameobjects.HillAI {
 	@Override
 	public void tick() throws Exception {
-		createAnt(Caste.Gatherer, GathererAI.class);
+		int antsToProduce = (int) (self.food / parameters.ANT_COST);
+		for (int i=0; i<antsToProduce; i++) {
+			createAnt(Caste.Gatherer, GathererAI.class);
+		}
 	}
-
 }
