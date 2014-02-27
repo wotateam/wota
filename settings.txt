@@ -1,6 +1,8 @@
 # settings.txt
 
 # AIs which should play against each other. Put in as many as you want.
+# "firstopponent" is the recommended AI to beat first.
+# A good next step would be to beat "solitary", but feel free to play against others, too!
 AI_PACKAGE_NAMES = pwahs03, solitary, clonewarriors
 
 IS_GRAPHICAL = true

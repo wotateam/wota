@@ -111,7 +111,7 @@ public class StatisticsView implements Runnable {
 				int playerId = column - 1;
 				Player player = gameWorld.getPlayers().get(playerId);
 
-				data[0][column] = GameView.playerColors[player.id()];
+				data[0][column] = PlayerColors.get(player.id());
 				data[1][column] = player.antObjects.size();
 				data[2][column] = player.numAnts(Caste.Gatherer);
 				data[3][column] = player.numAnts(Caste.Soldier);
@@ -125,8 +125,8 @@ public class StatisticsView implements Runnable {
 		@Override
 		public String toString() {
 			String out = new String(), format = new String();
-			String columnFormat = "%15s";
-			String firstColumnFormat = "%15s";
+			String columnFormat = "%18s";
+			String firstColumnFormat = "%18s";
 			for (int i=1; i<getColumnCount(); i++) {
 				format = format + columnFormat;
 			}

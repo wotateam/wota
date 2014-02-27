@@ -44,10 +44,6 @@ public class GameView {
 	private static final float ANT_CORPSE_COLOR_PERCENTAGE = 0.5f;
 	private static final float MESSAGE_ALPHA = 1.0f;
 	
-	// hardcoded maximum number of players = 8
-	public static final Color[] playerColors = { Color.RED, Color.BLUE, Color.GREEN,
-			Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.YELLOW };
-
 	private GameWorld gameWorld;
 
 	private int width;
@@ -112,7 +108,7 @@ public class GameView {
 		
 		// Hills
 		for (GameWorld.Player player : gameWorld.getPlayers()) {
-			Color color = playerColors[player.id()];
+			Color color = PlayerColors.get(player.id());
 			float[] colorComponents = color.getColorComponents(null);
 			
 			setColor(HILL_COLOR_PERCENTAGE*colorComponents[0],
@@ -124,7 +120,7 @@ public class GameView {
 
 		// Ant corpses are in the background, too.
 		for (GameWorld.Player player : gameWorld.getPlayers()) {
-			Color color = playerColors[player.id()];
+			Color color = PlayerColors.get(player.id());
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ant corpses			
@@ -141,7 +137,7 @@ public class GameView {
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ONE);
 
 		for (GameWorld.Player player : gameWorld.getPlayers()) {
-			Color color = playerColors[player.id()];
+			Color color = PlayerColors.get(player.id());
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ants			

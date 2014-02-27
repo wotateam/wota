@@ -23,7 +23,7 @@ public class ResultCollection {
 	@Override
 	public String toString() {
 		String str = "=======================================\n";
-		str = str + String.format("%15s %2s %2s %2s %3s\n", "AI name", "W", "D", "L", "P");
+		str = str + String.format("%18s %2s %2s %2s %3s\n", "AI name", "W", "D", "L", "P");
 		for (Result result : scores.values()) {
 			str = str + result + "\n";
 		}
@@ -94,7 +94,7 @@ public class ResultCollection {
 		
 		@Override
 		public String toString() {
-			return String.format("%15s %2d %2d %2d %2.1f", name, wins, draws, losses, getScore());
+			return String.format("%18s %2d %2d %2d %2.1f", name, wins, draws, losses, getScore());
 		}
 	}
 	

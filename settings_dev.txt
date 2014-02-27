@@ -1,7 +1,7 @@
 # settings_dev.txt
 
 # AIs which should play against each other. Put in as many as you want.
-AI_PACKAGE_NAMES = pwahs03, solitary, clonewarriors
+AI_PACKAGE_NAMES = solitary, firstopponent
 
 IS_GRAPHICAL = true
 
