@@ -9,7 +9,7 @@ public class HillAI extends wota.gameobjects.HillAI {
 	int n=1;
 	@Override
 	public void tick() throws Exception {
-			for(int i=0;i<10;i++){
+			for(int i=0;i<1;i++){
 				createAnt(Caste.Soldier,Mao.class);	
 			}
 			n++;
