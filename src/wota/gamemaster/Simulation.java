@@ -160,10 +160,13 @@ public class Simulation {
 					measureFrameCount++;
 					referenceFrameCount++;
 
-					if (isGraphical && !paused) { // calc graphics
-						gameView.render();						
+					if (isGraphical) { // calc graphics
+						if (!paused) {
+							gameView.render();						
+						}
+						 // must be called in any case to catch keyboard input
 						abortRequested = Display.isCloseRequested();
-						Display.update(); // must be called in any case to catch keyboard input
+						Display.update();
 					}
 				}
 
