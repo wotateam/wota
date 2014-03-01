@@ -35,4 +35,6 @@ A brief tutorial as well as the rules of the game can be found in the wiki.
 	
 https://github.com/wotateam/wota/wiki/
 	
-Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
+Have fun! If you have any questions, comments, suggestions or want to share your ai, don't hesitate to contact us!
+
+wotateam@gmx.de
