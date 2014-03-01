@@ -33,6 +33,7 @@ public class HillAI extends MyHillAI {
 	LinkedList<Haufen> sugarlist=new LinkedList<Haufen>();
 	LinkedList<Haufen> gegnerlist= new LinkedList<Haufen>();
 	LinkedList<Haufen> oldsugarlist= new LinkedList<Haufen>();
+	
 	int scoutlost=100000;
 	int numbergatherer=0;
 	int numberoftick=0;
@@ -43,6 +44,10 @@ public class HillAI extends MyHillAI {
 //		for(Haufen haufen : sugarlist){
 	//		System.out.println(haufen.getPosition().length());
 		//}
+		if(sugarlist.size()>25 || oldsugarlist.size()>100){
+			int s=23;
+			s=s-1;
+		}
 		numberoftick++;
 		if(numberoftick==8000){
 			saving=true;
@@ -87,7 +92,7 @@ public class HillAI extends MyHillAI {
 					if(vorhandencheck(neuerhaufen,sugarlist)!=-1){
 						sugarlist.remove(vorhandencheck(neuerhaufen,sugarlist));
 					}
-					if(vorhandencheck(neuerhaufen,sugarlist)==-1){
+					if(vorhandencheck(neuerhaufen,oldsugarlist)==-1){
 						oldsugarlist.add(neuerhaufen);
 					}
 				}
