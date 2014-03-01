@@ -15,6 +15,7 @@ import wota.utility.Vector;
 
 /**
  * Put a description of you AI here.
+ * a good bee
  */
 public class BieneMaja extends MyAntAI {
 
