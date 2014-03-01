@@ -431,6 +431,15 @@ public class SugarAI extends AntAI {
 				closest = enemy;
 			}
 		}
+		if (closest == null){
+			for (Ant enemy : enemies) {
+				double d = vectorBetween(self,enemy).length();
+				if (d < distance) {
+					distance = d;
+					closest = enemy;
+				}
+			}
+		}
 		return closest;
 	}
 }
