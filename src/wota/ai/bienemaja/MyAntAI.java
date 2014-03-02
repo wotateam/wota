@@ -106,13 +106,20 @@ public abstract class MyAntAI extends AntAI {
 	Ant dtarget=self;	// no sugar target in sight
 	
 	
-	Ant closenemy=self;
-	Ant closfriend=self;
-	int numbfriend=0;
-	int numbenemy=0;
-	int numbclosfriend=0;
-	int numbclosenemy=0;
-	int numbsoldiers=0;
+	Ant closeenemy=self;
+	Ant closefriend=self;
+	int numbfriendsoldier=0;
+	int numbfriendgatherer=0;
+	int numbclosefriendsoldier=0;
+	int numbclosefriendgatherer=0;	
+	int numbcloseenemygatherer=0;
+	int numbcloseenemysoldier=0;
+	int numbenemygatherer=0;
+	int numbenemysoldier=0;
+	double closefriendforce=0;
+	double friendforce=0;
+	double closeenemyforce=0;
+	double enemyforce=0;
 	double alpha=3.0;
 	
 	void setneighbours(){
@@ -121,13 +128,20 @@ public abstract class MyAntAI extends AntAI {
 		ctarget=self;	// best normal target
 		dtarget=self;	// no sugar targe in sight
 		
-		closenemy=self;	//not set
-		closfriend=self; 
-		numbfriend=0;
-		numbenemy=0;
-		numbclosfriend=0;
-		numbclosenemy=0;
-		numbsoldiers=0;
+		closeenemy=self;	//not set
+		closefriend=self; 
+		numbfriendsoldier=0;
+		numbfriendgatherer=0;
+		numbclosefriendsoldier=0;
+		numbclosefriendgatherer=0;	
+		numbcloseenemygatherer=0;
+		numbcloseenemysoldier=0;
+		numbenemygatherer=0;
+		numbenemysoldier=0;
+		closefriendforce=0;
+		friendforce=0;
+		closeenemyforce=0;
+		enemyforce=0;
 		double mindist=parameters.ATTACK_RANGE;
 		double mindist2=self.caste.SIGHT_RANGE;
 		double mindist3=3*parameters.ATTACK_RANGE;
@@ -144,12 +158,12 @@ public abstract class MyAntAI extends AntAI {
 					mindist2=vectorTo(ant).length();
 				}
 				if(ant.sugarCarry==0 && vectorTo(ant).length()<alpha*parameters.ATTACK_RANGE){
-					if(ant.caste==Caste.Soldier) numbenemy+=2;
-					if(ant.caste==Caste.Gatherer) numbenemy+=1;
+					if(ant.caste==Caste.Soldier) numbenemysoldier+=1;
+					if(ant.caste==Caste.Gatherer) numbenemygatherer+=1;
 				}
 				if(ant.sugarCarry==0 && vectorTo(ant).length()<parameters.ATTACK_RANGE){
-					if(ant.caste==Caste.Soldier) numbclosenemy+=2;
-					if(ant.caste==Caste.Gatherer) numbclosenemy+=1;
+					if(ant.caste==Caste.Soldier) numbcloseenemysoldier+=1;
+					if(ant.caste==Caste.Gatherer) numbcloseenemygatherer+=1;
 				}
 				if(ant.sugarCarry==0 && vectorTo(ant).length()<parameters.ATTACK_RANGE && (ant.health<ctarget.health || ctarget==self)){
 					ctarget=ant;
@@ -159,28 +173,31 @@ public abstract class MyAntAI extends AntAI {
 					dtarget=ant;
 				}
 				if(ant.sugarCarry==0 && vectorTo(ant).length()<mindist4){
-					closenemy=ant;
+					closeenemy=ant;
 					mindist4=vectorTo(ant).length();
 				}
 			}
 			if(ant.playerID==self.playerID){
 				if(vectorTo(ant).length()<frienddist1){
-					closfriend=ant;
+					closefriend=ant;
 					frienddist1=vectorTo(ant).length();
 				}
 				if(ant.sugarCarry==0 && vectorTo(ant).length()<alpha*parameters.ATTACK_RANGE){
 					if(ant.caste==Caste.Soldier){
-						numbfriend+=2;
-						numbsoldiers+=1;
+						numbfriendsoldier+=1;
 					}
-					if(ant.caste==Caste.Gatherer) numbfriend+=1;
+					if(ant.caste==Caste.Gatherer) numbfriendgatherer+=1;
 				}
 				if(ant.sugarCarry==0 && vectorTo(ant).length()<parameters.ATTACK_RANGE){
-					if(ant.caste==Caste.Soldier) numbclosfriend+=2;
-					if(ant.caste==Caste.Gatherer) numbclosfriend+=1;
+					if(ant.caste==Caste.Soldier) numbclosefriendsoldier+=1;
+					if(ant.caste==Caste.Gatherer) numbclosefriendgatherer+=1;
 				}
 			}
 		}
+		closefriendforce=1.0*numbclosefriendsoldier*Caste.Soldier.ATTACK/Caste.Soldier.INITIAL_HEALTH+1.0*numbclosefriendgatherer*Caste.Gatherer.ATTACK/Caste.Gatherer.INITIAL_HEALTH;
+		closeenemyforce=1.0*numbcloseenemysoldier*Caste.Soldier.ATTACK/Caste.Soldier.INITIAL_HEALTH+1.0*numbcloseenemygatherer*Caste.Gatherer.ATTACK/Caste.Gatherer.INITIAL_HEALTH;;
+		friendforce=1.0*numbfriendsoldier*Caste.Soldier.ATTACK/Caste.Soldier.INITIAL_HEALTH+1.0*numbfriendgatherer*Caste.Gatherer.ATTACK/Caste.Gatherer.INITIAL_HEALTH;;
+		enemyforce=1.0*numbenemysoldier*Caste.Soldier.ATTACK/Caste.Soldier.INITIAL_HEALTH+1.0*numbenemygatherer*Caste.Gatherer.ATTACK/Caste.Gatherer.INITIAL_HEALTH;;
 	}
 	
 	
@@ -424,14 +441,14 @@ public abstract class MyAntAI extends AntAI {
 		}else{	
 			timeforsugar=(int)Math.round(1.3*mysugar.getdistance()*(1/self.caste.SPEED+1/self.caste.SPEED_WHILE_CARRYING_SUGAR));
 		}
-		if(mysugar!=null && torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).length()<self.caste.SIGHT_RANGE && numbfriend>parameters.STARTING_FOOD/parameters.ANT_COST/parameters.NUMBER_OF_PLAYERS/parameters.SUGAR_SOURCES_PER_PLAYER){
+		if(mysugar!=null && torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).length()<self.caste.SIGHT_RANGE && numbfriendgatherer>parameters.STARTING_FOOD/parameters.ANT_COST/parameters.NUMBER_OF_PLAYERS/parameters.SUGAR_SOURCES_PER_PLAYER){
 			counter++;
 		}else{
 			counter=0;
 		}
-		if(counter>=12 && SeededRandomizer.getDouble()<0.3){
-			getnextsugar(0);
+		if(counter>=14){
 			counter=0;
+			if(SeededRandomizer.getDouble()<0.5)getnextsugar(0);
 		}
 			
 			/*if(countergetsugar>timeforsugar){

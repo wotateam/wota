@@ -73,12 +73,12 @@ public class Thekla extends MyAntAI {
 		boolean B=(mysugar!=null);
 		boolean C=(B && torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).length()<2*parameters.INITIAL_SUGAR_RADIUS );
 		boolean D=(btarget==self);
-		boolean E=(closenemy==self);
+		boolean E=(closeenemy==self);
 		double prefdir=direction;
 		
 		if(arrived) timespent++;
 		maxsoldiers=2+time/1000;
-		if(timespent>ticksperhill && numbsoldiers>maxsoldiers){
+		if(timespent>ticksperhill && numbfriendsoldier>maxsoldiers){
 			getnextsugar(0);
 			timespent=0;
 		}
@@ -97,11 +97,11 @@ public class Thekla extends MyAntAI {
 					moveToward(mysugar.getsnapshot());
 				}else{
 					arrived=true;
-					if(numbenemy<numbfriend+1){
+					if(enemyforce<friendforce){
 						if(ctarget!=self){
 							attack(ctarget);
-							if(closfriend!=self && vectorTo(ctarget).length()>parameters.ATTACK_RANGE/1.7){
-								moveInDirection(vectorTo(closfriend).angle()+180,self.caste.SPEED/3);
+							if(closefriend!=self && vectorTo(ctarget).length()>parameters.ATTACK_RANGE/1.7){
+								moveInDirection(vectorTo(closefriend).angle()+180,self.caste.SPEED/3);
 							}else{
 								moveInDirection(vectorTo(ctarget).angle());
 							}
@@ -109,7 +109,7 @@ public class Thekla extends MyAntAI {
 							moveToward(dtarget);
 						}
 					}else{
-						moveInDirection(Modulo.mod(vectorTo(closenemy).angle()+180., 360.));
+						moveInDirection(Modulo.mod(vectorTo(closeenemy).angle()+180., 360.));
 					}	
 				}	
 				

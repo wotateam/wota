@@ -67,71 +67,95 @@ public class BieneMaja extends MyAntAI {
 		boolean B=(mysugar!=null);
 		boolean C=(B && torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).length()<2*parameters.INITIAL_SUGAR_RADIUS );
 		boolean D=(btarget==self);
-		boolean E=(closenemy==self);
+		boolean E=(closeenemy==self);
+		boolean F=(self.health<10*Caste.Soldier.ATTACK);
 		double prefdir=direction;
 		
-		if(B){
-		/*	if(E){
+		if(!F){
+			if(B){
+			/*	if(E){
+					prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
+				}else{
+					prefdir=getdir(torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).angle(),vectorTo(closenemy).angle(),vectorTo(closenemy).length());
+				}*/
 				prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
 			}else{
-				prefdir=getdir(torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).angle(),vectorTo(closenemy).angle(),vectorTo(closenemy).length());
-			}*/
-			prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
-		}else{
-			if(!E) prefdir=getdir(direction,vectorTo(closenemy).angle(),vectorTo(closenemy).length());
-		}
-		
-		
-		
-		if(!A){
-			if(E){
-				moveHome();
-			}else{
-				if(vectorToHome().length()*Caste.Soldier.ATTACK*parameters.VULNERABILITY_WHILE_CARRYING*numbclosenemy/(self.caste.SPEED_WHILE_CARRYING_SUGAR*2)< Math.min(self.health,self.caste.INITIAL_HEALTH/2)){
-					moveHome();
-				}else{
-					moveInDirection(getdir(vectorToHome().angle(),vectorTo(closenemy).angle(),vectorTo(closenemy).length()));
-					if(vectorTo(closenemy).length()<parameters.ATTACK_RANGE+closenemy.caste.SPEED) dropSugar();
-				}
+				if(!E) prefdir=getdir(direction,vectorTo(closeenemy).angle(),vectorTo(closeenemy).length());
 			}
 			
-		}else{
-			if(!D){
-				if(atarget!=self){
-					moveToward(atarget);
-					if(vectorTo(atarget).length()<parameters.ATTACK_RANGE) attack(atarget);
+			
+			
+			if(!A){
+				if(E){
+					moveHome();
 				}else{
-					moveToward(btarget);
-				}
-			}else{
-				if(!C){
-					moveInDirection(prefdir);
-				}else{
-					if(!E){	//parameters.TICKS_SUGAR_PICKUP*closenemy.caste.SPEED){
-						if(numbenemy<numbfriend+1){
-							if(ctarget!=self){
-								attack(ctarget);
-								if(closfriend!=self && vectorTo(ctarget).length()<parameters.ATTACK_RANGE/1.7){
-									moveInDirection(vectorTo(closfriend).angle()+180,self.caste.SPEED/3);
-								}else{
-									moveInDirection(vectorTo(ctarget).angle());
-								}
-							}else{
-								moveToward(dtarget);
-							}
-							}else{
-								moveInDirection(Modulo.mod(vectorTo(closenemy).angle()+180., 360.));
-							}		
+					if(vectorToHome().length()*Caste.Soldier.ATTACK*parameters.VULNERABILITY_WHILE_CARRYING*(numbcloseenemysoldier+numbcloseenemygatherer)/(self.caste.SPEED_WHILE_CARRYING_SUGAR*2)< Math.min(self.health,self.caste.INITIAL_HEALTH/2)){
+						moveHome();
 					}else{
-						moveToward(closest(visibleSugar));
-						if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius ) pickUpSugar(closest(visibleSugar));
+						moveInDirection(getdir(vectorToHome().angle(),vectorTo(closeenemy).angle(),vectorTo(closeenemy).length()));
+						if(vectorTo(closeenemy).length()<parameters.ATTACK_RANGE+closeenemy.caste.SPEED) dropSugar();
+					}
+				}
+				
+			}else{
+				if(!D){
+					if(atarget!=self){
+						moveToward(atarget);
+						if(vectorTo(atarget).length()<parameters.ATTACK_RANGE) attack(atarget);
+					}else{
+						moveToward(btarget);
+					}
+				}else{
+					if(!C){
+						moveInDirection(prefdir);
+					}else{
+						if(!E){	//parameters.TICKS_SUGAR_PICKUP*closenemy.caste.SPEED){
+							if(enemyforce<friendforce){
+								if(ctarget!=self){
+									attack(ctarget);
+									if(closefriend!=self && vectorTo(ctarget).length()<parameters.ATTACK_RANGE/1.7){
+										moveInDirection(vectorTo(closefriend).angle()+180,self.caste.SPEED/3);
+									}else{
+										moveInDirection(vectorTo(ctarget).angle());
+									}
+								}else{
+									moveToward(dtarget);
+								}
+								}else{
+									moveInDirection(Modulo.mod(vectorTo(closeenemy).angle()+180., 360.));
+								}		
+						}else{
+							moveToward(closest(visibleSugar));
+							if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius ) pickUpSugar(closest(visibleSugar));
+						}
 					}
 				}
 			}
-		}
-	
 		
-		say(0);
+			
+			say(0);
+		}else{
+			if(closeenemy!=self && torus(vectorTo(closeenemy)).length()<parameters.ATTACK_RANGE+self.caste.SPEED+closeenemy.caste.SPEED){
+				moveInDirection(mod(vectorTo(closeenemy).angle()+180,360));
+			}else{
+				if(atarget!=self){
+					moveToward(atarget);
+					attack(atarget);
+				}else{
+					if(btarget!=self){
+						moveToward(btarget);
+					}else{
+						if(closeenemy!=self){
+							moveToward(closeenemy);
+						}else{
+							moveInDirection(direction);
+						}
+					
+					}
+				}
+			}
+			
+		}
 	}
 
 }

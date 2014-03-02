@@ -68,7 +68,7 @@ public class Willi extends MyAntAI {
 		boolean B=(mysugar!=null);
 		boolean C=(B && torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).length()<2*parameters.INITIAL_SUGAR_RADIUS );
 		boolean D=(atarget==self);
-		boolean E=(closenemy==self);
+		boolean E=(closeenemy==self);
 		double prefdir=direction;
 		
 		
@@ -76,10 +76,10 @@ public class Willi extends MyAntAI {
 			if(E){
 				prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
 			}else{
-				prefdir=getdir(torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).angle(),vectorTo(closenemy).angle(),vectorTo(closenemy).length());
+				prefdir=getdir(torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).angle(),vectorTo(closeenemy).angle(),vectorTo(closeenemy).length());
 			}
 		}else{
-			if(!E) prefdir=getdir(direction,vectorTo(closenemy).angle(),vectorTo(closenemy).length());
+			if(!E) prefdir=getdir(direction,vectorTo(closeenemy).angle(),vectorTo(closeenemy).length());
 		}
 		
 		
@@ -88,11 +88,11 @@ public class Willi extends MyAntAI {
 			if(E){
 				moveHome();
 			}else{
-				if(vectorToHome().length()*closenemy.caste.ATTACK/self.caste.SPEED_WHILE_CARRYING_SUGAR< Math.min(self.health,self.caste.INITIAL_HEALTH)){
+				if(vectorToHome().length()*closeenemy.caste.ATTACK/self.caste.SPEED_WHILE_CARRYING_SUGAR< Math.min(self.health,self.caste.INITIAL_HEALTH)){
 					moveHome();
 				}else{
-					moveInDirection(getdir(vectorToHome().angle(),vectorTo(closenemy).angle(),vectorTo(closenemy).length()));
-					if(vectorTo(closenemy).length()<parameters.ATTACK_RANGE+closenemy.caste.SPEED) dropSugar();
+					moveInDirection(getdir(vectorToHome().angle(),vectorTo(closeenemy).angle(),vectorTo(closeenemy).length()));
+					if(vectorTo(closeenemy).length()<parameters.ATTACK_RANGE+closeenemy.caste.SPEED) dropSugar();
 				}
 			}
 			
@@ -104,8 +104,8 @@ public class Willi extends MyAntAI {
 				if(!C){
 					moveToward(mysugar.getsnapshot());
 				}else{
-					if(!E && torus(vectorTo(closenemy)).length()-alpha*parameters.ATTACK_RANGE<0){	//parameters.TICKS_SUGAR_PICKUP*closenemy.caste.SPEED){	
-						moveInDirection(Modulo.mod(vectorTo(closenemy).angle()+180., 360.));	
+					if(!E && torus(vectorTo(closeenemy)).length()-alpha*parameters.ATTACK_RANGE<0){	//parameters.TICKS_SUGAR_PICKUP*closenemy.caste.SPEED){	
+						moveInDirection(Modulo.mod(vectorTo(closeenemy).angle()+180., 360.));	
 						if(ctarget!=self){
 							attack(ctarget);
 						}
