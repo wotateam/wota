@@ -56,7 +56,7 @@ public abstract class MyAntAI extends AntAI {
 	public int vorhandencheck(Haufen haufen, LinkedList<Haufen> haufenlist){
 		int index=-1;
 		for(int i=0; i<haufenlist.size(); i++){
-			if(Vector.subtract(haufenlist.get(i).getPosition(),haufen.getPosition()).length()<2*parameters.INITIAL_SUGAR_RADIUS){
+			if(torus(Vector.subtract(haufenlist.get(i).getPosition(),haufen.getPosition())).length()<2*parameters.INITIAL_SUGAR_RADIUS){
 				index=i;
 			}
 		}

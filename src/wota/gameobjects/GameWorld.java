@@ -1,6 +1,7 @@
 package wota.gameobjects;
 
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -473,9 +474,16 @@ public class GameWorld {
 		return nPlayersAlive == 0;
 	}
 	
-	public Player getWinner() {
+	/**
+	 * Produces a list of players who have won the game.
+	 * Returns an empty list if and only if no one has won so far.  
+	 * @return 
+	 */
+	public List<Player> getWinner() {
+		List<Player> winnerList = new ArrayList<Player>();
+
 		if (tickCount < parameters.DONT_CHECK_VICTORY_CONDITION_BEFORE) {
-			return null;
+			return winnerList;
 		}
 		
 		double totalAnts = 0;
@@ -483,20 +491,29 @@ public class GameWorld {
 			totalAnts += player.antObjects.size();
 		}
 		
+		if (totalAnts == 0) {
+			return new ArrayList<Player>(players);
+		}
+		
 		for (Player player : players) {
 			if (player.antObjects.size() / totalAnts >= parameters.FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY) {
-				return player;
+				winnerList.add(player);
+				return winnerList;
 			}
 		}
 		
-		return null;
+		if (tickCount >= parameters.MAX_TICKS_BEFORE_END) {
+			return playersWithMostAnts();
+		}
+		
+		return winnerList;
 	}
 	
 	/**
 	 * Gets all players who currently have the most ants.
 	 * @return List of players who currently have the most ants of all players.
 	 */
-	public List<Player> getPlayersWithMostAnts() {
+	private List<Player> playersWithMostAnts() {
 		List<Player> playersWithMostAnts = new LinkedList<Player>();
 		for (Player player : players) {
 			if (playersWithMostAnts.isEmpty()) {

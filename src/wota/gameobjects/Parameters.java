@@ -41,6 +41,9 @@ public class Parameters {
 	public final double FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY;
 	/** check the victory condition after this amount of ticks */
 	public final int DONT_CHECK_VICTORY_CONDITION_BEFORE;
+	/** maximal number of ticks before game is stopped and player with the most ants wins */
+	public final int MAX_TICKS_BEFORE_END;
+
 
 	public Parameters(Properties p, int NUMBER_OF_PLAYERS) {
 		this.NUMBER_OF_PLAYERS = NUMBER_OF_PLAYERS;
@@ -70,6 +73,7 @@ public class Parameters {
 		SUGAR_SOURCES_PER_PLAYER = Integer.parseInt(p.getProperty("SUGAR_SOURCES_PER_PLAYER"));
 		FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY = Double.parseDouble(p.getProperty("FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY"));
 		DONT_CHECK_VICTORY_CONDITION_BEFORE = Integer.parseInt(p.getProperty("DONT_CHECK_VICTORY_CONDITION_BEFORE"));
+		MAX_TICKS_BEFORE_END = Integer.parseInt(p.getProperty("MAX_TICKS_BEFORE_END"));
 	}
 	
 	public Vector normalize(Vector p) {

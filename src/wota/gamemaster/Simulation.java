@@ -1,5 +1,6 @@
 package wota.gamemaster;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,16 +68,12 @@ public class Simulation {
 	private boolean abortRequested = false;
 	
 	private int frameCount;
-	
-	/** maximum number of ticks before the game ends regardless of victory condition **/
-	private final int maxTicksBeforeEnd;
-	
+		
 	public Simulation(SimulationParameters simulationParameters, 
 					  GameWorldFactory gameWorldFactory) {
 		isGraphical = simulationParameters.IS_GRAPHICAL; 
 		framesPerSecond = simulationParameters.FRAMES_PER_SECOND;
 		ticksPerSecond = simulationParameters.INITIAL_TICKS_PER_SECOND;
-		maxTicksBeforeEnd = simulationParameters.MAX_TICKS_BEFORE_END;
 		
 		width = simulationParameters.DISPLAY_WIDTH;
 		height = simulationParameters.DISPLAY_HEIGHT;
@@ -189,14 +186,19 @@ public class Simulation {
 			}
 			
 			// game done. Add to stats.
-			Player winner = gameWorld.getWinner();
-			if (winner == null) {
-				resultCollection.addGame(null, getNames(gameWorld.getPlayers()), null);
+			List<Player> winner = gameWorld.getWinner();
+			List<Player> loosers = new ArrayList<Player>(gameWorld.getPlayers());
+			loosers.removeAll(winner);
+			
+			if (winner.size() == 0) {
+				System.err.println("winner should not be empty.");
+			}
+			else if (winner.size() == 1) {
+				resultCollection.addGame(getNames(winner), null, getNames(loosers));
 			}
 			else {
-				List<Player> active = new java.util.ArrayList<Player>(gameWorld.getPlayers());
-				active.remove(winner);
-				resultCollection.addGame(new String[] {winner.name}, null, getNames(active));
+				// multiple winners count as draw. But we could still have loosers. 
+				resultCollection.addGame(null, getNames(winner), getNames(loosers));
 			}
 			
 			System.out.println("seed last game: " + gameWorld.seed);
@@ -210,37 +212,30 @@ public class Simulation {
 	}
 	
 	/**
-	 * Advance the game world by one tick and check for victory / end after fixed number of ticks.
+	 * Advance the game world by one tick.
+	 * Ask gameworld for winners and print statistics.
 	 */
 	private void tick(GameWorld gameWorld) {
 		gameWorld.tick();
-
-		GameWorld.Player winner = gameWorld.getWinner();
-		running = false; // set to true if none of the victory conditions actually apply
+		
 		String gameOverMessage = "";
-		if (winner != null) {
-			gameOverMessage = winner + " has won the game in tick "
+		
+		List<Player> winner = gameWorld.getWinner();
+		if (winner.size() == 1) {
+			if (gameWorld.tickCount() >= gameWorld.parameters.MAX_TICKS_BEFORE_END) {
+				gameOverMessage = "The game was stopped since the maximum number of ticks is reached.\n";
+			}
+			gameOverMessage = winner.get(0) + " has won the game in tick "
 					+ gameWorld.tickCount();
-		} 
-		else if (gameWorld.allPlayersDead()) {
-			gameOverMessage = "Draw! Nobody has won the game after " + gameWorld.tickCount() + " ticks.";
 		}
-		// End the game after fixed number of ticks - players with most ants win.
-		else if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
-			List<GameWorld.Player> winners = gameWorld.getPlayersWithMostAnts();
-			if (winners.size() == gameWorld.getPlayers().size()) {
-				gameOverMessage = "Draw! Game was stopped after " + gameWorld.tickCount() + " ticks. All players have the same number of ants.";
+		else if (winner.size() > 1) {
+			for (GameWorld.Player aWinner : winner) {
+				gameOverMessage += aWinner + " ";
 			}
-			else {
-				gameOverMessage = "Game was stopped after " + gameWorld.tickCount() + " ticks. The following player(s) have won:";
-				for (GameWorld.Player aWinner : winners) {
-					gameOverMessage += aWinner;
-				}
-			}
+			gameOverMessage += "have won the game in tick " + gameWorld.tickCount();
 		}
-		else {
-			running = true;
-		}
+		running = (winner.size() == 0);
+
 		if (running == false) {
 			System.out.println(statisticsView);
 			System.out.println(gameOverMessage);
