@@ -1,9 +1,10 @@
 # settings_dev.txt
 
 # AIs which should play against each other. Put in as many as you want.
-AI_PACKAGE_NAMES = solitary, firstopponent
+#AI_PACKAGE_NAMES = bienemaja, bonnmath, bvb, clonewarriors, dichterunddenker, firstopponent, pwahs03, solitary
+AI_PACKAGE_NAMES = bienemaja, bonnmath, bvb
 
-IS_GRAPHICAL = true
+IS_GRAPHICAL = false
 
 # batch mode (each with one or two games depending on HOME_AND_AWAY or even more for tournament)
 NUMBER_OF_ROUNDS = 1
@@ -12,16 +13,13 @@ NUMBER_OF_ROUNDS = 1
 HOME_AND_AWAY = false
 
 # Tournament mode means that a series one-on-ones will be played 
-TOURNAMENT = false
+TOURNAMENT = true
 
 # Rate of graphics update
 FRAMES_PER_SECOND = 40
 
 # Rate of game update
-INITIAL_TICKS_PER_SECOND = 40
-
-# leads to draw if nobody has won until then
-MAX_TICKS_BEFORE_END = 100000
+INITIAL_TICKS_PER_SECOND = 100
 
 DISPLAY_WIDTH = 700
 DISPLAY_HEIGHT = 700
