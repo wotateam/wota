@@ -111,6 +111,7 @@ public class Simulation {
 	        
 	        if (isGraphical) {
 	        	try {
+	        		Display.setTitle("Wota");
 					Display.setDisplayMode(new DisplayMode(width, height));
 					Display.create(new PixelFormat(8,0,0,0));
 				} catch (LWJGLException e) {
