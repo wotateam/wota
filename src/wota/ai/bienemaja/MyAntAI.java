@@ -83,6 +83,8 @@ public abstract class MyAntAI extends AntAI {
 		return v;
 	}
 
+	boolean reachedsugar=false;
+	boolean initialised=false;
 	
 	double direction=SeededRandomizer.getDouble()*360;
 	double scal=7;
@@ -104,8 +106,9 @@ public abstract class MyAntAI extends AntAI {
 	Ant btarget=self;	// nearest sugar target
 	Ant ctarget=self;	// sugar target in sight
 	Ant dtarget=self;	// no sugar target in sight
+	boolean getsugar=false; // tests whether one should run for the sugar
 	
-	
+	Vector v=new Vector(0,0);// vector used for the scouts
 	Ant closeenemy=self;
 	Ant closefriend=self;
 	int numbfriendsoldier=0;
@@ -120,7 +123,8 @@ public abstract class MyAntAI extends AntAI {
 	double friendforce=0;
 	double closeenemyforce=0;
 	double enemyforce=0;
-	double alpha=3.0;
+	double alpha=4.0;
+	double beta=1.0; // security radius of sugar hills in units of sight ranges
 	
 	void setneighbours(){
 		atarget=self;	// sugar target in range
@@ -142,6 +146,12 @@ public abstract class MyAntAI extends AntAI {
 		friendforce=0;
 		closeenemyforce=0;
 		enemyforce=0;
+		
+		boolean closetosugar=false;
+		if(mysugar!=null && visibleSugar.size()>0){
+				closetosugar=(torus(Vector.subtract(self.getPosition(),mysugar.getsnapshot().getPosition())).length()<self.caste.SIGHT_RANGE);
+				getsugar=true;
+		}
 		double mindist=parameters.ATTACK_RANGE;
 		double mindist2=self.caste.SIGHT_RANGE;
 		double mindist3=3*parameters.ATTACK_RANGE;
@@ -178,6 +188,10 @@ public abstract class MyAntAI extends AntAI {
 				}
 			}
 			if(ant.playerID==self.playerID){
+				// if not closest gatherer to sugar source not carrying sugar unset
+				if(ant.sugarCarry==0 && closetosugar && ant.caste==Caste.Gatherer && torus(Vector.subtract(ant.getPosition(), mysugar.getsnapshot().getPosition())).length()<torus(Vector.subtract(self.getPosition(), mysugar.getsnapshot().getPosition())).length()){
+					getsugar=false;
+				}
 				if(vectorTo(ant).length()<frienddist1){
 					closefriend=ant;
 					frienddist1=vectorTo(ant).length();
@@ -335,21 +349,48 @@ public abstract class MyAntAI extends AntAI {
 	}
 	
 	public double f(double x){
-		double result=0;
+	/*	double result=0;
 		if(x>parameters.ATTACK_RANGE/self.caste.SIGHT_RANGE){
 			result=x*x;
 		}
-		return result;
+		return result;*/
+		double result=0;
+		if(x>parameters.ATTACK_RANGE+self.caste.SPEED) result=(x-parameters.ATTACK_RANGE-self.caste.SPEED)/(self.caste.SPEED);
+		return result;		
 	}
 	
 	public double getdir(double des, double enem, double dist){
-		double weight=1.-f(dist/self.caste.SIGHT_RANGE);
+		// old version, there seems to be no big difference
+	/*	double weight=1.-f(dist/self.caste.SIGHT_RANGE);
 		double result=Modulo.mod(-weight*enem+(1.-weight)*des+6.*SeededRandomizer.getDouble()-3, 360.);
 		if((Modulo.mod(result-enem, 360.)<90 || Modulo.mod(result-enem, 360.)>270) && dist<3*parameters.ATTACK_RANGE) result=Modulo.mod(result+180., 360.);
-		return result;
+		return result;*/
+		double angle=0;
+		double difference=Math.abs(mod(enem-des,360)-180);
+		if(dist>parameters.ATTACK_RANGE+2*self.caste.SPEED){
+			angle=des;
+			if(difference>90){
+				double dev=(difference-90)*(self.caste.SIGHT_RANGE-dist)/self.caste.SIGHT_RANGE;
+				if(mod(des-enem,360)<180){
+					angle=des+dev;
+				}else{
+					angle=des-dev;
+				}
+			}
+		}else{
+			angle=180+enem;
+			double dev=90*difference*difference/180.0/180.0*f(dist)+5;
+			if(difference<0){
+				angle+=dev;
+			}else{
+				angle-=dev;
+			}
+		}
+		return angle;
 	}
 	
 	public void getnextsugar(double temp){
+		reachedsugar=false;
 		boolean notfound=true;
 		int index=-1;
 		double mindist=4*(parameters.SIZE_X+parameters.SIZE_Y);
@@ -426,6 +467,10 @@ public abstract class MyAntAI extends AntAI {
 		if(time!=Integer.MIN_VALUE){
 			time++;
 		}
+		if(mysugar!=null &&torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).length()<4*parameters.INITIAL_SUGAR_RADIUS){
+			reachedsugar=true;
+		}
+		
 		if(mysugar!=null){
 			countergetsugar++;
 		}

@@ -30,6 +30,9 @@ public abstract class MyHillAI extends wota.gameobjects.HillAI  {
 	 * you want use is called SuperGathererAI	createAnt(Caste.Gatherer, SuperGathererAI.class)
 	 * 
 	 */
+	int gatherer=0;
+	int scout=0;
+	int soldier=0;
 	
 	public Vector torus(Vector v){
 		while(v.x< -parameters.SIZE_X/2){
