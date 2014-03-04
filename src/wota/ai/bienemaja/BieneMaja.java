@@ -128,6 +128,7 @@ public class BieneMaja extends MyAntAI {
 						//enemy in sightrange
 						if(!E){	//parameters.TICKS_SUGAR_PICKUP*closenemy.caste.SPEED){
 							if(enemyforce<friendforce && torus(Vector.subtract(self.getPosition(), mysugar.getsnapshot().getPosition())).length()< beta*self.caste.SIGHT_RANGE){
+								//getsugar tests whether there is a sugar in sightrange
 								if(getsugar){
 									moveToward(closest(visibleSugar));
 									if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius && vectorTo(closeenemy).length()>parameters.ATTACK_RANGE+closeenemy.caste.SPEED){
@@ -153,8 +154,11 @@ public class BieneMaja extends MyAntAI {
 							if(!C){
 								moveInDirection(prefdir);
 							}else{
-								if(visibleSugar.size()>0) moveToward(closest(visibleSugar));
-								if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius ) pickUpSugar(closest(visibleSugar));		
+								if(visibleSugar.size()>0){
+									moveToward(closest(visibleSugar));
+									if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius ) pickUpSugar(closest(visibleSugar));		
+								}
+								
 							}
 						}
 					}

@@ -148,6 +148,7 @@ public abstract class MyAntAI extends AntAI {
 		enemyforce=0;
 		
 		boolean closetosugar=false;
+		getsugar=false;
 		if(mysugar!=null && visibleSugar.size()>0){
 				closetosugar=(torus(Vector.subtract(self.getPosition(),mysugar.getsnapshot().getPosition())).length()<self.caste.SIGHT_RANGE);
 				getsugar=true;
