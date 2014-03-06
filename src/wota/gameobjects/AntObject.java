@@ -151,9 +151,7 @@ public class AntObject extends BaseAntObject{
 	public void move(Vector moveVector) {
 		Vector realMovement = moveVector;
 		if (moveVector.length() != 0) {
-			double angleError = parameters.ANGLE_ERROR_PER_DISTANCE * moveVector.length() 
-					* 2 * (SeededRandomizer.getDouble() - 0.5); 
-			realMovement = Vector.fromPolar(moveVector.length(), moveVector.angle() + angleError);
+			realMovement = Vector.fromPolar(moveVector.length(), moveVector.angle());
 		}
 		lastMovementDirection = realMovement.angle();
 		super.move(realMovement);
