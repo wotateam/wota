@@ -102,7 +102,7 @@ public abstract class MyHillAI extends wota.gameobjects.HillAI  {
 	}
 	
 	
-	double direction=SeededRandomizer.getDouble()*360;
+	double direction=random.getDouble()*360;
 	
 	public int checkexistence(Ext_Sugar sugar, LinkedList<Ext_Sugar> list){
 		int index=-1;
@@ -177,7 +177,7 @@ public abstract class MyHillAI extends wota.gameobjects.HillAI  {
 	
 	public void dowhatcanbedone(){
 		time++;
-		if(SeededRandomizer.getDouble()<0.1) direction+=10*SeededRandomizer.getDouble();
+		if(random.getDouble()<0.1) direction+=10*random.getDouble();
 		setneighbours();
 		insertheard(audibleAntMessages);
 	}
@@ -195,8 +195,8 @@ public abstract class MyHillAI extends wota.gameobjects.HillAI  {
 			talk(time*100+15);
 		}else{
 			if(message==0){
-					if(SeededRandomizer.getDouble()<0.1 && hilllist.size()>1){
-						Ext_Sugar ext_hill=hilllist.get(SeededRandomizer.getInt(hilllist.size()-1)+1);
+					if(random.getDouble()<0.1 && hilllist.size()>1){
+						Ext_Sugar ext_hill=hilllist.get(random.getInt(hilllist.size()-1)+1);
 						talk(13,ext_hill.getsnapshot());
 					}else{
 						if(sugarlist.size()>0){
@@ -205,8 +205,8 @@ public abstract class MyHillAI extends wota.gameobjects.HillAI  {
 							int index=0;
 							while(accepted==false && tries<20){
 								tries++;
-								index=SeededRandomizer.getInt(sugarlist.size());
-								if(acceptance(time-sugarlist.get(index).gettimestamp())>SeededRandomizer.getDouble()){
+								index=random.getInt(sugarlist.size());
+								if(acceptance(time-sugarlist.get(index).gettimestamp())>random.getDouble()){
 									accepted=true;
 								}
 							}

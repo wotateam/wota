@@ -11,7 +11,7 @@ public class HillAI extends wota.gameobjects.HillAI {
 	public void tick() {
 		int antsToProduce = (int) (self.food / parameters.ANT_COST);
 		for (int i=0; i<antsToProduce; i++) {
-			if (SeededRandomizer.getInt(5) <= 3) {
+			if (random.getInt(5) <= 3) {
 				createAnt(Caste.Gatherer, GathererAI.class);
 			}
 			else {

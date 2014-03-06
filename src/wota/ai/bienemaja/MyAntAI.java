@@ -50,7 +50,7 @@ public abstract class MyAntAI extends AntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -86,7 +86,7 @@ public abstract class MyAntAI extends AntAI {
 	boolean reachedsugar=false;
 	boolean initialised=false;
 	
-	double direction=SeededRandomizer.getDouble()*360;
+	double direction=random.getDouble()*360;
 	double scal=7;
 	int counter=0;
 	int counterrem=5;
@@ -363,7 +363,7 @@ public abstract class MyAntAI extends AntAI {
 	public double getdir(double des, double enem, double dist){
 		// old version, there seems to be no big difference
 	/*	double weight=1.-f(dist/self.caste.SIGHT_RANGE);
-		double result=Modulo.mod(-weight*enem+(1.-weight)*des+6.*SeededRandomizer.getDouble()-3, 360.);
+		double result=Modulo.mod(-weight*enem+(1.-weight)*des+6.*random.getDouble()-3, 360.);
 		if((Modulo.mod(result-enem, 360.)<90 || Modulo.mod(result-enem, 360.)>270) && dist<3*parameters.ATTACK_RANGE) result=Modulo.mod(result+180., 360.);
 		return result;*/
 		double angle=0;
@@ -432,8 +432,8 @@ public abstract class MyAntAI extends AntAI {
 			int n;
 			while(tries<20 && accepted==false){
 				tries++;
-				n=SeededRandomizer.getInt(sugarlist.size());
-		//		if(sugarlist.get(n).getexistence()==true && sugarlist.get(n).getvisited()==false && (SeededRandomizer.getDouble()<Math.exp(-temp*(torus(vectorTo(sugarlist.get(n).getsnapshot())).length()+torus(Vector.subtract(vectorTo(sugarlist.get(n).getsnapshot()),vectorToHome())).length()-mindist)*200/mindist/time))){
+				n=random.getInt(sugarlist.size());
+		//		if(sugarlist.get(n).getexistence()==true && sugarlist.get(n).getvisited()==false && (random.getDouble()<Math.exp(-temp*(torus(vectorTo(sugarlist.get(n).getsnapshot())).length()+torus(Vector.subtract(vectorTo(sugarlist.get(n).getsnapshot()),vectorToHome())).length()-mindist)*200/mindist/time))){
 				if(sugarlist.get(n).getexistence()==true && sugarlist.get(n).getvisited()==false){
 					accepted=true;
 					index=n;
@@ -475,7 +475,7 @@ public abstract class MyAntAI extends AntAI {
 		if(mysugar!=null){
 			countergetsugar++;
 		}
-		if(SeededRandomizer.getDouble()<0.1) direction+=10*SeededRandomizer.getDouble();
+		if(random.getDouble()<0.1) direction+=10*random.getDouble();
 		setneighbours();
 		insertseenhill(visibleHills);
 		insertseensugar(visibleSugar);
@@ -494,7 +494,7 @@ public abstract class MyAntAI extends AntAI {
 		}
 		if(counter>=14){
 			counter=0;
-			if(SeededRandomizer.getDouble()<0.5)getnextsugar(0);
+			if(random.getDouble()<0.5)getnextsugar(0);
 		}
 			
 			/*if(countergetsugar>timeforsugar){
@@ -518,8 +518,8 @@ public abstract class MyAntAI extends AntAI {
 	
 	public void say(int message){
 			if(message==0){
-				if(SeededRandomizer.getDouble()<0.1 && hilllist.size()>1){
-					Ext_Sugar ext_hill=hilllist.get(SeededRandomizer.getInt(hilllist.size()-1)+1);
+				if(random.getDouble()<0.1 && hilllist.size()>1){
+					Ext_Sugar ext_hill=hilllist.get(random.getInt(hilllist.size()-1)+1);
 					talk(12,ext_hill.getsnapshot());
 				}else{
 					if(sugarlist.size()>0){
@@ -527,9 +527,9 @@ public abstract class MyAntAI extends AntAI {
 						int tries=0;
 						int index=0;
 						while(accepted==false && tries<20){
-							index=SeededRandomizer.getInt(sugarlist.size());
+							index=random.getInt(sugarlist.size());
 							tries++;
-							if(acceptance(time-sugarlist.get(index).gettimestamp())>SeededRandomizer.getDouble()){
+							if(acceptance(time-sugarlist.get(index).gettimestamp())>random.getDouble()){
 								if(sugarlist.get(index).getfood()>parameters.INITIAL_SUGAR_IN_SOURCE/4 || sugarlist.get(index).getexistence()==false)
 									accepted=true;
 							}

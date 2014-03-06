@@ -63,7 +63,7 @@ public class Rapoport extends MyAntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -164,7 +164,7 @@ public class Rapoport extends MyAntAI {
 						}
 						attack(worstant);
 					}else{
-						if(hatzucker && veryclosefriends>2 && SeededRandomizer.getDouble()<0.1){
+						if(hatzucker && veryclosefriends>2 && random.getDouble()<0.1){
 							hatzucker=false;
 							position=new Vector(0,0);
 						}

@@ -19,7 +19,7 @@ public class GathererAI extends AntAI {
 			moveToward(sugar);
 			pickUpSugar(sugar);
 		} else if (ticksUntilNextDirectionChange == 0) {
-			moveInDirection(SeededRandomizer.getInt(360));
+			moveInDirection(random.getInt(360));
 			ticksUntilNextDirectionChange = DIRECTION_CHANGE_PERIOD;
 		} else {
 			moveAhead();

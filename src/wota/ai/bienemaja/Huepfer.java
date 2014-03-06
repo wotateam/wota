@@ -48,7 +48,7 @@ public class Huepfer extends MyAntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -69,9 +69,9 @@ public class Huepfer extends MyAntAI {
 		
 		if(initialised==false){
 			initialised=true;
-			if(SeededRandomizer.getInt(2)==0){
-				if(SeededRandomizer.getInt(2)==0){
-					if(SeededRandomizer.getInt(2)==0){
+			if(random.getInt(2)==0){
+				if(random.getInt(2)==0){
+					if(random.getInt(2)==0){
 						v.y=(2*self.caste.SIGHT_RANGE-1.);
 						v.x=parameters.SIZE_X;
 					}else{
@@ -79,7 +79,7 @@ public class Huepfer extends MyAntAI {
 						v.x=parameters.SIZE_X;
 					}
 				}else{
-					if(SeededRandomizer.getInt(2)==0){
+					if(random.getInt(2)==0){
 						v.y=(2*self.caste.SIGHT_RANGE-1.);
 						v.x=-parameters.SIZE_X;
 					}else{
@@ -88,8 +88,8 @@ public class Huepfer extends MyAntAI {
 					}
 				}
 			}else{
-				if(SeededRandomizer.getInt(2)==0){
-					if(SeededRandomizer.getInt(2)==0){
+				if(random.getInt(2)==0){
+					if(random.getInt(2)==0){
 						v.x=(2*self.caste.SIGHT_RANGE-1.);
 						v.y=parameters.SIZE_Y;
 					}else{
@@ -97,7 +97,7 @@ public class Huepfer extends MyAntAI {
 						v.y=parameters.SIZE_Y;
 					}
 				}else{
-					if(SeededRandomizer.getInt(2)==0){
+					if(random.getInt(2)==0){
 						v.x=(2*self.caste.SIGHT_RANGE-1.);
 						v.y=-parameters.SIZE_Y;
 					}else{
