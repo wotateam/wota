@@ -41,7 +41,6 @@ public class GameWorldFactory {
 		this.parameters = parameters;
 		this.simulationParameters = simulationParameters;
 		this.seed = seed;
-		SeededRandomizer.resetSeed(seed);
 
 		aiLoader = new AILoader("./");
 		

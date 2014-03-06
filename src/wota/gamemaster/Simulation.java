@@ -100,7 +100,6 @@ public class Simulation {
 				break;
 			}
 			
-			SeededRandomizer.resetSeed(gameWorld.seed);
 			System.out.println("seed next game: " + gameWorld.seed);			
 			
 			StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
