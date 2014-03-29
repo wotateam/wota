@@ -8,6 +8,7 @@ import java.util.List;
 
 import wota.gameobjects.GameWorld.Player;
 import wota.utility.Modulo;
+import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
 /**
@@ -26,6 +27,10 @@ public abstract class AI {
 
 	/** Reference to the parameters of the game. e.g. cost of a new ant. */
 	protected Parameters parameters;
+	
+	/** Source of random numbers. Always use this to get random numbers, so that the 
+	* game only depends on the seed, which helps with reproducing bugs. */
+	public SeededRandomizer random = SeededRandomizer.random;
 	
 	private Vector position;
 		
