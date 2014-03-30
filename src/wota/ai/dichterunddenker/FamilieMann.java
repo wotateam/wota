@@ -20,7 +20,7 @@ import wota.gameobjects.Hill;
  */
 public class FamilieMann extends AntAI {
  
-	public double	dir=random.getInt(360);
+	public double	dir=random.nextInt(360);
 	public double	 mysugar = 0;
 	public boolean 	ontheway = false;
 	public boolean gehehause = false;
@@ -149,7 +149,7 @@ public class FamilieMann extends AntAI {
 			
 				}else{
 					if(visibleSugar.size()==0){
-						dir+=random.getInt(5);
+						dir+=random.nextInt(5);
 						moveInDirection(dir);
 					}else{
 						moveToward((closest(visibleSugar)));

@@ -23,7 +23,7 @@ public class SeededRandomizer {
 	 * @param n Upper bound for internalRandom number
 	 * @return a internalRandom integer number between 0 and n-1
 	 */
-	public static int getInt(int n) {
+	public static int nextInt(int n) {
 		return internalRandom.nextInt(n);
 	}
 	
@@ -34,7 +34,7 @@ public class SeededRandomizer {
 	/**
 	 * @return Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0
 	 */
-	public static double getDouble()
+	public static double nextDouble()
 	{
 		return internalRandom.nextDouble();
 	}

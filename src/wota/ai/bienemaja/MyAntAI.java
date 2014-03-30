@@ -86,7 +86,7 @@ public abstract class MyAntAI extends AntAI {
 	boolean reachedsugar=false;
 	boolean initialised=false;
 	
-	double direction=random.getDouble()*360;
+	double direction=random.nextDouble()*360;
 	double scal=7;
 	int counter=0;
 	int counterrem=5;
@@ -432,7 +432,7 @@ public abstract class MyAntAI extends AntAI {
 			int n;
 			while(tries<20 && accepted==false){
 				tries++;
-				n=random.getInt(sugarlist.size());
+				n=random.nextInt(sugarlist.size());
 		//		if(sugarlist.get(n).getexistence()==true && sugarlist.get(n).getvisited()==false && (random.getDouble()<Math.exp(-temp*(torus(vectorTo(sugarlist.get(n).getsnapshot())).length()+torus(Vector.subtract(vectorTo(sugarlist.get(n).getsnapshot()),vectorToHome())).length()-mindist)*200/mindist/time))){
 				if(sugarlist.get(n).getexistence()==true && sugarlist.get(n).getvisited()==false){
 					accepted=true;
@@ -475,7 +475,7 @@ public abstract class MyAntAI extends AntAI {
 		if(mysugar!=null){
 			countergetsugar++;
 		}
-		if(random.getDouble()<0.1) direction+=10*random.getDouble();
+		if(random.nextDouble()<0.1) direction+=10*random.nextDouble();
 		setneighbours();
 		insertseenhill(visibleHills);
 		insertseensugar(visibleSugar);
@@ -494,7 +494,7 @@ public abstract class MyAntAI extends AntAI {
 		}
 		if(counter>=14){
 			counter=0;
-			if(random.getDouble()<0.5)getnextsugar(0);
+			if(random.nextDouble()<0.5)getnextsugar(0);
 		}
 			
 			/*if(countergetsugar>timeforsugar){
@@ -518,8 +518,8 @@ public abstract class MyAntAI extends AntAI {
 	
 	public void say(int message){
 			if(message==0){
-				if(random.getDouble()<0.1 && hilllist.size()>1){
-					Ext_Sugar ext_hill=hilllist.get(random.getInt(hilllist.size()-1)+1);
+				if(random.nextDouble()<0.1 && hilllist.size()>1){
+					Ext_Sugar ext_hill=hilllist.get(random.nextInt(hilllist.size()-1)+1);
 					talk(12,ext_hill.getsnapshot());
 				}else{
 					if(sugarlist.size()>0){
@@ -527,9 +527,9 @@ public abstract class MyAntAI extends AntAI {
 						int tries=0;
 						int index=0;
 						while(accepted==false && tries<20){
-							index=random.getInt(sugarlist.size());
+							index=random.nextInt(sugarlist.size());
 							tries++;
-							if(acceptance(time-sugarlist.get(index).gettimestamp())>random.getDouble()){
+							if(acceptance(time-sugarlist.get(index).gettimestamp())>random.nextDouble()){
 								if(sugarlist.get(index).getfood()>parameters.INITIAL_SUGAR_IN_SOURCE/4 || sugarlist.get(index).getexistence()==false)
 									accepted=true;
 							}

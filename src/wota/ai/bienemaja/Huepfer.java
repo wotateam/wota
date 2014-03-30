@@ -69,9 +69,9 @@ public class Huepfer extends MyAntAI {
 		
 		if(initialised==false){
 			initialised=true;
-			if(random.getInt(2)==0){
-				if(random.getInt(2)==0){
-					if(random.getInt(2)==0){
+			if(random.nextInt(2)==0){
+				if(random.nextInt(2)==0){
+					if(random.nextInt(2)==0){
 						v.y=(2*self.caste.SIGHT_RANGE-1.);
 						v.x=parameters.SIZE_X;
 					}else{
@@ -79,7 +79,7 @@ public class Huepfer extends MyAntAI {
 						v.x=parameters.SIZE_X;
 					}
 				}else{
-					if(random.getInt(2)==0){
+					if(random.nextInt(2)==0){
 						v.y=(2*self.caste.SIGHT_RANGE-1.);
 						v.x=-parameters.SIZE_X;
 					}else{
@@ -88,8 +88,8 @@ public class Huepfer extends MyAntAI {
 					}
 				}
 			}else{
-				if(random.getInt(2)==0){
-					if(random.getInt(2)==0){
+				if(random.nextInt(2)==0){
+					if(random.nextInt(2)==0){
 						v.x=(2*self.caste.SIGHT_RANGE-1.);
 						v.y=parameters.SIZE_Y;
 					}else{
@@ -97,7 +97,7 @@ public class Huepfer extends MyAntAI {
 						v.y=parameters.SIZE_Y;
 					}
 				}else{
-					if(random.getInt(2)==0){
+					if(random.nextInt(2)==0){
 						v.x=(2*self.caste.SIGHT_RANGE-1.);
 						v.y=-parameters.SIZE_Y;
 					}else{

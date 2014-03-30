@@ -91,7 +91,7 @@ public class ScoutAI extends AntAI {
 			
 			have_a_look_around();
 			
-			if (time % 100 == 0) dir = random.getInt(360);
+			if (time % 100 == 0) dir = random.nextInt(360);
 			
 			handle_sugar();
 
@@ -265,7 +265,7 @@ public class ScoutAI extends AntAI {
 				dir = (360*count)/(total+1);
 				moveInDirection(dir);
 			}else{//later, just go some random direction:
-				dir = random.getDouble()*360;
+				dir = random.nextDouble()*360;
 			}
 			
 			//initialize hills:

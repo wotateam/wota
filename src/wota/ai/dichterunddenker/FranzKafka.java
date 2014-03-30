@@ -64,7 +64,7 @@ public class FranzKafka extends AntAI {
 		if (dir==0 && audibleHillMessage != null) {
 			dir=2*audibleHillMessage.content;
 		}
-		if(random.getDouble()<0.02){
+		if(random.nextDouble()<0.02){
 			dir=dir+20;
 		}
 		
@@ -115,7 +115,7 @@ public class FranzKafka extends AntAI {
 					moveInDirection(vectorTo(worstant).angle()-180);
 				}
 			}else{
-				moveInDirection(random.getInt(360));
+				moveInDirection(random.nextInt(360));
 			}
 		}else{
 			moveInDirection(dir/2);

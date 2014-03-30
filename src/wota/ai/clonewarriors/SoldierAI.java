@@ -13,7 +13,7 @@ import wota.utility.SeededRandomizer;
  *
  */
 public class SoldierAI extends AntAI {
-	int direction = random.getInt(360);
+	int direction = random.nextInt(360);
 	boolean firstTick = true;
 	HashMap<Integer, Hill> enemyHills = new HashMap<Integer, Hill>();
 	int num_tick;

@@ -71,11 +71,11 @@ public class Teichner extends AntAI {
 	 */
 	@Override
 	public void tick() throws Exception {
-		if(random.getDouble()<0.03){
-			direction=random.getDouble()*360.0;
+		if(random.nextDouble()<0.03){
+			direction=random.nextDouble()*360.0;
 		}
 		if(position==false && value==-1){
-			value=random.getInt(100000);
+			value=random.nextInt(100000);
 			talk(10*value+7);
 		}
 		if(position==false){

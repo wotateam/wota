@@ -25,7 +25,7 @@ public class GathererAI extends AntAI {
 		update_health();
 		
 		if (lastDir == 0)
-			lastDir = random.getInt(360);
+			lastDir = random.nextInt(360);
 		
 		gather_sugar();
 		

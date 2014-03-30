@@ -29,17 +29,17 @@ public class HillAI extends wota.gameobjects.HillAI {
 			endgame=true;
 			counter=0;
 		}
-		talk(random.getInt(360));
+		talk(random.nextInt(360));
 		/* 
 		 * try to create an Ant using the TemplateAI in every tick
 		 * if you don't have enough food to create the ant your call
 		 * will be ignored
 		 */
 		if(endgame==false){
-			if(random.getInt(10)<9){
+			if(random.nextInt(10)<9){
 				createAnt(Caste.Gatherer, FamilieMann.class);
 			}else{
-				if(random.getDouble()<0.6){
+				if(random.nextDouble()<0.6){
 					createAnt(Caste.Soldier, FranzKafka.class);
 					createAnt(Caste.Soldier, FranzKafka.class);
 				}else{
@@ -51,10 +51,10 @@ public class HillAI extends wota.gameobjects.HillAI {
 		}else{
 			if(counter==55){
 				counter=0;
-				if(random.getInt(10)<5){
+				if(random.nextInt(10)<5){
 					createAnt(Caste.Gatherer, FamilieMann.class);
 				}else{
-					if(random.getDouble()<0.8){
+					if(random.nextDouble()<0.8){
 						createAnt(Caste.Soldier, FranzKafka.class);
 						createAnt(Caste.Soldier, FranzKafka.class);
 						createAnt(Caste.Soldier, FranzKafka.class);

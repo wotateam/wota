@@ -138,7 +138,7 @@ public class HillAI extends MyHillAI {
 					}
 				}
 			}
-			if(numbergatherer<10 || random.getDouble()<0.9){
+			if(numbergatherer<10 || random.nextDouble()<0.9){
 				for(Haufen haufen : sugarlist){	
 					if(check){
 						if(haufen.getsoldiers()<2){

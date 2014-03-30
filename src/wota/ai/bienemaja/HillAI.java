@@ -43,7 +43,7 @@ public class HillAI extends MyHillAI {
 		}
 		while(food>=parameters.ANT_COST){
 			//createAnt(Caste.Soldier, Thekla.class);
-			if(random.getDouble()<0.5 || gatherer<60){//0.4*acceptance(time)+0.3){
+			if(random.nextDouble()<0.5 || gatherer<60){//0.4*acceptance(time)+0.3){
 				createAnt(Caste.Gatherer, BieneMaja.class);
 				food-=parameters.ANT_COST;
 				gatherer+=1;

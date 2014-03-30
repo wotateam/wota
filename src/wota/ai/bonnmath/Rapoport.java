@@ -164,7 +164,7 @@ public class Rapoport extends MyAntAI {
 						}
 						attack(worstant);
 					}else{
-						if(hatzucker && veryclosefriends>2 && random.getDouble()<0.1){
+						if(hatzucker && veryclosefriends>2 && random.nextDouble()<0.1){
 							hatzucker=false;
 							position=new Vector(0,0);
 						}

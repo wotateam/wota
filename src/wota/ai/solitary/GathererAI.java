@@ -19,7 +19,7 @@ public class GathererAI extends AntAI {
 	public void tick() {
 		
 		if (lastDir == 0)
-			lastDir = random.getInt(360);
+			lastDir = random.nextInt(360);
 		
 		if (self.sugarCarry == 0) {
 			if (visibleSugar.size() == 0)

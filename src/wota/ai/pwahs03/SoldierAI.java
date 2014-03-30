@@ -255,7 +255,7 @@ public class SoldierAI extends AntAI {
 					}
 				}
 				if (hear_leader){
-					if (random.getDouble()<HillAI.SUGAR_PROB){
+					if (random.nextDouble()<HillAI.SUGAR_PROB){
 						assignment = SwatStatus.PATROLLING;
 						target_sugar();
 					}else{
@@ -287,7 +287,7 @@ public class SoldierAI extends AntAI {
 			target_home();
 		}else{
 			target = hills.get(HillAI.SUGAR_IND).get(
-					random.getInt(num_sugar));
+					random.nextInt(num_sugar));
 		}
 	}
 	
@@ -297,7 +297,7 @@ public class SoldierAI extends AntAI {
 			target_home();
 		}else{
 			target = hills.get(HillAI.HILL_IND).get(
-					random.getInt(num_hills-1)+1);
+					random.nextInt(num_hills-1)+1);
 		}
 	}
 	
@@ -373,7 +373,7 @@ public class SoldierAI extends AntAI {
 				dir = (360*count)/(total+1);
 				moveInDirection(dir);
 			}else{//later, just go some random direction:
-				dir = random.getDouble()*360;
+				dir = random.nextDouble()*360;
 			}
 			
 			//initialize hills:
