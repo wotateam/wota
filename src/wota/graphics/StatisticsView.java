@@ -24,7 +24,7 @@ import wota.gameobjects.GameWorld.Player;
  */
 public class StatisticsView implements Runnable {
 
-	public JFrame frame;
+	private JFrame frame;
 	private GameWorld gameWorld;
 	private StatisticsLogger logger;
 	private StatisticsTableModel statisticsTableModel;
@@ -34,8 +34,11 @@ public class StatisticsView implements Runnable {
 	}
 
 	public void run() {
-		frame = new JFrame("Wota Statistics");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//lazy initialization of frame
+		if (frame == null) {
+			frame = new JFrame("Wota Statistics");
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 		frame.setLayout(new FlowLayout());
 
 		statisticsTableModel = new StatisticsTableModel(logger);
@@ -46,7 +49,7 @@ public class StatisticsView implements Runnable {
 		table.setFillsViewportHeight(true);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-		frame.add(scrollPane);
+		frame.getContentPane().add(scrollPane);
 
 		frame.pack();
 		frame.setVisible(true);
@@ -173,6 +176,13 @@ public class StatisticsView implements Runnable {
 	public void setGameWorld(GameWorld gameWorld, StatisticsLogger logger) {
 		this.gameWorld = gameWorld;
 		this.logger = logger;
+	}
+	
+	/**
+	 * Removes everything from the frame
+	 */
+	public void destroyContents(){
+		frame.getContentPane().removeAll();
 	}
 	
 	

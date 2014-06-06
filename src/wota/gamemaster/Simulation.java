@@ -105,7 +105,11 @@ public class Simulation {
 			StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
 			gameWorld.setLogger(logger);
 			
-			statisticsView = new StatisticsView(gameWorld, logger);
+			//lazy initialization
+			if (statisticsView == null)
+				statisticsView = new StatisticsView(gameWorld, logger);
+			else
+				statisticsView.setGameWorld(gameWorld, logger);
 	        statisticsView.run();
 	        
 	        if (isGraphical) {
@@ -203,7 +207,7 @@ public class Simulation {
 			
 			System.out.println("seed last game: " + gameWorld.seed);
 
-			statisticsView.frame.dispose();
+			statisticsView.destroyContents();
 			if (isGraphical) {
 				Display.destroy();
 			}
