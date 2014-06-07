@@ -2,8 +2,6 @@ package wota.gameobjects;
 
 import java.util.List;
 
-import wota.gameobjects.Parameters;
-import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 
 

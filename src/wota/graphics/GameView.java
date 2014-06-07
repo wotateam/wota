@@ -1,8 +1,5 @@
 package wota.graphics;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.*;
-
 import wota.gameobjects.AntCorpseObject;
 import wota.gameobjects.AntObject;
 import wota.gameobjects.GameWorld;
@@ -14,8 +11,6 @@ import wota.utility.Vector;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL14.*;
 import java.awt.Color;
-
-import javax.swing.JFrame;
 
 
 /**

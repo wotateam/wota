@@ -6,7 +6,6 @@ package wota.gameobjects;
 import java.util.LinkedList;
 import java.util.List;
 
-import wota.gameobjects.GameWorld.Player;
 import wota.utility.Modulo;
 import wota.utility.SeededRandomizer;
 import wota.utility.Vector;

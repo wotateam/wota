@@ -7,9 +7,8 @@ package wota.ai.template; /* <-- change this to wota.ai.YOUR_AI_NAME
  							  * the name of your choice) 
  							  */
 
-import wota.gamemaster.AIInformation;
-import wota.gameobjects.*;
-import wota.utility.SeededRandomizer;
+import wota.gameobjects.AntAI;
+import wota.gameobjects.Sugar;
 
 /**
  * Put a description of you AI here.

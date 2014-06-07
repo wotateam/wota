@@ -3,7 +3,6 @@
  */
 package wota.gameobjects;
 
-import wota.utility.Vector;
 
 /**
  *

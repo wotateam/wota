@@ -3,7 +3,6 @@ package wota.gameobjects;
 import java.util.LinkedList;
 import java.util.List;
 
-import wota.utility.Modulo;
 import wota.utility.Vector;
 
 

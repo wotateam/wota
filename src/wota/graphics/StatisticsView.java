@@ -3,19 +3,21 @@
  */
 package wota.graphics;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
-import java.awt.*;
-import java.awt.print.PrinterException;
-import java.util.Map;
-import java.util.Vector;
 
 import wota.gamemaster.StatisticsLogger;
-import wota.gameobjects.*;
+import wota.gameobjects.Caste;
+import wota.gameobjects.GameWorld;
 import wota.gameobjects.GameWorld.Player;
 
 /**
@@ -60,9 +62,9 @@ public class StatisticsView implements Runnable {
 	 * methods like getValueAt() which are used by the JTable to obtain the cell
 	 * values.
 	 */
-	@SuppressWarnings("synthetic-access")
 	public class StatisticsTableModel extends AbstractTableModel {
 
+		private static final long serialVersionUID = -2557558732669501033L;
 		private StatisticsLogger logger;
 		private final String[] playerNames;
 		/**
@@ -154,6 +156,10 @@ public class StatisticsView implements Runnable {
 	}
 
 	public class CellRenderer extends JLabel implements TableCellRenderer {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4207895084707571884L;
 		DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
 
 		CellRenderer() {

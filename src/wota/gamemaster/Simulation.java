@@ -1,11 +1,7 @@
 package wota.gamemaster;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.swing.SwingUtilities;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -17,8 +13,6 @@ import wota.gameobjects.GameWorld;
 import wota.gameobjects.GameWorld.Player;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
-import wota.gameobjects.Parameters;
-import wota.utility.SeededRandomizer;
 
 
 /**
@@ -313,6 +307,34 @@ public class Simulation {
 			playerNames[iActive] = player.get(iActive).name;
 		}
 		return playerNames;
+	}
+
+	/**
+	 * @return the startTime
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * @return the frameCount
+	 */
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	/**
+	 * @param frameCount the frameCount to set
+	 */
+	public void setFrameCount(int frameCount) {
+		this.frameCount = frameCount;
 	}
 
 }
