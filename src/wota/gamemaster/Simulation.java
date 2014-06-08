@@ -265,10 +265,10 @@ public class Simulation {
 				running = false;
 				break;
 			case Keyboard.KEY_S:
-				gameView.drawSightRange = !gameView.drawSightRange;
+				gameView.setDrawSightRange(!gameView.isDrawSightRange());
 				break;
 			case Keyboard.KEY_M:
-				gameView.drawMessages = !gameView.drawMessages;
+				gameView.setDrawMessages(!gameView.isDrawMessages());
 				break;
 			case Keyboard.KEY_PERIOD:
 				ticksPerSecond *= 1.3;

@@ -30,8 +30,8 @@ public class GameView {
 	private static final int ANT_CORPSE_RADIUS = 3;
 	private static final int MESSAGE_RADIUS = 10;
 	private static final double CARRIED_SUGAR_RADIUS = 2;
-	public boolean drawSightRange = false;
-	public boolean drawMessages = false;
+	private boolean drawSightRange = false;
+	private boolean drawMessages = false;
 	private static final boolean DRAW_ATTACK = true;
 	private static final int SAMPLES = 1; // the scene is actually rendered SAMPLES^2 times 
 	
@@ -143,12 +143,12 @@ public class GameView {
 					setColor(1.0f, 1.0f, 1.0f, 1.0f);
 					fillCircle(antObject.getPosition(), CARRIED_SUGAR_RADIUS, ANT_CIRCLE_CORNERS);
 				}
-				if (drawSightRange) {
+				if (isDrawSightRange()) {
 					final float sightRangeAlpha = 0.3f;
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha);
 					drawCircle(antObject.getPosition(), antObject.caste.SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
-				if (drawMessages && antObject.getAction() != null && antObject.getAction().antMessage != null) {
+				if (isDrawMessages() && antObject.getAction() != null && antObject.getAction().antMessage != null) {
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
 					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 				}				
@@ -164,7 +164,7 @@ public class GameView {
 				}
 			}
 			// Hill messages
-			if (drawMessages && player.hillObject.getMessage() != null) {
+			if (isDrawMessages() && player.hillObject.getMessage() != null) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
 				drawCircle(player.hillObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 			}
@@ -260,5 +260,33 @@ public class GameView {
 			glVertex2d(Math.cos(angle), Math.sin(angle));
 		}
 		glEnd();
+	}
+
+	/**
+	 * @return the drawMessages
+	 */
+	public boolean isDrawMessages() {
+		return drawMessages;
+	}
+
+	/**
+	 * @param drawMessages the drawMessages to set
+	 */
+	public void setDrawMessages(boolean drawMessages) {
+		this.drawMessages = drawMessages;
+	}
+
+	/**
+	 * @return the drawSightRange
+	 */
+	public boolean isDrawSightRange() {
+		return drawSightRange;
+	}
+
+	/**
+	 * @param drawSightRange the drawSightRange to set
+	 */
+	public void setDrawSightRange(boolean drawSightRange) {
+		this.drawSightRange = drawSightRange;
 	}
 }

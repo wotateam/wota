@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class SeededRandomizer {
 	private static long seed;
-	private static Random internalRandom = new Random();
+	private static final Random internalRandom = new Random();
 	
-	public static SeededRandomizer random = new SeededRandomizer();
+	public static final SeededRandomizer random = new SeededRandomizer();
 	
 	public static void resetSeed(long seed) {
 		SeededRandomizer.seed = seed;
