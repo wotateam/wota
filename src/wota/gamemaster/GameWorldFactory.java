@@ -1,16 +1,13 @@
 package wota.gamemaster;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
-import java.util.Random;
 
-import wota.gameobjects.*;
+import wota.gameobjects.GameWorld;
+import wota.gameobjects.Parameters;
+import wota.gameobjects.SugarObject;
 import wota.utility.SeededRandomizer;
 import wota.utility.Vector;
 

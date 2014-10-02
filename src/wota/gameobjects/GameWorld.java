@@ -1,6 +1,5 @@
 package wota.gameobjects;
 
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,8 +9,6 @@ import java.util.List;
 import wota.gamemaster.AILoader;
 import wota.gamemaster.Logger;
 import wota.gamemaster.RandomPosition;
-import wota.gamemaster.SimulationParameters;
-import wota.gamemaster.StatisticsLogger;
 import wota.utility.Vector;
 
 

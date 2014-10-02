@@ -1,11 +1,7 @@
 package wota.gamemaster;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.swing.SwingUtilities;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -17,8 +13,6 @@ import wota.gameobjects.GameWorld;
 import wota.gameobjects.GameWorld.Player;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
-import wota.gameobjects.Parameters;
-import wota.utility.SeededRandomizer;
 
 
 /**
@@ -105,7 +99,11 @@ public class Simulation {
 			StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
 			gameWorld.setLogger(logger);
 			
-			statisticsView = new StatisticsView(gameWorld, logger);
+			//lazy initialization
+			if (statisticsView == null)
+				statisticsView = new StatisticsView(gameWorld, logger);
+			else
+				statisticsView.setGameWorld(gameWorld, logger);
 	        statisticsView.run();
 	        
 	        if (isGraphical) {
@@ -203,7 +201,7 @@ public class Simulation {
 			
 			System.out.println("seed last game: " + gameWorld.seed);
 
-			statisticsView.frame.dispose();
+			statisticsView.destroyContents();
 			if (isGraphical) {
 				Display.destroy();
 			}
@@ -267,10 +265,10 @@ public class Simulation {
 				running = false;
 				break;
 			case Keyboard.KEY_S:
-				gameView.drawSightRange = !gameView.drawSightRange;
+				gameView.setDrawSightRange(!gameView.isDrawSightRange());
 				break;
 			case Keyboard.KEY_M:
-				gameView.drawMessages = !gameView.drawMessages;
+				gameView.setDrawMessages(!gameView.isDrawMessages());
 				break;
 			case Keyboard.KEY_PERIOD:
 				ticksPerSecond *= 1.3;
@@ -309,6 +307,34 @@ public class Simulation {
 			playerNames[iActive] = player.get(iActive).name;
 		}
 		return playerNames;
+	}
+
+	/**
+	 * @return the startTime
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * @return the frameCount
+	 */
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	/**
+	 * @param frameCount the frameCount to set
+	 */
+	public void setFrameCount(int frameCount) {
+		this.frameCount = frameCount;
 	}
 
 }
