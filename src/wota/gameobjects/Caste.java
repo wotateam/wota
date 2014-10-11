@@ -9,6 +9,13 @@ package wota.gameobjects;
  * 1 tick laufen = Angriffsreichweite
  * Soldier vs. Soldier: Kampf dauert 5 Spielfeldlängen = 500 ticks
  * Soldier vs. Gatherer: noch nicht festgelegt (es gibt VULNERABILITY_WHILE_CARRYING in Parameters)
+ * 
+ * English translation:
+ * 100 ticks to get across the world without food
+ * 5 ticks = radius for seeing others and to be seen
+ * 1 tick = distance for attacking
+ * Soldier vs. Soldier: fight is about 5 game fields = 500 ticks
+ * Soldier vs. Gatherer: there is no information right now (there is VULNERABILITY_WHILE_CARRYING in Parameters)
  */
 public enum Caste {
 	Gatherer(

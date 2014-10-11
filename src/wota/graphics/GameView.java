@@ -110,7 +110,7 @@ public class GameView {
 					 HILL_COLOR_PERCENTAGE*colorComponents[1],
 					 HILL_COLOR_PERCENTAGE*colorComponents[2], 
 					 0);
-			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
+			fillCircle(player.getHillObject().getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 
 		// Ant corpses are in the background, too.
@@ -119,7 +119,7 @@ public class GameView {
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ant corpses			
-			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {
+			for (AntCorpseObject antCorpseObject : player.getAntCorpseObjects()) {
 				setColor(ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[0],
 						 ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[1],
 						 ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[2],
@@ -136,7 +136,7 @@ public class GameView {
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ants			
-			for (AntObject antObject : player.antObjects) {
+			for (AntObject antObject : player.getAntObjects()) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], 1.0f);
 				fillCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
 				if (antObject.isCarrying()) {
@@ -164,9 +164,9 @@ public class GameView {
 				}
 			}
 			// Hill messages
-			if (isDrawMessages() && player.hillObject.getMessage() != null) {
+			if (isDrawMessages() && player.getHillObject().getMessage() != null) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
-				drawCircle(player.hillObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
+				drawCircle(player.getHillObject().getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 			}
 		}
 	}
