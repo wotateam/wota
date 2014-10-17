@@ -6,7 +6,9 @@ package wota.graphics;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -40,6 +42,12 @@ public class StatisticsView implements Runnable {
 		if (frame == null) {
 			frame = new JFrame("Wota Statistics");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			// set logo as icon
+			try {
+				frame.setIconImage(ImageIO.read(getClass().getResource("logo.png")));
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 		frame.setLayout(new FlowLayout());
 
@@ -110,14 +118,17 @@ public class StatisticsView implements Runnable {
 			return data[rowIndex][columnIndex];
 		}
 
-		/** updates all of the data */
-		public void refresh() {
+		/** updates all of the data 
+		 * 
+		 * @throws NullPointerException from player.numAnts
+		 */
+		public synchronized void refresh() throws NullPointerException{
 			for (int column = 1; column < getColumnCount(); column++) {
 				int playerId = column - 1;
 				Player player = gameWorld.getPlayers().get(playerId);
 
 				data[0][column] = PlayerColors.get(player.id());
-				data[1][column] = player.antObjects.size();
+				data[1][column] = player.getAntObjects().size();
 				data[2][column] = player.numAnts(Caste.Gatherer);
 				data[3][column] = player.numAnts(Caste.Soldier);
 				data[4][column] = player.numAnts(Caste.Scout);
@@ -147,8 +158,11 @@ public class StatisticsView implements Runnable {
 
 	}
 
-	/** call this when the table should grab the information */
-	public void refresh() {
+	/** call this when the table should grab the information
+	 * 
+	 * @throws NullPointerException
+	 */
+	public void refresh() throws NullPointerException{
 		statisticsTableModel.refresh();
 		
 		// tell the JTable to update graphics

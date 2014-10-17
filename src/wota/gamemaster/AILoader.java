@@ -40,7 +40,6 @@ public class AILoader {
 		searchpath = path;
 	}
 
-	// FIXME: This is ugly, but I don't know a way around it
 	/**
 	 * Dynamically loads the class object representing the given HillAI
 	 * implementation. The class is assumed to be "HillAI" located in the in
@@ -51,7 +50,6 @@ public class AILoader {
 	 *            qualifier)
 	 * @return Class object representing an implementation of HillAI
 	 */
-	@SuppressWarnings("unchecked")
 	public Class<? extends HillAI> loadHill(String aiName) {
 		File hillFile = new File(aiName + ".jar");
 		File searchFile = new File(searchpath);
@@ -61,18 +59,21 @@ public class AILoader {
 
 			Class<?> hillAIClass = hillLoader.loadClass(AI_PACKAGE + "."
 					+ aiName + "." + HILL_AI_CLASS_NAME);
-
-			// Check whether loaded class is a HillAI
-			if (!HillAI.class.isAssignableFrom(hillAIClass)) {
+			
+			try{
+				// cast class
+				Class<? extends HillAI> castHillAIClass = hillAIClass.asSubclass(HillAI.class);
+				
+				if (AISecurity.checkAI(castHillAIClass))
+					return castHillAIClass;
+				else
+					return null;
+			}catch (ClassCastException ex){
+				// handle loaded class not subclass of HillAI
 				System.out.println("Class " + hillAIClass
 						+ " does not extend HillAI");
 				return null;
 			}
-
-			if (AISecurity.checkAI((Class<? extends HillAI>) hillAIClass))
-				return (Class<? extends HillAI>) hillAIClass;
-			else
-				return null;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			System.exit(-1);

@@ -62,6 +62,8 @@ public class Simulation {
 	private boolean abortRequested = false;
 	
 	private int frameCount;
+
+	private int measureFrameCount;
 		
 	public Simulation(SimulationParameters simulationParameters, 
 					  GameWorldFactory gameWorldFactory) {
@@ -126,8 +128,11 @@ public class Simulation {
 	        
 			resetReferenceValues();
 			long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
-			int measureFrameCount = 0; // Frame counter to determine TPS
+			measureFrameCount = 0;
 			int measureTickCount = 0; // Tick counter to determine FPS
+			
+			if(!isGraphical)
+				new Thread(new StatisticsRefresher()).start();
 			
 			// events for graphics update and tick are created uniformly. Call them with priority on graphics
 			while (running && !abortRequested) { 			
@@ -149,7 +154,7 @@ public class Simulation {
 				}
 					
 				// Update Graphics if event for graphic update is swept.
-				if (framesToDo() > 0) {
+				if (framesToDo() > 0 && isGraphical) {
 					statisticsView.refresh();
 					frameCount++;
 					measureFrameCount++;
@@ -205,8 +210,37 @@ public class Simulation {
 			if (isGraphical) {
 				Display.destroy();
 			}
+			running = false;
 		} // last gameWorld done
 		System.out.println(resultCollection);
+	}
+	
+	/**
+	 * Refreshes the statisticsView  in run().
+	 */
+	private class StatisticsRefresher implements Runnable{
+
+		@Override
+		public void run() {
+			try {
+				while (running && !abortRequested) {
+					if (framesToDo() > 0) {
+						try{
+							statisticsView.refresh();
+						} catch (NullPointerException ex) {
+							// only thrown in strange circumstances
+						}
+						frameCount++;
+						measureFrameCount++;
+						referenceFrameCount++;
+					}
+					Thread.sleep((long)(1 / framesPerSecond));//correct frames per second
+				}
+			} catch (InterruptedException ex) {
+
+			}
+		}
+		
 	}
 	
 	/**
