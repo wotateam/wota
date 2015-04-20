@@ -1,6 +1,5 @@
 package wota.gameobjects;
 
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,8 +9,6 @@ import java.util.List;
 import wota.gamemaster.AILoader;
 import wota.gamemaster.Logger;
 import wota.gamemaster.RandomPosition;
-import wota.gamemaster.SimulationParameters;
-import wota.gamemaster.StatisticsLogger;
 import wota.utility.Vector;
 
 
@@ -57,7 +54,7 @@ public class GameWorld {
 	public void createRandomSugarObject() {
 		List<Vector> hillPositions = new LinkedList<Vector>();
 		for (Player player : players) {
-			hillPositions.add(player.hillObject.getPosition());
+			hillPositions.add(player.getHillObject().getPosition());
 		}
 		
 		List<Vector> sugarPositions = new LinkedList<Vector>();
@@ -87,9 +84,9 @@ public class GameWorld {
 	private int nextPlayerId = 0;
 	
 	public class Player {
-		public final List<AntObject> antObjects = new LinkedList<AntObject>();
-		public final List<AntCorpseObject> antCorpseObjects = new LinkedList<AntCorpseObject>();
-		public final HillObject hillObject;
+		private final List<AntObject> antObjects = new LinkedList<AntObject>();
+		private final List<AntCorpseObject> antCorpseObjects = new LinkedList<AntCorpseObject>();
+		private final HillObject hillObject;
 
 		public final String name;
 		public final String creator;
@@ -103,7 +100,7 @@ public class GameWorld {
 		// TODO make this private and change addPlayer
 		public Player(Vector position, Class<? extends HillAI> hillAIClass) {
 			hillObject = new HillObject(position, this, hillAIClass, parameters);
-			spacePartitioning.addHillObject(hillObject);
+			spacePartitioning.addHillObject(getHillObject());
 					
 			name = AILoader.getAIName(hillAIClass);
 			creator = AILoader.getAICreator(hillAIClass);
@@ -117,19 +114,53 @@ public class GameWorld {
 			return "AI " + (id +1) + " " + name + " written by " + creator;
 		}
 		
-		public void addAntObject(AntObject antObject) {
-			antObjects.add(antObject);
+		public synchronized void addAntObject(AntObject antObject) {
+			getAntObjects().add(antObject);
 			spacePartitioning.addAntObject(antObject);
 		}
+		
+		/**
+		 * removes antObject from the antObjects list
+		 * @param antObject antObject to remove
+		 */
+		public synchronized void removeAntObject(AntObject antObject) {
+			getAntObjects().remove(antObject);
+		}
 				
-		public int numAnts(Caste caste) {
+		/**
+		 * @param caste
+		 * @return number of ants of given caste
+		 * @throws NullPointerException if antObjects is null
+		 */
+		public synchronized int numAnts(Caste caste) throws NullPointerException{
 			int num = 0;
-			for (AntObject antObject : antObjects) {
+			for (AntObject antObject : getAntObjects()) {
 				if (antObject.caste == caste) {
 					num++;
 				}
 			}
 			return num;
+		}
+
+		/**
+		 * @return antObjects
+		 */
+		public synchronized List<AntObject> getAntObjects() {
+			return antObjects;
+		}
+
+		/**
+		 * @return the antCorpseObjects
+		 */
+		public List<AntCorpseObject> getAntCorpseObjects() {
+			return antCorpseObjects;
+		}
+
+		/**
+		 * @return the hillObject
+		 */
+		public HillObject getHillObject() {
+			return hillObject;
 		}
 		
 	}
@@ -141,13 +172,13 @@ public class GameWorld {
 		// the AntAI (the latter happens in AntObject.createAnt() )
 		// also create Sugar for SugarObjects
 		for (Player player : players) {
-			for (AntObject antObject : player.antObjects) {
+			for (AntObject antObject : player.getAntObjects()) {
 				antObject.createAnt();
 			}
-			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {
+			for (AntCorpseObject antCorpseObject : player.getAntCorpseObjects()) {
 				antCorpseObject.createAntCorpse();
 			}
-			player.hillObject.createHill();
+			player.getHillObject().createHill();
 		}
 
 		for (SugarObject sugarObject : sugarObjects) {
@@ -156,7 +187,7 @@ public class GameWorld {
 
 		// call tick for all AntObjects
 		for (Player player : players) {			
-			for (AntObject antObject : player.antObjects) {
+			for (AntObject antObject : player.getAntObjects()) {
 				List<Ant> visibleAnts = new LinkedList<Ant>();
 				List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
 				List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
@@ -212,7 +243,7 @@ public class GameWorld {
 			}
 			
 			// call tick for all corpses
-			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {			
+			for (AntCorpseObject antCorpseObject : player.getAntCorpseObjects()) {			
 				antCorpseObject.tick();
 			}
 			
@@ -225,9 +256,9 @@ public class GameWorld {
 			List<AntCorpse> visibleCorpses = new LinkedList<AntCorpse>();
 			List<AntMessage> audibleAntMessages = new LinkedList<AntMessage>();
 
-			double sightRange = player.hillObject.caste.SIGHT_RANGE;
-			double hearingRange = player.hillObject.caste.HEARING_RANGE;
-			Vector position = player.hillObject.getPosition();
+			double sightRange = player.getHillObject().caste.SIGHT_RANGE;
+			double hearingRange = player.getHillObject().caste.HEARING_RANGE;
+			Vector position = player.getHillObject().getPosition();
 			
 			for (AntObject visibleAntObject : 
 					spacePartitioning.antObjectsInsideCircle(sightRange, position)) {
@@ -246,7 +277,7 @@ public class GameWorld {
 				}
 			}
 			
-			player.hillObject.tick(visibleAnts, visibleCorpses, audibleAntMessages);
+			player.getHillObject().tick(visibleAnts, visibleCorpses, audibleAntMessages);
 
 		}
 		// Only do this now that we used last tick's message objects.
@@ -255,19 +286,19 @@ public class GameWorld {
 		
 		// execute all actions, ants get created
 		for (Player player : players) {
-			for (AntObject antObject : player.antObjects) {
+			for (AntObject antObject : player.getAntObjects()) {
 				executeActionExceptMovement(antObject);
 			} 
 		}
 		
 		for (Player player : players) {
-			for (AntObject antObject : player.antObjects) {
+			for (AntObject antObject : player.getAntObjects()) {
 				executeMovement(antObject);
 			}
 
 			// order does matter since the hill creates new ants!
-			handleHillMessage(player.hillObject, player.hillObject.getMessage());
-			executeAntOrders(player.hillObject);
+			handleHillMessage(player.getHillObject(), player.getHillObject().getMessage());
+			executeAntOrders(player.getHillObject());
 		}
 		
 		// The sugar objects needs to go after the ant actions, because now
@@ -282,24 +313,27 @@ public class GameWorld {
 				
 
 		// Let ants die! (i.e. turn them into corpses) and let corpses disappear
+		LinkedList<AntObject> antObjectsToRemove = new LinkedList<AntObject>();
+		LinkedList<AntCorpseObject> corpsesToRemove = new LinkedList<AntCorpseObject>();
 		for (Player player : players) {
-			for (Iterator<AntObject> antObjectIter = player.antObjects.iterator();
-					antObjectIter.hasNext();) {
-				AntObject antObject = antObjectIter.next();
+			antObjectsToRemove.clear();
+			corpsesToRemove.clear();
+			for (AntObject antObject : player.getAntObjects()) {
 				if (antObject.isDead()) {
 					antDies(antObject);
-					antObjectIter.remove();
+					antObjectsToRemove.add(antObject);
 				}
 			}
+			for(AntObject deadAnt : antObjectsToRemove)
+				player.removeAntObject(deadAnt);
 			
-			for (Iterator<AntCorpseObject> antCorpseObjectIter = player.antCorpseObjects.iterator();
-					antCorpseObjectIter.hasNext();) {
-				AntCorpseObject antCorpseObject = antCorpseObjectIter.next();
+			for (AntCorpseObject antCorpseObject : player.getAntCorpseObjects()) {
 				if (antCorpseObject.isDecayed()) {
-					antCorpseObjectIter.remove();
+					corpsesToRemove.add(antCorpseObject);
 					antCorpseDisappears(antCorpseObject);
 				}
 			}
+			player.getAntCorpseObjects().removeAll(corpsesToRemove);
 		}
 		
 		int removedSugarObjects = removeSugarObjects();
@@ -315,7 +349,7 @@ public class GameWorld {
 		spacePartitioning.removeAntObject(almostDead);
 		
 		AntCorpseObject freshCorpse = new AntCorpseObject(almostDead);
-		almostDead.player.antCorpseObjects.add(freshCorpse);
+		almostDead.player.getAntCorpseObjects().add(freshCorpse);
 		spacePartitioning.addAntCorpseObject(freshCorpse);
 	}
 	
@@ -353,11 +387,11 @@ public class GameWorld {
 		while (iterator.hasNext()) {
 			AntOrder antOrder = iterator.next();
 		
-			if (parameters.ANT_COST <= player.hillObject.getStoredFood()) {
-				player.hillObject.changeStoredFoodBy(-parameters.ANT_COST);
+			if (parameters.ANT_COST <= player.getHillObject().getStoredFood()) {
+				player.getHillObject().changeStoredFoodBy(-parameters.ANT_COST);
 				
 				AntObject newAntObject = new AntObject(
-						hillObject.getPlayer().hillObject.getPosition(),
+						hillObject.getPlayer().getHillObject().getPosition(),
 						antOrder.getCaste(), antOrder.getAntAIClass(),
 						hillObject.getPlayer(), parameters);
 				createAntObject(hillObject, newAntObject);
@@ -406,9 +440,9 @@ public class GameWorld {
 
 		// Drop sugar at the hill.
 		// Optimization: Use space partitioning for dropping sugar at the hill, don't test for all ants.
-		if (parameters.distance(actor.player.hillObject.getPosition(), actor.getPosition())
+		if (parameters.distance(actor.player.getHillObject().getPosition(), actor.getPosition())
 				<= parameters.HILL_RADIUS && actor.getSugarCarry() > 0) {
-			actor.player.hillObject.changeStoredFoodBy(actor.getSugarCarry());
+			actor.player.getHillObject().changeStoredFoodBy(actor.getSugarCarry());
 			logger.antCollectedFood(actor.player, actor.getSugarCarry());
 			actor.dropSugar();
 		}
@@ -467,7 +501,7 @@ public class GameWorld {
 		
 		int nPlayersAlive = players.size();
 		for (Player player : players) {
-			if ( player.antObjects.size() == 0 ) {
+			if ( player.getAntObjects().size() == 0 ) {
 				nPlayersAlive--;
 			}
 		}
@@ -488,7 +522,7 @@ public class GameWorld {
 		
 		double totalAnts = 0;
 		for (Player player : players) {
-			totalAnts += player.antObjects.size();
+			totalAnts += player.getAntObjects().size();
 		}
 		
 		if (totalAnts == 0) {
@@ -496,7 +530,7 @@ public class GameWorld {
 		}
 		
 		for (Player player : players) {
-			if (player.antObjects.size() / totalAnts >= parameters.FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY) {
+			if (player.getAntObjects().size() / totalAnts >= parameters.FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY) {
 				winnerList.add(player);
 				return winnerList;
 			}
@@ -520,8 +554,8 @@ public class GameWorld {
 				playersWithMostAnts.add(player);
 			}
 			else {
-				int antsPlayer = player.antObjects.size();
-				int antsNeeded = playersWithMostAnts.get(0).antObjects.size();
+				int antsPlayer = player.getAntObjects().size();
+				int antsNeeded = playersWithMostAnts.get(0).getAntObjects().size();
 				if (antsPlayer > antsNeeded) {
 					playersWithMostAnts.clear();
 					playersWithMostAnts.add(player);
@@ -537,7 +571,7 @@ public class GameWorld {
 	public int totalNumberOfAntObjects() {
 		int n = 0;
 		for (Player player : players) {
-			n += player.antObjects.size();
+			n += player.getAntObjects().size();
 		}
 		return n;
 	}

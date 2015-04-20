@@ -57,7 +57,7 @@ public class SoldierAI extends AntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -255,7 +255,7 @@ public class SoldierAI extends AntAI {
 					}
 				}
 				if (hear_leader){
-					if (SeededRandomizer.getDouble()<HillAI.SUGAR_PROB){
+					if (random.nextDouble()<HillAI.SUGAR_PROB){
 						assignment = SwatStatus.PATROLLING;
 						target_sugar();
 					}else{
@@ -287,7 +287,7 @@ public class SoldierAI extends AntAI {
 			target_home();
 		}else{
 			target = hills.get(HillAI.SUGAR_IND).get(
-					SeededRandomizer.getInt(num_sugar));
+					random.nextInt(num_sugar));
 		}
 	}
 	
@@ -297,7 +297,7 @@ public class SoldierAI extends AntAI {
 			target_home();
 		}else{
 			target = hills.get(HillAI.HILL_IND).get(
-					SeededRandomizer.getInt(num_hills-1)+1);
+					random.nextInt(num_hills-1)+1);
 		}
 	}
 	
@@ -373,7 +373,7 @@ public class SoldierAI extends AntAI {
 				dir = (360*count)/(total+1);
 				moveInDirection(dir);
 			}else{//later, just go some random direction:
-				dir = SeededRandomizer.getDouble()*360;
+				dir = random.nextDouble()*360;
 			}
 			
 			//initialize hills:

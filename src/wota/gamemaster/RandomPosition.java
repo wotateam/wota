@@ -59,10 +59,10 @@ public class RandomPosition {
 			
 			@Override
 			public Vector position() {
-				final double distance = SeededRandomizer.getDouble() * 
+				final double distance = SeededRandomizer.nextDouble() * 
 					(parameters.MAXIMUM_STARTING_SUGAR_DISTANCE - parameters.MINIMUM_STARTING_SUGAR_DISTANCE) 
 					+ parameters.MINIMUM_STARTING_SUGAR_DISTANCE;
-				final double direction = SeededRandomizer.getDouble() * 360;
+				final double direction = SeededRandomizer.nextDouble() * 360;
 				return Vector.add(hillPosition, Vector.fromPolar(distance, direction));
 			}
 			
@@ -113,7 +113,7 @@ public class RandomPosition {
 	}
 	
 	private Vector randomPosition() {
-		return new Vector(SeededRandomizer.getDouble()*parameters.SIZE_X, SeededRandomizer.getDouble()*parameters.SIZE_Y);
+		return new Vector(SeededRandomizer.nextDouble()*parameters.SIZE_X, SeededRandomizer.nextDouble()*parameters.SIZE_Y);
 	}
 	
 	private static abstract class KindOfPosition {

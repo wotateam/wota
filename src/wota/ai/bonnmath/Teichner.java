@@ -60,7 +60,7 @@ public class Teichner extends AntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -71,13 +71,11 @@ public class Teichner extends AntAI {
 	 */
 	@Override
 	public void tick() throws Exception {
-		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
-		// note: it won't leave the sugar source after it reached it.
-		if(SeededRandomizer.getDouble()<0.03){
-			direction=SeededRandomizer.getDouble()*360.0;
+		if(random.nextDouble()<0.03){
+			direction=random.nextDouble()*360.0;
 		}
 		if(position==false && value==-1){
-			value=SeededRandomizer.getInt(100000);
+			value=random.nextInt(100000);
 			talk(10*value+7);
 		}
 		if(position==false){

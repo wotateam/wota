@@ -61,6 +61,16 @@ public class BieneMaja extends MyAntAI {
 	 */
 	@Override
 	public void tick() throws Exception {
+	/*
+		System.out.print(getdir(10.,20.,48.));
+		System.out.print("\n");
+		System.out.print(getdir(10.,20.,36.));
+		System.out.print("\n");
+		System.out.print(getdir(10,45.,48.));
+		System.out.print("\n");
+		System.out.print(getdir(10.,20.,34.));
+	*/	
+		
 		moveInDirection(0);
 		dowhatcanbedone();
 		boolean A=(self.sugarCarry==0);
@@ -70,21 +80,22 @@ public class BieneMaja extends MyAntAI {
 		boolean E=(closeenemy==self);
 		boolean F=(self.health<10*Caste.Soldier.ATTACK);
 		double prefdir=direction;
-		
+		// First division: test whether enough health
 		if(!F){
+			// set direction where ant wants to go (in case it is not carrying sugar
 			if(B){
-			/*	if(E){
+				if(E || friendforce>=enemyforce){
 					prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
 				}else{
-					prefdir=getdir(torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).angle(),vectorTo(closenemy).angle(),vectorTo(closenemy).length());
-				}*/
-				prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
+					prefdir=getdir(torus(Vector.subtract(mysugar.getsnapshot().getPosition(),self.getPosition())).angle(),vectorTo(closeenemy).angle(),vectorTo(closeenemy).length());
+				}
+			//	prefdir=torus(Vector.subtract(mysugar.getsnapshot().getPosition(), self.getPosition())).angle();
 			}else{
 				if(!E) prefdir=getdir(direction,vectorTo(closeenemy).angle(),vectorTo(closeenemy).length());
 			}
 			
 			
-			
+			// Easy case carrying sugar
 			if(!A){
 				if(E){
 					moveHome();
@@ -96,8 +107,9 @@ public class BieneMaja extends MyAntAI {
 						if(vectorTo(closeenemy).length()<parameters.ATTACK_RANGE+closeenemy.caste.SPEED) dropSugar();
 					}
 				}
-				
+			// not carrying sugar	
 			}else{
+				// easy case: good victim
 				if(!D){
 					if(atarget!=self){
 						moveToward(atarget);
@@ -106,11 +118,23 @@ public class BieneMaja extends MyAntAI {
 						moveToward(btarget);
 					}
 				}else{
-					if(!C){
+					// did not yet reach sugar
+					// in case you have more ants you probably have to be more agressive 
+					// 
+					if(!C && reachedsugar==false){
 						moveInDirection(prefdir);
+					// reached sugar
 					}else{
+						//enemy in sightrange
 						if(!E){	//parameters.TICKS_SUGAR_PICKUP*closenemy.caste.SPEED){
-							if(enemyforce<friendforce){
+							if(enemyforce<friendforce && torus(Vector.subtract(self.getPosition(), mysugar.getsnapshot().getPosition())).length()< beta*self.caste.SIGHT_RANGE){
+								//getsugar tests whether there is a sugar in sightrange
+								if(getsugar){
+									moveToward(closest(visibleSugar));
+									if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius && vectorTo(closeenemy).length()>parameters.ATTACK_RANGE+closeenemy.caste.SPEED){
+										pickUpSugar(closest(visibleSugar));
+									}
+								}
 								if(ctarget!=self){
 									attack(ctarget);
 									if(closefriend!=self && vectorTo(ctarget).length()<parameters.ATTACK_RANGE/1.7){
@@ -122,11 +146,20 @@ public class BieneMaja extends MyAntAI {
 									moveToward(dtarget);
 								}
 								}else{
-									moveInDirection(Modulo.mod(vectorTo(closeenemy).angle()+180., 360.));
-								}		
+									moveInDirection(prefdir);
+							//		moveInDirection(Modulo.mod(vectorTo(closeenemy).angle()+180., 360.));
+								}
+						// no enemy in sightrange	
 						}else{
-							moveToward(closest(visibleSugar));
-							if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius ) pickUpSugar(closest(visibleSugar));
+							if(!C){
+								moveInDirection(prefdir);
+							}else{
+								if(visibleSugar.size()>0){
+									moveToward(closest(visibleSugar));
+									if(vectorTo(closest(visibleSugar)).length()<closest(visibleSugar).radius ) pickUpSugar(closest(visibleSugar));		
+								}
+								
+							}
 						}
 					}
 				}

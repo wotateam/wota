@@ -7,9 +7,8 @@ package wota.ai.template; /* <-- change this to wota.ai.YOUR_AI_NAME
  							  * the name of your choice) 
  							  */
 
-import wota.gamemaster.AIInformation;
-import wota.gameobjects.*;
-import wota.utility.SeededRandomizer;
+import wota.gameobjects.AntAI;
+import wota.gameobjects.Sugar;
 
 /**
  * Put a description of you AI here.
@@ -47,7 +46,7 @@ public class TemplateAI extends AntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts

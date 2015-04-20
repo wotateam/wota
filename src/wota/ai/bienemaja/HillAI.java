@@ -30,15 +30,27 @@ public class HillAI extends MyHillAI {
 		 * if you don't have enough food to create the ant your call
 		 * will be ignored
 		 */
+		double food=self.food;
 		dowhatcanbedone();
-		if(time==1) createAnt(Caste.Scout, Huepfer.class);
-		
-		for(int i=0; i<self.food/parameters.ANT_COST;i++){
+		if(time==1){
+			createAnt(Caste.Scout, Huepfer.class);
+			scout+=1;
+		}
+		if(gatherer>10*scout && food>=parameters.ANT_COST && scout<5){
+			food-=parameters.ANT_COST;
+			scout+=1;
+			createAnt(Caste.Scout, Huepfer.class);
+		}
+		while(food>=parameters.ANT_COST){
 			//createAnt(Caste.Soldier, Thekla.class);
-			if(SeededRandomizer.getDouble()<1){//0.4*acceptance(time)+0.3){
+			if(random.nextDouble()<0.5 || gatherer<60){//0.4*acceptance(time)+0.3){
 				createAnt(Caste.Gatherer, BieneMaja.class);
+				food-=parameters.ANT_COST;
+				gatherer+=1;
 			}else{
 				createAnt(Caste.Soldier, Thekla.class);
+				soldier+=1;
+				food-=parameters.ANT_COST;
 			}
 		
 		say(0);

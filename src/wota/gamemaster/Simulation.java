@@ -1,11 +1,7 @@
 package wota.gamemaster;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.swing.SwingUtilities;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -17,8 +13,6 @@ import wota.gameobjects.GameWorld;
 import wota.gameobjects.GameWorld.Player;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
-import wota.gameobjects.Parameters;
-import wota.utility.SeededRandomizer;
 
 
 /**
@@ -68,6 +62,8 @@ public class Simulation {
 	private boolean abortRequested = false;
 	
 	private int frameCount;
+
+	private int measureFrameCount;
 		
 	public Simulation(SimulationParameters simulationParameters, 
 					  GameWorldFactory gameWorldFactory) {
@@ -100,17 +96,21 @@ public class Simulation {
 				break;
 			}
 			
-			SeededRandomizer.resetSeed(gameWorld.seed);
 			System.out.println("seed next game: " + gameWorld.seed);			
 			
 			StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
 			gameWorld.setLogger(logger);
 			
-			statisticsView = new StatisticsView(gameWorld, logger);
+			//lazy initialization
+			if (statisticsView == null)
+				statisticsView = new StatisticsView(gameWorld, logger);
+			else
+				statisticsView.setGameWorld(gameWorld, logger);
 	        statisticsView.run();
 	        
 	        if (isGraphical) {
 	        	try {
+	        		Display.setTitle("Wota");
 					Display.setDisplayMode(new DisplayMode(width, height));
 					Display.create(new PixelFormat(8,0,0,0));
 				} catch (LWJGLException e) {
@@ -128,8 +128,11 @@ public class Simulation {
 	        
 			resetReferenceValues();
 			long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
-			int measureFrameCount = 0; // Frame counter to determine TPS
+			measureFrameCount = 0;
 			int measureTickCount = 0; // Tick counter to determine FPS
+			
+			if(!isGraphical)
+				new Thread(new StatisticsRefresher()).start();
 			
 			// events for graphics update and tick are created uniformly. Call them with priority on graphics
 			while (running && !abortRequested) { 			
@@ -151,7 +154,7 @@ public class Simulation {
 				}
 					
 				// Update Graphics if event for graphic update is swept.
-				if (framesToDo() > 0) {
+				if (framesToDo() > 0 && isGraphical) {
 					statisticsView.refresh();
 					frameCount++;
 					measureFrameCount++;
@@ -203,12 +206,41 @@ public class Simulation {
 			
 			System.out.println("seed last game: " + gameWorld.seed);
 
-			statisticsView.frame.dispose();
+			statisticsView.destroyContents();
 			if (isGraphical) {
 				Display.destroy();
 			}
+			running = false;
 		} // last gameWorld done
 		System.out.println(resultCollection);
+	}
+	
+	/**
+	 * Refreshes the statisticsView  in run().
+	 */
+	private class StatisticsRefresher implements Runnable{
+
+		@Override
+		public void run() {
+			try {
+				while (running && !abortRequested) {
+					if (framesToDo() > 0) {
+						try{
+							statisticsView.refresh();
+						} catch (NullPointerException ex) {
+							// only thrown in strange circumstances
+						}
+						frameCount++;
+						measureFrameCount++;
+						referenceFrameCount++;
+					}
+					Thread.sleep((long)(1 / framesPerSecond));//correct frames per second
+				}
+			} catch (InterruptedException ex) {
+
+			}
+		}
+		
 	}
 	
 	/**
@@ -267,10 +299,10 @@ public class Simulation {
 				running = false;
 				break;
 			case Keyboard.KEY_S:
-				gameView.drawSightRange = !gameView.drawSightRange;
+				gameView.setDrawSightRange(!gameView.isDrawSightRange());
 				break;
 			case Keyboard.KEY_M:
-				gameView.drawMessages = !gameView.drawMessages;
+				gameView.setDrawMessages(!gameView.isDrawMessages());
 				break;
 			case Keyboard.KEY_PERIOD:
 				ticksPerSecond *= 1.3;
@@ -309,6 +341,34 @@ public class Simulation {
 			playerNames[iActive] = player.get(iActive).name;
 		}
 		return playerNames;
+	}
+
+	/**
+	 * @return the startTime
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * @return the frameCount
+	 */
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	/**
+	 * @param frameCount the frameCount to set
+	 */
+	public void setFrameCount(int frameCount) {
+		this.frameCount = frameCount;
 	}
 
 }

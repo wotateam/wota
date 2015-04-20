@@ -106,10 +106,10 @@ public class HillAI extends MyHillAI {
 		
 		Vector position=new Vector(0,0);
 	/*	if(sugarlist.size()>0){
-			if(SeededRandomizer.getDouble()<0.5){
+			if(random.getDouble()<0.5){
 				position=sugarlist.get(0).getPosition();
 			}else{
-				position=sugarlist.get(SeededRandomizer.getInt(sugarlist.size())).getPosition();
+				position=sugarlist.get(random.getInt(sugarlist.size())).getPosition();
 			}
 			talk(((int)((Math.round(position.x+parameters.SIZE_X/2))*Math.round(parameters.SIZE_Y)*10)+((int)((Math.round(position.y+parameters.SIZE_Y/2))*10+1))));
 		}*/
@@ -138,7 +138,7 @@ public class HillAI extends MyHillAI {
 					}
 				}
 			}
-			if(numbergatherer<10 || SeededRandomizer.getDouble()<0.9){
+			if(numbergatherer<10 || random.nextDouble()<0.9){
 				for(Haufen haufen : sugarlist){	
 					if(check){
 						if(haufen.getsoldiers()<2){

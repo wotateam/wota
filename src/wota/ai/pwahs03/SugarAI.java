@@ -288,7 +288,7 @@ public class SugarAI extends AntAI {
 				dir = (360*count)/(total+1);
 				moveInDirection(dir);
 			}else{//later, just go some random direction:
-				dir = SeededRandomizer.getDouble()*360;
+				dir = random.nextDouble()*360;
 			}
 			
 			//initialize hills:

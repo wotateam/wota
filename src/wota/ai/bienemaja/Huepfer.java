@@ -48,7 +48,7 @@ public class Huepfer extends MyAntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -60,8 +60,54 @@ public class Huepfer extends MyAntAI {
 	@Override
 	public void tick() throws Exception {
 		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
+		for(Ant ant: visibleAnts){
+			if(ant.caste==Caste.Scout && ant.playerID==self.playerID){
+				initialised=false;
+			}
+		}
 		dowhatcanbedone();
-		Vector v=new Vector((2*self.caste.SIGHT_RANGE-1.),parameters.SIZE_X);
+		
+		if(initialised==false){
+			initialised=true;
+			if(random.nextInt(2)==0){
+				if(random.nextInt(2)==0){
+					if(random.nextInt(2)==0){
+						v.y=(2*self.caste.SIGHT_RANGE-1.);
+						v.x=parameters.SIZE_X;
+					}else{
+						v.y=-(2*self.caste.SIGHT_RANGE-1.);
+						v.x=parameters.SIZE_X;
+					}
+				}else{
+					if(random.nextInt(2)==0){
+						v.y=(2*self.caste.SIGHT_RANGE-1.);
+						v.x=-parameters.SIZE_X;
+					}else{
+						v.y=-(2*self.caste.SIGHT_RANGE-1.);
+						v.x=-parameters.SIZE_X;
+					}
+				}
+			}else{
+				if(random.nextInt(2)==0){
+					if(random.nextInt(2)==0){
+						v.x=(2*self.caste.SIGHT_RANGE-1.);
+						v.y=parameters.SIZE_Y;
+					}else{
+						v.x=-(2*self.caste.SIGHT_RANGE-1.);
+						v.y=parameters.SIZE_Y;
+					}
+				}else{
+					if(random.nextInt(2)==0){
+						v.x=(2*self.caste.SIGHT_RANGE-1.);
+						v.y=-parameters.SIZE_Y;
+					}else{
+						v.x=-(2*self.caste.SIGHT_RANGE-1.);
+						v.y=-parameters.SIZE_Y;
+					}
+				}
+			}
+		}
+
 		moveInDirection(v.angle());
 		say(0);
 	}

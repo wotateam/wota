@@ -24,8 +24,6 @@ public class Parameters {
 	public final int ANT_COST;
 	// Amount of food available at each hill when the game starts:
 	public final int STARTING_FOOD;
-	// An ant's moving direction may differ this much from the intended direction:
-	public final double ANGLE_ERROR_PER_DISTANCE;
 	// Number of ticks between sugar pickups: 
 	public final int TICKS_BETWEEN_PICK_UPS_AT_SOURCE;
 	// Number of ticks until a corpse disappears:
@@ -59,8 +57,6 @@ public class Parameters {
 		INITIAL_SUGAR_IN_SOURCE = Integer.parseInt(p.getProperty("INITIAL_SUGAR_IN_SOURCE"));
 		ANT_COST = Integer.parseInt(p.getProperty("ANT_COST"));
 		STARTING_FOOD = Integer.parseInt(p.getProperty("STARTING_FOOD"));
-		
-		ANGLE_ERROR_PER_DISTANCE  = Double.parseDouble(p.getProperty("ANGLE_ERROR_PER_DISTANCE"));
 
 		TICKS_BETWEEN_PICK_UPS_AT_SOURCE = Integer.parseInt(p.getProperty("TICKS_BETWEEN_PICK_UPS_AT_SOURCE"));
 		CORPSE_DECAY_TIME = Integer.parseInt(p.getProperty("CORPSE_DECAY_TIME"));

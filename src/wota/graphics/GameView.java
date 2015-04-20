@@ -1,8 +1,5 @@
 package wota.graphics;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.*;
-
 import wota.gameobjects.AntCorpseObject;
 import wota.gameobjects.AntObject;
 import wota.gameobjects.GameWorld;
@@ -14,8 +11,6 @@ import wota.utility.Vector;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL14.*;
 import java.awt.Color;
-
-import javax.swing.JFrame;
 
 
 /**
@@ -35,8 +30,8 @@ public class GameView {
 	private static final int ANT_CORPSE_RADIUS = 3;
 	private static final int MESSAGE_RADIUS = 10;
 	private static final double CARRIED_SUGAR_RADIUS = 2;
-	public boolean drawSightRange = false;
-	public boolean drawMessages = false;
+	private boolean drawSightRange = false;
+	private boolean drawMessages = false;
 	private static final boolean DRAW_ATTACK = true;
 	private static final int SAMPLES = 1; // the scene is actually rendered SAMPLES^2 times 
 	
@@ -115,7 +110,7 @@ public class GameView {
 					 HILL_COLOR_PERCENTAGE*colorComponents[1],
 					 HILL_COLOR_PERCENTAGE*colorComponents[2], 
 					 0);
-			fillCircle(player.hillObject.getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
+			fillCircle(player.getHillObject().getPosition(), parameters.HILL_RADIUS, HILL_CIRCLE_CORNERS);
 		}
 
 		// Ant corpses are in the background, too.
@@ -124,7 +119,7 @@ public class GameView {
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ant corpses			
-			for (AntCorpseObject antCorpseObject : player.antCorpseObjects) {
+			for (AntCorpseObject antCorpseObject : player.getAntCorpseObjects()) {
 				setColor(ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[0],
 						 ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[1],
 						 ANT_CORPSE_COLOR_PERCENTAGE*colorComponents[2],
@@ -141,19 +136,19 @@ public class GameView {
 			float[] colorComponents = color.getColorComponents(null);
 			
 			// Ants			
-			for (AntObject antObject : player.antObjects) {
+			for (AntObject antObject : player.getAntObjects()) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], 1.0f);
 				fillCircle(antObject.getPosition(), ANT_RADIUS, ANT_CIRCLE_CORNERS);
 				if (antObject.isCarrying()) {
 					setColor(1.0f, 1.0f, 1.0f, 1.0f);
 					fillCircle(antObject.getPosition(), CARRIED_SUGAR_RADIUS, ANT_CIRCLE_CORNERS);
 				}
-				if (drawSightRange) {
+				if (isDrawSightRange()) {
 					final float sightRangeAlpha = 0.3f;
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2],sightRangeAlpha);
 					drawCircle(antObject.getPosition(), antObject.caste.SIGHT_RANGE, SIGHT_RANGE_CORNERS);
 				}
-				if (drawMessages && antObject.getAction() != null && antObject.getAction().antMessage != null) {
+				if (isDrawMessages() && antObject.getAction() != null && antObject.getAction().antMessage != null) {
 					setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
 					drawCircle(antObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 				}				
@@ -169,9 +164,9 @@ public class GameView {
 				}
 			}
 			// Hill messages
-			if (drawMessages && player.hillObject.getMessage() != null) {
+			if (isDrawMessages() && player.getHillObject().getMessage() != null) {
 				setColor(colorComponents[0], colorComponents[1], colorComponents[2], MESSAGE_ALPHA);
-				drawCircle(player.hillObject.getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
+				drawCircle(player.getHillObject().getPosition(), MESSAGE_RADIUS, MESSAGE_CORNERS);
 			}
 		}
 	}
@@ -265,5 +260,33 @@ public class GameView {
 			glVertex2d(Math.cos(angle), Math.sin(angle));
 		}
 		glEnd();
+	}
+
+	/**
+	 * @return the drawMessages
+	 */
+	public boolean isDrawMessages() {
+		return drawMessages;
+	}
+
+	/**
+	 * @param drawMessages the drawMessages to set
+	 */
+	public void setDrawMessages(boolean drawMessages) {
+		this.drawMessages = drawMessages;
+	}
+
+	/**
+	 * @return the drawSightRange
+	 */
+	public boolean isDrawSightRange() {
+		return drawSightRange;
+	}
+
+	/**
+	 * @param drawSightRange the drawSightRange to set
+	 */
+	public void setDrawSightRange(boolean drawSightRange) {
+		this.drawSightRange = drawSightRange;
 	}
 }

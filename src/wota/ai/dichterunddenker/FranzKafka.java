@@ -48,7 +48,7 @@ public class FranzKafka extends AntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -64,7 +64,7 @@ public class FranzKafka extends AntAI {
 		if (dir==0 && audibleHillMessage != null) {
 			dir=2*audibleHillMessage.content;
 		}
-		if(SeededRandomizer.getDouble()<0.02){
+		if(random.nextDouble()<0.02){
 			dir=dir+20;
 		}
 		
@@ -115,7 +115,7 @@ public class FranzKafka extends AntAI {
 					moveInDirection(vectorTo(worstant).angle()-180);
 				}
 			}else{
-				moveInDirection(SeededRandomizer.getInt(360));
+				moveInDirection(random.nextInt(360));
 			}
 		}else{
 			moveInDirection(dir/2);

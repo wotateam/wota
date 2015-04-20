@@ -1,10 +1,12 @@
 package wota.testing;
 
+/*
 import java.util.LinkedList;
 
 import wota.gamemaster.Simulation;
 import wota.gamemaster.GameWorldFactory;
 import wota.utility.Vector;
+*/
 
 
 /*
