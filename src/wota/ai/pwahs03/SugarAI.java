@@ -288,7 +288,7 @@ public class SugarAI extends AntAI {
 				dir = (360*count)/(total+1);
 				moveInDirection(dir);
 			}else{//later, just go some random direction:
-				dir = random.nextDouble()*360;
+				dir = SeededRandomizer.nextDouble()*360;
 			}
 			
 			//initialize hills:
@@ -429,6 +429,15 @@ public class SugarAI extends AntAI {
 			if (d < distance && enemy.caste == Caste.Soldier) {
 				distance = d;
 				closest = enemy;
+			}
+		}
+		if (closest == null){
+			for (Ant enemy : enemies) {
+				double d = vectorBetween(self,enemy).length();
+				if (d < distance) {
+					distance = d;
+					closest = enemy;
+				}
 			}
 		}
 		return closest;
