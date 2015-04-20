@@ -40,7 +40,7 @@ public class SugarObject extends GameObject {
 	public void tick() {
 		if (ticksUntilNextPickUp == 0) {
 			if (!pickUpCandidates.isEmpty()) {
-				final int winningIndex = SeededRandomizer.getInt(pickUpCandidates.size());
+				final int winningIndex = SeededRandomizer.nextInt(pickUpCandidates.size());
 				AntObject receivingAntObject = pickUpCandidates.get(winningIndex);
 				receivingAntObject.pickUpSugar(this);
 				ticksUntilNextPickUp = parameters.TICKS_BETWEEN_PICK_UPS_AT_SOURCE;

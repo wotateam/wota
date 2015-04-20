@@ -20,7 +20,7 @@ import wota.gameobjects.Hill;
  */
 public class FamilieMann extends AntAI {
  
-	public double	dir=SeededRandomizer.getInt(360);
+	public double	dir=random.nextInt(360);
 	public double	 mysugar = 0;
 	public boolean 	ontheway = false;
 	public boolean gehehause = false;
@@ -58,7 +58,7 @@ public class FamilieMann extends AntAI {
 	 * your health points								self.health
 	 * 
 	 * to obtain random numbers use	SeededRandomizer
-	 * e.g. a random elment of {0,1,2}					SeededRandomizer.getInt(3)
+	 * e.g. a random elment of {0,1,2}					random.getInt(3)
 	 * 
 	 * to iterate over a list (e.g. visibleAnts) use	for (Ant ant : visibleAnts) {
 	 * 														// ant is an element of visibleAnts
@@ -149,7 +149,7 @@ public class FamilieMann extends AntAI {
 			
 				}else{
 					if(visibleSugar.size()==0){
-						dir+=SeededRandomizer.getInt(5);
+						dir+=random.nextInt(5);
 						moveInDirection(dir);
 					}else{
 						moveToward((closest(visibleSugar)));

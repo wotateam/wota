@@ -77,8 +77,6 @@ public class Mueller extends MyAntAI {
 	
 	@Override
 	public void tick() throws Exception {
-		// sample AI which moves with at constant angle 27 degrees until it finds some sugar source
-		// note: it won't leave the sugar source after it reached it.
 		for(Sugar sugar : visibleSugar){
 			Haufen neuerhaufen=new Haufen(Vector.subtract(vectorTo(sugar),vectorToHome()),sugar.amount);
 			if(vorhandencheck(neuerhaufen,sugarlist)==-1){

@@ -7,7 +7,6 @@ public class SimulationParameters {
 	public final boolean IS_GRAPHICAL;
 	public final double FRAMES_PER_SECOND;
 	public final double INITIAL_TICKS_PER_SECOND;
-	public final int MAX_TICKS_BEFORE_END;
 	public final int NUMBER_OF_ROUNDS;
 	public final boolean HOME_AND_AWAY;
 	public final boolean TOURNAMENT;
@@ -21,7 +20,6 @@ public class SimulationParameters {
 		NUMBER_OF_ROUNDS = Integer.parseInt(p.getProperty("NUMBER_OF_ROUNDS"));
 		FRAMES_PER_SECOND = Double.parseDouble(p.getProperty("FRAMES_PER_SECOND"));
 		INITIAL_TICKS_PER_SECOND = Double.parseDouble(p.getProperty("INITIAL_TICKS_PER_SECOND"));
-		MAX_TICKS_BEFORE_END = Integer.parseInt(p.getProperty("MAX_TICKS_BEFORE_END"));
 		TOURNAMENT = Boolean.parseBoolean(p.getProperty("TOURNAMENT"));
 		HOME_AND_AWAY = Boolean.parseBoolean(p.getProperty("HOME_AND_AWAY"));
 		

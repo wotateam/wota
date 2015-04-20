@@ -80,7 +80,6 @@ public class Scholze extends MyAntAI {
 	
 	@Override
 	public void tick() throws Exception {
-		
 		for(Hill hill: visibleHills){
 			if(hill.playerID!=self.playerID && gegnerlist.size()==0){
 				Haufen newhaufen=new Haufen(Vector.subtract(vectorTo(hill),vectorToHome()),0);

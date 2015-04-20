@@ -16,7 +16,9 @@ or press the right-hand side button on the repository's front page to download H
     Set the project name to "wota".  
     Click on 'finish' (eclipse should say that it will import the project settings)
 
-4.  Run as a Java application. The main method is located in src/wota/Wota.java
+4.  Run as a Java application. The main method is located in src/wota/Wota.java , opening this file and clicking the green run button should create the appropriate Eclipse run configuration.
+
+## Writing your AI
 
 5.  To start writing your AI, create a folder with the name of your AI in src/wota/ai/ .
 
@@ -35,4 +37,6 @@ A brief tutorial as well as the rules of the game can be found in the wiki.
 	
 https://github.com/wotateam/wota/wiki/
 	
-Have fun! If you have any questions, comments or suggestions, don't hesitate to contact us!
+Have fun! If you have any questions, comments, suggestions or want to share your AI, don't hesitate to contact us by writing an email or by creating an issue!
+
+wotateam@gmx.de

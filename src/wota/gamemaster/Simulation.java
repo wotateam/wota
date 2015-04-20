@@ -1,10 +1,7 @@
 package wota.gamemaster;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.swing.SwingUtilities;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -16,8 +13,6 @@ import wota.gameobjects.GameWorld;
 import wota.gameobjects.GameWorld.Player;
 import wota.graphics.GameView;
 import wota.graphics.StatisticsView;
-import wota.gameobjects.Parameters;
-import wota.utility.SeededRandomizer;
 
 
 /**
@@ -67,16 +62,14 @@ public class Simulation {
 	private boolean abortRequested = false;
 	
 	private int frameCount;
-	
-	/** maximum number of ticks before the game ends regardless of victory condition **/
-	private final int maxTicksBeforeEnd;
-	
+
+	private int measureFrameCount;
+		
 	public Simulation(SimulationParameters simulationParameters, 
 					  GameWorldFactory gameWorldFactory) {
 		isGraphical = simulationParameters.IS_GRAPHICAL; 
 		framesPerSecond = simulationParameters.FRAMES_PER_SECOND;
 		ticksPerSecond = simulationParameters.INITIAL_TICKS_PER_SECOND;
-		maxTicksBeforeEnd = simulationParameters.MAX_TICKS_BEFORE_END;
 		
 		width = simulationParameters.DISPLAY_WIDTH;
 		height = simulationParameters.DISPLAY_HEIGHT;
@@ -103,17 +96,21 @@ public class Simulation {
 				break;
 			}
 			
-			SeededRandomizer.resetSeed(gameWorld.seed);
 			System.out.println("seed next game: " + gameWorld.seed);			
 			
 			StatisticsLogger logger = new StatisticsLogger(gameWorld.getPlayers());
 			gameWorld.setLogger(logger);
 			
-			statisticsView = new StatisticsView(gameWorld, logger);
+			//lazy initialization
+			if (statisticsView == null)
+				statisticsView = new StatisticsView(gameWorld, logger);
+			else
+				statisticsView.setGameWorld(gameWorld, logger);
 	        statisticsView.run();
 	        
 	        if (isGraphical) {
 	        	try {
+	        		Display.setTitle("Wota");
 					Display.setDisplayMode(new DisplayMode(width, height));
 					Display.create(new PixelFormat(8,0,0,0));
 				} catch (LWJGLException e) {
@@ -131,8 +128,11 @@ public class Simulation {
 	        
 			resetReferenceValues();
 			long lastMeasurementTime = System.nanoTime(); // time for TPS / FPS measurements
-			int measureFrameCount = 0; // Frame counter to determine TPS
+			measureFrameCount = 0;
 			int measureTickCount = 0; // Tick counter to determine FPS
+			
+			if(!isGraphical)
+				new Thread(new StatisticsRefresher()).start();
 			
 			// events for graphics update and tick are created uniformly. Call them with priority on graphics
 			while (running && !abortRequested) { 			
@@ -154,7 +154,7 @@ public class Simulation {
 				}
 					
 				// Update Graphics if event for graphic update is swept.
-				if (framesToDo() > 0) {
+				if (framesToDo() > 0 && isGraphical) {
 					statisticsView.refresh();
 					frameCount++;
 					measureFrameCount++;
@@ -189,58 +189,85 @@ public class Simulation {
 			}
 			
 			// game done. Add to stats.
-			Player winner = gameWorld.getWinner();
-			if (winner == null) {
-				resultCollection.addGame(null, getNames(gameWorld.getPlayers()), null);
+			List<Player> winner = gameWorld.getWinner();
+			List<Player> loosers = new ArrayList<Player>(gameWorld.getPlayers());
+			loosers.removeAll(winner);
+			
+			if (winner.size() == 0) {
+				System.err.println("winner should not be empty.");
+			}
+			else if (winner.size() == 1) {
+				resultCollection.addGame(getNames(winner), null, getNames(loosers));
 			}
 			else {
-				List<Player> active = new java.util.ArrayList<Player>(gameWorld.getPlayers());
-				active.remove(winner);
-				resultCollection.addGame(new String[] {winner.name}, null, getNames(active));
+				// multiple winners count as draw. But we could still have loosers. 
+				resultCollection.addGame(null, getNames(winner), getNames(loosers));
 			}
 			
 			System.out.println("seed last game: " + gameWorld.seed);
 
-			statisticsView.frame.dispose();
+			statisticsView.destroyContents();
 			if (isGraphical) {
 				Display.destroy();
 			}
+			running = false;
 		} // last gameWorld done
 		System.out.println(resultCollection);
 	}
 	
 	/**
-	 * Advance the game world by one tick and check for victory / end after fixed number of ticks.
+	 * Refreshes the statisticsView  in run().
+	 */
+	private class StatisticsRefresher implements Runnable{
+
+		@Override
+		public void run() {
+			try {
+				while (running && !abortRequested) {
+					if (framesToDo() > 0) {
+						try{
+							statisticsView.refresh();
+						} catch (NullPointerException ex) {
+							// only thrown in strange circumstances
+						}
+						frameCount++;
+						measureFrameCount++;
+						referenceFrameCount++;
+					}
+					Thread.sleep((long)(1 / framesPerSecond));//correct frames per second
+				}
+			} catch (InterruptedException ex) {
+
+			}
+		}
+		
+	}
+	
+	/**
+	 * Advance the game world by one tick.
+	 * Ask gameworld for winners and print statistics.
 	 */
 	private void tick(GameWorld gameWorld) {
 		gameWorld.tick();
-
-		GameWorld.Player winner = gameWorld.getWinner();
-		running = false; // set to true if none of the victory conditions actually apply
+		
 		String gameOverMessage = "";
-		if (winner != null) {
-			gameOverMessage = winner + " has won the game in tick "
+		
+		List<Player> winner = gameWorld.getWinner();
+		if (winner.size() == 1) {
+			if (gameWorld.tickCount() >= gameWorld.parameters.MAX_TICKS_BEFORE_END) {
+				gameOverMessage = "The game was stopped since the maximum number of ticks is reached.\n";
+			}
+			gameOverMessage = winner.get(0) + " has won the game in tick "
 					+ gameWorld.tickCount();
-		} 
-		else if (gameWorld.allPlayersDead()) {
-			gameOverMessage = "Draw! Nobody has won the game after " + gameWorld.tickCount() + " ticks.";
 		}
-		// End the game after fixed number of ticks - players with most ants win.
-		else if (gameWorld.tickCount() >= maxTicksBeforeEnd) {
-			List<GameWorld.Player> winners = gameWorld.getPlayersWithMostAnts();
-			if (winners.size() == gameWorld.getPlayers().size()) {
-				gameOverMessage = "Draw! Game was stopped after " + gameWorld.tickCount() + " ticks. All players have the same number of ants.";
+		else if (winner.size() > 1) {
+			for (GameWorld.Player aWinner : winner) {
+				gameOverMessage += aWinner + " ";
 			}
-			else {
-				gameOverMessage = "Game was stopped after " + gameWorld.tickCount() + " ticks. The following player(s) have won:";
-				for (GameWorld.Player aWinner : winners) {
-					gameOverMessage += aWinner;
-				}
-			}
+			gameOverMessage += "have won the game in tick " + gameWorld.tickCount();
 		}
-		else {
-			running = true;
-		}
+		running = (winner.size() == 0);
+
 		if (running == false) {
 			System.out.println(statisticsView);
 			System.out.println(gameOverMessage);
@@ -272,10 +299,10 @@ public class Simulation {
 				running = false;
 				break;
 			case Keyboard.KEY_S:
-				gameView.drawSightRange = !gameView.drawSightRange;
+				gameView.setDrawSightRange(!gameView.isDrawSightRange());
 				break;
 			case Keyboard.KEY_M:
-				gameView.drawMessages = !gameView.drawMessages;
+				gameView.setDrawMessages(!gameView.isDrawMessages());
 				break;
 			case Keyboard.KEY_PERIOD:
 				ticksPerSecond *= 1.3;
@@ -314,6 +341,34 @@ public class Simulation {
 			playerNames[iActive] = player.get(iActive).name;
 		}
 		return playerNames;
+	}
+
+	/**
+	 * @return the startTime
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * @return the frameCount
+	 */
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	/**
+	 * @param frameCount the frameCount to set
+	 */
+	public void setFrameCount(int frameCount) {
+		this.frameCount = frameCount;
 	}
 
 }

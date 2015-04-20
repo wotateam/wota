@@ -24,8 +24,6 @@ public class Parameters {
 	public final int ANT_COST;
 	// Amount of food available at each hill when the game starts:
 	public final int STARTING_FOOD;
-	// An ant's moving direction may differ this much from the intended direction:
-	public final double ANGLE_ERROR_PER_DISTANCE;
 	// Number of ticks between sugar pickups: 
 	public final int TICKS_BETWEEN_PICK_UPS_AT_SOURCE;
 	// Number of ticks until a corpse disappears:
@@ -41,6 +39,9 @@ public class Parameters {
 	public final double FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY;
 	/** check the victory condition after this amount of ticks */
 	public final int DONT_CHECK_VICTORY_CONDITION_BEFORE;
+	/** maximal number of ticks before game is stopped and player with the most ants wins */
+	public final int MAX_TICKS_BEFORE_END;
+
 
 	public Parameters(Properties p, int NUMBER_OF_PLAYERS) {
 		this.NUMBER_OF_PLAYERS = NUMBER_OF_PLAYERS;
@@ -56,8 +57,6 @@ public class Parameters {
 		INITIAL_SUGAR_IN_SOURCE = Integer.parseInt(p.getProperty("INITIAL_SUGAR_IN_SOURCE"));
 		ANT_COST = Integer.parseInt(p.getProperty("ANT_COST"));
 		STARTING_FOOD = Integer.parseInt(p.getProperty("STARTING_FOOD"));
-		
-		ANGLE_ERROR_PER_DISTANCE  = Double.parseDouble(p.getProperty("ANGLE_ERROR_PER_DISTANCE"));
 
 		TICKS_BETWEEN_PICK_UPS_AT_SOURCE = Integer.parseInt(p.getProperty("TICKS_BETWEEN_PICK_UPS_AT_SOURCE"));
 		CORPSE_DECAY_TIME = Integer.parseInt(p.getProperty("CORPSE_DECAY_TIME"));
@@ -70,6 +69,7 @@ public class Parameters {
 		SUGAR_SOURCES_PER_PLAYER = Integer.parseInt(p.getProperty("SUGAR_SOURCES_PER_PLAYER"));
 		FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY = Double.parseDouble(p.getProperty("FRACTION_OF_ALL_ANTS_NEEDED_FOR_VICTORY"));
 		DONT_CHECK_VICTORY_CONDITION_BEFORE = Integer.parseInt(p.getProperty("DONT_CHECK_VICTORY_CONDITION_BEFORE"));
+		MAX_TICKS_BEFORE_END = Integer.parseInt(p.getProperty("MAX_TICKS_BEFORE_END"));
 	}
 	
 	public Vector normalize(Vector p) {

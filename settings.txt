@@ -22,8 +22,5 @@ FRAMES_PER_SECOND = 40
 # Rate of game update
 INITIAL_TICKS_PER_SECOND = 40
 
-# leads to draw if nobody has won until then
-MAX_TICKS_BEFORE_END = 100000
-
 DISPLAY_WIDTH = 700
 DISPLAY_HEIGHT = 700

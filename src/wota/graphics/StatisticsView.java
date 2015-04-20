@@ -3,19 +3,23 @@
  */
 package wota.graphics;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
-import java.awt.*;
-import java.awt.print.PrinterException;
-import java.util.Map;
-import java.util.Vector;
 
 import wota.gamemaster.StatisticsLogger;
-import wota.gameobjects.*;
+import wota.gameobjects.Caste;
+import wota.gameobjects.GameWorld;
 import wota.gameobjects.GameWorld.Player;
 
 /**
@@ -24,7 +28,7 @@ import wota.gameobjects.GameWorld.Player;
  */
 public class StatisticsView implements Runnable {
 
-	public JFrame frame;
+	private JFrame frame;
 	private GameWorld gameWorld;
 	private StatisticsLogger logger;
 	private StatisticsTableModel statisticsTableModel;
@@ -34,8 +38,17 @@ public class StatisticsView implements Runnable {
 	}
 
 	public void run() {
-		frame = new JFrame("Wota Statistics");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//lazy initialization of frame
+		if (frame == null) {
+			frame = new JFrame("Wota Statistics");
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			// set logo as icon
+			try {
+				frame.setIconImage(ImageIO.read(getClass().getResource("logo.png")));
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 		frame.setLayout(new FlowLayout());
 
 		statisticsTableModel = new StatisticsTableModel(logger);
@@ -46,7 +59,7 @@ public class StatisticsView implements Runnable {
 		table.setFillsViewportHeight(true);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-		frame.add(scrollPane);
+		frame.getContentPane().add(scrollPane);
 
 		frame.pack();
 		frame.setVisible(true);
@@ -57,9 +70,9 @@ public class StatisticsView implements Runnable {
 	 * methods like getValueAt() which are used by the JTable to obtain the cell
 	 * values.
 	 */
-	@SuppressWarnings("synthetic-access")
 	public class StatisticsTableModel extends AbstractTableModel {
 
+		private static final long serialVersionUID = -2557558732669501033L;
 		private StatisticsLogger logger;
 		private final String[] playerNames;
 		/**
@@ -105,14 +118,17 @@ public class StatisticsView implements Runnable {
 			return data[rowIndex][columnIndex];
 		}
 
-		/** updates all of the data */
-		public void refresh() {
+		/** updates all of the data 
+		 * 
+		 * @throws NullPointerException from player.numAnts
+		 */
+		public synchronized void refresh() throws NullPointerException{
 			for (int column = 1; column < getColumnCount(); column++) {
 				int playerId = column - 1;
 				Player player = gameWorld.getPlayers().get(playerId);
 
 				data[0][column] = PlayerColors.get(player.id());
-				data[1][column] = player.antObjects.size();
+				data[1][column] = player.getAntObjects().size();
 				data[2][column] = player.numAnts(Caste.Gatherer);
 				data[3][column] = player.numAnts(Caste.Soldier);
 				data[4][column] = player.numAnts(Caste.Scout);
@@ -142,8 +158,11 @@ public class StatisticsView implements Runnable {
 
 	}
 
-	/** call this when the table should grab the information */
-	public void refresh() {
+	/** call this when the table should grab the information
+	 * 
+	 * @throws NullPointerException
+	 */
+	public void refresh() throws NullPointerException{
 		statisticsTableModel.refresh();
 		
 		// tell the JTable to update graphics
@@ -151,6 +170,10 @@ public class StatisticsView implements Runnable {
 	}
 
 	public class CellRenderer extends JLabel implements TableCellRenderer {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4207895084707571884L;
 		DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
 
 		CellRenderer() {
@@ -173,6 +196,13 @@ public class StatisticsView implements Runnable {
 	public void setGameWorld(GameWorld gameWorld, StatisticsLogger logger) {
 		this.gameWorld = gameWorld;
 		this.logger = logger;
+	}
+	
+	/**
+	 * Removes everything from the frame
+	 */
+	public void destroyContents(){
+		frame.getContentPane().removeAll();
 	}
 	
 	

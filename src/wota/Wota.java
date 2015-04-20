@@ -6,18 +6,13 @@ package wota;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
-import javax.swing.SwingUtilities;
-
-import wota.gamemaster.*;
+import wota.gamemaster.GameWorldFactory;
+import wota.gamemaster.Simulation;
+import wota.gamemaster.SimulationParameters;
 import wota.gameobjects.Parameters;
-import wota.graphics.StatisticsView;
-import wota.utility.SeededRandomizer;
-import wota.utility.Vector;
 
 /**
  * Class used to start the game.

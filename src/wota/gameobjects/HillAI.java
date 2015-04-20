@@ -75,4 +75,8 @@ public abstract class HillAI extends AI {
 		this.hillObject = hillObject;
 		setPosition ( hillObject.getPosition() );
 	}
+	
+	HillObject getHillObject(){
+		return hillObject;
+	}
 }

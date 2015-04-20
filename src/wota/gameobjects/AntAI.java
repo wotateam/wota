@@ -3,7 +3,6 @@ package wota.gameobjects;
 import java.util.LinkedList;
 import java.util.List;
 
-import wota.utility.Modulo;
 import wota.utility.Vector;
 
 
@@ -87,7 +86,7 @@ public abstract class AntAI extends AI{
 	 * Move maximal distance in direction of the own hill, even if it is not visible. 
 	 */
 	protected void moveHome() {
-		moveToward(antObject.player.hillObject.getHill());
+		moveToward(antObject.player.getHillObject().getHill());
 	}
 	
 	//--------------------------------------------------------
@@ -136,7 +135,7 @@ public abstract class AntAI extends AI{
 	
 	/** gives the shortest vector pointing to home = hill. */ 
 	protected Vector vectorToHome() {
-		return parameters.shortestDifferenceOnTorus(antObject.player.hillObject.getPosition(), antObject.getPosition());
+		return parameters.shortestDifferenceOnTorus(antObject.player.getHillObject().getPosition(), antObject.getPosition());
 	}
 	
 	/** returns true if target is in view range. */

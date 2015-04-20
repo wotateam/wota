@@ -33,6 +33,7 @@ public class HillAI extends MyHillAI {
 	LinkedList<Haufen> sugarlist=new LinkedList<Haufen>();
 	LinkedList<Haufen> gegnerlist= new LinkedList<Haufen>();
 	LinkedList<Haufen> oldsugarlist= new LinkedList<Haufen>();
+	
 	int scoutlost=100000;
 	int numbergatherer=0;
 	int numberoftick=0;
@@ -43,6 +44,10 @@ public class HillAI extends MyHillAI {
 //		for(Haufen haufen : sugarlist){
 	//		System.out.println(haufen.getPosition().length());
 		//}
+		if(sugarlist.size()>25 || oldsugarlist.size()>100){
+			int s=23;
+			s=s-1;
+		}
 		numberoftick++;
 		if(numberoftick==8000){
 			saving=true;
@@ -87,7 +92,7 @@ public class HillAI extends MyHillAI {
 					if(vorhandencheck(neuerhaufen,sugarlist)!=-1){
 						sugarlist.remove(vorhandencheck(neuerhaufen,sugarlist));
 					}
-					if(vorhandencheck(neuerhaufen,sugarlist)==-1){
+					if(vorhandencheck(neuerhaufen,oldsugarlist)==-1){
 						oldsugarlist.add(neuerhaufen);
 					}
 				}
@@ -101,10 +106,10 @@ public class HillAI extends MyHillAI {
 		
 		Vector position=new Vector(0,0);
 	/*	if(sugarlist.size()>0){
-			if(SeededRandomizer.getDouble()<0.5){
+			if(random.getDouble()<0.5){
 				position=sugarlist.get(0).getPosition();
 			}else{
-				position=sugarlist.get(SeededRandomizer.getInt(sugarlist.size())).getPosition();
+				position=sugarlist.get(random.getInt(sugarlist.size())).getPosition();
 			}
 			talk(((int)((Math.round(position.x+parameters.SIZE_X/2))*Math.round(parameters.SIZE_Y)*10)+((int)((Math.round(position.y+parameters.SIZE_Y/2))*10+1))));
 		}*/
@@ -133,7 +138,7 @@ public class HillAI extends MyHillAI {
 					}
 				}
 			}
-			if(numbergatherer<10 || SeededRandomizer.getDouble()<0.9){
+			if(numbergatherer<10 || random.nextDouble()<0.9){
 				for(Haufen haufen : sugarlist){	
 					if(check){
 						if(haufen.getsoldiers()<2){
