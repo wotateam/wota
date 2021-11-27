@@ -4,8 +4,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.security.Policy;
-
 import wota.gameobjects.HillAI;
 
 /**
@@ -34,9 +32,6 @@ public class AILoader {
 	 *            directory or .jar file where player AIs should be located
 	 */
 	public AILoader(String path) {
-		Policy.setPolicy(new AIPolicy());
-		System.setSecurityManager(new SecurityManager());
-
 		searchpath = path;
 	}
 
